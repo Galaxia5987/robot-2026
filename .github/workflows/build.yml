@@ -1,0 +1,40 @@
+# Adapted from WPILib docs: https://docs.wpilib.org/en/stable/docs/software/advanced-gradlerio/robot-code-ci.html
+
+name: Build, tests, formatting
+
+# Controls when the action will run. Triggers the workflow on pull request events.
+on:
+  pull_request
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Grab the WPILib docker container
+    container: wpilib/roborio-cross-ubuntu:2025-22.04
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Check-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+      # Declare the repository safe and not under dubious ownership.
+      - name: Add repository to git safe directories
+        run: git config --global --add safe.directory $GITHUB_WORKSPACE
+
+      # Grant execute permission for gradlew
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # Run Gradle commands
+      - name: Check that the code builds
+        run: ./gradlew compileKotlin compileJava
+
+      - name: Run tests
+        run: ./gradlew test
+
+      - name: Check formatting
+        run: ./gradlew spotlessCheck

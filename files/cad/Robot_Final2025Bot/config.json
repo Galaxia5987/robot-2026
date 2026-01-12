@@ -1,0 +1,500 @@
+{
+  "name": "2022OffSeason",
+  "sourceUrl": "",
+  "disableSimplification": false,
+  "rotations": [
+    {
+      "axis": "x",
+      "degrees": 90
+    },
+    {
+      "axis": "z",
+      "degrees": -90
+    }
+  ],
+  "position": [
+    0,
+    0,
+    0.0508
+  ],
+  "cameras": [
+    {
+      "name": "frontRight",
+      "rotations": [
+        {
+          "axis": "x",
+          "degrees": 0
+        },
+        {
+          "axis": "y",
+          "degrees": 35
+        },
+        {
+          "axis": "z",
+          "degrees": 0
+        }
+      ],
+      "position": [
+        0.24886,
+        -0.11289,
+        0.59876
+      ],
+      "resolution": [
+        1280,
+        960
+      ],
+      "fov": 95
+    },
+    {
+      "name": "frontLeft",
+      "rotations": [
+        {
+          "axis": "x",
+          "degrees": 0
+        },
+        {
+          "axis": "y",
+          "degrees": 35
+        },
+        {
+          "axis": "z",
+          "degrees": 0
+        }
+      ],
+      "position": [
+        0.24886,
+        0.11411,
+        0.59876
+      ],
+      "resolution": [
+        1280,
+        960
+      ],
+      "fov": 95
+    },
+    {
+      "name": "backRight",
+      "rotations": [
+        {
+          "axis": "x",
+          "degrees": 0
+        },
+        {
+          "axis": "y",
+          "degrees": 195
+        },
+        {
+          "axis": "z",
+          "degrees": 205
+        }
+      ],
+      "position": [
+        -0.12547,
+        -0.23183,
+        0.55182
+      ],
+      "resolution": [
+        1280,
+        960
+      ],
+      "fov": 95
+    },
+    {
+      "name": "backLeft",
+      "rotations": [
+        {
+          "axis": "x",
+          "degrees": 0
+        },
+        {
+          "axis": "y",
+          "degrees": 195
+        },
+        {
+          "axis": "z",
+          "degrees": 155
+        }
+      ],
+      "position": [
+        -0.12635,
+        0.23345,
+        0.55208
+      ],
+      "resolution": [
+        1280,
+        960
+      ],
+      "fov": 95
+    }
+  ],
+  "components": [
+    {
+      "_comment": "model_0 : Swerve module 0 TURN",
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": 90
+        },
+        {
+          "axis": "z",
+          "degrees": -90
+        }
+      ],
+      "zeroedPosition": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "_comment": "model_1 : Swerve module 0 DRIVE",
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": 90
+        },
+        {
+          "axis": "z",
+          "degrees": -90
+        }
+      ],
+      "zeroedPosition": [
+        -0.0,
+        0,
+        -0.0
+      ]
+    },
+    {
+      "_comment": "model_2 : Swerve module 1 TURN",
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": 90
+        },
+        {
+          "axis": "z",
+          "degrees": -90
+        }
+      ],
+      "zeroedPosition": [
+        -0.0,
+        0,
+        -0.0
+      ]
+    },
+    {
+      "_comment": "model_3 : Swerve module 1 DRIVE",
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": 90
+        },
+        {
+          "axis": "z",
+          "degrees": -90
+        }
+      ],
+      "zeroedPosition": [
+        -0.0,
+        0,
+        -0.0
+      ]
+    },
+    {
+      "_comment": "model_4 : Swerve module 2 TURN",
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": 90
+        },
+        {
+          "axis": "z",
+          "degrees": -90
+        }
+      ],
+      "zeroedPosition": [
+        -0.0,
+        0,
+        -0.0
+      ]
+    },
+    {
+      "_comment": "model_5 : Swerve module 2 DRIVE",
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": 90
+        },
+        {
+          "axis": "z",
+          "degrees": -90
+        }
+      ],
+      "zeroedPosition": [
+        -0.0,
+        0,
+        -0.0
+      ]
+    },
+    {
+      "_comment": "model_6 : Swerve module 3 TURN",
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": 90
+        },
+        {
+          "axis": "z",
+          "degrees": -90
+        }
+      ],
+      "zeroedPosition": [
+        -0.0,
+        0,
+        -0.0
+      ]
+    },
+    {
+      "_comment": "model_7 : Swerve module 3 DRIVE",
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": 90
+        },
+        {
+          "axis": "z",
+          "degrees": -90
+        }
+      ],
+      "zeroedPosition": [
+        -0.0,
+        0,
+        -0.0
+      ]
+    },
+    {
+      "_comment": "model_8 : Intake Plates",
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": 90
+        },
+        {
+          "axis": "z",
+          "degrees": -90
+        }
+      ],
+      "zeroedPosition": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "_comment": "model_9 : Intake Roller Front wait : -0.56,0,0.28",
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": 90
+        },
+        {
+          "axis": "z",
+          "degrees": -90
+        }
+      ],
+      "zeroedPosition": [
+        0,0,0
+      ]
+    },
+    {
+      "_comment": "model_10 : Intake Roller Second",
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": 90
+        },
+        {
+          "axis": "z",
+          "degrees": -90
+        }
+      ],
+      "zeroedPosition": [
+        -0.0,
+        0,
+        -0.01
+      ]
+    },
+    {
+      "_comment": "model_11 : Conveyor Front",
+
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": 63
+        },
+        {
+          "axis": "z",
+          "degrees": -90
+        },
+        {
+          "axis": "y",
+          "degrees": -90
+        }
+      ],
+      "zeroedPosition": [
+        -0.0,
+        0,
+        -0.0
+      ]
+    },
+    {
+      "_comment": "model_12 : Conveyor Second",
+
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": 0
+        },
+        {
+          "axis": "z",
+          "degrees": 90
+        }
+      ],
+      "zeroedPosition": [
+        -0.0,
+        0,
+        -0.0
+      ]
+    },
+    {
+      "_comment": "model_13 : Pre Shooter - Front",
+
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": 0
+        },
+        {
+          "axis": "z",
+          "degrees": -90
+        }
+      ],
+      "zeroedPosition": [
+        -0.0,
+        0,
+        -0.0
+      ]
+    },
+
+    {
+      "_comment": "model_14 : Pre Shooter - Second",
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": 128
+        },
+        {
+          "axis": "y",
+          "degrees": 0
+        },
+        {
+          "axis": "z",
+          "degrees": -90
+        }
+      ],
+      "zeroedPosition": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "_comment": "model_15 : Turret",
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": 90
+        },
+        {
+          "axis": "y",
+          "degrees": 0
+        },
+        {
+          "axis": "z",
+          "degrees": 0
+        }
+      ],
+      "zeroedPosition": [
+        0,
+        0,
+        0.0
+      ]
+    },
+    {
+      "_comment": "model_16 : Shooter Roller",
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": 128
+        },
+        {
+          "axis": "y",
+          "degrees": 0
+        },
+        {
+          "axis": "z",
+          "degrees": -90
+        }
+      ],
+      "zeroedPosition": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "_comment": "model_17 : Hood",
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": 0
+        },
+        {
+          "axis": "y",
+          "degrees": 180
+        },
+        {
+          "axis": "z",
+          "degrees":0
+        }
+      ],
+      "zeroedPosition": [
+        0.0,
+        0.0,
+        0
+      ]
+    },
+    {
+      "_comment": "model_18 : Hood Roller",
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": 128
+        },
+        {
+          "axis": "y",
+          "degrees": 0
+        },
+        {
+          "axis": "z",
+          "degrees": -90
+        }
+      ],
+      "zeroedPosition": [
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

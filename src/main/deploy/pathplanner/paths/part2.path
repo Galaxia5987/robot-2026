@@ -1,0 +1,66 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.471132073936746,
+        "y": 6.765271893533112
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.563979743025273,
+        "y": 6.997391066254426
+      },
+      "isLocked": false,
+      "linkedName": "PickUp_GamePiece"
+    },
+    {
+      "anchor": {
+        "x": 4.490656668146077,
+        "y": 5.008058414693342
+      },
+      "prevControl": {
+        "x": 4.451607479727415,
+        "y": 5.3302142191473
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "throw_gamePiece"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "shoot_gamepiece",
+      "waypointRelativePos": 0.7559055118110345,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "shoot_gamepiece"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -4.205357001708594
+  },
+  "reversed": false,
+  "folder": "New Folder",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -41.98721249581659
+  },
+  "useDefaultConstraints": true
+}
