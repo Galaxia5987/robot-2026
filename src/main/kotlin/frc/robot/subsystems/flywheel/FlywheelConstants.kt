@@ -8,13 +8,14 @@ import com.ctre.phoenix6.signals.NeutralModeValue
 import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.amps
-import frc.robot.lib.extensions.sec
 
 val GAINS = Gains(kP = 0.0, kS = 0.0, kV = 0.0)
-
 val MOTOR_PORT = 0
-val MOTOT_PORT2 = 0
-val MOTOR_PORT3 = 0
+
+enum class AUXILIARY_MOTORS_PORTS(val port: Int) {
+    MOTOR_PORT2(0),
+    MOTOR_PORT3(1)
+}
 
 val MOTOR_CONFIG =
     TalonFXConfiguration().apply {

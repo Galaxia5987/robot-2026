@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.lib.extensions.rps
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.AutoLogOutput
-import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
 object Flywheel : SubsystemBase() {
@@ -21,28 +20,20 @@ object Flywheel : SubsystemBase() {
             config = MOTOR_CONFIG,
             subsystem = name
         )
-    private val Motor2 =
-        UniversalTalonFX(
-            port = MOTOT_PORT2,
-            config = MOTOR_CONFIG,
-            subsystem = name
-        )
-    private val Motor3 =
-        UniversalTalonFX(
-            port = MOTOR_PORT3,
-            config = MOTOR_CONFIG,
-            subsystem = name
-        )
 
     private val velocityTorque = VelocityVoltage(0.0)
     private val voltageOut = VoltageOut(0.0)
     @AutoLogOutput private var setpoint = 0.rps
 
     val velocity
-        get() = Motor.inputs.velocity
+        get() = motor.inputs.velocity
     init {
-        AUXILIARY_MOTORS_PORTS.forEach {
-            UniversalTalonFX(port = it, config = MOTOR_CONFIG, subsystem = name)
+        AUXILIARY_MOTORS_PORTS.values().forEach {
+            UniversalTalonFX(
+                    port = it.port,
+                    config = MOTOR_CONFIG,
+                    subsystem = name
+                )
                 .setControl(Follower(MOTOR_PORT, MotorAlignmentValue.Aligned))
         }
     }
@@ -54,20 +45,22 @@ object Flywheel : SubsystemBase() {
         calibrationVelocity.get().rps
     }
 
-    fun setVelocity(velocity: AngularVelocity): Command = setVelocity { velocity }
+    fun setVelocity(velocity: AngularVelocity): Command = setVelocity {
+        velocity
+    }
 
     fun setVelocity(velocity: () -> AngularVelocity): Command = run {
         setpoint = velocity()
-        Motor.setControl(velocityTorque.withVelocity(setpoint))
+        motor.setControl(velocityTorque.withVelocity(setpoint))
     }
 
     fun stop() = setVelocity(0.rps)
 
     fun setVoltage(voltage: Voltage) {
-        Motor.setControl(voltageOut.withOutput(voltage))
+        motor.setControl(voltageOut.withOutput(voltage))
     }
 
     override fun periodic() {
-        Motor.periodic()
+        motor.periodic()
     }
 }
