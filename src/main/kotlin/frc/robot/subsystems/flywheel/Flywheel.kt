@@ -51,10 +51,7 @@ object Flywheel : SubsystemBase() {
         calibrationVelocity.get().rps
     }
 
-    fun setVelocity(velocity: AngularVelocity): Command = runOnce {
-        setpoint = velocity
-        Motor.setControl(velocityTorque.withVelocity(velocity))
-    }
+    fun setVelocity(velocity: AngularVelocity): Command = setVelocity { velocity }
 
     fun setVelocity(velocity: () -> AngularVelocity): Command = run {
         setpoint = velocity.invoke()
