@@ -47,7 +47,7 @@ object Flywheel : SubsystemBase() {
     private val calibrationVelocity =
         LoggedNetworkNumber("/Tuning/calibrationFlywheelVelocity", 40.0)
 
-    fun setCalibrationAngle(): Command = setVelocity {
+    fun setCalibrationVelocity(): Command = setVelocity {
         calibrationVelocity.get().rps
     }
 
