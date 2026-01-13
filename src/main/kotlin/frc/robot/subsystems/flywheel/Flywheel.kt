@@ -13,13 +13,12 @@ import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
-
 object Flywheel : SubsystemBase() {
     private val motor =
         UniversalTalonFX(
             port = MOTOR_PORT,
             config = MOTOR_CONFIG,
-            subsystem = name ,
+            subsystem = name,
             simGains = SIM_GAINS
         )
 
@@ -36,12 +35,18 @@ object Flywheel : SubsystemBase() {
                     config = MOTOR_CONFIG,
                     subsystem = name
                 )
-                .setControl(Follower(MOTOR_PORT, MotorAlignmentValue.Aligned).withUpdateFreqHz(123.0))
+                .setControl(
+                    Follower(MOTOR_PORT, MotorAlignmentValue.Aligned)
+                        .withUpdateFreqHz(123.0)
+                )
         }
     }
 
     private val calibrationVelocity =
-        LoggedNetworkNumber("/Tuning/Flywheel/calibrationFlywheelVelocity", 40.0)
+        LoggedNetworkNumber(
+            "/Tuning/Flywheel/calibrationFlywheelVelocity",
+            40.0
+        )
 
     fun setCalibrationVelocity(): Command = setVelocity {
         calibrationVelocity.get().rps

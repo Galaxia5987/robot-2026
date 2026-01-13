@@ -12,7 +12,7 @@ import frc.robot.lib.extensions.amps
 import frc.robot.lib.extensions.rps
 
 val GAINS = Gains(kP = 0.0, kS = 0.0, kV = 0.0)
-val SIM_GAINS= Gains(kP =0.0, kS=0.0)
+val SIM_GAINS = Gains(kP = 0.0, kS = 0.0)
 
 val MOTOR_PORT = 0
 
@@ -24,7 +24,7 @@ enum class AUXILIARY_MOTORS_PORTS(val port: Int) {
 enum class Preset(val velocity: AngularVelocity) {
     NEAR(30.0.rps),
     MEDIUM(40.0.rps),
-   FAR(50.0.rps)
+    FAR(50.0.rps)
 }
 
 val MOTOR_CONFIG =
