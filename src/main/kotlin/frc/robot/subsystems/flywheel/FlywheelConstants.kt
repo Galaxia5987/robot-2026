@@ -10,6 +10,8 @@ import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.amps
 
 val GAINS = Gains(kP = 0.0, kS = 0.0, kV = 0.0)
+val SIM_GAINS= Gains(kP =0.0, kS=0.0)
+
 val MOTOR_PORT = 0
 
 enum class AUXILIARY_MOTORS_PORTS(val port: Int) {
