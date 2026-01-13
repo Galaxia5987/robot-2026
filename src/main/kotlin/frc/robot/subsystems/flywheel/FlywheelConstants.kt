@@ -20,6 +20,7 @@ val MAIN_MOTOR_PORT = 0
 
 val AUXILIARY_MOTORS_PORTS = listOf(0, 0)
 
+@CommandEnum
 enum class Preset(val velocity: AngularVelocity) {
     NEAR(30.0.rps),
     MEDIUM(40.0.rps),
