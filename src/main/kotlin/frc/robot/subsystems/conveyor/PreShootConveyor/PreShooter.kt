@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.sysid.SysIdable
 import frc.robot.lib.universal_motor.UniversalTalonFX
+import org.littletonrobotics.junction.Logger
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
@@ -38,9 +39,9 @@ object PreShooter :
     private val velocityVoltage = VelocityVoltage(0.0)
     private val voltageRequest = VoltageOut(0.0)
 
-    @LoggedOutput(LogLevel.DEV) var setpoint = PreShooterVelocity.STOP
+     var setpoint = PreShooterVelocity.STOP
 
-    @LoggedOutput(LogLevel.DEV)
+    @LoggedOutput(LogLevel.COMP)
     val isAtSetpoint = Trigger {
         mainMotor.inputs.velocity.isNear(setpoint.velocity, SETPOINT_TOLERANCE)
     }
@@ -56,5 +57,6 @@ object PreShooter :
 
     override fun periodic() {
         mainMotor.periodic()
+        Logger.recordOutput("Subsystems/$name/setpoint",setpoint)
     }
 }
