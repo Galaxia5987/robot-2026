@@ -40,7 +40,7 @@ object Conveyor : SubsystemBase(), ConveyorVelocityCommandFactory, SysIdable {
     @LoggedOutput(LogLevel.DEV) var setpoint = ConveyorVelocity.STOP
 
     @LoggedOutput(LogLevel.DEV)
-    val isAtSetPoint = Trigger {
+    val isAtSetpoint = Trigger {
         mainMotor.inputs.velocity.isNear(setpoint.velocity, SETPOINT_TOLERANCE)
     }
 
