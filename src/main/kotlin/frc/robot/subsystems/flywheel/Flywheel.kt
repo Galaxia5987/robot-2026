@@ -26,7 +26,7 @@ object Flywheel : SubsystemBase() {
     private val voltageOut = VoltageOut(0.0)
     @AutoLogOutput private var setpoint = 0.rps
 
-    val velocity
+    private val velocity
         get() = motor.inputs.velocity
     init {
         AUXILIARY_MOTORS_PORTS.forEach {
@@ -49,6 +49,7 @@ object Flywheel : SubsystemBase() {
     }
 
     fun setVelocity(velocity: AngularVelocity): Command = setVelocity {
+        setpoint = velocity
         velocity
     }
 
@@ -59,7 +60,7 @@ object Flywheel : SubsystemBase() {
 
     fun stop() = setVelocity(0.rps)
 
-    fun setPreset(preset: Preset): Command = setVelocity(preset.velocity)
+    fun setTarget(preset: Preset): Command = setVelocity(preset.velocity)
 
     fun setVoltage(voltage: Voltage) {
         motor.setControl(voltageOut.withOutput(voltage))
