@@ -66,7 +66,7 @@ object Climb : SubsystemBase(), ClimbLevelsCommandFactory {
 
     override fun periodic() {
         listOf(mainMotor, lock).forEach { it.periodic() }
-        Logger.recordOutput("Subsystems/setpoint", setpoint)
-        Logger.recordOutput("Subsystems/isLocked", isLocked)
+        Logger.recordOutput("Subsystems/$name/setpoint", setpoint)
+        Logger.recordOutput("Subsystems/$name/isLocked", isLocked)
     }
 }
