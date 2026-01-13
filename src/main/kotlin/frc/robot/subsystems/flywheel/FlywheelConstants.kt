@@ -27,9 +27,5 @@ val MOTOR_CONFIG =
         Slot0 = GAINS.toSlotConfig()
 
         CurrentLimits =
-            createCurrentLimits(
-                supplyCurrentLimit = 30.amps,
-                supplyCurrentPeakDifference = 10.amps,
-                supplyCurrentLowerTime = 0.4.sec
-            )
+            createCurrentLimits(supplyCurrentPeakDifference = 10.amps)
     }

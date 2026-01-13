@@ -15,7 +15,7 @@ import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
 object Flywheel : SubsystemBase() {
-    private val Motor =
+    private val motor =
         UniversalTalonFX(
             port = MOTOR_PORT,
             config = MOTOR_CONFIG,
@@ -48,21 +48,18 @@ object Flywheel : SubsystemBase() {
     private val calibrationVelocity =
         LoggedNetworkNumber("/Tuning/calibrationFlywheelVelocity", 40.0)
 
-    fun setCalibrationAngle(): Command = setVelocity {
+    fun setCalibrationVelocity(): Command = setVelocity {
         calibrationVelocity.get().rps
     }
 
-    fun setVelocity(velocity: AngularVelocity): Command = runOnce {
-        setpoint = velocity
-        Motor.setControl(velocityTorque.withVelocity(velocity))
-    }
+    fun setVelocity(velocity: AngularVelocity): Command = setVelocity { velocity }
 
     fun setVelocity(velocity: () -> AngularVelocity): Command = run {
-        setpoint = velocity.invoke()
+        setpoint = velocity()
         Motor.setControl(velocityTorque.withVelocity(setpoint))
     }
 
-    fun stop() = setVelocity(0.0.rps)
+    fun stop() = setVelocity(0.rps)
 
     fun setVoltage(voltage: Voltage) {
         Motor.setControl(voltageOut.withOutput(voltage))
