@@ -41,7 +41,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.Alert;
@@ -59,7 +58,6 @@ import frc.robot.subsystems.drive.ModuleIOs.Module;
 import frc.robot.subsystems.drive.ModuleIOs.ModuleIO;
 import frc.robot.subsystems.drive.gyroIOs.GyroIO;
 import frc.robot.subsystems.drive.gyroIOs.GyroIOInputsAutoLogged;
-import java.time.LocalDate;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
@@ -287,7 +285,7 @@ public class Drive extends SubsystemBase implements SysIdable {
                 this);
 
         FlippingUtil.symmetryType = FlippingUtil.FieldSymmetry.kRotational;
-        
+
         Pathfinding.setPathfinder(new LocalADStarAK());
         PathPlannerLogging.setLogActivePathCallback(
                 (activePath) -> {
