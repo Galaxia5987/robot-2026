@@ -40,8 +40,10 @@ object Flywheel : SubsystemBase() {
     val velocity
         get() = Motor.inputs.velocity
     init {
-        Motor2.setControl(Follower(MOTOR_PORT, MotorAlignmentValue.Aligned))
-        Motor3.setControl(Follower(MOTOR_PORT, MotorAlignmentValue.Aligned))
+        AUXILIARY_MOTORS_PORTS.forEach {
+            UniversalTalonFX(port = it, config = MOTOR_CONFIG, subsystem = name)
+                .setControl(Follower(MOTOR_PORT, MotorAlignmentValue.Aligned))
+        }
     }
 
     private val calibrationVelocity =
