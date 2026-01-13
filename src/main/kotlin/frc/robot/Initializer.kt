@@ -1,13 +1,8 @@
 package frc.robot
 
 import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.math.geometry.Rotation2d
 import frc.robot.lib.Mode
-import frc.robot.lib.extensions.mm
-import frc.robot.lib.extensions.toTransform
-import frc.robot.lib.getRotation3d
-import frc.robot.lib.getTranslation3d
 import frc.robot.subsystems.drive.Drive
 import frc.robot.subsystems.drive.ModuleIOs.ModuleIO
 import frc.robot.subsystems.drive.ModuleIOs.ModuleIOSim
@@ -65,38 +60,12 @@ private val visionIOs =
     when (CURRENT_MODE) {
         Mode.REAL ->
             OV_NAME_TO_CONFIG.map {
-                if (it.key == TURRET_OV_NAME) {
-                    VisionIOPhotonVision(
-                        it.key,
-                        {
-                            Pose3d(
-                                    it.value.robotToCamera.translation
-                                        .rotateAround(
-                                            getTranslation3d(z = 441.837.mm),
-                                            getRotation3d(yaw = 0.0)
-                                        ),
-                                    getRotation3d(
-                                        yaw =
-                                            it.value.robotToCamera.rotation
-                                                .measureZ,
-                                        pitch =
-                                            it.value.robotToCamera.rotation
-                                                .measureY
-                                    )
-                                )
-                                .toTransform()
-                        },
-                        { drive.gyroRotation },
-                        { mutableListOf(2, 9, 10, 11) }
-                    )
-                } else {
-                    VisionIOPhotonVision(
-                        it.key,
-                        { it.value.robotToCamera },
-                        { drive.gyroRotation },
-                        { mutableListOf(2, 9, 10, 11) }
-                    )
-                }
+                VisionIOPhotonVision(
+                    it.key,
+                    { it.value.robotToCamera },
+                    { drive.gyroRotation },
+                    { listOf() } // TODO:
+                )
             }
         Mode.SIM ->
             OV_NAME_TO_CONFIG.map {
@@ -104,7 +73,7 @@ private val visionIOs =
                     it.key,
                     { it.value.robotToCamera },
                     { drive.gyroRotation },
-                    { mutableListOf(2, 9, 10, 11) },
+                    { listOf() }, // TODO:
                     { drive.pose },
                 )
             }
