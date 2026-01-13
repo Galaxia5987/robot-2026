@@ -285,20 +285,7 @@ public class Drive extends SubsystemBase implements SysIdable {
                         DriverStation.getAlliance().isPresent()
                                 && DriverStation.getAlliance().get() == DriverStation.Alliance.Red,
                 this);
-
-        FlippingUtil.symmetryType = FlippingUtil.FieldSymmetry.kRotational;
-        FlippingUtil.fieldSizeX = Units.inchesToMeters(324 * 2);
-        FlippingUtil.fieldSizeY = Units.inchesToMeters(162 * 2);
-
-        // TODO: remove this after the kickoff
-        LocalDate kickoffDate = LocalDate.of(2026, 1, 10); // 10 January
-        LocalDate today = LocalDate.now();
-
-        if (today.isAfter(kickoffDate)) {
-            throw new IllegalArgumentException(
-                    "REMOVE THE FIELD OVERRIDE, REMOVE LINES: DRIVE, 239-241");
-        }
-
+        
         Pathfinding.setPathfinder(new LocalADStarAK());
         PathPlannerLogging.setLogActivePathCallback(
                 (activePath) -> {
