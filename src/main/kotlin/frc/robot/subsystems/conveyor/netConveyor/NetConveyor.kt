@@ -1,0 +1,58 @@
+package frc.robot.subsystems.conveyor.netConveyor
+
+import com.ctre.phoenix6.controls.Follower
+import com.ctre.phoenix6.controls.VelocityVoltage
+import com.ctre.phoenix6.controls.VoltageOut
+import com.ctre.phoenix6.signals.MotorAlignmentValue
+import edu.wpi.first.units.measure.Voltage
+import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.SubsystemBase
+import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.lib.sysid.SysIdable
+import frc.robot.lib.universal_motor.UniversalTalonFX
+import org.team5987.annotation.LogLevel
+import org.team5987.annotation.LoggedOutput
+
+object NetConveyor :
+    SubsystemBase(), NetConveyorVelocityCommandFactory, SysIdable {
+
+    private val mainMotor =
+        UniversalTalonFX(
+            MAIN_MOTOR_ID,
+            config = MOTOR_CONFIG,
+            gearRatio = GEAR_RATIO
+        )
+
+    private val auxMotor =
+        UniversalTalonFX(
+                AUX_MOTOR_ID,
+                config = MOTOR_CONFIG,
+                gearRatio = GEAR_RATIO
+            )
+            .apply {
+                setControl(Follower(MAIN_MOTOR_ID, MotorAlignmentValue.Aligned))
+            } //TODO is using double motors ?
+
+    private val velocityVoltage = VelocityVoltage(0.0)
+    private val voltageRequest = VoltageOut(0.0)
+
+    @LoggedOutput(LogLevel.DEV) var setPoint = NetConveyorVelocity.STOP
+
+    @LoggedOutput(LogLevel.DEV)
+    val isAtSetPoint = Trigger {
+        mainMotor.inputs.velocity.isNear(setPoint.velocity, SETPOINT_TOLERANCE)
+    }
+
+    override fun setTarget(value: NetConveyorVelocity): Command = runOnce {
+        mainMotor.setControl(velocityVoltage.withVelocity(value.velocity))
+        setPoint = value
+    }
+
+    override fun setVoltage(voltage: Voltage) {
+        mainMotor.setControl(voltageRequest.withOutput(voltage))
+    }
+
+    override fun periodic() {
+        mainMotor.periodic()
+    }
+}
