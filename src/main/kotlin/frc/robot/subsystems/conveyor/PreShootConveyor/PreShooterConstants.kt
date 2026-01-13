@@ -10,7 +10,7 @@ import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.rps
 import org.team5987.annotation.command_enum.CommandEnum
 
-val GAINS = LoggedNetworkGains("PreShooterGains", 1.0) // TODO calibration
+val GAINS = LoggedNetworkGains("PreShooterRealGains", 1.0) // TODO calibration
 
 val SIM_GAINS = Gains(1.0)
 
