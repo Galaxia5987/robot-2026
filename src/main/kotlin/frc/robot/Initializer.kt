@@ -29,11 +29,11 @@ val driveSimulation: SwerveDriveSimulation? =
 
 private val driveModuleIOs =
     arrayOf(
-            TunerConstants.FrontLeft,
-            TunerConstants.FrontRight,
-            TunerConstants.BackLeft,
-            TunerConstants.BackRight
-        )
+        TunerConstants.FrontLeft,
+        TunerConstants.FrontRight,
+        TunerConstants.BackLeft,
+        TunerConstants.BackRight
+    )
         .mapIndexed { index, module ->
             when (CURRENT_MODE) {
                 Mode.REAL -> ModuleIOTalonFX(module)
@@ -51,6 +51,7 @@ private val gyroIO =
                 driveSimulation?.gyroSimulation
                     ?: throw Exception("Gyro simulation is null")
             )
+
         else -> object : GyroIO {}
     }
 
@@ -65,49 +66,25 @@ private val visionIOs =
     when (CURRENT_MODE) {
         Mode.REAL ->
             OV_NAME_TO_CONFIG.map {
-                if (it.key == TURRET_OV_NAME) {
-                    VisionIOPhotonVision(
-                        it.key,
-                        {
-                            Pose3d(
-                                    it.value.robotToCamera.translation
-                                        .rotateAround(
-                                            getTranslation3d(z = 441.837.mm),
-                                            getRotation3d(yaw = 0.0)
-                                        ),
-                                    getRotation3d(
-                                        yaw =
-                                            it.value.robotToCamera.rotation
-                                                .measureZ,
-                                        pitch =
-                                            it.value.robotToCamera.rotation
-                                                .measureY
-                                    )
-                                )
-                                .toTransform()
-                        },
-                        { drive.gyroRotation },
-                        { mutableListOf(2, 9, 10, 11) }
-                    )
-                } else {
-                    VisionIOPhotonVision(
-                        it.key,
-                        { it.value.robotToCamera },
-                        { drive.gyroRotation },
-                        { mutableListOf(2, 9, 10, 11) }
-                    )
-                }
+                VisionIOPhotonVision(
+                    it.key,
+                    { it.value.robotToCamera },
+                    { drive.gyroRotation },
+                    { listOf() } // TODO:
+                )
             }
+
         Mode.SIM ->
             OV_NAME_TO_CONFIG.map {
                 VisionIOPhotonVisionSim(
                     it.key,
                     { it.value.robotToCamera },
                     { drive.gyroRotation },
-                    { mutableListOf(2, 9, 10, 11) },
+                    { listOf() }, // TODO:
                     { drive.pose },
                 )
             }
+
         Mode.REPLAY -> emptyList()
     }.toTypedArray()
 
