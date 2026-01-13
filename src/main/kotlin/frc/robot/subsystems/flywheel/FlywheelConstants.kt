@@ -12,7 +12,7 @@ import frc.robot.lib.extensions.amps
 import frc.robot.lib.extensions.rps
 import org.team5987.annotation.command_enum.CommandEnum
 
-const val GEAR_RATIO=1
+const val GEAR_RATIO = 1
 val REAL_GAINS = Gains(kP = 0.0, kS = 0.0, kV = 0.0)
 val SIM_GAINS = Gains(kP = 0.0, kS = 0.0)
 
