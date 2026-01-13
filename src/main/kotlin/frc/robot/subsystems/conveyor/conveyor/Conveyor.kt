@@ -38,7 +38,7 @@ object Conveyor : SubsystemBase(), ConveyorVelocityCommandFactory, SysIdable {
     private val velocityVoltage = VelocityVoltage(0.0)
     private val voltageRequest = VoltageOut(0.0)
 
-    var setpoint = ConveyorVelocity.STOP
+    private var setpoint = ConveyorVelocity.STOP
 
     @LoggedOutput(LogLevel.COMP)
     val isAtSetpoint = Trigger {
