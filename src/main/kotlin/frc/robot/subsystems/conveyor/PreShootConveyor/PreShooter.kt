@@ -13,8 +13,8 @@ import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
-object PreShootConveyor :
-    SubsystemBase(), PreShootConveyorVelocityCommandFactory, SysIdable {
+object PreShooter :
+    SubsystemBase(), PreShooterVelocityCommandFactory, SysIdable {
 
     private val mainMotor =
         UniversalTalonFX(
@@ -38,14 +38,14 @@ object PreShootConveyor :
     private val velocityVoltage = VelocityVoltage(0.0)
     private val voltageRequest = VoltageOut(0.0)
 
-    @LoggedOutput(LogLevel.DEV) var setpoint = PreShootConveyorVelocity.STOP
+    @LoggedOutput(LogLevel.DEV) var setpoint = PreShooterVelocity.STOP
 
     @LoggedOutput(LogLevel.DEV)
     val isAtSetpoint = Trigger {
         mainMotor.inputs.velocity.isNear(setpoint.velocity, SETPOINT_TOLERANCE)
     }
 
-    override fun setTarget(value: PreShootConveyorVelocity): Command = runOnce {
+    override fun setTarget(value: PreShooterVelocity): Command = runOnce {
         mainMotor.setControl(velocityVoltage.withVelocity(value.velocity))
         setpoint = value
     }

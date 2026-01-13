@@ -33,7 +33,7 @@ val MOTOR_CONFIG =
     }
 
 @CommandEnum
-enum class PreShootConveyorVelocity(val velocity: AngularVelocity) {
+enum class PreShooterVelocity(val velocity: AngularVelocity) {
     STOP(0.rps),
     START(10.rps),
     FAST(20.rps),
