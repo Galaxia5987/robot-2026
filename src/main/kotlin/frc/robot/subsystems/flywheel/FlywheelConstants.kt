@@ -6,6 +6,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import edu.wpi.first.units.measure.AngularVelocity
+import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.amps
@@ -26,6 +27,8 @@ enum class Preset(val velocity: AngularVelocity) {
     MEDIUM(40.0.rps),
     FAR(50.0.rps)
 }
+interface PresetActions {
+    fun setTarget(preset: Preset): Command}
 
 val MOTOR_CONFIG =
     TalonFXConfiguration().apply {
