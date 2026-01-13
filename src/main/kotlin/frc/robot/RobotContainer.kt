@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.enableAutoLogOutputFor
-import frc.robot.lib.unified_controller.UnifiedController
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.hood.Hood
 import org.ironmaple.simulation.SimulatedArena
@@ -54,8 +53,8 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
-        driverController.povUp().onTrue(Hood.setPosition(10.deg))
-        driverController.povDown().onTrue(Hood.setPosition(0.deg))
+        driverController.povUp().onTrue(Hood.getToPosition(10.deg))
+        driverController.povDown().onTrue(Hood.getToPosition(0.deg))
 
     }
 
