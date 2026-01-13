@@ -16,7 +16,7 @@ import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 object Flywheel : SubsystemBase() {
     private val motor =
         UniversalTalonFX(
-            port = MOTOR_PORT,
+            port = MAIN_MOTOR_PORT,
             config = MOTOR_CONFIG,
             subsystem = name,
             simGains = SIM_GAINS
@@ -29,14 +29,10 @@ object Flywheel : SubsystemBase() {
     val velocity
         get() = motor.inputs.velocity
     init {
-        AUXILIARY_MOTORS_PORTS.values().forEach {
-            UniversalTalonFX(
-                    port = it.port,
-                    config = MOTOR_CONFIG,
-                    subsystem = name
-                )
+        AUXILIARY_MOTORS_PORTS.forEach {
+            UniversalTalonFX(port = it, config = MOTOR_CONFIG, subsystem = name)
                 .setControl(
-                    Follower(MOTOR_PORT, MotorAlignmentValue.Aligned)
+                    Follower(MAIN_MOTOR_PORT, MotorAlignmentValue.Aligned)
                         .withUpdateFreqHz(123.0)
                 )
         }
