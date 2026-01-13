@@ -8,7 +8,6 @@ import frc.robot.lib.extensions.mm
 import frc.robot.lib.extensions.toTransform
 import frc.robot.lib.getRotation3d
 import frc.robot.lib.getTranslation3d
-import frc.robot.sim.RapidReactArena
 import frc.robot.subsystems.drive.Drive
 import frc.robot.subsystems.drive.ModuleIOs.ModuleIO
 import frc.robot.subsystems.drive.ModuleIOs.ModuleIOSim
@@ -17,17 +16,15 @@ import frc.robot.subsystems.drive.TunerConstants
 import frc.robot.subsystems.drive.gyroIOs.GyroIO
 import frc.robot.subsystems.drive.gyroIOs.GyroIOPigeon2
 import frc.robot.subsystems.drive.gyroIOs.GyroIOSim
-import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.vision.*
-import org.ironmaple.simulation.SimulatedArena
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation
 
 val driveSimulation: SwerveDriveSimulation? =
     if (CURRENT_MODE == Mode.SIM)
         SwerveDriveSimulation(
-                Drive.mapleSimConfig,
-                Pose2d(3.0, 3.0, Rotation2d())
-            )
+            Drive.mapleSimConfig,
+            Pose2d(3.0, 3.0, Rotation2d())
+        )
     else null
 
 private val driveModuleIOs =
@@ -76,15 +73,12 @@ private val visionIOs =
                                     it.value.robotToCamera.translation
                                         .rotateAround(
                                             getTranslation3d(z = 441.837.mm),
-                                            getRotation3d(
-                                                yaw = Turret.inputs.position
-                                            )
+                                            getRotation3d(yaw = 0.0)
                                         ),
                                     getRotation3d(
                                         yaw =
                                             it.value.robotToCamera.rotation
-                                                .measureZ -
-                                                Turret.inputs.position,
+                                                .measureZ,
                                         pitch =
                                             it.value.robotToCamera.rotation
                                                 .measureY

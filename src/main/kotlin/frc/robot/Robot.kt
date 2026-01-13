@@ -16,11 +16,7 @@ import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.lib.logged_output.LoggedOutputManager
 import org.ironmaple.simulation.SimulatedArena
-import org.littletonrobotics.junction.AutoLogOutputManager
-import org.littletonrobotics.junction.LogFileUtil
-import org.littletonrobotics.junction.LoggedRobot
-import org.littletonrobotics.junction.Logger
-import org.littletonrobotics.junction.inputs.LoggedPowerDistribution
+import org.littletonrobotics.junction.*
 import org.littletonrobotics.junction.networktables.NT4Publisher
 import org.littletonrobotics.junction.wpilog.WPILOGReader
 import org.littletonrobotics.junction.wpilog.WPILOGWriter
@@ -94,8 +90,11 @@ object Robot : LoggedRobot() {
         LoggedOutputManager
 
         DriverStation.silenceJoystickConnectionWarning(true)
-        FollowPathCommand.warmupCommand().schedule()
-        PathfindingCommand.warmupCommand().schedule()
+        CommandScheduler.getInstance()
+            .schedule(
+                FollowPathCommand.warmupCommand(),
+                PathfindingCommand.warmupCommand()
+            )
 
         val commandCounts = HashMap<String, Int>()
         val logCommandFunction =
@@ -135,7 +134,6 @@ object Robot : LoggedRobot() {
      */
     override fun robotPeriodic() {
         CommandScheduler.getInstance().run()
-        logSubsystemPose()
     }
 
     /**
@@ -154,7 +152,7 @@ object Robot : LoggedRobot() {
         autonomousCommand = RobotContainer.getAutonomousCommand()
 
         // Schedule the autonomous command
-        autonomousCommand.schedule()
+        CommandScheduler.getInstance().schedule(autonomousCommand)
     }
 
     /** This function is called periodically during autonomous. */
