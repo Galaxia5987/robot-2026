@@ -13,6 +13,7 @@ import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
+
 object Flywheel : SubsystemBase() {
     private val motor =
         UniversalTalonFX(
@@ -56,6 +57,8 @@ object Flywheel : SubsystemBase() {
     }
 
     fun stop() = setVelocity(0.rps)
+
+    fun setPreset(preset: Preset): Command = setVelocity(preset.velocity)
 
     fun setVoltage(voltage: Voltage) {
         motor.setControl(voltageOut.withOutput(voltage))
