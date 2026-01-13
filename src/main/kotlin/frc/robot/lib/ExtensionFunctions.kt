@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.GenericHID
 import edu.wpi.first.wpilibj.util.Color
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
-import edu.wpi.first.wpilibj2.command.WrapperCommand
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import kotlin.math.*
 import org.littletonrobotics.junction.LogTable
@@ -61,20 +60,6 @@ inline fun <reified T : List<Any>> LogTable.get(
     return if (T::class == MutableList::class) result.toMutableList() as T
     else result as T
 }
-
-fun Command.handleInterrupt(command: Command): WrapperCommand =
-    handleInterrupt {
-        command.schedule()
-    }
-
-fun Command.finallyDo(command: Command): WrapperCommand =
-    finallyDo(
-        Runnable {
-            this.cancel()
-            if (command.isScheduled) command.cancel()
-            command.schedule()
-        }
-    )
 
 fun CommandXboxController.setRumble(strength: Double) {
     this.hid.setRumble(GenericHID.RumbleType.kBothRumble, strength)
