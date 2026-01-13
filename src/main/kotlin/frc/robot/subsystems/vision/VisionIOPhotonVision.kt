@@ -33,7 +33,6 @@ open class VisionIOPhotonVision(
     private val localPoseEstimator =
         PhotonPoseEstimator(
             APRILTAG_LAYOUT,
-            PhotonPoseEstimator.PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
             robotToCamera()
         )
 
@@ -68,7 +67,7 @@ open class VisionIOPhotonVision(
                     )
 
                 localPoseEstimator.robotToCameraTransform = robotToCamera()
-                val estimatedPose = localPoseEstimator.update(filteredResult)
+                val estimatedPose = localPoseEstimator.estimatePnpDistanceTrigSolvePose(filteredResult)
                 localPoseEstimator.addHeadingData(
                     result.timestampSeconds,
                     botRotation()
