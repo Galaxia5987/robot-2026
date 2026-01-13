@@ -17,16 +17,14 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout
 import edu.wpi.first.math.geometry.Rotation3d
 import edu.wpi.first.math.geometry.Transform3d
 import edu.wpi.first.math.geometry.Translation3d
-import edu.wpi.first.units.Units.Millimeters
 import edu.wpi.first.wpilibj.Filesystem
-import frc.robot.lib.extensions.deg
-import frc.robot.lib.extensions.mm
 import java.io.File
 
 const val LOG_PREFIX = "Subsystems/Vision/"
 
 // AprilTag layout
-val APRILTAG_LAYOUT: AprilTagFieldLayout = // TODO: Replace with correct apriltag layout when it comes out
+val APRILTAG_LAYOUT:
+    AprilTagFieldLayout = // TODO: Replace with correct apriltag layout when it comes out
     AprilTagFieldLayout(
         File(Filesystem.getDeployDirectory(), "apriltag-locations.json")
             .toPath()
@@ -45,16 +43,9 @@ const val EXMAPLE = "example"
 // Robot to camera transforms
 // (Not used by Limelight, configure in web UI instead)
 
-val OV_NAME_TO_CONFIG =
-    mapOf<String, CameraConfig>(
-        )
+val OV_NAME_TO_CONFIG = mapOf<String, CameraConfig>()
 
-var realsenseRobotToCamera =
-    Transform3d(
-        Translation3d(
-        ),
-        Rotation3d()
-    )
+var realsenseRobotToCamera = Transform3d(Translation3d(), Rotation3d())
 
 // Basic filtering thresholds
 const val MAX_AMBIGUITY = 0.3

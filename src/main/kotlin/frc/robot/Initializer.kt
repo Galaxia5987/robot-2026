@@ -1,13 +1,8 @@
 package frc.robot
 
 import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.math.geometry.Rotation2d
 import frc.robot.lib.Mode
-import frc.robot.lib.extensions.mm
-import frc.robot.lib.extensions.toTransform
-import frc.robot.lib.getRotation3d
-import frc.robot.lib.getTranslation3d
 import frc.robot.subsystems.drive.Drive
 import frc.robot.subsystems.drive.ModuleIOs.ModuleIO
 import frc.robot.subsystems.drive.ModuleIOs.ModuleIOSim
@@ -29,11 +24,11 @@ val driveSimulation: SwerveDriveSimulation? =
 
 private val driveModuleIOs =
     arrayOf(
-        TunerConstants.FrontLeft,
-        TunerConstants.FrontRight,
-        TunerConstants.BackLeft,
-        TunerConstants.BackRight
-    )
+            TunerConstants.FrontLeft,
+            TunerConstants.FrontRight,
+            TunerConstants.BackLeft,
+            TunerConstants.BackRight
+        )
         .mapIndexed { index, module ->
             when (CURRENT_MODE) {
                 Mode.REAL -> ModuleIOTalonFX(module)
@@ -51,7 +46,6 @@ private val gyroIO =
                 driveSimulation?.gyroSimulation
                     ?: throw Exception("Gyro simulation is null")
             )
-
         else -> object : GyroIO {}
     }
 
@@ -73,7 +67,6 @@ private val visionIOs =
                     { listOf() } // TODO:
                 )
             }
-
         Mode.SIM ->
             OV_NAME_TO_CONFIG.map {
                 VisionIOPhotonVisionSim(
@@ -84,7 +77,6 @@ private val visionIOs =
                     { drive.pose },
                 )
             }
-
         Mode.REPLAY -> emptyList()
     }.toTypedArray()
 
