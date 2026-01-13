@@ -17,8 +17,8 @@ class UnifiedController(val port: Int) {
     private var controller: UnifiedControllerIO =
         PsControllerMap(port) // default value
 
-    var isXboxController = false
-    var isSonyLinux = false
+    private var isXboxController = false
+    private var isSonyLinux = false
 
     fun updateControllerType() {
         isXboxController =
@@ -55,16 +55,36 @@ class UnifiedController(val port: Int) {
                 )
             } // has to be a trigger. need to wait until the controller is readable.
 
-    fun cross() = controller.cross()
-    fun circle() = controller.circle()
-    fun square() = controller.square()
-    fun triangle() = controller.triangle()
-    fun L1() = controller.L1()
-    fun R1() = controller.R1()
-    fun L2() = controller.L2()
-    fun R2() = controller.R2()
-    fun create() = controller.create()
-    fun options() = controller.options()
+    /**
+     * The bottom face button.
+     * - PlayStation: **Cross (X)**
+     * - Xbox: **A**
+     */
+    fun cross() = Trigger { controller.cross().asBoolean }
+    /**
+     * The right face button.
+     * - PlayStation: **Circle**
+     * - Xbox: **B**
+     */
+    fun circle() = Trigger { controller.circle().asBoolean }
+    /**
+     * The left face button.
+     * - PlayStation: **Square**
+     * - Xbox: **X**
+     */
+    fun square() = Trigger { controller.square().asBoolean }
+    /**
+     * The top face button.
+     * - PlayStation: **Triangle**
+     * - Xbox: **Y**
+     */
+    fun triangle() = Trigger { controller.triangle().asBoolean }
+    fun L1() = Trigger { controller.L1().asBoolean }
+    fun R1() = Trigger { controller.R1().asBoolean }
+    fun L2() = Trigger { controller.L2().asBoolean }
+    fun R2() = Trigger { controller.R2().asBoolean }
+    fun create() = Trigger { controller.create().asBoolean }
+    fun options() = Trigger { controller.options().asBoolean }
 
     val leftX
         get() = controller.leftX()
