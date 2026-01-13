@@ -31,10 +31,7 @@ open class VisionIOPhotonVision(
 ) : VisionIO {
     protected val camera = PhotonCamera(name)
     private val localPoseEstimator =
-        PhotonPoseEstimator(
-            APRILTAG_LAYOUT,
-            robotToCamera()
-        )
+        PhotonPoseEstimator(APRILTAG_LAYOUT, robotToCamera())
 
     override fun updateInputs(inputs: VisionIOInputs) {
         inputs.connected = camera.isConnected
@@ -67,7 +64,10 @@ open class VisionIOPhotonVision(
                     )
 
                 localPoseEstimator.robotToCameraTransform = robotToCamera()
-                val estimatedPose = localPoseEstimator.estimatePnpDistanceTrigSolvePose(filteredResult)
+                val estimatedPose =
+                    localPoseEstimator.estimatePnpDistanceTrigSolvePose(
+                        filteredResult
+                    )
                 localPoseEstimator.addHeadingData(
                     result.timestampSeconds,
                     botRotation()
