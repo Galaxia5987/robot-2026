@@ -34,7 +34,7 @@ object Flywheel : SubsystemBase() {
                     config = MOTOR_CONFIG,
                     subsystem = name
                 )
-                .setControl(Follower(MOTOR_PORT, MotorAlignmentValue.Aligned))
+                .setControl(Follower(MOTOR_PORT, MotorAlignmentValue.Aligned).withUpdateFreqHz(123.0))
         }
     }
 
