@@ -13,8 +13,7 @@ import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
-object Conveyor :
-    SubsystemBase(), NetConveyorVelocityCommandFactory, SysIdable {
+object Conveyor : SubsystemBase(), ConveyorVelocityCommandFactory, SysIdable {
 
     private val mainMotor =
         UniversalTalonFX(
@@ -38,14 +37,14 @@ object Conveyor :
     private val velocityVoltage = VelocityVoltage(0.0)
     private val voltageRequest = VoltageOut(0.0)
 
-    @LoggedOutput(LogLevel.DEV) var setpoint = NetConveyorVelocity.STOP
+    @LoggedOutput(LogLevel.DEV) var setpoint = ConveyorVelocity.STOP
 
     @LoggedOutput(LogLevel.DEV)
     val isAtSetPoint = Trigger {
         mainMotor.inputs.velocity.isNear(setpoint.velocity, SETPOINT_TOLERANCE)
     }
 
-    override fun setTarget(value: NetConveyorVelocity): Command = runOnce {
+    override fun setTarget(value: ConveyorVelocity): Command = runOnce {
         mainMotor.setControl(velocityVoltage.withVelocity(value.velocity))
         setpoint = value
     }
