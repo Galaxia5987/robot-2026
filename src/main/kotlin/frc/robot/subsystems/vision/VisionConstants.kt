@@ -18,8 +18,6 @@ import edu.wpi.first.apriltag.AprilTagFields
 import edu.wpi.first.math.geometry.Rotation3d
 import edu.wpi.first.math.geometry.Transform3d
 import edu.wpi.first.math.geometry.Translation3d
-import edu.wpi.first.wpilibj.Filesystem
-import java.io.File
 
 const val LOG_PREFIX = "Subsystems/Vision/"
 
