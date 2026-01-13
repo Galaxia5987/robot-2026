@@ -15,7 +15,7 @@ import kotlin.invoke
 val PORT = 0;
 // TODO: check port
 
-val SIM_GAINS = Gains(kP = 1.0, kD = 0.0)
+val SIM_GAINS = Gains(kP = 1.5, kD = 0.22)
 
 val CONFIG = TalonFXConfiguration().apply {
     MotorOutput =
