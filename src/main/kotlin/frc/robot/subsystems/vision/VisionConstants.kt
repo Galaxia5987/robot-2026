@@ -26,7 +26,7 @@ import java.io.File
 const val LOG_PREFIX = "Subsystems/Vision/"
 
 // AprilTag layout
-val APRILTAG_LAYOUT: AprilTagFieldLayout =
+val APRILTAG_LAYOUT: AprilTagFieldLayout = // TODO: Replace with correct apriltag layout when it comes out
     AprilTagFieldLayout(
         File(Filesystem.getDeployDirectory(), "apriltag-locations.json")
             .toPath()
@@ -40,58 +40,18 @@ data class CameraConfig(
 )
 
 // Camera names, must match names configured on coprocessor
-const val TURRET_OV_NAME = "turret"
-const val LEFT_OV_NAME = "left"
-const val RIGHT_OV_NAME = "right"
+const val EXMAPLE = "example"
 
 // Robot to camera transforms
 // (Not used by Limelight, configure in web UI instead)
-val TURRET_CAMERA_CONFIG: CameraConfig =
-    CameraConfig(
-        Transform3d(
-            183.105966196.mm,
-            0.mm,
-            697.57321.mm,
-            Rotation3d(0.deg, 13.48.deg, 180.deg)
-        ),
-        1.0
-    )
-
-val RIGHT: CameraConfig =
-    CameraConfig(
-        Transform3d(
-            131.525.mm,
-            (-180).mm,
-            303.928.mm,
-            Rotation3d(0.deg, 0.0.deg, (-90).deg)
-        ),
-        1.0
-    )
-
-val LEFT: CameraConfig =
-    CameraConfig(
-        Transform3d(
-            131.525.mm,
-            180.mm,
-            303.928.mm,
-            Rotation3d(0.deg, 0.0.deg, 90.deg)
-        ),
-        1.0
-    )
 
 val OV_NAME_TO_CONFIG =
-    mapOf(
-        TURRET_OV_NAME to TURRET_CAMERA_CONFIG,
-        //    RIGHT_OV_NAME to RIGHT,
-        //    LEFT_OV_NAME to LEFT,
+    mapOf<String, CameraConfig>(
         )
 
 var realsenseRobotToCamera =
     Transform3d(
         Translation3d(
-            Millimeters.of(330.0),
-            Millimeters.of(11.326),
-            Millimeters.of(-70.751)
         ),
         Rotation3d()
     )
