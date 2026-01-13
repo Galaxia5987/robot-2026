@@ -29,9 +29,9 @@ class UnifiedController(val port: Int) {
 
     val controllerTrigger =
         Trigger {
-            updateControllerType()
-            isXboxController || isSonyLinux
-        }
+                updateControllerType()
+                isXboxController || isSonyLinux
+            }
             .apply {
                 and { isXboxController }
                     .onTrue(
