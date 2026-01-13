@@ -39,7 +39,7 @@ object PreShooter :
     private val velocityVoltage = VelocityVoltage(0.0)
     private val voltageRequest = VoltageOut(0.0)
 
-     var setpoint = PreShooterVelocity.STOP
+    private var setpoint = PreShooterVelocity.STOP
 
     @LoggedOutput(LogLevel.COMP)
     val isAtSetpoint = Trigger {
