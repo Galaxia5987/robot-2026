@@ -17,8 +17,8 @@ class UnifiedController(val port: Int) {
     private var controller: UnifiedControllerIO =
         PsControllerMap(port) // default value
 
-    var isXboxController = false
-    var isSonyLinux = false
+    private var isXboxController = false
+    private var isSonyLinux = false
 
     fun updateControllerType() {
         isXboxController =
