@@ -25,16 +25,8 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 
 object RobotContainer {
     private val driverController = UnifiedController(0)
-    private val switchController = CommandGenericHID(1)
-    private val userButton = Trigger { RobotController.getUserButton() }
     private val autoChooser: LoggedDashboardChooser<Command>
 
-    enum class SwitchInput(val buttonId: Int) {
-        DisableAutoAlign(0),
-        StaticSetpoint(1),
-        IntakeByVision(2),
-        ShouldShootOneBall(12)
-    }
 
     init {
         drive // Ensure Drive is initialized
@@ -70,56 +62,13 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
-
-        driverController
-            .povDown()
-            .onTrue(
-                drive.defer {
-                    profiledAlignToPose(
-                        drive.pose +
-                            Transform2d(
-                                getTranslation2d(x = 3.m),
-                                Rotation2d.kCCW_90deg
-                            )
-                    )
-                }
-            )
-
-        driverController
-            .square()
-            .onTrue(
-                Commands.runOnce({
-                    AutoBuilder.resetOdom(
-                        PathPlannerPath.fromPathFile(
-                                autoChooser.sendableChooser.selected
-                            )
-                            .pathPoses[0]
-                    )
-                })
-            )
-        // reset swerve
-        driverController.apply {
-            options().onTrue(DriveCommands.resetGyro())
-            povRight()
-                .onTrue(
-                    drive.defer {
-                        profiledAlignToPose(
-                            drive.pose +
-                                Transform2d(
-                                    Translation2d(3.0, 0.0),
-                                    Rotation2d.kCCW_90deg
-                                )
-                        )
-                    }
-                )
-        }
+        driverController.options().onTrue(DriveCommands.resetGyro())
     }
 
     fun getAutonomousCommand(): Command = autoChooser.get()
 
     private fun registerAutoCommands() {
         // SysIds
-
         autoChooser.addOption(
             "Drive Wheel Radius Characterization",
             DriveCommands.wheelRadiusCharacterization()
