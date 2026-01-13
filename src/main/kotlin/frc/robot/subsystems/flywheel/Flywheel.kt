@@ -61,7 +61,7 @@ object Flywheel : SubsystemBase() {
         Motor.setControl(velocityTorque.withVelocity(setpoint))
     }
 
-    fun stop() = setVelocity(0.0.rps)
+    fun stop() = setVelocity(0.rps)
 
     fun setVoltage(voltage: Voltage) {
         Motor.setControl(voltageOut.withOutput(voltage))
