@@ -27,8 +27,10 @@ enum class Preset(val velocity: AngularVelocity) {
     MEDIUM(40.0.rps),
     FAR(50.0.rps)
 }
+
 interface PresetActions {
-    fun setTarget(preset: Preset): Command}
+    fun setTarget(preset: Preset): Command
+}
 
 val MOTOR_CONFIG =
     TalonFXConfiguration().apply {

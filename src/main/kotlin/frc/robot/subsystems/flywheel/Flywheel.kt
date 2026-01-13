@@ -12,9 +12,8 @@ import frc.robot.lib.extensions.rps
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
-import org.team5987.annotation.command_enum.CommandEnum
 
-object Flywheel : SubsystemBase(),PresetActions {
+object Flywheel : SubsystemBase(), PresetActions {
     private val motor =
         UniversalTalonFX(
             port = MAIN_MOTOR_PORT,
