@@ -1,14 +1,17 @@
 package frc.robot.subsystems.turret
 
 import com.ctre.phoenix6.configs.*
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import com.ctre.phoenix6.signals.SensorDirectionValue
+import com.revrobotics.spark.config.EncoderConfig
 import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.degrees
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.rps
+import kotlinx.serialization.encoding.Encoder
 
 const val PORT = 0
 const val RATIO = 1.0
@@ -38,5 +41,9 @@ val CONFIG =
             Slot0Configs().apply { //
                 Slot0 = REAL_GAINS.toSlotConfig()
             }
-        Feedback = FeedbackConfigs().apply { SensorToMechanismRatio = RATIO }
+        Feedback = FeedbackConfigs().apply {
+            SensorToMechanismRatio = RATIO
+            FeedbackRemoteSensorID = ENCODER_ID
+            FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder
+        }
     }
