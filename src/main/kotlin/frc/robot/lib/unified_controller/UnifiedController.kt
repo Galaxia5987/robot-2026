@@ -55,9 +55,29 @@ class UnifiedController(val port: Int) {
                 )
             } // has to be a trigger. need to wait until the controller is readable.
 
+    /**
+     * The bottom face button.
+     * - PlayStation: **Cross (X)**
+     * - Xbox: **A**
+     */
     fun cross() = Trigger { controller.cross().asBoolean }
+    /**
+     * The right face button.
+     * - PlayStation: **Circle**
+     * - Xbox: **B**
+     */
     fun circle() = Trigger { controller.circle().asBoolean }
+    /**
+     * The left face button.
+     * - PlayStation: **Square**
+     * - Xbox: **X**
+     */
     fun square() = Trigger { controller.square().asBoolean }
+    /**
+     * The top face button.
+     * - PlayStation: **Triangle**
+     * - Xbox: **Y**
+     */
     fun triangle() = Trigger { controller.triangle().asBoolean }
     fun L1() = Trigger { controller.L1().asBoolean }
     fun R1() = Trigger { controller.R1().asBoolean }
