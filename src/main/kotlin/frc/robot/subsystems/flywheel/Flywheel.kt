@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.lib.extensions.rps
 import frc.robot.lib.universal_motor.UniversalTalonFX
+import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
@@ -35,7 +36,7 @@ object Flywheel : SubsystemBase() {
 
     private val velocityTorque = VelocityVoltage(0.0)
     private val voltageOut = VoltageOut(0.0)
-    private var setpoint = 0.rps
+    @AutoLogOutput private var setpoint = 0.rps
 
     val velocity
         get() = Motor.inputs.velocity
@@ -69,6 +70,5 @@ object Flywheel : SubsystemBase() {
 
     override fun periodic() {
         Motor.periodic()
-        Logger.recordOutput("Subsystems/$name/setpoint", setpoint)
     }
 }
