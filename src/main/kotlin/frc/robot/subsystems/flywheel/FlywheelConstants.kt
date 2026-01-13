@@ -10,8 +10,10 @@ import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.amps
 import frc.robot.lib.extensions.rps
+import org.team5987.annotation.command_enum.CommandEnum
 
-val GAINS = Gains(kP = 0.0, kS = 0.0, kV = 0.0)
+const val GEAR_RATIO=1
+val REAL_GAINS = Gains(kP = 0.0, kS = 0.0, kV = 0.0)
 val SIM_GAINS = Gains(kP = 0.0, kS = 0.0)
 
 val MAIN_MOTOR_PORT = 0
@@ -31,8 +33,8 @@ val MOTOR_CONFIG =
                 NeutralMode = NeutralModeValue.Coast
                 Inverted = InvertedValue.CounterClockwise_Positive
             }
-        Feedback = FeedbackConfigs().apply { RotorToSensorRatio = 0.0 }
-        Slot0 = GAINS.toSlotConfig()
+        Feedback = FeedbackConfigs().apply { GEAR_RATIO }
+        Slot0 = REAL_GAINS.toSlotConfig()
 
         CurrentLimits =
             createCurrentLimits(supplyCurrentPeakDifference = 10.amps)
