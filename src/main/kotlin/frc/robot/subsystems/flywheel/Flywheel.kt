@@ -14,7 +14,7 @@ import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
 object Flywheel : SubsystemBase() {
-    private val Motor =
+    private val motor =
         UniversalTalonFX(
             port = MOTOR_PORT,
             config = MOTOR_CONFIG,
