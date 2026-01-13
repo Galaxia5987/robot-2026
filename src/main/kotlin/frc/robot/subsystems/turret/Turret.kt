@@ -5,7 +5,6 @@ import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.extensions.degrees
-import frc.robot.lib.extensions.kg2m
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
@@ -20,27 +19,26 @@ private var root = mechanism.getRoot("Turret", 2.5, 2.5)
 private val ligament = root.append(LoggedMechanismLigament2d("TurretLigament", 1.0, 0.0))
 
 object Turret : SubsystemBase() {
-    val motor: UniversalTalonFX = UniversalTalonFX(
+    private val motor: UniversalTalonFX = UniversalTalonFX(
         port = PORT,
         config = config,
         gearRatio = RATIO,
         simGains = SIM_GAINS,
-        momentOfInertia = 0.05.kg2m
     )
-    val positionVoltageRequest: PositionVoltage = PositionVoltage(0.0)
+    private val positionVoltageRequest: PositionVoltage = PositionVoltage(0.0)
     @LoggedOutput(LogLevel.DEV)
     var setpoint = 0.degrees
 
-    val isAtSetpoint = Trigger{
-        motor.inputs.position.isNear(setpoint, LIMIT_EXCEEDED)
+    @LoggedOutput(LogLevel.DEV) val isAtSetpoint = Trigger{
+        motor.inputs.position.isNear(setpoint, SETPOINT_TOLERANCE)
     }
 
-    private fun setAngle(angle: Angle) = runOnce {
+    fun setAngle(angle: Angle) = runOnce {
         setpoint = angle
         motor.setControl(positionVoltageRequest.withPosition(angle))
     }
 
-    fun setAngleSupplier(angleSupplier: () -> Angle) = run {
+    fun setAngle(angleSupplier: () -> Angle) = run {
         val angle = angleSupplier()
         setpoint = angle
         motor.setControl(positionVoltageRequest.withPosition(angle))
@@ -48,7 +46,7 @@ object Turret : SubsystemBase() {
 
     override fun periodic() {
         motor.periodic()
-        ligament.setAngle(setpoint)
+        ligament.setAngle(motor.inputs.position)
         Logger.recordOutput("Turret", mechanism)
     }
 }

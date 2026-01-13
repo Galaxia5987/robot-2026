@@ -3,16 +3,14 @@ package frc.robot
 import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.degrees
 import frc.robot.lib.extensions.enableAutoLogOutputFor
-import frc.robot.lib.unified_controller.UnifiedController
 import frc.robot.subsystems.drive.DriveCommands
-import frc.robot.subsystems.turret.Turret.setAngleSupplier
+import frc.robot.subsystems.turret.Turret.setAngle
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
@@ -55,7 +53,8 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
-        driverController.b().whileTrue(setAngleSupplier({ 1.0.degrees }))
+        driverController.b().onTrue(setAngle({ 45.0.degrees }))
+        driverController.x().onTrue(setAngle({ 0.degrees }))
     }
 
     fun getAutonomousCommand(): Command = autoChooser.get()

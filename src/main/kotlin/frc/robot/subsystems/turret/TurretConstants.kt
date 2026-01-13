@@ -8,9 +8,10 @@ import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.degrees
 
 const val PORT = 0
-const val RATIO = 0.0
-val SIM_GAINS = Gains(kP = 0.0, kD = 0.0)
-val LIMIT_EXCEEDED = 1.degrees
+const val RATIO = 1.0
+val SIM_GAINS = Gains(kP = 0.5, kD = 0.075)
+val REAL_GAINS = Gains(kP = 1.0, kD = 0.0)
+val SETPOINT_TOLERANCE = 1.degrees
 
 val config =
     TalonFXConfiguration().apply {
@@ -21,10 +22,9 @@ val config =
             }
         CurrentLimits = createCurrentLimits()
         Slot0 =
-            Slot0Configs().apply {
-                kP = 0.0
-                kD = 0.0
+            Slot0Configs().apply { //
+                Slot0 = REAL_GAINS.toSlotConfig()
             }
         Feedback =
-            FeedbackConfigs().apply { SensorToMechanismRatio = 0.0 / 0.0 }
+            FeedbackConfigs().apply { SensorToMechanismRatio = RATIO }
     }
