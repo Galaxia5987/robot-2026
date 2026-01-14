@@ -115,7 +115,7 @@ object LoggedOutputManager : SubsystemBase() {
                     addRunnable(key) {
                         value().ifNotNull { recordOutput(key, it as Double) }
                     }
-                type == String::class.javaPrimitiveType ->
+                type == String::class.java ->
                     addRunnable(key) {
                         value().ifNotNull { recordOutput(key, it as String?) }
                     }
@@ -123,23 +123,6 @@ object LoggedOutputManager : SubsystemBase() {
                     addRunnable(key) {
                         value().ifNotNull {
                             recordOutput(key, value() as LoggedMechanism2d?)
-                        }
-                    }
-                type == Color::class.java ->
-                    addRunnable(key) {
-                        value().ifNotNull {
-                            recordOutput(
-                                "$key/red",
-                                (value() as Color).red * 255
-                            )
-                            recordOutput(
-                                "$key/blue",
-                                (value() as Color).blue * 255
-                            )
-                            recordOutput(
-                                "$key/green",
-                                (value() as Color).green * 255
-                            )
                         }
                     }
                 type == Color::class.java ->
