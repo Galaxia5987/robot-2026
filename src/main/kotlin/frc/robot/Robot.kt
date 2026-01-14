@@ -134,6 +134,7 @@ object Robot : LoggedRobot() {
      */
     override fun robotPeriodic() {
         CommandScheduler.getInstance().run()
+        getActiveAlliance()
     }
 
     /**
