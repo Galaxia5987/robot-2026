@@ -21,7 +21,7 @@ val ENCODER_ID = 10
 
 
 
-val SIM_GAINS = Gains(kP = 1.5, kD = 0.22)
+val SIM_GAINS = Gains(kP = 1.7, kD = 0.32)
 
 val GEAR_RATIO = 1.0
 
