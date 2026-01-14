@@ -1,4 +1,4 @@
-package frc.robot.subsystems.conveyor.conveyor
+package frc.robot.subsystems.conveyor.netConveyor
 
 import com.ctre.phoenix6.configs.MotorOutputConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration

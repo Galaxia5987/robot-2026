@@ -1,4 +1,4 @@
-package frc.robot.subsystems.conveyor.conveyor
+package frc.robot.subsystems.conveyor.netConveyor
 
 import com.ctre.phoenix6.controls.Follower
 import com.ctre.phoenix6.controls.VelocityVoltage
@@ -56,6 +56,6 @@ object Conveyor : SubsystemBase(), ConveyorVelocityCommandFactory, SysIdable {
 
     override fun periodic() {
         mainMotor.periodic()
-        Logger.recordOutput("Subsystems/$name/setpoint",setpoint)
+        Logger.recordOutput("Subsystems/$name/setpoint", setpoint.velocity)
     }
 }
