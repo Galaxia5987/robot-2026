@@ -41,16 +41,16 @@ object Turret : SubsystemBase() {
         motor.setControl(positionVoltageRequest.withPosition(angle))
     }
 
-    fun setAngle(angleSupplier: () -> Angle) = run {
+    fun setAngle(angleSupplier: () -> Angle) = run { // ?
         val angle = angleSupplier()
-        setpoint = angle
-        motor.setControl(positionVoltageRequest.withPosition(angle))
+        setpoint = angleSupplier()
+        motor.setControl(positionVoltageRequest.withPosition(setpoint))
     }
 
     private val encoder = CANcoder(ENCODER_ID)
 
     init {
-        encoder.configurator.apply(ENCODER_CONFIG)
+        encoder.configurator.apply(ENCODER_CONFIG) // ?
     }
 
     override fun periodic() {
