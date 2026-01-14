@@ -1,4 +1,4 @@
-package frc.robot.subsystems.turret
+package frc.robot.subsystems.shooter.turret
 
 import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.hardware.CANcoder
@@ -28,11 +28,11 @@ object Turret : SubsystemBase() {
             gearRatio = RATIO,
             simGains = SIM_GAINS
         )
+    private val absoluteEncoder = CANcoder(ENCODER_ID)
+
     private val positionVoltageRequest: PositionVoltage = PositionVoltage(0.0)
     @LoggedOutput(LogLevel.DEV) var setpoint = 0.deg
-
-    @LoggedOutput(LogLevel.DEV)
-    val isAtSetpoint = Trigger {
+    @LoggedOutput(LogLevel.DEV) val isAtSetpoint = Trigger {
         motor.inputs.position.isNear(setpoint, SETPOINT_TOLERANCE)
     }
 
@@ -41,16 +41,13 @@ object Turret : SubsystemBase() {
         motor.setControl(positionVoltageRequest.withPosition(angle))
     }
 
-    fun setAngle(angleSupplier: () -> Angle) = run { // ?
-        val angle = angleSupplier()
+    fun setAngle(angleSupplier: () -> Angle) = run { // What does it do?
         setpoint = angleSupplier()
         motor.setControl(positionVoltageRequest.withPosition(setpoint))
     }
 
-    private val encoder = CANcoder(ENCODER_ID)
-
     init {
-        encoder.configurator.apply(ENCODER_CONFIG) // ?
+        absoluteEncoder.configurator.apply(ENCODER_CONFIG) // What does it do?
     }
 
     override fun periodic() {

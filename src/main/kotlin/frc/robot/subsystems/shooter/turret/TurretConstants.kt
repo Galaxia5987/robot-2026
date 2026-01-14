@@ -1,30 +1,47 @@
-package frc.robot.subsystems.turret
+package frc.robot.subsystems.shooter.turret
 
 import com.ctre.phoenix6.configs.*
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import com.ctre.phoenix6.signals.SensorDirectionValue
+import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.units.measure.AngularVelocity
 import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.rps
+import org.team5987.annotation.command_enum.CommandEnum
 
 const val PORT = 0
 const val RATIO = 1.0
 val SIM_GAINS = Gains(kP = 0.5, kD = 0.075)
 val REAL_GAINS = Gains(kP = 0.5, kD = 0.075)
+
 val SETPOINT_TOLERANCE = 1.deg
+
 val ENCODER_ID = 0
 val ABSOLUTE_ENCODER_OFFSET = 0.rps
+
+val FORWARD_SOFT_LIMIT = Rotation2d.fromRotations(0.0) // Value unknown
+val REVERSE_SOFT_LIMIT = Rotation2d.fromRotations(0.0) // Value unknown
 
 val ENCODER_CONFIG =
     CANcoderConfiguration().apply {
         MagnetSensor.SensorDirection =
             SensorDirectionValue.CounterClockwise_Positive
-        MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.9 // ?
-        MagnetSensor.MagnetOffset = ABSOLUTE_ENCODER_OFFSET[rps] //?
+        MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.0 // What does it do? //Value unknown
+        MagnetSensor.MagnetOffset =
+            ABSOLUTE_ENCODER_OFFSET[rps] // What does it do?
+    }
+
+val SOFT_LIMITS_CONFIG =  // Where to use?
+    SoftwareLimitSwitchConfigs().apply {
+        ForwardSoftLimitEnable = true
+        ReverseSoftLimitEnable = true
+        ForwardSoftLimitThreshold = FORWARD_SOFT_LIMIT.rotations
+        ReverseSoftLimitThreshold = REVERSE_SOFT_LIMIT.rotations
     }
 
 val CONFIG =
@@ -36,13 +53,22 @@ val CONFIG =
             }
         CurrentLimits = createCurrentLimits()
         Slot0 =
-            Slot0Configs().apply { //
-                Slot0 = REAL_GAINS.toSlotConfig() // ?
+            Slot0Configs().apply { // What does it do?
+                Slot0 = REAL_GAINS.toSlotConfig() // What does it do?
             }
         Feedback =
-            FeedbackConfigs().apply { // ?
+            FeedbackConfigs().apply { // What does it do?
                 SensorToMechanismRatio = RATIO
                 FeedbackRemoteSensorID = ENCODER_ID
                 FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder
             }
     }
+
+@CommandEnum
+enum class ConveyorVelocity(val velocity: AngularVelocity) {
+    STOP(0.rps),
+    START(10.rps),
+    SLOW(4.rps),
+    REVERSE(-START.velocity),
+    REVERSE_SLOW(-SLOW.velocity)
+}

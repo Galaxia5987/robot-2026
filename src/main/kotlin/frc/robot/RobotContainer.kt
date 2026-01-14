@@ -10,7 +10,7 @@ import frc.robot.lib.Mode
 import frc.robot.lib.extensions.degrees
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.subsystems.drive.DriveCommands
-import frc.robot.subsystems.turret.Turret.setAngle
+import frc.robot.subsystems.shooter.turret.Turret.setAngle
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
