@@ -47,7 +47,7 @@ object Climb : SubsystemBase(), ClimbLevelsCommandFactory {
         setpoint.angle.isNear(mainMotor.inputs.position, TOLERANCE)
     }
 
-    var isLocked = false
+    private var isLocked = false
 
     fun lock(): Command = runOnce {
         lock.setControl(positionVoltage.withPosition(LOCK))
@@ -65,7 +65,8 @@ object Climb : SubsystemBase(), ClimbLevelsCommandFactory {
     }
 
     override fun periodic() {
-        listOf(mainMotor, lock).forEach { it.periodic() }
+        mainMotor.periodic()
+        lock.periodic()
         Logger.recordOutput("Subsystems/$name/setpoint", setpoint)
         Logger.recordOutput("Subsystems/$name/isLocked", isLocked)
     }
