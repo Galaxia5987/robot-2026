@@ -72,7 +72,7 @@ object Climb : SubsystemBase(), ClimbLevelsCommandFactory {
     override fun periodic() {
         mainMotor.periodic()
         lockMotor.periodic()
-        Logger.recordOutput("Subsystems/$name/setpoint", setpoint)
+        Logger.recordOutput("Subsystems/$name/setpoint", setpoint.angle)
         Logger.recordOutput("Subsystems/$name/lockSetPoint", lockSetPoint)
     }
 }
