@@ -14,7 +14,7 @@ import frc.robot.lib.extensions.rps
 const val PORT = 0
 const val RATIO = 1.0
 val SIM_GAINS = Gains(kP = 0.5, kD = 0.075)
-val REAL_GAINS = Gains(kP = 1.0, kD = 0.0)
+val REAL_GAINS = Gains(kP = 0.5, kD = 0.075)
 val SETPOINT_TOLERANCE = 1.degrees
 val ENCODER_ID = 0
 val ABSOLUTE_ENCODER_OFFSET = 0.rps

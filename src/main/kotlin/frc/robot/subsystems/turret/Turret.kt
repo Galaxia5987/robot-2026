@@ -26,7 +26,7 @@ object Turret : SubsystemBase() {
             port = PORT,
             config = CONFIG,
             gearRatio = RATIO,
-            simGains = SIM_GAINS,
+            simGains = SIM_GAINS
         )
     private val positionVoltageRequest: PositionVoltage = PositionVoltage(0.0)
     @LoggedOutput(LogLevel.DEV) var setpoint = 0.degrees
