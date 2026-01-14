@@ -44,14 +44,14 @@ fun getActiveAlliance() {
             isHubActive =
                 when (data.firstOrNull()) {
                     'B' -> {
-                        currentActiveAlliance = Blue
-                        allianceCaptured = true
-                        !IS_RED
-                    }
-                    'R' -> {
                         currentActiveAlliance = Red
                         allianceCaptured = true
                         IS_RED
+                    }
+                    'R' -> {
+                        currentActiveAlliance = Blue
+                        allianceCaptured = true
+                        !IS_RED
                     }
                     else -> {
                         true
