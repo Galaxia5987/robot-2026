@@ -1,11 +1,13 @@
 package frc.robot.subsystems.climb
 
 import com.ctre.phoenix6.controls.Follower
-import com.ctre.phoenix6.controls.PositionVoltage
+import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC
 import com.ctre.phoenix6.signals.MotorAlignmentValue
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.lib.extensions.deg
+import frc.robot.lib.namedRunOnce
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.Logger
 import org.team5987.annotation.LogLevel
@@ -22,41 +24,43 @@ object Climb : SubsystemBase(), ClimbLevelsCommandFactory {
         )
     val auxMotor =
         UniversalTalonFX(
-                AUX_PORT,
-                config = MOTOR_CONFIG,
-                simGains = SIM_GAINS,
-                gearRatio = GEAR_RATION
-            )
+            AUX_PORT,
+            config = MOTOR_CONFIG,
+            simGains = SIM_GAINS,
+            gearRatio = GEAR_RATION
+        )
             .apply {
                 setControl(Follower(MAIN_PORT, MotorAlignmentValue.Aligned))
             }
 
-    val lock =
+    val lockMotor =
         UniversalTalonFX(
             LOCK_PORT,
             config = MOTOR_CONFIG,
             gearRatio = GEAR_RATION
         ) // TODO swap later
 
-    val positionVoltage = PositionVoltage(0.0)
+    val positionVoltage = MotionMagicTorqueCurrentFOC(0.0)
 
-    var setpoint = ClimbLevels.DOWN
+    var setpoint = ClimbLevels.GROUND
 
     @LoggedOutput(LogLevel.COMP)
     val isAtSetpoint = Trigger {
         setpoint.angle.isNear(mainMotor.inputs.position, TOLERANCE)
     }
 
-    private var isLocked = false
+    private var isLocked = Trigger { isLockedSetPoint.isNear(lockMotor.inputs.position, TOLERANCE) }
 
-    fun lock(): Command = runOnce {
-        lock.setControl(positionVoltage.withPosition(LOCK))
-        isLocked = true
+    private var isLockedSetPoint = 0.deg
+
+    fun lock(): Command = namedRunOnce {
+        lockMotor.setControl(positionVoltage.withPosition(LOCK))
+        isLockedSetPoint = LOCK
     }
 
-    fun unlock(): Command = runOnce {
-        lock.setControl(positionVoltage.withPosition(UNLOCK))
-        isLocked = false
+    fun unlock(): Command = namedRunOnce {
+        lockMotor.setControl(positionVoltage.withPosition(UNLOCK))
+        isLockedSetPoint = UNLOCK
     }
 
     override fun setTarget(value: ClimbLevels): Command = runOnce {
@@ -66,7 +70,7 @@ object Climb : SubsystemBase(), ClimbLevelsCommandFactory {
 
     override fun periodic() {
         mainMotor.periodic()
-        lock.periodic()
+        lockMotor.periodic()
         Logger.recordOutput("Subsystems/$name/setpoint", setpoint)
         Logger.recordOutput("Subsystems/$name/isLocked", isLocked)
     }
