@@ -5,7 +5,7 @@ import com.ctre.phoenix6.hardware.CANcoder
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.lib.extensions.degrees
+import frc.robot.lib.extensions.deg
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
@@ -29,7 +29,7 @@ object Turret : SubsystemBase() {
             simGains = SIM_GAINS
         )
     private val positionVoltageRequest: PositionVoltage = PositionVoltage(0.0)
-    @LoggedOutput(LogLevel.DEV) var setpoint = 0.degrees
+    @LoggedOutput(LogLevel.DEV) var setpoint = 0.deg
 
     @LoggedOutput(LogLevel.DEV)
     val isAtSetpoint = Trigger {

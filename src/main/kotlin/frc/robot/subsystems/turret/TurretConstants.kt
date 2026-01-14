@@ -7,7 +7,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue
 import com.ctre.phoenix6.signals.SensorDirectionValue
 import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
-import frc.robot.lib.extensions.degrees
+import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.rps
 
@@ -15,7 +15,7 @@ const val PORT = 0
 const val RATIO = 1.0
 val SIM_GAINS = Gains(kP = 0.5, kD = 0.075)
 val REAL_GAINS = Gains(kP = 0.5, kD = 0.075)
-val SETPOINT_TOLERANCE = 1.degrees
+val SETPOINT_TOLERANCE = 1.deg
 val ENCODER_ID = 0
 val ABSOLUTE_ENCODER_OFFSET = 0.rps
 
