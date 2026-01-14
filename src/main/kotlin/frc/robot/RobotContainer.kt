@@ -7,10 +7,9 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import frc.robot.lib.Mode
-import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.subsystems.drive.DriveCommands
-import frc.robot.subsystems.hood.Hood
+import frc.robot.subsystems.shooter.hood.Hood
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
@@ -53,11 +52,16 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
-        driverController.povUp().onTrue(Hood.getUp())
-        driverController.povDown().onTrue(Hood.getDown())
-        driverController.povRight().whileTrue(Hood.angleUpByController()).onFalse(Hood.stop())
-        driverController.povLeft().whileTrue(Hood.angleDownByController()).onFalse(Hood.stop())
-
+        driverController.povUp().onTrue(Hood.up())
+        driverController.povDown().onTrue(Hood.down())
+        driverController
+            .povRight()
+            .whileTrue(Hood.angleUpByController())
+            .onFalse(Hood.stop())
+        driverController
+            .povLeft()
+            .whileTrue(Hood.angleDownByController())
+            .onFalse(Hood.stop())
     }
 
     fun getAutonomousCommand(): Command = autoChooser.get()

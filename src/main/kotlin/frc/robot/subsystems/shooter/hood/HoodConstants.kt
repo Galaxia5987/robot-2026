@@ -1,4 +1,4 @@
-package frc.robot.subsystems.hood
+package frc.robot.subsystems.shooter.hood
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration
 import com.ctre.phoenix6.configs.FeedbackConfigs
@@ -16,16 +16,18 @@ import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.rad
 import frc.robot.lib.extensions.rot
 import frc.robot.lib.extensions.volts
+import org.team5987.annotation.command_enum.CommandEnum
 
 val PORT = 0
 // TODO: check port
 
 val ENCODER_ID = 10
 
+val TOLERANCE = 0.5.deg
+
 val ANGLE_UP_VOLTAGE = 0.013.volts
 val ANGLE_DOWN_VOLTAGE = -0.013.volts
 // TODO: real values
-
 
 val SIM_GAINS = Gains(kP = 1.7, kD = 0.32)
 
@@ -41,29 +43,29 @@ val ENCODER_CONFIG =
         MagnetSensor.MagnetOffset = ABSOLUTE_ENCODER_OFFSET[rot]
     }
 
-val CONFIG = TalonFXConfiguration().apply {
-    MotorOutput =
-        MotorOutputConfigs().apply {
-            NeutralMode = NeutralModeValue.Brake
-            Inverted = InvertedValue.Clockwise_Positive
-            // TODO: check motor direction
+val CONFIG =
+    TalonFXConfiguration().apply {
+        MotorOutput =
+            MotorOutputConfigs().apply {
+                NeutralMode = NeutralModeValue.Brake
+                Inverted = InvertedValue.Clockwise_Positive
+                // TODO: check motor direction
+            }
+
+        CurrentLimits = createCurrentLimits()
+
+        Slot0 =
+            Slot0Configs().apply {
+                kP = 1.0
+                kD = 0.0
+                // TODO: actual values
+            }
+        Feedback =
+            FeedbackConfigs().apply { SensorToMechanismRatio = GEAR_RATIO }
     }
 
-    CurrentLimits = createCurrentLimits()
-
-    Slot0 =
-        Slot0Configs().apply {
-            kP = 1.0
-            kD = 0.0
-            // TODO: actual values
-        }
-    Feedback =
-        FeedbackConfigs().apply {
-            SensorToMechanismRatio = GEAR_RATIO
-        }
-}
-
-enum class HoodPositions(var angle: Angle){
+@CommandEnum
+enum class HoodPositions(var angle: Angle) {
     UP(10.deg),
     DOWN(0.deg)
 }

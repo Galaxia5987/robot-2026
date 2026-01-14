@@ -1,37 +1,37 @@
-package frc.robot.subsystems.hood
+package frc.robot.subsystems.shooter.hood
 
 import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.CANcoder
-import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.volts
+import frc.robot.lib.named
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
 
-object Hood : SubsystemBase(){
-    private val motor = UniversalTalonFX(
-        port = PORT,
-        config = CONFIG,
-        absoluteEncoderOffset = ABSOLUTE_ENCODER_OFFSET,
-        simGains = SIM_GAINS
-    )
+object Hood : SubsystemBase(), HoodPositionsCommandFactory {
+    private val motor =
+        UniversalTalonFX(
+            port = PORT,
+            config = CONFIG,
+            absoluteEncoderOffset = ABSOLUTE_ENCODER_OFFSET,
+            simGains = SIM_GAINS
+        )
     private val encoder = CANcoder(ENCODER_ID)
 
     init {
         encoder.configurator.apply(ENCODER_CONFIG)
     }
-    @AutoLogOutput
-    private var setpoint = 0.deg
+    @AutoLogOutput private var setpoint = 0.deg
 
     var atSetpoint = Trigger {
-        motor.inputs.position.isNear(setpoint, 0.5.deg)
+        motor.inputs.position.isNear(setpoint, TOLERANCE)
     }
 
     @AutoLogOutput(key = "Hood/mechanism")
@@ -43,39 +43,39 @@ object Hood : SubsystemBase(){
     private val positionRequest = PositionVoltage(0.deg)
     private val voltageRequest = VoltageOut(0.volts)
 
-    fun getToPosition(angle: HoodPositions) : Command{
-        return runOnce({
-            setpoint = angle.angle
-            motor.setControl(positionRequest.withPosition(angle.angle))
-        })
+    fun getToPosition(angle: HoodPositions): Command {
+        return runOnce {
+                setpoint = angle.angle
+                motor.setControl(positionRequest.withPosition(angle.angle))
+            }
+            .named()
     }
 
-    fun getUp() : Command{
-        return getToPosition(HoodPositions.UP)
+    fun setAngle(voltage: Voltage): Command {
+        return run({ motor.setControl(voltageRequest.withOutput(voltage)) })
+            .named()
     }
 
-    fun getDown() : Command{
-        return getToPosition(HoodPositions.DOWN)
+    fun angleUpByController(): Command {
+        return setAngle(ANGLE_UP_VOLTAGE).named()
     }
 
-    fun setAngle(voltage: Voltage) : Command{
-        return run ({ motor.setControl(voltageRequest.withOutput(voltage))})
+    fun angleDownByController(): Command {
+        return setAngle(ANGLE_DOWN_VOLTAGE).named()
     }
 
-    fun angleUpByController() : Command{
-        return setAngle(ANGLE_UP_VOLTAGE)
-    }
-
-    fun angleDownByController() : Command{
-        return setAngle(ANGLE_DOWN_VOLTAGE)
-    }
-
-    fun stop() : Command{
-        return setAngle(0.volts)
+    fun stop(): Command {
+        return setAngle(0.volts).named()
     }
 
     override fun periodic() {
         motor.periodic()
         ligament.setAngle(setpoint)
+    }
+
+    override fun setTarget(value: HoodPositions): Command {
+        return runOnce {
+            motor.setControl(positionRequest.withPosition(value.angle))
+        }
     }
 }
