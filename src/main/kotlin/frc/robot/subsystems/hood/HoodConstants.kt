@@ -8,17 +8,23 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import com.ctre.phoenix6.signals.SensorDirectionValue
+import edu.wpi.first.units.measure.Angle
 import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
+import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.rad
 import frc.robot.lib.extensions.rot
+import frc.robot.lib.extensions.volts
 
 val PORT = 0
 // TODO: check port
 
 val ENCODER_ID = 10
 
+val ANGLE_UP_VOLTAGE = 0.013.volts
+val ANGLE_DOWN_VOLTAGE = -0.013.volts
+// TODO: real values
 
 
 val SIM_GAINS = Gains(kP = 1.7, kD = 0.32)
@@ -56,3 +62,9 @@ val CONFIG = TalonFXConfiguration().apply {
             SensorToMechanismRatio = GEAR_RATIO
         }
 }
+
+enum class HoodPositions(var angle: Angle){
+    UP(10.deg),
+    DOWN(0.deg)
+}
+// TODO: real values

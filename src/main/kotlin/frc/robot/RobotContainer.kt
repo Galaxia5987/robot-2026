@@ -53,8 +53,10 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
-        driverController.povUp().onTrue(Hood.getToPosition(10.deg))
-        driverController.povDown().onTrue(Hood.getToPosition(0.deg))
+        driverController.povUp().onTrue(Hood.getUp())
+        driverController.povDown().onTrue(Hood.getDown())
+        driverController.povRight().whileTrue(Hood.angleUpByController()).onFalse(Hood.stop())
+        driverController.povLeft().whileTrue(Hood.angleDownByController()).onFalse(Hood.stop())
 
     }
 
