@@ -1,10 +1,10 @@
 package frc.robot
 
-import edu.wpi.first.units.Units
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj.util.Color
 import frc.robot.lib.Mode
+import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.sec
 import org.littletonrobotics.junction.LoggedRobot
 import org.team5987.annotation.LogLevel
@@ -36,6 +36,11 @@ enum class Team(val color: String) {
     NO_DATA(Color.kGray.toHexString())
 }
 
+val gameTimer
+    get() = Timer.getTimestamp().sec
+
+val timeStamp = listOf(0.sec, 20.sec, 45.sec, 70.sec, 95.sec, 120.sec, 150.sec)
+
 @LoggedOutput(LogLevel.COMP)
 val currentSide
     get() =
@@ -47,17 +52,10 @@ val currentSide
             }
         } else Team.NO_DATA.color)
 
-val timeStamp = listOf(0.sec, 20.sec, 45.sec, 70.sec, 95.sec, 120.sec, 150.sec)
-
 @LoggedOutput(LogLevel.COMP)
 val timeUntilModeChange
     get() =
-        when (val timer = Timer.getTimestamp().sec) {
-            in timeStamp[0]..timeStamp[1] -> timeStamp[1] - timer
-            in timeStamp[1]..timeStamp[2] -> timeStamp[2] - timer
-            in timeStamp[2]..timeStamp[3] -> timeStamp[3] - timer
-            in timeStamp[3]..timeStamp[4] -> timeStamp[4] - timer
-            in timeStamp[4]..timeStamp[5] -> timeStamp[5] - timer
-            in timeStamp[5]..timeStamp[6] -> timeStamp[6] - timer
-            else -> timer
-        }.`in`(Units.Second)
+        gameTimer
+            .let { now ->
+                timeStamp.firstOrNull { it > now }?.minus(now) ?: now
+            }[sec]
