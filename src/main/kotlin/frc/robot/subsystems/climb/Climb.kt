@@ -49,18 +49,19 @@ object Climb : SubsystemBase(), ClimbLevelsCommandFactory {
         setpoint.angle.isNear(mainMotor.inputs.position, TOLERANCE)
     }
 
-    private var isLocked = Trigger { isLockedSetPoint.isNear(lockMotor.inputs.position, TOLERANCE) }
+    @LoggedOutput(LogLevel.COMP)
+    var isLocked = Trigger { lockSetPoint.isNear(lockMotor.inputs.position, TOLERANCE) }
 
-    private var isLockedSetPoint = 0.deg
+    private var lockSetPoint = 0.deg
 
     fun lock(): Command = namedRunOnce {
         lockMotor.setControl(positionVoltage.withPosition(LOCK))
-        isLockedSetPoint = LOCK
+        lockSetPoint = LOCK
     }
 
     fun unlock(): Command = namedRunOnce {
         lockMotor.setControl(positionVoltage.withPosition(UNLOCK))
-        isLockedSetPoint = UNLOCK
+        lockSetPoint = UNLOCK
     }
 
     override fun setTarget(value: ClimbLevels): Command = runOnce {
@@ -72,6 +73,6 @@ object Climb : SubsystemBase(), ClimbLevelsCommandFactory {
         mainMotor.periodic()
         lockMotor.periodic()
         Logger.recordOutput("Subsystems/$name/setpoint", setpoint)
-        Logger.recordOutput("Subsystems/$name/isLocked", isLocked)
+        Logger.recordOutput("Subsystems/$name/lockSetPoint", lockSetPoint)
     }
 }
