@@ -57,6 +57,6 @@ object PreShooter :
 
     override fun periodic() {
         mainMotor.periodic()
-        Logger.recordOutput("Subsystems/$name/setpoint",setpoint)
+        Logger.recordOutput("Subsystems/$name/setpoint", setpoint.velocity)
     }
 }
