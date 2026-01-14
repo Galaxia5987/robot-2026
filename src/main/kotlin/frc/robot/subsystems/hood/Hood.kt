@@ -13,7 +13,7 @@ import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
 
 object Hood : SubsystemBase(){
-    private val hoodMotor = UniversalTalonFX(
+    private val motor = UniversalTalonFX(
         port = PORT,
         config = CONFIG,
         absoluteEncoderOffset = ABSOLUTE_ENCODER_OFFSET,
@@ -28,7 +28,7 @@ object Hood : SubsystemBase(){
     private var setpoint = 0.deg
 
     var atSetpoint = Trigger {
-        hoodMotor.inputs.position.isNear(setpoint, 0.5.deg)
+        motor.inputs.position.isNear(setpoint, 0.5.deg)
     }
 
     @AutoLogOutput(key = "Hood/mechanism")
@@ -41,17 +41,17 @@ object Hood : SubsystemBase(){
     fun getToPosition(angle: Angle) : Command{
         return runOnce({
             setpoint = angle
-            hoodMotor.setControl(positionRequest.withPosition(angle))
+            motor.setControl(positionRequest.withPosition(angle))
         })
     }
 
-    fun setPosition(angle: Angle): Command{
-        return run ({ hoodMotor.setControl(positionRequest.withPosition(1.deg))})
+    fun setAngle(angle: Angle): Command{
+        return run ({ motor.setControl(positionRequest.withPosition(1.deg))})
     }
 
 
     override fun periodic() {
-        hoodMotor.periodic()
+        motor.periodic()
         ligament.setAngle(setpoint)
     }
 }

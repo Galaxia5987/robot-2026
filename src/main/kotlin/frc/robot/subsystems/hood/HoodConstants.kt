@@ -1,7 +1,6 @@
 package frc.robot.subsystems.hood
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration
-import com.ctre.phoenix6.configs.CurrentLimitsConfigs
 import com.ctre.phoenix6.configs.FeedbackConfigs
 import com.ctre.phoenix6.configs.MotorOutputConfigs
 import com.ctre.phoenix6.configs.Slot0Configs
@@ -9,16 +8,13 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import com.ctre.phoenix6.signals.SensorDirectionValue
-import edu.wpi.first.units.AngleUnit
-import edu.wpi.first.units.measure.Angle
 import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.rad
 import frc.robot.lib.extensions.rot
-import kotlin.invoke
 
-val PORT = 0;
+val PORT = 0
 // TODO: check port
 
 val ENCODER_ID = 10
@@ -60,6 +56,3 @@ val CONFIG = TalonFXConfiguration().apply {
             SensorToMechanismRatio = GEAR_RATIO
         }
 }
-
-
-
