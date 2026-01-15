@@ -39,11 +39,10 @@ val isOurHubActive: Boolean
         val bothHubsActive =
             matchTime !in SHIFT_CHANGES.last()..SHIFT_CHANGES.first()
 
-        val shiftOneActiveRed = isShiftOneActiveRed() ?: return true
-        val wasShiftOneOurs = IS_RED == shiftOneActiveRed
+        val wasShiftOneOurs = IS_RED == isShiftOneActiveRed()
 
         val currentIndex = SHIFT_CHANGES.indexOfFirst { matchTime > it }
-        val isCurrentShiftOdd = currentIndex != -1 && currentIndex % 2 == 1
+        val isCurrentShiftOdd = currentIndex % 2 == 1
 
         return bothHubsActive || (wasShiftOneOurs == isCurrentShiftOdd)
     }
