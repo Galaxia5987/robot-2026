@@ -31,5 +31,6 @@ val MOTOR_CONFIG =
             MotorOutputConfigs().apply {
                 Inverted = InvertedValue.Clockwise_Positive
             }
-        CurrentLimits = createCurrentLimits(supplyCurrentLimit = 20.amps)
+        CurrentLimits = createCurrentLimits(supplyCurrentLimit = 00.amps)//defult number
     }
+
