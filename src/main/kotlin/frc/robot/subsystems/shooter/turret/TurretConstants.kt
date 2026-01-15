@@ -5,7 +5,6 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import com.ctre.phoenix6.signals.SensorDirectionValue
-import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.measure.AngularVelocity
 import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
@@ -24,9 +23,6 @@ val SETPOINT_TOLERANCE = 1.deg
 val ENCODER_ID = 0
 val ABSOLUTE_ENCODER_OFFSET = 0.rps
 
-val FORWARD_SOFT_LIMIT = Rotation2d.fromRotations(0.0) // Value unknown
-val REVERSE_SOFT_LIMIT = Rotation2d.fromRotations(0.0) // Value unknown
-
 val ENCODER_CONFIG =
     CANcoderConfiguration().apply {
         MagnetSensor.SensorDirection =
@@ -34,14 +30,6 @@ val ENCODER_CONFIG =
         MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.0 // What does it do? //Value unknown
         MagnetSensor.MagnetOffset =
             ABSOLUTE_ENCODER_OFFSET[rps] // What does it do?
-    }
-
-val SOFT_LIMITS_CONFIG =  // Where to use?
-    SoftwareLimitSwitchConfigs().apply {
-        ForwardSoftLimitEnable = true
-        ReverseSoftLimitEnable = true
-        ForwardSoftLimitThreshold = FORWARD_SOFT_LIMIT.rotations
-        ReverseSoftLimitThreshold = REVERSE_SOFT_LIMIT.rotations
     }
 
 val CONFIG =

@@ -41,9 +41,14 @@ object Turret : SubsystemBase() {
         motor.setControl(positionVoltageRequest.withPosition(angle))
     }
 
-    fun setAngle(angleSupplier: () -> Angle) = run { // What does it do?
+    fun setAngle(angleSupplier: () -> Angle) = run {
         setpoint = angleSupplier()
         motor.setControl(positionVoltageRequest.withPosition(setpoint))
+    }
+
+    fun resetAngle() = runOnce {
+        setpoint = 0.deg
+        motor.setControl(positionVoltageRequest.withPosition(0.0))
     }
 
     init {
