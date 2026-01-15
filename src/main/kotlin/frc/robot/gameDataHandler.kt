@@ -1,83 +1,74 @@
 package frc.robot
 
-import edu.wpi.first.hal.DriverStationJNI.getMatchTime
-import edu.wpi.first.units.measure.Time
 import edu.wpi.first.wpilibj.DriverStation
-import edu.wpi.first.wpilibj.DriverStation.Alliance.Blue
-import edu.wpi.first.wpilibj.DriverStation.Alliance.Red
 import edu.wpi.first.wpilibj.util.Color
 import frc.robot.lib.IS_RED
-import frc.robot.lib.extensions.get
+import frc.robot.lib.extensions.min
 import frc.robot.lib.extensions.sec
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
-private val gameData: String
-    get() = DriverStation.getGameSpecificMessage()
+private var isShiftOneActiveRedBackingField: Boolean? = null
 
-private val MAX_GAME_TIME = 160.sec
-val gameTimer: Time
-    get() = MAX_GAME_TIME - getMatchTime().sec
+private fun isShiftOneActiveRed(): Boolean? {
+    if (isShiftOneActiveRedBackingField != null) {
+        return isShiftOneActiveRedBackingField
+    }
+    val message = DriverStation.getGameSpecificMessage()
+    if (message.isEmpty()) return null
 
-private val SHIFT_CHANGE_TIMES =
-    listOf(0, 20, 30, 55, 80, 105, 130, 160).map { it.sec }
+    isShiftOneActiveRedBackingField =
+        when (message.firstOrNull()) {
+            'R' -> false
+            'B' -> true
+            else -> null
+        }
+    return isShiftOneActiveRedBackingField
+}
 
-private var currentShift = SHIFT_CHANGE_TIMES[3]
+private val matchTime
+    get() = DriverStation.getMatchTime().sec
 
-private var allianceCaptured = false
-private var currentActiveAlliance = Red
+private val SHIFT_CHANGES =
+    listOf(2.min + 10.sec, 1.min + 45.sec, 1.min + 20.sec, 55.sec, 30.sec)
 
-@LoggedOutput(LogLevel.COMP) var isHubActive: Boolean = false
+@LoggedOutput(LogLevel.COMP)
+val isOurHubActive: Boolean
+    get() {
+        // Both Hubs are active in the beginning and end of the match.
+        val bothHubsActive =
+            matchTime !in SHIFT_CHANGES.last()..SHIFT_CHANGES.first()
+
+        val shiftOneActiveRed = isShiftOneActiveRed() ?: return true
+        val wasShiftOneOurs = IS_RED == shiftOneActiveRed
+
+        val currentIndex = SHIFT_CHANGES.indexOfFirst { matchTime > it }
+        val isCurrentShiftOdd = currentIndex != -1 && currentIndex % 2 == 1
+
+        return bothHubsActive || (wasShiftOneOurs == isCurrentShiftOdd)
+    }
 
 @LoggedOutput(LogLevel.COMP)
 val activeColor: String
-    get() =
-        if (!allianceCaptured) Color.kGray.toHexString()
-        else if (currentActiveAlliance == Red) Color.kRed.toHexString()
-        else Color.kBlue.toHexString()
-
-fun getActiveAlliance() {
-    val time = gameTimer
-    if (time >= 23.sec && !allianceCaptured) {
-        val data = gameData
-        if (data.isNotEmpty()) {
-            isHubActive =
-                when (data.firstOrNull()) {
-                    'B' -> {
-                        currentActiveAlliance = Red
-                        allianceCaptured = true
-                        IS_RED
-                    }
-                    'R' -> {
-                        currentActiveAlliance = Blue
-                        allianceCaptured = true
-                        !IS_RED
-                    }
-                    else -> {
-                        true
-                    }
-                }
-        }
-        allianceCaptured = true
+    get() {
+        return (if (
+                isShiftOneActiveRed() == null ||
+                    matchTime < SHIFT_CHANGES.last()
+            )
+                Color.kPurple
+            else {
+                if (isOurHubActive) if (IS_RED) Color.kRed else Color.kBlue
+                else if (IS_RED) Color.kBlue else Color.kRed
+            })
+            .toHexString()
     }
-
-    if (time >= SHIFT_CHANGE_TIMES[2] && allianceCaptured) {
-        time.let { now ->
-            val nextShift = SHIFT_CHANGE_TIMES.indexOfFirst { it > now }.sec
-            if (currentShift != nextShift) {
-                currentShift = nextShift
-                isHubActive = !isHubActive
-                currentActiveAlliance =
-                    if (currentActiveAlliance == Red) Blue else Red
-            }
-        }
-    }
-}
 
 @LoggedOutput(LogLevel.COMP)
-val timeUntilModeChange
-    get() =
-        gameTimer
-            .let { now ->
-                SHIFT_CHANGE_TIMES.firstOrNull { it > now }?.minus(now) ?: now
-            }[sec]
+val timeUntilNextShift: Double
+    get() {
+        SHIFT_CHANGES.find { matchTime > it }
+            ?.let {
+                return (matchTime - it).`in`(sec)
+            }
+        return 0.0
+    }
