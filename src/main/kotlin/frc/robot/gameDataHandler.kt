@@ -56,8 +56,9 @@ val activeColor: String
             )
                 Color.kPurple
             else {
-                if (isOurHubActive) if (IS_RED) Color.kRed else Color.kBlue
-                else if (IS_RED) Color.kBlue else Color.kRed
+                if (isOurHubActive)
+                    if (IS_RED) Color.kOrangeRed else Color.kFirstBlue
+                else if (IS_RED) Color.kFirstBlue else Color.kOrangeRed
             })
             .toHexString()
     }
