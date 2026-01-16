@@ -43,29 +43,21 @@ object Hood : SubsystemBase(), HoodPositionsCommandFactory {
     private val positionRequest = PositionVoltage(0.deg)
     private val voltageRequest = VoltageOut(0.volts)
 
-    fun getToPosition(angle: HoodPositions): Command {
-        return runOnce {
-                setpoint = angle.angle
-                motor.setControl(positionRequest.withPosition(angle.angle))
-            }
-            .named()
-    }
-
-    fun setAngle(voltage: Voltage): Command {
-        return run({ motor.setControl(voltageRequest.withOutput(voltage)) })
+    fun setVoltage(voltage: Voltage): Command {
+        return run{ motor.setControl(voltageRequest.withOutput(voltage)) }
             .named()
     }
 
     fun angleUpByController(): Command {
-        return setAngle(ANGLE_UP_VOLTAGE).named()
+        return setVoltage(ANGLE_UP_VOLTAGE).named()
     }
 
     fun angleDownByController(): Command {
-        return setAngle(ANGLE_DOWN_VOLTAGE).named()
+        return setVoltage(ANGLE_DOWN_VOLTAGE).named()
     }
 
     fun stop(): Command {
-        return setAngle(0.volts).named()
+        return setVoltage(0.volts).named()
     }
 
     override fun periodic() {
