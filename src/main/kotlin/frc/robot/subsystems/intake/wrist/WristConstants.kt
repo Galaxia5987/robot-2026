@@ -40,7 +40,7 @@ val CONFIG =
     }
 
 @CommandEnum
-enum class WristPositions(angle: Angle) {
+enum class WristPositions(var angle: Angle) {
     INTAKE(0.deg),
     UP(30.deg)
     // TODO: actual values
