@@ -15,6 +15,7 @@ class Roller : SubsystemBase(), positionActions {
             config = MOTOR_CONFIG,
             subsystem = name
         )
+    @AutoLogOutput private var setpoint = 0.rps
 
     private val velocity
         get() = motor.inputs.velocity
@@ -30,6 +31,7 @@ class Roller : SubsystemBase(), positionActions {
 
     override fun setVoltage(voltage: Voltage): Command = runOnce {
         motor.setControl(voltageRequest.withOutput(voltage))
+        setpoint=velocity
     }
 
 
