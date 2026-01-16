@@ -44,7 +44,7 @@ object Hood : SubsystemBase(), HoodPositionsCommandFactory {
     private val voltageRequest = VoltageOut(0.volts)
 
     fun setVoltage(voltage: Voltage): Command {
-        return run{ motor.setControl(voltageRequest.withOutput(voltage)) }
+        return run { motor.setControl(voltageRequest.withOutput(voltage)) }
             .named()
     }
 
@@ -67,6 +67,7 @@ object Hood : SubsystemBase(), HoodPositionsCommandFactory {
 
     override fun setTarget(value: HoodPositions): Command {
         return runOnce {
+            setpoint = value.angle
             motor.setControl(positionRequest.withPosition(value.angle))
         }
     }
