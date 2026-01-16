@@ -18,7 +18,6 @@ val GEAR_RATIO = 1.0
 // TODO: actual value
 
 val SIM_GAINS = Gains(kP = 1.33, kD = 0.24)
-// TODO: actual values
 
 val CONFIG =
     TalonFXConfiguration().apply {
