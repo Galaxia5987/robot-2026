@@ -48,19 +48,17 @@ val isOurHubActive: Boolean
     }
 
 @LoggedOutput(LogLevel.COMP)
-val activeColor: String
+val activeColor: Color
     get() {
         return (if (
-                isShiftOneActiveRed() == null ||
-                    matchTime < SHIFT_CHANGES.last()
-            )
-                Color.kPurple
-            else {
-                if (isOurHubActive)
-                    if (IS_RED) Color.kOrangeRed else Color.kFirstBlue
-                else if (IS_RED) Color.kFirstBlue else Color.kOrangeRed
-            })
-            .toHexString()
+            isShiftOneActiveRed() == null || matchTime < SHIFT_CHANGES.last()
+        )
+            Color.kPurple
+        else {
+            if (isOurHubActive)
+                if (IS_RED) Color.kOrangeRed else Color.kFirstBlue
+            else if (IS_RED) Color.kFirstBlue else Color.kOrangeRed
+        })
     }
 
 @LoggedOutput(LogLevel.COMP)
