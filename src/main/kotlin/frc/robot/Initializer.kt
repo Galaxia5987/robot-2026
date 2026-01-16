@@ -56,33 +56,33 @@ val drive =
         driveSimulation?.let { it::setSimulationWorldPose } ?: { _: Pose2d -> }
     )
 
-//private val visionIOs =
-//    when (CURRENT_MODE) {
-//        Mode.REAL ->
-//            OV_NAME_TO_CONFIG.map {
-//                VisionIOPhotonVision(
-//                    it.key,
-//                    { it.value.robotToCamera },
-//                    { drive.gyroRotation },
-//                    { listOf() } // TODO:
-//                )
-//            }
-//        Mode.SIM ->
-//            OV_NAME_TO_CONFIG.map {
-//                VisionIOPhotonVisionSim(
-//                    it.key,
-//                    { it.value.robotToCamera },
-//                    { drive.gyroRotation },
-//                    { listOf() }, // TODO:
-//                    { drive.pose },
-//                )
-//            }
-//        Mode.REPLAY -> emptyList()
-//    }.toTypedArray()
-//
-//val vision =
-//    Vision(
-//        drive::addGlobalVisionMeasurement,
-//        drive::addLocalVisionMeasurement,
-//        *visionIOs
-//    )
+private val visionIOs =
+    when (CURRENT_MODE) {
+        Mode.REAL ->
+            OV_NAME_TO_CONFIG.map {
+                VisionIOPhotonVision(
+                    it.key,
+                    { it.value.robotToCamera },
+                    { drive.gyroRotation },
+                    { listOf() } // TODO:
+                )
+            }
+        Mode.SIM ->
+            OV_NAME_TO_CONFIG.map {
+                VisionIOPhotonVisionSim(
+                    it.key,
+                    { it.value.robotToCamera },
+                    { drive.gyroRotation },
+                    { listOf() }, // TODO:
+                    { drive.pose },
+                )
+            }
+        Mode.REPLAY -> emptyList()
+    }.toTypedArray()
+
+val vision =
+    Vision(
+        drive::addGlobalVisionMeasurement,
+        drive::addLocalVisionMeasurement,
+        *visionIOs
+    )

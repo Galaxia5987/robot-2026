@@ -17,7 +17,7 @@ object Wrist : SubsystemBase(), WristPositionsCommandFactory {
             gearRatio = GEAR_RATIO
         )
 
-    var setPoint = 0.deg
+    private var setPoint = 0.deg
 
     private var mechanism = LoggedMechanism2d(5.0, 5.0)
     private var root = mechanism.getRoot("Hood", 2.5, 2.5)
@@ -26,7 +26,7 @@ object Wrist : SubsystemBase(), WristPositionsCommandFactory {
 
     private val positionRequest = PositionVoltage(0.deg)
     override fun setTarget(value: WristPositions): Command {
-        return run {
+        return runOnce {
             setPoint = value.angle
             motor.setControl(positionRequest.withPosition(value.angle))
         }
@@ -34,6 +34,6 @@ object Wrist : SubsystemBase(), WristPositionsCommandFactory {
 
     override fun periodic() {
         motor.periodic()
-        ligament.setAngle(setPoint)
+        ligament.setAngle(motor.inputs.position)
     }
 }

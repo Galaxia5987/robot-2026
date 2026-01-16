@@ -1,5 +1,6 @@
 package frc.robot.subsystems.intake.wrist
 
+import com.ctre.phoenix6.configs.FeedbackConfigs
 import com.ctre.phoenix6.configs.MotorOutputConfigs
 import com.ctre.phoenix6.configs.Slot0Configs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
@@ -19,6 +20,9 @@ val GEAR_RATIO = 1.0
 
 val SIM_GAINS = Gains(kP = 1.33, kD = 0.24)
 
+val REAL_GAINS = Gains(kP = 1.0, kD = 0.0)
+// TODO: actual values
+
 val CONFIG =
     TalonFXConfiguration().apply {
         MotorOutput =
@@ -32,11 +36,16 @@ val CONFIG =
 
         Slot0 =
             Slot0Configs().apply {
-                kP = 1.0
-                kD = 0.0
-                // TODO: actual values
+                REAL_GAINS
+            }
+
+        Feedback =
+            FeedbackConfigs().apply {
+                SensorToMechanismRatio = GEAR_RATIO
             }
     }
+
+
 
 @CommandEnum
 enum class WristPositions(var angle: Angle) {
