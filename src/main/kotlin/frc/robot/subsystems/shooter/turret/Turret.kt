@@ -5,7 +5,10 @@ import com.ctre.phoenix6.hardware.CANcoder
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.drive
 import frc.robot.lib.extensions.deg
+import frc.robot.lib.extensions.degrees
+import frc.robot.lib.extensions.radians
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
@@ -13,6 +16,7 @@ import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
+import kotlin.math.atan2
 
 @AutoLogOutput(key = "Turret/mechanism")
 private var mechanism = LoggedMechanism2d(5.0, 5.0)

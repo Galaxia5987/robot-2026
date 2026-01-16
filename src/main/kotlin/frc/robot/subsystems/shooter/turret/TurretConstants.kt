@@ -18,10 +18,19 @@ const val RATIO = 1.0
 val SIM_GAINS = Gains(kP = 0.5, kD = 0.075)
 val REAL_GAINS = Gains(kP = 0.5, kD = 0.075)
 
+val TOLERANCE = 2.deg
 val SETPOINT_TOLERANCE = 1.deg
 
 val ENCODER_ID = 0
 val ABSOLUTE_ENCODER_OFFSET = 0.rps
+
+val SOFTWARE_LIMIT_CONFIG =
+    SoftwareLimitSwitchConfigs().apply {
+        ForwardSoftLimitEnable = true
+        ForwardSoftLimitThreshold = 0.73291
+        ReverseSoftLimitEnable = true
+        ReverseSoftLimitThreshold = -0.005
+    }
 
 val ENCODER_CONFIG =
     CANcoderConfiguration().apply {
