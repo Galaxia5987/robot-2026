@@ -9,3 +9,5 @@ val path = PathPlannerPath.fromPathFile(name)
 val startPose= path.pathPoses[0]
 return AutoBuilder.resetOdom(startPose).andThen(AutoBuilder.followPath(path))
 }
+
+fun BumpToDeputTest():Command= runPath("BumpToDeput")
