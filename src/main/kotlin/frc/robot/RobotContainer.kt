@@ -7,8 +7,14 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
+import frc.robot.lib.extensions.onFalse
+import frc.robot.lib.extensions.onTrue
+import frc.robot.lib.extensions.rps
 import frc.robot.lib.unified_controller.UnifiedController
+import frc.robot.subsystems.conveyor.PreShootConveyor.PreShooter
+import frc.robot.subsystems.conveyor.conveyor.Conveyor
 import frc.robot.subsystems.drive.DriveCommands
+import frc.robot.subsystems.flywheel.Flywheel
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
@@ -52,6 +58,10 @@ object RobotContainer {
 
     private fun configureButtonBindings() {
         driverController.options().onTrue(DriveCommands.resetGyro())
+
+        driverController.cross().onTrue(PreShooter.start(), Flywheel.setVelocity(30.rps))
+        driverController.square().onTrue(PreShooter.stop(), Flywheel.stop())
+        driverController.L1().onTrue(Conveyor.start()).onFalse(Conveyor.stop())
     }
 
     fun getAutonomousCommand(): Command = autoChooser.get()
