@@ -10,9 +10,8 @@ import frc.robot.lib.Mode
 import frc.robot.lib.extensions.degrees
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.subsystems.drive.DriveCommands
-import frc.robot.subsystems.shooter.turret.Turret
-import frc.robot.subsystems.shooter.turret.Turret.setAngle
-import frc.robot.subsystems.shooter.turret.turretAngleToHub
+import frc.robot.subsystems.intake.wrist.Wrist
+import frc.robot.subsystems.intake.wrist.WristPositions
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
@@ -56,8 +55,8 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
-        driverController.b().whileTrue(setAngle({ 45.0.degrees }))
-        driverController.x().whileTrue(setAngle({ 0.degrees }))
+        driverController.y().onTrue(Wrist.setTarget(WristPositions.UP))
+        driverController.x().onTrue(Wrist.setTarget(WristPositions.INTAKE))
     }
 
     fun getAutonomousCommand(): Command = autoChooser.get()

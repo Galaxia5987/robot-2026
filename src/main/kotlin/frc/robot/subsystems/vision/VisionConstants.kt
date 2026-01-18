@@ -25,7 +25,6 @@ const val LOG_PREFIX = "Subsystems/Vision/"
 val APRILTAG_LAYOUT:
     AprilTagFieldLayout = // TODO: Replace with correct apriltag layout when it comes out
     AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark)
-
 // stddevFactor - Standard deviation multipliers for each camera
 // (Adjust to trust some cameras more than others)
 data class CameraConfig(
