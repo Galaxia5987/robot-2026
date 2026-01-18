@@ -11,6 +11,7 @@ import com.ctre.phoenix6.signals.SensorDirectionValue
 import edu.wpi.first.units.measure.Angle
 import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
+import frc.robot.lib.extensions.amps
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.rad
@@ -29,10 +30,10 @@ val REAL_GAINS = Gains(kP = 1.0, kD = 0.0)
 // TODO: actual values
 
 val ENCODER_ID = 10
-//TODO: actual value
+// TODO: actual value
 
 val ABSOLUTE_ENCODER_OFFSET = 0.rad
-//TODO: actual value
+// TODO: actual value
 
 val ENCODER_CONFIG =
     CANcoderConfiguration().apply {
@@ -51,20 +52,12 @@ val CONFIG =
                 // TODO: check motor direction
             }
 
-        CurrentLimits = createCurrentLimits()
-
-        Slot0 =
-            Slot0Configs().apply {
-                REAL_GAINS
-            }
-
+        Slot0 = Slot0Configs().apply { REAL_GAINS }
         Feedback =
-            FeedbackConfigs().apply {
-                SensorToMechanismRatio = GEAR_RATIO
-            }
+            FeedbackConfigs().apply { SensorToMechanismRatio = GEAR_RATIO }
+
+        CurrentLimits = createCurrentLimits(30.amps, 5.amps)
     }
-
-
 
 @CommandEnum
 enum class WristPositions(var angle: Angle) {

@@ -1,16 +1,19 @@
 package frc.robot.subsystems.intake.wrist
 
-import com.ctre.phoenix6.controls.PositionVoltage
+import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC
+import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.CANcoder
+import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.lib.extensions.deg
+import frc.robot.lib.sysid.SysIdable
 import frc.robot.lib.universal_motor.UniversalTalonFX
-import org.littletonrobotics.junction.AutoLogOutput
+import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
 
-object Wrist : SubsystemBase(), WristPositionsCommandFactory {
+object Wrist : SubsystemBase(), SysIdable, WristPositionsCommandFactory {
     private val motor =
         UniversalTalonFX(
             port = PORT,
@@ -20,8 +23,15 @@ object Wrist : SubsystemBase(), WristPositionsCommandFactory {
             gearRatio = GEAR_RATIO
         )
 
-    @AutoLogOutput
-    private var setPoint = 0.deg
+    private var setpoint = 0.deg
+
+    private var mechanism = LoggedMechanism2d(5.0, 5.0)
+    private var root = mechanism.getRoot(name, 2.5, 2.5)
+    private val ligament =
+        root.append(LoggedMechanismLigament2d("WristLigament", 1.0, 0.0))
+
+    private val positionRequest = PositionTorqueCurrentFOC(0.deg)
+    private val voltageOut = VoltageOut(0.0)
 
     private val encoder = CANcoder(ENCODER_ID)
 
@@ -29,23 +39,19 @@ object Wrist : SubsystemBase(), WristPositionsCommandFactory {
         encoder.configurator.apply(ENCODER_CONFIG)
     }
 
-    @AutoLogOutput(key = "Wrist/mechanism")
-    private var mechanism = LoggedMechanism2d(5.0, 5.0)
-    private var root = mechanism.getRoot("Wrist", 2.5, 2.5)
-    private val ligament =
-        root.append(LoggedMechanismLigament2d("WristLigament", 1.0, 0.0))
+    override fun setTarget(value: WristPositions): Command = runOnce {
+        setpoint = value.angle
+        motor.setControl(positionRequest.withPosition(value.angle))
+    }
 
-    private val positionRequest = PositionVoltage(0.deg)
-    override fun setTarget(value: WristPositions): Command {
-        return runOnce {
-            setPoint = value.angle
-            motor.setControl(positionRequest.withPosition(value.angle))
-        }
-
+    override fun setVoltage(voltage: Voltage) {
+        motor.setControl(voltageOut.withOutput(voltage))
     }
 
     override fun periodic() {
-        motor.periodic()
         ligament.setAngle(motor.inputs.position)
+        motor.periodic()
+        Logger.recordOutput("Subsystems/$name/setpoint", setpoint)
+        Logger.recordOutput("Subsystems/$name/mechanism", mechanism)
     }
 }
