@@ -36,7 +36,7 @@ val ENCODER_CONFIG =
     CANcoderConfiguration().apply {
         MagnetSensor.SensorDirection =
             SensorDirectionValue.CounterClockwise_Positive
-        MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.0 // What does it do? //Value unknown
+        MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.0
         MagnetSensor.MagnetOffset =
             ABSOLUTE_ENCODER_OFFSET[rps] // What does it do?
     }
@@ -50,11 +50,11 @@ val CONFIG =
             }
         CurrentLimits = createCurrentLimits()
         Slot0 =
-            Slot0Configs().apply { // What does it do?
-                Slot0 = REAL_GAINS.toSlotConfig() // What does it do?
+            Slot0Configs().apply {
+                Slot0 = REAL_GAINS.toSlotConfig()
             }
         Feedback =
-            FeedbackConfigs().apply { // What does it do?
+            FeedbackConfigs().apply {
                 SensorToMechanismRatio = RATIO
                 FeedbackRemoteSensorID = ENCODER_ID
                 FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder
