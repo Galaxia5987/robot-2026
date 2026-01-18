@@ -41,7 +41,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.Alert;
@@ -284,11 +283,7 @@ public class Drive extends SubsystemBase implements SysIdable {
                         DriverStation.getAlliance().isPresent()
                                 && DriverStation.getAlliance().get() == DriverStation.Alliance.Red,
                 this);
-
-        FlippingUtil.symmetryType = FlippingUtil.FieldSymmetry.kRotational;
-        FlippingUtil.fieldSizeX = Units.inchesToMeters(324 * 2);
-        FlippingUtil.fieldSizeY = Units.inchesToMeters(162 * 2);
-
+      
         Pathfinding.setPathfinder(new LocalADStarAK());
         PathPlannerLogging.setLogActivePathCallback(
                 (activePath) -> {
