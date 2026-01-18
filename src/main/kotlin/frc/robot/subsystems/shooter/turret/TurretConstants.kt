@@ -8,6 +8,7 @@ import com.ctre.phoenix6.signals.SensorDirectionValue
 import edu.wpi.first.units.measure.AngularVelocity
 import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
+import frc.robot.lib.extensions.amps
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.rps
@@ -15,6 +16,7 @@ import org.team5987.annotation.command_enum.CommandEnum
 
 const val PORT = 0
 const val RATIO = 1.0
+const val ENCODER_RATIO = 1.0
 val SIM_GAINS = Gains(kP = 0.5, kD = 0.075)
 val REAL_GAINS = Gains(kP = 0.5, kD = 0.075)
 
@@ -38,7 +40,7 @@ val ENCODER_CONFIG =
             SensorDirectionValue.CounterClockwise_Positive
         MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.0
         MagnetSensor.MagnetOffset =
-            ABSOLUTE_ENCODER_OFFSET[rps] // What does it do?
+            ABSOLUTE_ENCODER_OFFSET[rps]
     }
 
 val CONFIG =
@@ -48,7 +50,6 @@ val CONFIG =
                 NeutralMode = NeutralModeValue.Coast
                 Inverted = InvertedValue.Clockwise_Positive
             }
-        CurrentLimits = createCurrentLimits()
         Slot0 =
             Slot0Configs().apply {
                 Slot0 = REAL_GAINS.toSlotConfig()
@@ -56,9 +57,11 @@ val CONFIG =
         Feedback =
             FeedbackConfigs().apply {
                 SensorToMechanismRatio = RATIO
+                RotorToSensorRatio = ENCODER_RATIO
                 FeedbackRemoteSensorID = ENCODER_ID
                 FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder
             }
+        CurrentLimits = createCurrentLimits(20.amps, 5.amps)
     }
 
 @CommandEnum
