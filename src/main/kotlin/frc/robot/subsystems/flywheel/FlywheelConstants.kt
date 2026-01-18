@@ -4,9 +4,9 @@ import com.ctre.phoenix6.configs.FeedbackConfigs
 import com.ctre.phoenix6.configs.MotorOutputConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.signals.InvertedValue
+import com.ctre.phoenix6.signals.MotorAlignmentValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import edu.wpi.first.units.measure.AngularVelocity
-import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.amps
@@ -15,21 +15,21 @@ import org.team5987.annotation.command_enum.CommandEnum
 
 const val GEAR_RATIO = 1
 val REAL_GAINS = Gains(kP = 0.0, kS = 0.0, kV = 0.0)
-val SIM_GAINS = Gains(kP = 0.0, kS = 0.0)
+val SIM_GAINS = Gains(kP = 1.0, kS = 0.0)
 
 val MAIN_MOTOR_PORT = 0
 
-val AUXILIARY_MOTORS_PORTS = listOf(0, 0)
+val AUXILIARY_MOTORS_PORTS = mapOf<Int, MotorAlignmentValue>(
+    0 to MotorAlignmentValue.Aligned,
+    1 to MotorAlignmentValue.Aligned
+)
 
 @CommandEnum
-enum class Preset(val velocity: AngularVelocity) {
+enum class FlywheelVelocities(val velocity: AngularVelocity) {
     NEAR(30.0.rps),
     MEDIUM(40.0.rps),
-    FAR(50.0.rps)
-}
-
-interface PresetActions {
-    fun setTarget(preset: Preset): Command
+    FAR(50.0.rps),
+    ZERO(0.rps)
 }
 
 val MOTOR_CONFIG =
@@ -43,5 +43,5 @@ val MOTOR_CONFIG =
         Slot0 = REAL_GAINS.toSlotConfig()
 
         CurrentLimits =
-            createCurrentLimits(supplyCurrentPeakDifference = 10.amps)
+            createCurrentLimits(supplyCurrentLimit = 30.amps, supplyCurrentPeakDifference = 10.amps)
     }
