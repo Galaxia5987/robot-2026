@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import frc.robot.lib.Mode
+import frc.robot.lib.extensions.degrees
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.intake.wrist.Wrist
@@ -32,6 +33,7 @@ object RobotContainer {
         configureDefaultCommands()
 
         if (CURRENT_MODE == Mode.SIM) {
+            SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation)
             SimulatedArena.getInstance().resetFieldForAuto()
         }
 
@@ -43,13 +45,13 @@ object RobotContainer {
         driveSimulation?.simulatedDriveTrainPose
 
     private fun configureDefaultCommands() {
-
         drive.defaultCommand =
             DriveCommands.joystickDrive(
                 { -driverController.leftY },
                 { -driverController.leftX },
                 { -driverController.rightX * 0.8 }
             )
+        Turret.defaultCommand = setAngle { turretAngleToHub }
     }
 
     private fun configureButtonBindings() {
