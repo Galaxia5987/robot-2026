@@ -5,17 +5,14 @@ import com.ctre.phoenix6.configs.FeedbackConfigs
 import com.ctre.phoenix6.configs.MotorOutputConfigs
 import com.ctre.phoenix6.configs.Slot0Configs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import com.ctre.phoenix6.signals.SensorDirectionValue
 import edu.wpi.first.units.measure.Angle
 import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
-import frc.robot.lib.extensions.deg
-import frc.robot.lib.extensions.get
-import frc.robot.lib.extensions.rad
-import frc.robot.lib.extensions.rot
-import frc.robot.lib.extensions.volts
+import frc.robot.lib.extensions.*
 import org.team5987.annotation.command_enum.CommandEnum
 
 val PORT = 0
@@ -25,11 +22,8 @@ val ENCODER_ID = 10
 
 val TOLERANCE = 0.5.deg
 
-val ANGLE_UP_VOLTAGE = 0.013.volts
-val ANGLE_DOWN_VOLTAGE = -0.013.volts
-// TODO: real values
-
 val SIM_GAINS = Gains(kP = 1.7, kD = 0.32)
+val REAL_GAINS = Gains(kP = 1.7)
 
 val GEAR_RATIO = 1.0
 
@@ -52,16 +46,17 @@ val CONFIG =
                 // TODO: check motor direction
             }
 
-        CurrentLimits = createCurrentLimits()
 
-        Slot0 =
-            Slot0Configs().apply {
-                kP = 1.0
-                kD = 0.0
-                // TODO: actual values
-            }
+        Slot0 = REAL_GAINS.toSlotConfig()
         Feedback =
-            FeedbackConfigs().apply { SensorToMechanismRatio = GEAR_RATIO }
+            FeedbackConfigs().apply {
+                SensorToMechanismRatio = GEAR_RATIO
+                RotorToSensorRatio = 1.0
+                FeedbackRemoteSensorID = ENCODER_ID
+                FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder
+            }
+
+        CurrentLimits = createCurrentLimits(15.amps, 5.amps)
     }
 
 @CommandEnum
