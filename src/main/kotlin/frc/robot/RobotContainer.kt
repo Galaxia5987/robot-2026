@@ -9,7 +9,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.subsystems.drive.DriveCommands
-import frc.robot.subsystems.shooter.hood.Hood
+import frc.robot.subsystems.intake.wrist.Wrist
+import frc.robot.subsystems.intake.wrist.WristPositions
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
@@ -52,16 +53,8 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
-        driverController.povUp().onTrue(Hood.up())
-        driverController.povDown().onTrue(Hood.down())
-        driverController
-            .povRight()
-            .whileTrue(Hood.angleUpByController())
-            .onFalse(Hood.stop())
-        driverController
-            .povLeft()
-            .whileTrue(Hood.angleDownByController())
-            .onFalse(Hood.stop())
+        driverController.y().onTrue(Wrist.setTarget(WristPositions.UP))
+        driverController.x().onTrue(Wrist.setTarget(WristPositions.INTAKE))
     }
 
     fun getAutonomousCommand(): Command = autoChooser.get()
