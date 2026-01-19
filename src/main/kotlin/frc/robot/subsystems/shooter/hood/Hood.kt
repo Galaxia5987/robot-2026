@@ -54,8 +54,8 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
     override fun periodic() {
         ligament.setAngle(setpoint)
         motor.periodic()
-        Logger.recordOutput("Subsystems/$name/mechanism", setpoint)
-        Logger.recordOutput("Subsystems/$name/atSetpoint", setpoint)
+        Logger.recordOutput("Subsystems/$name/mechanism", mechanism)
+        Logger.recordOutput("Subsystems/$name/atSetpoint", atSetpoint)
         Logger.recordOutput("Subsystems/$name/setpoint", setpoint)
     }
 }
