@@ -23,6 +23,7 @@ import frc.robot.subsystems.drive.TunerConstants;
 import java.util.Arrays;
 import org.ironmaple.simulation.drivesims.SwerveModuleSimulation;
 import org.ironmaple.simulation.motorsims.SimulatedMotorController;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * Physics sim implementation of module IO. The sim models are configured using a set of module
@@ -129,6 +130,7 @@ public class ModuleIOSim implements ModuleIO {
 
     @Override
     public void setDriveVelocity(double velocityRadPerSec) {
+        Logger.recordOutput("Velocity", velocityRadPerSec);
         driveClosedLoop = true;
         driveFFVolts = DRIVE_KS * Math.signum(velocityRadPerSec) + DRIVE_KV * velocityRadPerSec;
         driveController.setSetpoint(velocityRadPerSec);

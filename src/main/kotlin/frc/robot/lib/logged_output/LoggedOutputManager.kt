@@ -115,7 +115,7 @@ object LoggedOutputManager : SubsystemBase() {
                     addRunnable(key) {
                         value().ifNotNull { recordOutput(key, it as Double) }
                     }
-                type == String::class.java ->
+                type == String::class.javaPrimitiveType ->
                     addRunnable(key) {
                         value().ifNotNull { recordOutput(key, it as String?) }
                     }
@@ -128,15 +128,55 @@ object LoggedOutputManager : SubsystemBase() {
                 type == Color::class.java ->
                     addRunnable(key) {
                         value().ifNotNull {
-                            recordOutput(key, (value() as Color).toHexString())
+                            recordOutput(
+                                "$key/red",
+                                (value() as Color).red * 255
+                            )
+                            recordOutput(
+                                "$key/blue",
+                                (value() as Color).blue * 255
+                            )
+                            recordOutput(
+                                "$key/green",
+                                (value() as Color).green * 255
+                            )
                         }
                     }
-                type.isEnum ->
+                type.isEnum -> {
+                    val constants =
+                        type.declaredFields.filter {
+                            !java.lang.reflect.Modifier.isStatic(
+                                it.modifiers
+                            ) && !it.isSynthetic
+                        }
+                    constants.forEach { it.trySetAccessible() }
                     addRunnable(key) {
                         value().ifNotNull {
-                            recordOutput(key, (it as Enum<*>).name)
+                            val enum = (it as Enum<*>)
+                            recordOutput(key, enum.name)
+                            constants.forEach { constant ->
+                                try {
+                                    val value = constant.get(it)
+                                    val subKey = "$key/${constant.name}"
+                                    when (value) {
+                                        is Number ->
+                                            recordOutput(
+                                                subKey,
+                                                value.toDouble()
+                                            )
+                                        is Measure<*> ->
+                                            recordOutput(subKey, value)
+                                        else ->
+                                            recordOutput(
+                                                subKey,
+                                                value.toString()
+                                            )
+                                    }
+                                } catch (_: Exception) {}
+                            }
                         }
                     }
+                }
                 type.isRecord ->
                     addRunnable(key) {
                         value().ifNotNull { recordOutput(key, it as Record) }
