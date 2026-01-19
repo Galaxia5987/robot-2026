@@ -39,8 +39,7 @@ val ENCODER_CONFIG =
         MagnetSensor.SensorDirection =
             SensorDirectionValue.CounterClockwise_Positive
         MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.0
-        MagnetSensor.MagnetOffset =
-            ABSOLUTE_ENCODER_OFFSET[rps]
+        MagnetSensor.MagnetOffset = ABSOLUTE_ENCODER_OFFSET[rps]
     }
 
 val CONFIG =
@@ -50,10 +49,7 @@ val CONFIG =
                 NeutralMode = NeutralModeValue.Coast
                 Inverted = InvertedValue.Clockwise_Positive
             }
-        Slot0 =
-            Slot0Configs().apply {
-                Slot0 = REAL_GAINS.toSlotConfig()
-            }
+        Slot0 = Slot0Configs().apply { Slot0 = REAL_GAINS.toSlotConfig() }
         Feedback =
             FeedbackConfigs().apply {
                 SensorToMechanismRatio = RATIO

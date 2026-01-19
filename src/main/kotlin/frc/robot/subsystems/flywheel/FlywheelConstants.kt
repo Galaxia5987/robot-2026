@@ -19,10 +19,11 @@ val SIM_GAINS = Gains(kP = 1.0, kS = 0.0)
 
 val MAIN_MOTOR_PORT = 0
 
-val AUXILIARY_MOTORS_PORTS = mapOf<Int, MotorAlignmentValue>(
-    0 to MotorAlignmentValue.Aligned,
-    1 to MotorAlignmentValue.Aligned
-)
+val AUXILIARY_MOTORS_PORTS =
+    mapOf<Int, MotorAlignmentValue>(
+        0 to MotorAlignmentValue.Aligned,
+        1 to MotorAlignmentValue.Aligned
+    )
 
 @CommandEnum
 enum class FlywheelVelocities(val velocity: AngularVelocity) {
@@ -43,5 +44,8 @@ val MOTOR_CONFIG =
         Slot0 = REAL_GAINS.toSlotConfig()
 
         CurrentLimits =
-            createCurrentLimits(supplyCurrentLimit = 30.amps, supplyCurrentPeakDifference = 10.amps)
+            createCurrentLimits(
+                supplyCurrentLimit = 30.amps,
+                supplyCurrentPeakDifference = 10.amps
+            )
     }

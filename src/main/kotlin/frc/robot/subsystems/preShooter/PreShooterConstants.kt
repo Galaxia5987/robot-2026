@@ -5,13 +5,12 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.signals.InvertedValue
 import edu.wpi.first.units.measure.AngularVelocity
 import frc.robot.lib.Gains
-import frc.robot.lib.LoggedNetworkGains
 import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.amps
 import frc.robot.lib.extensions.rps
 import org.team5987.annotation.command_enum.CommandEnum
 
-val GAINS = Gains( 1.0) // TODO calibration
+val GAINS = Gains(1.0) // TODO calibration
 
 val SIM_GAINS = Gains(1.0)
 

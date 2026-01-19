@@ -7,8 +7,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.Logger
 
-object PreShooter :
-    SubsystemBase(), PreShooterVelocityCommandFactory {
+object PreShooter : SubsystemBase(), PreShooterVelocityCommandFactory {
 
     private val mainMotor =
         UniversalTalonFX(

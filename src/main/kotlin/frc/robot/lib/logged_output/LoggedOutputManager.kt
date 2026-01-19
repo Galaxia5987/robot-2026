@@ -12,14 +12,14 @@ import frc.robot.lib.extensions.toPrimitiveTypeJava
 import frc.robot.lib.ifNotNull
 import frc.robot.lib.logged_output.generated.registerAllLoggedOutputs
 import frc.robot.logLevel
-import org.littletonrobotics.junction.Logger.recordOutput
-import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
-import org.team5987.annotation.LogLevel
 import java.util.function.*
 import kotlin.reflect.KFunction
 import kotlin.reflect.KProperty0
 import kotlin.reflect.jvm.javaGetter
 import kotlin.reflect.jvm.javaMethod
+import org.littletonrobotics.junction.Logger.recordOutput
+import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
+import org.team5987.annotation.LogLevel
 
 object LoggedOutputManager : SubsystemBase() {
     private val callbacks = mutableListOf<Runnable>()
@@ -99,46 +99,38 @@ object LoggedOutputManager : SubsystemBase() {
                     addRunnable(key) {
                         value().ifNotNull { recordOutput(key, it as Boolean) }
                     }
-
                 type == Int::class.javaPrimitiveType ->
                     addRunnable(key) {
                         value().ifNotNull { recordOutput(key, it as Int) }
                     }
-
                 type == Long::class.javaPrimitiveType ->
                     addRunnable(key) {
                         value().ifNotNull { recordOutput(key, it as Long) }
                     }
-
                 type == Float::class.javaPrimitiveType ->
                     addRunnable(key) {
                         value().ifNotNull { recordOutput(key, it as Float) }
                     }
-
                 type == Double::class.javaPrimitiveType ->
                     addRunnable(key) {
                         value().ifNotNull { recordOutput(key, it as Double) }
                     }
-
                 type == String::class.javaPrimitiveType ->
                     addRunnable(key) {
                         value().ifNotNull { recordOutput(key, it as String?) }
                     }
-
                 type == LoggedMechanism2d::class.java ->
                     addRunnable(key) {
                         value().ifNotNull {
                             recordOutput(key, value() as LoggedMechanism2d?)
                         }
                     }
-
                 type == Color::class.java ->
                     addRunnable(key) {
                         value().ifNotNull {
                             recordOutput(key, (value() as Color).toHexString())
                         }
                     }
-
                 type.isEnum -> {
                     val constants =
                         type.declaredFields.filter {
@@ -161,28 +153,23 @@ object LoggedOutputManager : SubsystemBase() {
                                                 subKey,
                                                 value.toDouble()
                                             )
-
                                         is Measure<*> ->
                                             recordOutput(subKey, value)
-
                                         else ->
                                             recordOutput(
                                                 subKey,
                                                 value.toString()
                                             )
                                     }
-                                } catch (_: Exception) {
-                                }
+                                } catch (_: Exception) {}
                             }
                         }
                     }
                 }
-
                 type.isRecord ->
                     addRunnable(key) {
                         value().ifNotNull { recordOutput(key, it as Record) }
                     }
-
                 type == ProfiledPIDController::class.java -> {
                     addRunnable(key) {
                         value().ifNotNull {
@@ -190,42 +177,36 @@ object LoggedOutputManager : SubsystemBase() {
                         }
                     }
                 }
-
                 BooleanSupplier::class.java.isAssignableFrom(type) ->
                     addRunnable(key) {
                         value().ifNotNull {
                             recordOutput(key, it as BooleanSupplier?)
                         }
                     }
-
                 IntSupplier::class.java.isAssignableFrom(type) ->
                     addRunnable(key) {
                         value().ifNotNull {
                             recordOutput(key, it as IntSupplier?)
                         }
                     }
-
                 LongSupplier::class.java.isAssignableFrom(type) ->
                     addRunnable(key) {
                         value().ifNotNull {
                             recordOutput(key, it as LongSupplier?)
                         }
                     }
-
                 DoubleSupplier::class.java.isAssignableFrom(type) ->
                     addRunnable(key) {
                         value().ifNotNull {
                             recordOutput(key, it as DoubleSupplier?)
                         }
                     }
-
                 Measure::class.java.isAssignableFrom(type) ->
                     addRunnable(key) {
                         value().ifNotNull {
                             recordOutput(key, it as Measure<*>)
                         }
                     }
-
                 else -> {
                     addRunnable(key) {
                         value().ifNotNull {
@@ -235,7 +216,7 @@ object LoggedOutputManager : SubsystemBase() {
                             } catch (e: ClassCastException) {
                                 DriverStation.reportError(
                                     "[LoggedOutputManager] Auto serialization is not supported for type " +
-                                            type.getSimpleName(),
+                                        type.getSimpleName(),
                                     false
                                 )
                             }
@@ -253,49 +234,40 @@ object LoggedOutputManager : SubsystemBase() {
                             recordOutput(key, it as ByteArray?)
                         }
                     }
-
                 componentType == Boolean::class.javaPrimitiveType ->
                     addRunnable(key) {
                         value().ifNotNull { recordOutput(key, it as Boolean) }
                     }
-
                 componentType == Int::class.javaPrimitiveType ->
                     addRunnable(key) {
                         value().ifNotNull { recordOutput(key, it as Int) }
                     }
-
                 componentType == Long::class.javaPrimitiveType ->
                     addRunnable(key) {
                         value().ifNotNull { recordOutput(key, it as Long) }
                     }
-
                 componentType == Float::class.javaPrimitiveType ->
                     addRunnable(key) {
                         value().ifNotNull { recordOutput(key, it as Float) }
                     }
-
                 componentType == Double::class.javaPrimitiveType ->
                     addRunnable(key) {
                         value().ifNotNull { recordOutput(key, it as Double) }
                     }
-
                 componentType == String::class.javaPrimitiveType ->
                     addRunnable(key) {
                         value().ifNotNull { recordOutput(key, it as String?) }
                     }
-
                 componentType.isEnum ->
                     addRunnable(key) {
                         value().ifNotNull {
                             recordOutput(key, (it as Enum<*>).name)
                         }
                     }
-
                 componentType.isRecord ->
                     addRunnable(key) {
                         value().ifNotNull { recordOutput(key, it as Record) }
                     }
-
                 else -> {
                     addRunnable(key) {
                         value().ifNotNull {
@@ -308,7 +280,7 @@ object LoggedOutputManager : SubsystemBase() {
                             } catch (e: ClassCastException) {
                                 DriverStation.reportError(
                                     "[LoggedOutputManager] Auto serialization is not supported for array type " +
-                                            componentType.getSimpleName(),
+                                        componentType.getSimpleName(),
                                     false
                                 )
                             }
@@ -326,49 +298,40 @@ object LoggedOutputManager : SubsystemBase() {
                             recordOutput(key, it as ByteArray?)
                         }
                     }
-
                 componentType == Boolean::class.javaPrimitiveType ->
                     addRunnable(key) {
                         value().ifNotNull { recordOutput(key, it as Boolean) }
                     }
-
                 componentType == Int::class.javaPrimitiveType ->
                     addRunnable(key) {
                         value().ifNotNull { recordOutput(key, it as Int) }
                     }
-
                 componentType == Long::class.javaPrimitiveType ->
                     addRunnable(key) {
                         value().ifNotNull { recordOutput(key, it as Long) }
                     }
-
                 componentType == Float::class.javaPrimitiveType ->
                     addRunnable(key) {
                         value().ifNotNull { recordOutput(key, it as Float) }
                     }
-
                 componentType == Double::class.javaPrimitiveType ->
                     addRunnable(key) {
                         value().ifNotNull { recordOutput(key, it as Double) }
                     }
-
                 componentType == String::class.javaPrimitiveType ->
                     addRunnable(key) {
                         value().ifNotNull { recordOutput(key, it as String?) }
                     }
-
                 componentType.isEnum ->
                     addRunnable(key) {
                         value().ifNotNull {
                             recordOutput(key, (it as Enum<*>).name)
                         }
                     }
-
                 componentType.isRecord ->
                     addRunnable(key) {
                         value().ifNotNull { recordOutput(key, it as Record) }
                     }
-
                 else -> {
                     addRunnable(key) {
                         value().ifNotNull {
@@ -381,7 +344,7 @@ object LoggedOutputManager : SubsystemBase() {
                             } catch (e: ClassCastException) {
                                 DriverStation.reportError(
                                     ("[LoggedOutputManager] Auto serialization is not supported for 2D array type " +
-                                            componentType.getSimpleName()),
+                                        componentType.getSimpleName()),
                                     false
                                 )
                             }

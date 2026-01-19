@@ -35,7 +35,8 @@ object RobotContainer {
         configureDefaultCommands()
 
         if (CURRENT_MODE == Mode.SIM) {
-            SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation)
+            SimulatedArena.getInstance()
+                .addDriveTrainSimulation(driveSimulation)
             SimulatedArena.getInstance().resetFieldForAuto()
         }
 

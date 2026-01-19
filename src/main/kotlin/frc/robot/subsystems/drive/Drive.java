@@ -282,7 +282,7 @@ public class Drive extends SubsystemBase implements SysIdable {
                         DriverStation.getAlliance().isPresent()
                                 && DriverStation.getAlliance().get() == DriverStation.Alliance.Red,
                 this);
-      
+
         Pathfinding.setPathfinder(new LocalADStarAK());
         PathPlannerLogging.setLogActivePathCallback(
                 (activePath) -> {
