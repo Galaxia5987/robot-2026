@@ -1,6 +1,7 @@
 package frc.robot
 
 import frc.robot.lib.Mode
+import frc.robot.lib.extensions.get
 import org.littletonrobotics.junction.LoggedRobot
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput

@@ -215,6 +215,8 @@ val Number.sec: Time
     get() = toUnit(Units.Seconds::of)
 val Number.seconds: Time
     get() = toUnit(Units.Seconds::of)
+val Number.min: Time
+    get() = toUnit(Units.Minute::of)
 
 operator fun Time.get(unit: TimeUnit): Double = this.`in`(unit)
 

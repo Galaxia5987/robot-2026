@@ -7,11 +7,13 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import frc.robot.lib.Mode
-import frc.robot.lib.extensions.degrees
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.intake.wrist.Wrist
 import frc.robot.subsystems.intake.wrist.WristPositions
+import frc.robot.subsystems.shooter.turret.Turret
+import frc.robot.subsystems.shooter.turret.Turret.setAngle
+import frc.robot.subsystems.shooter.turret.turretAngleToHub
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
@@ -33,7 +35,8 @@ object RobotContainer {
         configureDefaultCommands()
 
         if (CURRENT_MODE == Mode.SIM) {
-            SimulatedArena.getInstance().addDriveTrainSimulation(driveSimulation)
+            SimulatedArena.getInstance()
+                .addDriveTrainSimulation(driveSimulation)
             SimulatedArena.getInstance().resetFieldForAuto()
         }
 

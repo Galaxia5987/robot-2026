@@ -1,7 +1,6 @@
 package frc.robot.subsystems.shooter.hood
 
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC
-import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.CANcoder
 import edu.wpi.first.units.measure.Voltage
@@ -10,10 +9,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.volts
-import frc.robot.lib.named
 import frc.robot.lib.sysid.SysIdable
 import frc.robot.lib.universal_motor.UniversalTalonFX
-import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d

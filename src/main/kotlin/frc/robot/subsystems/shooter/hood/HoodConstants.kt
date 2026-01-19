@@ -3,7 +3,6 @@ package frc.robot.subsystems.shooter.hood
 import com.ctre.phoenix6.configs.CANcoderConfiguration
 import com.ctre.phoenix6.configs.FeedbackConfigs
 import com.ctre.phoenix6.configs.MotorOutputConfigs
-import com.ctre.phoenix6.configs.Slot0Configs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue
 import com.ctre.phoenix6.signals.InvertedValue
@@ -45,7 +44,6 @@ val CONFIG =
                 Inverted = InvertedValue.Clockwise_Positive
                 // TODO: check motor direction
             }
-
 
         Slot0 = REAL_GAINS.toSlotConfig()
         Feedback =

@@ -1,14 +1,11 @@
 package frc.robot.subsystems.netConveyor
 
 import com.ctre.phoenix6.controls.VelocityVoltage
-import com.ctre.phoenix6.controls.VoltageOut
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.Logger
-import org.team5987.annotation.LogLevel
-import org.team5987.annotation.LoggedOutput
 
 object Spindexer : SubsystemBase(), ConveyorVelocityCommandFactory {
     private val mainMotor =

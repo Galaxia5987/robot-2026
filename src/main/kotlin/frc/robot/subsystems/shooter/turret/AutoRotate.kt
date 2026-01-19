@@ -34,16 +34,12 @@ val turretToRobotHubAngle: Rotation2d
 
 val turretAngleToHub: Angle
     get() =
-        turretToRobotHubAngle.measure
-            .wrapAround(
-                SOFTWARE_LIMIT_CONFIG.ReverseSoftLimitThreshold.rot,
-                SOFTWARE_LIMIT_CONFIG.ForwardSoftLimitThreshold.rot
-            )
+        turretToRobotHubAngle.measure.wrapAround(
+            SOFTWARE_LIMIT_CONFIG.ReverseSoftLimitThreshold.rot,
+            SOFTWARE_LIMIT_CONFIG.ForwardSoftLimitThreshold.rot
+        )
 
 @LoggedOutput(LogLevel.COMP, path = HUB_PATH)
 val isTurretAligned = Trigger {
-    turretAngleToHub.isNear(
-        turretToRobotHubAngle.measure,
-        TOLERANCE
-    )
+    turretAngleToHub.isNear(turretToRobotHubAngle.measure, TOLERANCE)
 }

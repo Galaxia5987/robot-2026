@@ -33,8 +33,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.InitializerKt;
 import frc.robot.lib.AllianceHelperKt;
-import org.littletonrobotics.junction.Logger;
-
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;

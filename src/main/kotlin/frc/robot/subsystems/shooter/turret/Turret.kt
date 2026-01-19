@@ -28,7 +28,8 @@ object Turret : SubsystemBase() {
         )
     private val absoluteEncoder = CANcoder(ENCODER_ID)
 
-    private val positionTorqueCurrentFOC: PositionTorqueCurrentFOC = PositionTorqueCurrentFOC(0.0)
+    private val positionTorqueCurrentFOC: PositionTorqueCurrentFOC =
+        PositionTorqueCurrentFOC(0.0)
     private var setpoint = 0.deg
     val isAtSetpoint = Trigger {
         motor.inputs.position.isNear(setpoint, SETPOINT_TOLERANCE)

@@ -2,7 +2,6 @@ package frc.robot.subsystems.flywheel
 
 import com.ctre.phoenix6.controls.Follower
 import com.ctre.phoenix6.controls.VelocityVoltage
-import com.ctre.phoenix6.signals.MotorAlignmentValue
 import edu.wpi.first.units.measure.AngularVelocity
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -25,10 +24,12 @@ object Flywheel : SubsystemBase(), FlywheelVelocitiesCommandFactory {
 
     init {
         AUXILIARY_MOTORS_PORTS.forEach {
-            UniversalTalonFX(port = it.key, config = MOTOR_CONFIG, subsystem = name)
-                .setControl(
-                    Follower(MAIN_MOTOR_PORT, it.value)
+            UniversalTalonFX(
+                    port = it.key,
+                    config = MOTOR_CONFIG,
+                    subsystem = name
                 )
+                .setControl(Follower(MAIN_MOTOR_PORT, it.value))
         }
     }
 
@@ -47,7 +48,7 @@ object Flywheel : SubsystemBase(), FlywheelVelocitiesCommandFactory {
         motor.setControl(velocityOut.withVelocity(setpoint))
     }
 
-    override fun setTarget(value: FlywheelVelocities): Command  = runOnce {
+    override fun setTarget(value: FlywheelVelocities): Command = runOnce {
         setpoint = value.velocity
         motor.setControl(velocityOut.withVelocity(setpoint))
     }
