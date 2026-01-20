@@ -24,9 +24,9 @@ val PORT = 0
 val GEAR_RATIO = 1.0
 // TODO: actual value
 
-val SIM_GAINS = Gains(kP = 1.33, kD = 0.24)
+val SIM_GAINS = Gains(kP = 1.4, kD = 0.3)
 
-val REAL_GAINS = Gains(kP = 1.0, kD = 0.0)
+val REAL_GAINS = Gains(kP = 1.4, kD = 0.3)
 // TODO: actual values
 
 val ENCODER_ID = 10

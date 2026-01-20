@@ -9,8 +9,14 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.subsystems.drive.DriveCommands
-import frc.robot.subsystems.intake.wrist.Wrist
-import frc.robot.subsystems.intake.wrist.WristPositions
+import frc.robot.subsystems.intake.roller.Roller
+import frc.robot.subsystems.netConveyor.ConveyorVelocity
+import frc.robot.subsystems.netConveyor.Spindexer
+import frc.robot.subsystems.preShooter.PreShooter
+import frc.robot.subsystems.preShooter.PreShooterVelocity
+import frc.robot.subsystems.roller.RollerPositions
+import frc.robot.subsystems.shooter.hood.Hood
+import frc.robot.subsystems.shooter.hood.HoodPositions
 import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.shooter.turret.Turret.setAngle
 import frc.robot.subsystems.shooter.turret.turretAngleToHub
@@ -58,8 +64,9 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
-        driverController.y().onTrue(Wrist.setTarget(WristPositions.UP))
-        driverController.x().onTrue(Wrist.setTarget(WristPositions.INTAKE))
+        driverController.x().onTrue(Roller.setTarget(RollerPositions.INTAKE))
+        driverController.b().onTrue(Roller.setTarget(RollerPositions.OUTTAKE))
+        driverController.a().onTrue(Roller.setTarget(RollerPositions.STOP))
     }
 
     fun getAutonomousCommand(): Command = autoChooser.get()

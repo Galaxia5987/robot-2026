@@ -16,7 +16,6 @@ object PreShooter : SubsystemBase(), PreShooterVelocityCommandFactory {
             gearRatio = GEAR_RATIO,
             simGains = SIM_GAINS
         )
-
     private val velocityVoltage = VelocityVoltage(0.0)
 
     private var setpoint = PreShooterVelocity.STOP

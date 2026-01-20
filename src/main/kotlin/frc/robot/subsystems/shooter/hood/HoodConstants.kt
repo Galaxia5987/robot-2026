@@ -21,7 +21,7 @@ val ENCODER_ID = 10
 
 val TOLERANCE = 0.5.deg
 
-val SIM_GAINS = Gains(kP = 1.7, kD = 0.32)
+val SIM_GAINS = Gains(kP = 1.7, kD = 0.3)
 val REAL_GAINS = Gains(kP = 1.7)
 
 val GEAR_RATIO = 1.0

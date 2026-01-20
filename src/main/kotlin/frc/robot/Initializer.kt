@@ -11,6 +11,10 @@ import frc.robot.subsystems.drive.TunerConstants
 import frc.robot.subsystems.drive.gyroIOs.GyroIO
 import frc.robot.subsystems.drive.gyroIOs.GyroIOPigeon2
 import frc.robot.subsystems.drive.gyroIOs.GyroIOSim
+import frc.robot.subsystems.intake.roller.Roller
+import frc.robot.subsystems.netConveyor.Spindexer
+import frc.robot.subsystems.preShooter.PreShooter
+import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.vision.*
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation
 
@@ -86,3 +90,8 @@ val vision =
         drive::addLocalVisionMeasurement,
         *visionIOs
     )
+
+val hood = Hood
+val preShooter = PreShooter
+val spindexer = Spindexer
+val roller = Roller
