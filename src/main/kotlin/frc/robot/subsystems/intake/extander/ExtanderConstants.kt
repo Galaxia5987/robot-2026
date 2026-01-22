@@ -1,4 +1,4 @@
-package frc.robot.subsystems.intake.wrist
+package frc.robot.subsystems.intake.extander
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration
 import com.ctre.phoenix6.configs.FeedbackConfigs
@@ -60,8 +60,8 @@ val CONFIG =
     }
 
 @CommandEnum
-enum class WristPositions(var angle: Angle) {
-    INTAKE(0.deg),
-    UP(30.deg)
+enum class ExtanderPositions() {
+    OPEN,
+    CLOSE
     // TODO: actual values
 }
