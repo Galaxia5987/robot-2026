@@ -1,9 +1,10 @@
 package frc.robot.lib
 
 import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.ShooterState.IDLE
+import frc.robot.lib.logged_output.LoggedOutputManager.runOnce
+import java.util.concurrent.ConcurrentHashMap
 
 interface ShooterStateMachine {
     val context: Trigger.() -> Unit
@@ -14,12 +15,25 @@ interface ShooterStateMachine {
     }
 }
 
-fun ShooterState.set(): Command = runOnce({
+private val triggerCache = ConcurrentHashMap<Enum<*>, Trigger>()
+
+fun ShooterState.stateTrigger(): Trigger =
+    triggerCache.getOrPut(this) {
+        Trigger { this == ShooterStateMachine.currentState }
+            .apply(this.context)
+            .apply {
+                transitions.forEach { (cond, next) ->
+                    and(cond).onTrue(runOnce { next().set() })
+                }
+            }
+    }
+
+
+fun ShooterState.set(): Command = runOnce {
     ShooterStateMachine.currentState = this
-})
+}
 
-operator fun ShooterState.invoke() = stateTrigger
-
+operator fun ShooterState.invoke() = stateTrigger()
 
 
 enum class ShooterState(
@@ -35,9 +49,4 @@ enum class ShooterState(
         Trigger { false } to { IDLE }
     );
 
-    val stateTrigger = Trigger { this == ShooterStateMachine.currentState }
-        .apply(context)
-        .apply {
-            transitions.forEach { and(it.first).onTrue(it.second().set()) }
-        }
 }
