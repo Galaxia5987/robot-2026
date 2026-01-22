@@ -8,7 +8,7 @@ enum class IntakingStates {
     CLOSED,
     INTAKING,
     OPEN,
-    PUMPING;
+    PLUMPING;
 
     val IntakingStatesTrigger = Trigger { state == this }
 
