@@ -14,14 +14,12 @@ enum class DrivetrainStates {
 
     val trigger = Trigger { state == this }
 
-    fun set(){
+    fun set() {
         state = this
     }
 }
 
-@LoggedOutput(LogLevel.COMP)
-var state: DrivetrainStates = DrivetrainStates.IDLE
-
+@LoggedOutput(LogLevel.COMP) var state: DrivetrainStates = DrivetrainStates.IDLE
 
 // Example Usage
 fun example() {
