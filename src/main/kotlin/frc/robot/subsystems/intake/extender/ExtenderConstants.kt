@@ -14,13 +14,12 @@ import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.amps
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.meters
-import frc.robot.lib.extensions.millimeters
 import frc.robot.lib.extensions.mm
 import frc.robot.lib.extensions.rad
 import frc.robot.lib.extensions.rot
 import org.team5987.annotation.command_enum.CommandEnum
 
-val DIAMETER=12.7.mm
+val DIAMETER = 12.7.mm
 
 val PORT = 0
 // TODO: actual port

@@ -6,28 +6,22 @@ import frc.robot.lib.extensions.sec
 import frc.robot.roller
 import frc.robot.subsystems.intake.extender.Extender
 import frc.robot.subsystems.intake.extender.ExtenderPositions
-import frc.robot.subsystems.roller.RollerPositions
-import kotlin.concurrent.timerTask
-import kotlin.system.measureTimeMillis
-import kotlin.time.Duration.Companion.microseconds
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
 
-
-fun closed(): Command{
-    return roller.setTarget(RollerPositions.STOP).alongWith(Extender.setTarget(ExtenderPositions.CLOSE))
+fun closed(): Command {
+    return roller.stop().alongWith(Extender.close())
 }
 
-fun intaking(): Command{
-    return roller.intake()
+fun intaking(): Command {
+    return roller.intake().alongWith(Extender.open()) // Spindexer Intaking
 }
 
-fun open(): Command{
-    return Extender.setTarget(ExtenderPositions.OPEN)
+fun open(): Command {
+    return Extender.open()
 }
 
-fun pluming(): Command {
-     return run {   Extender.setTarget(ExtenderPositions.OPEN)
-    Commands.waitTime(0.4.sec).andThen(Extender.setTarget(ExtenderPositions.CLOSE))
-     }
+fun pumping(): Command {
+    return Commands.sequence(Extender.setTarget(ExtenderPositions.OPEN),
+        Commands.waitTime(0.4.sec),
+        (Extender.setTarget(ExtenderPositions.CLOSE))) .repeatedly()
 }
+

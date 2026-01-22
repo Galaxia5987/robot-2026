@@ -1,11 +1,11 @@
 package frc.robot.states.intaking
 
 class IntakingTriggers {
-    val intakingTrigger= IntakingStates.INTAKING.IntakingStatesTrigger.whileTrue(intaking())
+    val intakingTrigger = IntakingStates.INTAKING.trigger.onTrue(intaking())
 
-    val closedTrigger= IntakingStates.CLOSED.IntakingStatesTrigger.whileTrue(closed())
+    val closedTrigger = IntakingStates.CLOSED.trigger.onTrue(closed())
 
-    val openTrigger= IntakingStates.OPEN.IntakingStatesTrigger.whileTrue(open())
+    val openTrigger = IntakingStates.OPEN.trigger.onTrue(open())
 
-    val plummingTrigger= IntakingStates.PLUMPING.IntakingStatesTrigger.whileTrue(pluming())
+    val plummingTrigger = IntakingStates.PUMPING.trigger.onTrue(pumping())
 }

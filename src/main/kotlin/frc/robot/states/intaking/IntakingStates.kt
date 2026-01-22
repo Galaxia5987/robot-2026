@@ -8,14 +8,13 @@ enum class IntakingStates {
     CLOSED,
     INTAKING,
     OPEN,
-    PLUMPING;
+    PUMPING;
 
-    val IntakingStatesTrigger = Trigger { state == this }
+    val trigger = Trigger { state == this }
 
     fun set() {
         state = this
     }
 }
 
-@LoggedOutput(LogLevel.COMP)
-var state: IntakingStates = IntakingStates.CLOSED
+@LoggedOutput(LogLevel.COMP) var state: IntakingStates = IntakingStates.CLOSED
