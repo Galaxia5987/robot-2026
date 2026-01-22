@@ -1,44 +1,32 @@
 package frc.robot.subsystems.climb
 
-import com.ctre.phoenix6.controls.Follower
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC
-import com.ctre.phoenix6.signals.MotorAlignmentValue
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.extensions.deg
-import frc.robot.lib.namedRunOnce
+import frc.robot.lib.extensions.get
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.Logger
+import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
+import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
 object Climb : SubsystemBase(), ClimbLevelsCommandFactory {
 
-    val mainMotor =
+    private var mechanism = LoggedMechanism2d(5.0, 5.0)
+    private var root = mechanism.getRoot(name, 2.5, 2.5)
+    private val ligament =
+        root.append(LoggedMechanismLigament2d("ClimbLigament", 1.0, 0.0))
+
+    val motor =
         UniversalTalonFX(
             MAIN_PORT,
             config = MOTOR_CONFIG,
             simGains = SIM_GAINS,
             gearRatio = GEAR_RATION
         )
-    val auxMotor =
-        UniversalTalonFX(
-            AUX_PORT,
-            config = MOTOR_CONFIG,
-            simGains = SIM_GAINS,
-            gearRatio = GEAR_RATION
-        )
-            .apply {
-                setControl(Follower(MAIN_PORT, MotorAlignmentValue.Aligned))
-            }
-
-    val lockMotor =
-        UniversalTalonFX(
-            LOCK_PORT,
-            config = MOTOR_CONFIG,
-            gearRatio = GEAR_RATION
-        ) // TODO swap later
 
     val positionVoltage = MotionMagicTorqueCurrentFOC(0.0)
 
@@ -46,33 +34,21 @@ object Climb : SubsystemBase(), ClimbLevelsCommandFactory {
 
     @LoggedOutput(LogLevel.COMP)
     val isAtSetpoint = Trigger {
-        setpoint.angle.isNear(mainMotor.inputs.position, TOLERANCE)
-    }
-
-    @LoggedOutput(LogLevel.COMP)
-    var isLocked = Trigger { lockSetPoint.isNear(lockMotor.inputs.position, TOLERANCE) }
-
-    private var lockSetPoint = 0.deg
-
-    fun lock(): Command = namedRunOnce {
-        lockMotor.setControl(positionVoltage.withPosition(LOCK))
-        lockSetPoint = LOCK
-    }
-
-    fun unlock(): Command = namedRunOnce {
-        lockMotor.setControl(positionVoltage.withPosition(UNLOCK))
-        lockSetPoint = UNLOCK
+        setpoint.angle.isNear(motor.inputs.position, TOLERANCE)
     }
 
     override fun setTarget(value: ClimbLevels): Command = runOnce {
-        mainMotor.setControl(positionVoltage.withPosition(value.angle))
+        motor.setControl(positionVoltage.withPosition(value.angle))
         setpoint = value
     }
 
     override fun periodic() {
-        mainMotor.periodic()
-        lockMotor.periodic()
+        ligament.angle =
+            if (setpoint.angle >= ClimbLevels.UNLOCK.angle)
+                ClimbLevels.UNLOCK.angle[deg]
+            else 45.0
+        motor.periodic()
         Logger.recordOutput("Subsystems/$name/setpoint", setpoint.angle)
-        Logger.recordOutput("Subsystems/$name/lockSetPoint", lockSetPoint)
+        Logger.recordOutput("Subsystems/$name/mechanism", mechanism)
     }
 }

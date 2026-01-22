@@ -12,11 +12,12 @@ var CLIMB_LOCATION = Translation2d(4090.6.mm, 5457.8.mm)
 var OUTPOST_LOCATION = Translation2d(3026.5.mm, 7940.6.mm)
 var DEPOT_LOCATION = Translation2d(3692.8.mm, 2641.6.mm)
 
-val allianceColorTrigger = Trigger({IS_RED}).onTrue(flipAllianceLocation())
+val allianceColorTrigger = Trigger({ IS_RED }).onTrue(flipAllianceLocation())
 
-private fun flipAllianceLocation () = runOnce ({
-    HUB_LOCATION = HUB_LOCATION.flip()
-    CLIMB_LOCATION = CLIMB_LOCATION.flip()
-    OUTPOST_LOCATION = OUTPOST_LOCATION.flip()
-    DEPOT_LOCATION = DEPOT_LOCATION.flip()
-})
+private fun flipAllianceLocation() =
+    runOnce({
+        HUB_LOCATION = HUB_LOCATION.flip()
+        CLIMB_LOCATION = CLIMB_LOCATION.flip()
+        OUTPOST_LOCATION = OUTPOST_LOCATION.flip()
+        DEPOT_LOCATION = DEPOT_LOCATION.flip()
+    })
