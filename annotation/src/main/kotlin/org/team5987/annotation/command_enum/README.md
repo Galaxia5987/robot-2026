@@ -23,7 +23,7 @@ Implement the generated actions interface and define the angle-setting behavior:
 object Wrist : SubsystemBase(), WristAnglesActions {
     ..
     
-    override fun setAngle(value: WristAngles): Command = runOnce({
+    override fun setTarget(value: WristAngles): Command = runOnce({
         setpoint = value.angle
         motor.setControl(positionRequest.withPosition(value.angle))
     })
