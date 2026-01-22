@@ -9,6 +9,7 @@ var isFeeding = false
 
 var isIntaking = false
     private set
+
 fun setFeeding(value : Boolean) = runOnce({ isFeeding =value })
 fun setIntaking(value : Boolean) = runOnce({ isIntaking = value })
 
