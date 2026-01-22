@@ -65,8 +65,8 @@ object RobotContainer {
 
     private fun configureButtonBindings() {
         driverController.x().onTrue(Roller.setTarget(RollerPositions.INTAKE))
-        driverController.b().onTrue(Roller.setTarget(RollerPositions.OUTTAKE))
-        driverController.a().onTrue(Roller.setTarget(RollerPositions.STOP))
+        driverController.b().onTrue(Spindexer.setTarget(ConveyorVelocity.REVERSE_SLOW))
+        driverController.a().onTrue(Spindexer.setTarget(ConveyorVelocity.REVERSE))
     }
 
     fun getAutonomousCommand(): Command = autoChooser.get()
