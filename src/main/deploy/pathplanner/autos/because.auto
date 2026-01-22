@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "startToFuelOutpostSide"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "fuelStep1ToStep2OutpostSide"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "stopBeforeOutpost"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "bumpToOutpost"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NiceToHavePathOutpost"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
