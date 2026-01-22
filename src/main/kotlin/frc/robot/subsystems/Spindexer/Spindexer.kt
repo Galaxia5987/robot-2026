@@ -1,10 +1,11 @@
-package frc.robot.subsystems.netConveyor
+package frc.robot.subsystems.Spindexer
 
 import com.ctre.phoenix6.controls.VelocityVoltage
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.universal_motor.UniversalTalonFX
+import frc.robot.subsystems.netConveyor.ConveyorVelocityCommandFactory
 import org.littletonrobotics.junction.Logger
 
 object Spindexer : SubsystemBase(), ConveyorVelocityCommandFactory {
@@ -18,13 +19,13 @@ object Spindexer : SubsystemBase(), ConveyorVelocityCommandFactory {
 
     private val velocityVoltage = VelocityVoltage(0.0)
 
-    private var setpoint = ConveyorVelocity.STOP
+    private var setpoint = SpindexerVelocity.STOP
 
     val isAtSetpoint = Trigger {
         mainMotor.inputs.velocity.isNear(setpoint.velocity, SETPOINT_TOLERANCE)
     }
 
-    override fun setTarget(value: ConveyorVelocity): Command = runOnce {
+    override fun setTarget(value: SpindexerVelocity): Command = runOnce {
         setpoint = value
         mainMotor.setControl(velocityVoltage.withVelocity(value.velocity))
     }

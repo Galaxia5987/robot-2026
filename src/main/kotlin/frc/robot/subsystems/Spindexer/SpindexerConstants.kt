@@ -1,4 +1,4 @@
-package frc.robot.subsystems.netConveyor
+package frc.robot.subsystems.Spindexer
 
 import com.ctre.phoenix6.configs.MotorOutputConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
@@ -31,7 +31,7 @@ val MOTOR_CONFIG =
     }
 
 @CommandEnum
-enum class ConveyorVelocity(val velocity: AngularVelocity) {
+enum class SpindexerVelocity(val velocity: AngularVelocity) {
     STOP(0.rps),
     START(10.rps),
     SLOW(4.rps),
