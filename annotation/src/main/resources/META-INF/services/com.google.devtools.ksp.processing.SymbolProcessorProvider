@@ -1,3 +1,4 @@
 org.team5987.annotation.Provider
 org.team5987.annotation.LoggedOutputProcessorProvider
 org.team5987.annotation.command_enum.CommandEnumProcessorProvider
+org.team5987.annotation.machine_states.MachineStatesProcessorProvider

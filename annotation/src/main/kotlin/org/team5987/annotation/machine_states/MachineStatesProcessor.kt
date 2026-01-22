@@ -5,111 +5,130 @@ import com.google.devtools.ksp.symbol.ClassKind
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.ksp.writeTo
 
-const val ANNOTATION_PACKAGE = "org.team5987.annotation.command_enum.CommandEnum"
-
-val snakeRegex = "_[a-zA-Z]".toRegex()
-
-fun String.snakeToCamelCase(): String {
-    return snakeRegex.replace(lowercase()) {
-        it.value.replace("_", "")
-            .uppercase()
-    }
-}
-
-class CreateCommandProcessor(
-    env: SymbolProcessorEnvironment
+class MachineStatesProcessor(
+    private val environment: SymbolProcessorEnvironment
 ) : SymbolProcessor {
-    private val code = env.codeGenerator
+
+    // You can change this to the fully qualified name of your specific annotation
+    private val annotationName = "org.team5987.annotation.machine_states.MachineStates"
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
-        val symbols = resolver.getSymbolsWithAnnotation(ANNOTATION_PACKAGE)
+        val symbols = resolver.getSymbolsWithAnnotation(annotationName)
 
         symbols
             .filterIsInstance<KSClassDeclaration>()
             .filter { it.classKind == ClassKind.ENUM_CLASS }
             .forEach { enumDecl ->
-                generateForEnum(enumDecl)
+                generateStateMachine(enumDecl)
             }
 
         return emptyList()
     }
 
-    fun generateInterface(
-        pkg: String,
-        fileName: String,
-        enumName: String,
-        entries: List<String>
-    ): FileSpec {
-
-        val enumClass = ClassName(pkg, enumName)
-        val commandClass = ClassName("edu.wpi.first.wpilibj2.command", "Command")
-
-        // generate all default entry functions
-        val entryFunctions = entries.map { entry ->
-            val camelEntry = entry.snakeToCamelCase()
-            FunSpec.builder(camelEntry)
-                .returns(commandClass)
-                .addStatement(
-                    "return setTarget(%T.%L).withName(\"\$prefix/%L\")",
-                    enumClass,
-                    entry,
-                    camelEntry
-                )
-                .build()
-        }
-
-        // abstract setTarget function
-        val setTargetFun = FunSpec.builder("setTarget")
-            .addParameter("value", enumClass)
-            .returns(commandClass)
-            .addModifiers(KModifier.ABSTRACT)
-            .build()
-
-        val property = PropertySpec
-            .builder("prefix", String::class)
-            .getter(
-                FunSpec
-                    .getterBuilder()
-                    .addStatement(
-                        "return this::class.simpleName?.substringBefore(%S) ?: %S", "CommandFactory", ""
-                    ).build()
-            ).build()
-
-        // the interface
-        val interfaceSpec = TypeSpec.interfaceBuilder(fileName)
-            .addProperty(property)
-            .addFunctions(entryFunctions)
-            .addFunction(setTargetFun)
-            .build()
-
-        // final file
-        return FileSpec.builder(pkg, fileName)
-            .addType(interfaceSpec)
-            .build()
-    }
-
-
-    private fun generateForEnum(enumDecl: KSClassDeclaration) {
-        val pkg = enumDecl.packageName.asString()
+    private fun generateStateMachine(enumDecl: KSClassDeclaration) {
+        val packageName = enumDecl.packageName.asString()
         val enumName = enumDecl.simpleName.asString()
 
-        val entries = enumDecl.declarations
+        val enumClassName = ClassName(packageName, enumName)
+        val stateMachineName = "${enumName}Machine"
+        val stateMachineInterface = ClassName(packageName, stateMachineName)
+        val triggerClass = ClassName("edu.wpi.first.wpilibj2.command.button", "Trigger")
+        val commandClass = ClassName("edu.wpi.first.wpilibj2.command", "Command")
+        val runOnceFun = MemberName("edu.wpi.first.wpilibj2.command.Commands","runOnce")
+        val concurrentHashMapClass = ClassName("java.util.concurrent", "ConcurrentHashMap")
+
+        val contextType = LambdaTypeName.get(receiver = triggerClass, returnType = UNIT)
+
+        val enumProvider = LambdaTypeName.get(returnType = enumClassName)
+        val pairType = ClassName("kotlin", "Pair").parameterizedBy(triggerClass, enumProvider)
+        val transitionsArrayType = ClassName("kotlin", "Array").parameterizedBy(
+            WildcardTypeName.producerOf(pairType)
+        )
+
+        val firstEntry = enumDecl.declarations
             .filterIsInstance<KSClassDeclaration>()
-            .filter { it.classKind == ClassKind.ENUM_ENTRY }
-            .map { it.simpleName.asString() }.toList()
+            .firstOrNull { it.classKind == ClassKind.ENUM_ENTRY }
+            ?.simpleName?.asString()
+            ?: enumDecl.declarations.firstOrNull()?.simpleName?.asString() ?: "entries.first()"
 
-        val fileName = "${enumName}StateProcessor"
+        val interfaceSpec = TypeSpec.interfaceBuilder(stateMachineInterface)
+            .addProperty("context", contextType)
+            .addProperty("transitions", transitionsArrayType)
+            .addType(
+                TypeSpec.companionObjectBuilder()
+                    .addProperty(
+                        PropertySpec.builder("currentState", enumClassName)
+                            .mutable(true)
+                            .initializer("%T.%L", enumClassName, firstEntry)
+                            .build()
+                    )
+                    .build()
+            )
+            .build()
 
-        val generated: FileSpec = generateInterface(pkg, fileName, enumName, entries)
+        val fileSpec = FileSpec.builder(packageName, stateMachineName)
+            .addType(interfaceSpec)
 
-        generated.writeTo(code, Dependencies(false))
+        val enumWildcard = ClassName("kotlin", "Enum").parameterizedBy(STAR)
+        val mapType = concurrentHashMapClass.parameterizedBy(enumWildcard, triggerClass)
+
+        val cacheProperty = PropertySpec.builder("triggerCache", mapType)
+            .addModifiers(KModifier.PRIVATE)
+            .initializer("%T()", concurrentHashMapClass)
+            .build()
+
+        fileSpec.addProperty(cacheProperty)
+
+        val stateTriggerFun = FunSpec.builder("stateTrigger")
+            .receiver(enumClassName)
+            .returns(triggerClass)
+            .addCode(
+                CodeBlock.builder()
+                    .beginControlFlow("return triggerCache.getOrPut(this)")
+                    .addStatement("%T { this == %T.currentState }", triggerClass, stateMachineInterface)
+                    .indent()
+                    .addStatement(".apply(this.context)")
+                    .add(".apply {\n")
+                    .indent()
+                    .beginControlFlow("transitions.forEach { (cond, next) ->")
+                    .addStatement("and(cond).onTrue(next().set())")
+                    .endControlFlow()
+                    .unindent()
+                    .addStatement("}")
+                    .unindent()
+                    .endControlFlow()
+                    .build()
+            )
+            .build()
+
+        fileSpec.addFunction(stateTriggerFun)
+
+        val setFun = FunSpec.builder("set")
+            .receiver(enumClassName)
+            .returns(commandClass)
+            .addStatement("return %M ({ %T.currentState = this })", runOnceFun, stateMachineInterface)
+            .build()
+
+        fileSpec.addFunction(setFun)
+
+        val invokeFun = FunSpec.builder("invoke")
+            .addModifiers(KModifier.OPERATOR)
+            .receiver(enumClassName)
+            .returns(triggerClass)
+            .addStatement("return stateTrigger()")
+            .build()
+
+        fileSpec.addFunction(invokeFun)
+
+        fileSpec.build().writeTo(environment.codeGenerator, Dependencies(true, enumDecl.containingFile!!))
     }
 }
 
-class CommandEnumProcessorProvider : SymbolProcessorProvider {
+class MachineStatesProcessorProvider : SymbolProcessorProvider {
     override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor {
-        return CreateCommandProcessor(environment)
+        return MachineStatesProcessor(environment)
     }
 }
