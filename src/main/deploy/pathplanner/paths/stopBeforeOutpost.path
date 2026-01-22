@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.61227327656758,
-        "y": 3.71726441988877
+        "x": 8.3250046464085,
+        "y": 3.6001911404250353
       },
       "isLocked": false,
       "linkedName": "fuelStep2OutPostSide"
     },
     {
       "anchor": {
-        "x": 3.1523784722222223,
-        "y": 2.0036979166666673
+        "x": 2.821376488095238,
+        "y": 1.8881770833333338
       },
       "prevControl": {
-        "x": 2.549689485864546,
-        "y": 1.812748104326095
+        "x": 3.0558787800314855,
+        "y": 1.9748296948153137
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 107.65012421993012
+    "rotation": 92.67721722468895
   },
   "reversed": false,
   "folder": null,

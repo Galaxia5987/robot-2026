@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.1523784722222223,
-        "y": 2.0036979166666673
+        "x": 2.821376488095238,
+        "y": 1.8881770833333338
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.8196222332340533,
-        "y": 2.334709258453153
+        "x": 2.0826168060750656,
+        "y": 1.6677581489371258
       },
       "isLocked": false,
       "linkedName": "stopBeforeOutpost"
     },
     {
       "anchor": {
-        "x": 0.5227083333333333,
-        "y": 0.6967361111111119
+        "x": 0.6164330079858025,
+        "y": 0.8279059449866895
       },
       "prevControl": {
-        "x": 0.2743772101392319,
-        "y": 0.5838038577263811
+        "x": 0.3918721866941548,
+        "y": 0.7180313003191381
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,14 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "takeFromHumanPlayer",
+      "waypointRelativePos": 1.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -48,7 +55,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 107.65012421993012
+    "rotation": 92.67721722468895
   },
   "useDefaultConstraints": true
 }

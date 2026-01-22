@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.514166666666666,
-        "y": 6.759149305555556
+        "x": 7.5130654761904765,
+        "y": 6.827827380952381
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.50626752927777,
-        "y": 7.131765162748804
+        "x": 7.505166338801581,
+        "y": 7.200443238145629
       },
       "isLocked": false,
       "linkedName": "fuelStep1DepotSide"
@@ -31,7 +31,14 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "intake",
+      "waypointRelativePos": 1.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
