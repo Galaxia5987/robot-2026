@@ -1,4 +1,4 @@
-package frc.robot.subsystems.flywheel
+package frc.robot.subsystems.shooter.flywheel
 
 import com.ctre.phoenix6.configs.FeedbackConfigs
 import com.ctre.phoenix6.configs.MotorOutputConfigs

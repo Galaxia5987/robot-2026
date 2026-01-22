@@ -1,4 +1,4 @@
-package frc.robot.subsystems.flywheel
+package frc.robot.subsystems.shooter.flywheel
 
 import com.ctre.phoenix6.controls.Follower
 import com.ctre.phoenix6.controls.VelocityVoltage
@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.lib.extensions.rps
 import frc.robot.lib.universal_motor.UniversalTalonFX
+import frc.robot.subsystems.flywheel.FlywheelVelocitiesCommandFactory
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
