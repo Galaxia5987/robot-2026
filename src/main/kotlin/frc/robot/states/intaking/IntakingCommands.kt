@@ -4,9 +4,11 @@ import edu.wpi.first.wpilibj2.command.Command
 import frc.robot.roller
 import frc.robot.subsystems.roller.RollerPositions
 
-fun
-
 
 fun closed(): Command{
     return roller.setTarget(RollerPositions.STOP).alongWith()
+}
+
+fun intaking(): Command{
+    return roller.intake()
 }

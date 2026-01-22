@@ -17,4 +17,5 @@ enum class IntakingStates {
     }
 }
 
-@LoggedOutput(LogLevel.COMP) var state: IntakingStates = IntakingStates.CLOSED
+@LoggedOutput(LogLevel.COMP)
+var state: IntakingStates = IntakingStates.CLOSED
