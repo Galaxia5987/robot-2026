@@ -8,7 +8,6 @@ enum class ExternalControl(buttonId: Int) {
     StaticShootingOverride(1),
     ShootOnMoveOverride(2),
     AutoIntakeOverride(3);
-
     val trigger: Trigger = switchController.button(buttonId)
 }
 
