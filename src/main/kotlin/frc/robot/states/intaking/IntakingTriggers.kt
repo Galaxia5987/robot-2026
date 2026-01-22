@@ -7,4 +7,5 @@ import frc.robot.drive
 class IntakingTriggers {
     val intakingTrigger= IntakingStates.INTAKING.IntakingStatesTrigger.whileTrue(intaking())
 
+    val closedTrigger= IntakingStates.CLOSED.IntakingStatesTrigger.whileTrue(closed())
 }
