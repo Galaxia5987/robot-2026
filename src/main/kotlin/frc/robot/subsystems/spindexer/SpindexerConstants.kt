@@ -1,4 +1,4 @@
-package frc.robot.subsystems.preShooter
+package frc.robot.subsystems.spindexer
 
 import com.ctre.phoenix6.configs.MotorOutputConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
@@ -10,9 +10,9 @@ import frc.robot.lib.extensions.amps
 import frc.robot.lib.extensions.rps
 import org.team5987.annotation.command_enum.CommandEnum
 
-val GAINS = Gains(1.0) // TODO calibration
+val GAINS = Gains(1.3) // TODO calibration
 
-val SIM_GAINS = Gains(1.0, 0.0)
+val SIM_GAINS = Gains(1.0)
 
 const val MAIN_MOTOR_ID = 0
 
@@ -27,14 +27,14 @@ val MOTOR_CONFIG =
             MotorOutputConfigs().apply {
                 Inverted = InvertedValue.Clockwise_Positive
             }
-        CurrentLimits = createCurrentLimits(20.amps, 10.amps)
+        CurrentLimits = createCurrentLimits(40.amps, 5.0.amps)
     }
 
 @CommandEnum
-enum class PreShooterVelocity(val velocity: AngularVelocity) {
+enum class ConveyorVelocity(val velocity: AngularVelocity) {
     STOP(0.rps),
     START(10.rps),
-    FAST(20.rps),
     SLOW(4.rps),
     REVERSE(-START.velocity),
+    REVERSE_SLOW(-SLOW.velocity)
 }

@@ -1,4 +1,4 @@
-package frc.robot.field.constants
+package frc.robot.field_constants
 
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj2.command.Commands.runOnce

@@ -1,4 +1,4 @@
-package frc.robot.subsystems.flywheel
+package frc.robot.subsystems.shooter.flywheel
 
 import com.ctre.phoenix6.controls.Follower
 import com.ctre.phoenix6.controls.VelocityVoltage

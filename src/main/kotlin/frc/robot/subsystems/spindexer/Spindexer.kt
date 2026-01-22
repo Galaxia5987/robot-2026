@@ -1,4 +1,4 @@
-package frc.robot.subsystems.preShooter
+package frc.robot.subsystems.spindexer
 
 import com.ctre.phoenix6.controls.VelocityVoltage
 import edu.wpi.first.wpilibj2.command.Command
@@ -7,8 +7,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.Logger
 
-object PreShooter : SubsystemBase(), PreShooterVelocityCommandFactory {
-
+object Spindexer : SubsystemBase(), ConveyorVelocityCommandFactory {
     private val mainMotor =
         UniversalTalonFX(
             MAIN_MOTOR_ID,
@@ -16,15 +15,16 @@ object PreShooter : SubsystemBase(), PreShooterVelocityCommandFactory {
             gearRatio = GEAR_RATIO,
             simGains = SIM_GAINS
         )
+
     private val velocityVoltage = VelocityVoltage(0.0)
 
-    private var setpoint = PreShooterVelocity.STOP
+    private var setpoint = ConveyorVelocity.STOP
 
     val isAtSetpoint = Trigger {
         mainMotor.inputs.velocity.isNear(setpoint.velocity, SETPOINT_TOLERANCE)
     }
 
-    override fun setTarget(value: PreShooterVelocity): Command = runOnce {
+    override fun setTarget(value: ConveyorVelocity): Command = runOnce {
         setpoint = value
         mainMotor.setControl(velocityVoltage.withVelocity(value.velocity))
     }
