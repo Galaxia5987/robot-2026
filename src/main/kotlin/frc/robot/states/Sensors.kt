@@ -7,7 +7,7 @@ import frc.robot.lib.unified_canrange.UnifiedCANRange
 enum class Sensors(port: Int) {
     MidLevelSensor(1),
     Spindexer1(2),
-    Spindexer2(3), ;
+    Spindexer2(3),
 
     val canRange = UnifiedCANRange(port, configuration = CANrangeConfiguration())
     val trigger = Trigger(canRange::isInRange)
