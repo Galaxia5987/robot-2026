@@ -7,5 +7,5 @@ val TOP_SENSOR_PORT = 2
 val AUX_TOP_SENSOR = 3
 
 val SPINDEXER_SENSOR_CONFIG = CANrangeConfiguration()
-val TOP_SWENSOR_CONFIG = CANrangeConfiguration()
+val TOP_SENSOR_CONFIG = CANrangeConfiguration()
 val AUX_TOP_SENSOR_CONFIG = CANrangeConfiguration()

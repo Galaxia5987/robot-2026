@@ -17,7 +17,7 @@ private val spindexerSensor =
         configuration = SPINDEXER_SENSOR_CONFIG
     )
 private val topSensor =
-    UnifiedCANRange(TOP_SENSOR_PORT, configuration = TOP_SWENSOR_CONFIG)
+    UnifiedCANRange(TOP_SENSOR_PORT, configuration = TOP_SENSOR_CONFIG)
 private val auxTopSensor =
     UnifiedCANRange(AUX_TOP_SENSOR, configuration = AUX_TOP_SENSOR_CONFIG)
 
