@@ -7,6 +7,7 @@ import frc.robot.lib.unified_canrange.UnifiedCANRange
 
 val FULL=1.cm //change the value
 val HALF_FULL=0.5.cm //change the value
+val HAS_FUEL=0.0.cm //change the value
 
 enum class Sensors(port: Int) {
     Spindexer(1),
@@ -18,12 +19,16 @@ enum class Sensors(port: Int) {
 
      val status get() = canRange.inputs.distance
 
-    val isHalfFull: Trigger= Trigger{
-        status>HALF_FULL
-    }
 
-    val isFull: Trigger= Trigger{
-        status==FULL
-    }
+}
+val isHalfFull: Trigger= Trigger{
+    (Sensors.HighLevel1.status >HALF_FULL).and(Sensors.HighLevel2.status >HALF_FULL)
+}
 
+val isFull: Trigger= Trigger{
+    (Sensors.HighLevel1.status==FULL).and(Sensors.HighLevel2.status==FULL)
+}
+
+val hasFuel: Trigger= Trigger {
+    Sensors.Spindexer.status>HAS_FUEL
 }
