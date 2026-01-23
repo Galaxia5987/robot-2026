@@ -20,7 +20,7 @@ object Climb : SubsystemBase(), ClimbLevelsCommandFactory {
     private val ligament =
         root.append(LoggedMechanismLigament2d("ClimbLigament", 1.0, 0.0))
 
-    val motor =
+    private val motor =
         UniversalTalonFX(
             MAIN_PORT,
             config = MOTOR_CONFIG,
@@ -30,7 +30,7 @@ object Climb : SubsystemBase(), ClimbLevelsCommandFactory {
 
     private val positionVoltage = MotionMagicTorqueCurrentFOC(0.0)
 
-    var setpoint = ClimbLevels.RETRACTED
+    private var setpoint = ClimbLevels.RETRACTED
 
     @LoggedOutput(LogLevel.COMP)
     val isAtSetpoint = Trigger {
@@ -38,15 +38,12 @@ object Climb : SubsystemBase(), ClimbLevelsCommandFactory {
     }
 
     override fun setTarget(value: ClimbLevels): Command = runOnce {
-        motor.setControl(positionVoltage.withPosition(value.angle))
         setpoint = value
+        motor.setControl(positionVoltage.withPosition(value.angle))
     }
 
     override fun periodic() {
-        ligament.angle =
-            if (setpoint.angle >= ClimbLevels.EXTENDED.angle)
-                ClimbLevels.EXTENDED.angle[deg]
-            else 45.0
+        ligament.angle = motor.inputs.position[deg]
         motor.periodic()
         Logger.recordOutput("Subsystems/$name/setpoint", setpoint)
         Logger.recordOutput("Subsystems/$name/mechanism", mechanism)
