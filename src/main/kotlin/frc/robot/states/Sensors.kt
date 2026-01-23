@@ -5,9 +5,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.unified_canrange.UnifiedCANRange
 
 enum class Sensors(port: Int) {
-    MidLevelSensor(1),
-    Spindexer1(2),
-    Spindexer2(3), ;
+    Spindexer(1),
+    HighLevel1(2),
+    HighLevel2(3);
 
     val canRange = UnifiedCANRange(port, configuration = CANrangeConfiguration())
     val trigger = Trigger(canRange::isInRange)
