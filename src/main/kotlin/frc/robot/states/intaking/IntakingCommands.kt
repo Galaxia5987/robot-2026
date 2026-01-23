@@ -4,19 +4,28 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import frc.robot.lib.extensions.sec
 import frc.robot.roller
+import frc.robot.spindexer
 import frc.robot.subsystems.intake.extender.Extender
 import frc.robot.subsystems.intake.extender.ExtenderPositions
+import frc.robot.subsystems.spindexer.Spindexer
+import frc.robot.subsystems.spindexer.SpindexerVelocity
 
 fun closed(): Command {
     return roller.stop().alongWith(Extender.close())
 }
 
 fun intaking(): Command {
-    return roller.intake().alongWith(Extender.open()) // Spindexer Intaking
+    return roller
+        .intake()
+        .alongWith(
+            Extender.open()
+                .alongWith(Spindexer.setTarget(SpindexerVelocity.START))
+        ) // Spindexer Intaking
 }
 
 fun open(): Command {
     return Extender.open()
+        .alongWith(spindexer.setTarget(SpindexerVelocity.STOP))
 }
 
 fun pumping(): Command {
