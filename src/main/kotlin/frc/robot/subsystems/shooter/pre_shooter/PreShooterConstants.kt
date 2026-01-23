@@ -4,9 +4,11 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.signals.InvertedValue
 import edu.wpi.first.units.measure.AngularVelocity
+import edu.wpi.first.units.measure.Distance
 import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.amps
+import frc.robot.lib.extensions.m
 import frc.robot.lib.extensions.rps
 import org.team5987.annotation.command_enum.CommandEnum
 
