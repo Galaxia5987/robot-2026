@@ -33,7 +33,7 @@ val MOTOR_CONFIG =
 
 @CommandEnum
 enum class ClimbLevels(val angle: Angle) {
-    GROUND(0.deg),
-    UNLOCK(90.deg),
-    CLIMB(180.deg),
+    RETRACTED(0.deg),
+    EXTENDED(90.deg),
+    ENGAGED(180.deg),
 }

@@ -28,9 +28,9 @@ object Climb : SubsystemBase(), ClimbLevelsCommandFactory {
             gearRatio = GEAR_RATION
         )
 
-    val positionVoltage = MotionMagicTorqueCurrentFOC(0.0)
+    private val positionVoltage = MotionMagicTorqueCurrentFOC(0.0)
 
-    var setpoint = ClimbLevels.GROUND
+    var setpoint = ClimbLevels.RETRACTED
 
     @LoggedOutput(LogLevel.COMP)
     val isAtSetpoint = Trigger {
@@ -44,11 +44,11 @@ object Climb : SubsystemBase(), ClimbLevelsCommandFactory {
 
     override fun periodic() {
         ligament.angle =
-            if (setpoint.angle >= ClimbLevels.UNLOCK.angle)
-                ClimbLevels.UNLOCK.angle[deg]
+            if (setpoint.angle >= ClimbLevels.EXTENDED.angle)
+                ClimbLevels.EXTENDED.angle[deg]
             else 45.0
         motor.periodic()
-        Logger.recordOutput("Subsystems/$name/setpoint", setpoint.angle)
+        Logger.recordOutput("Subsystems/$name/setpoint", setpoint)
         Logger.recordOutput("Subsystems/$name/mechanism", mechanism)
     }
 }
