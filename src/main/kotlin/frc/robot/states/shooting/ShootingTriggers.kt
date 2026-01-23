@@ -5,6 +5,8 @@ import frc.robot.drive
 import frc.robot.field_constants.ALLIANCE_ZONE
 import frc.robot.isOurHubActive
 import frc.robot.lib.LoggedNetworkTrigger
+import frc.robot.states.sensors.hasFuel
+import frc.robot.states.sensors.isPreshooterUnloaded
 import frc.robot.subsystems.shooter.flywheel.Flywheel
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
@@ -23,17 +25,7 @@ val atGoal =
         .and(Flywheel.atSetpoint)
         .and(PreShooter.atSetpoint)
 
-val robotEmpty =
-    LoggedNetworkTrigger(
-        "/Tuning/robotEmpty",
-        {
-            // TODO: read sensors
-            false
-        }
-    )
-
-val isPreshooterUnloaded =
-    Trigger { PreShooter.distanceSensor.isInRange }.negate()
+val robotEmpty = LoggedNetworkTrigger("/Tuning/robotEmpty", hasFuel.negate())
 
 fun bindShootingTriggers() {
     canShoot.negate().onTrue(setIdle())
