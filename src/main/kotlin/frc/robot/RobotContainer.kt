@@ -10,7 +10,6 @@ import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.intake.roller.Roller
-import frc.robot.subsystems.spindexer.Spindexer
 import frc.robot.subsystems.roller.RollerPositions
 import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.shooter.turret.Turret.setAngle
