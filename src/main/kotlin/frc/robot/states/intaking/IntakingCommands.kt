@@ -20,8 +20,10 @@ fun open(): Command {
 }
 
 fun pumping(): Command {
-    return Commands.sequence(Extender.setTarget(ExtenderPositions.OPEN),
-        Commands.waitTime(0.4.sec),
-        (Extender.setTarget(ExtenderPositions.CLOSE))) .repeatedly()
+    return Commands.sequence(
+            Extender.setTarget(ExtenderPositions.OPEN),
+            Commands.waitTime(0.4.sec),
+            (Extender.setTarget(ExtenderPositions.CLOSE))
+        )
+        .repeatedly()
 }
-
