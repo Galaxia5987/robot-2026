@@ -5,30 +5,22 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.extensions.cm
 import frc.robot.lib.unified_canrange.UnifiedCANRange
 
-val FULL=1.cm //change the value
-val HALF_FULL=0.5.cm //change the value
-val HAS_FUEL=0.0.cm //change the value
-
-enum class Sensors(port: Int) {
-    Spindexer(1),
-    HighLevel1(2),
-    HighLevel2(3);
-
-    val canRange = UnifiedCANRange(port, configuration = CANrangeConfiguration())
-    val trigger = Trigger(canRange::isInRange)
-
-     val status get() = canRange.inputs.distance
+val FULL = 1.cm // change the value
+val HALF_FULL = 0.5.cm // change the value
+val HAS_FUEL = 0.0.cm // change the value
 
 
+val Spindexer= UnifiedCANRange(1, configuration = CANrangeConfiguration())
+val HighLevel1= UnifiedCANRange(2, configuration = CANrangeConfiguration())
+val HighLevel2= UnifiedCANRange(3, configuration = CANrangeConfiguration())
+
+
+
+val isHalfFull: Trigger = Trigger {
+    (HighLevel1.inputs.distance > HALF_FULL).and(HighLevel2.inputs.distance > HALF_FULL
+    )
 }
-val isHalfFull: Trigger= Trigger{
-    (Sensors.HighLevel1.status >HALF_FULL).and(Sensors.HighLevel2.status >HALF_FULL)
+val isFull: Trigger = Trigger {
+    (HighLevel1.inputs.distance == FULL).and(HighLevel2.inputs.distance == FULL)
 }
-
-val isFull: Trigger= Trigger{
-    (Sensors.HighLevel1.status==FULL).and(Sensors.HighLevel2.status==FULL)
-}
-
-val hasFuel: Trigger= Trigger {
-    Sensors.Spindexer.status>HAS_FUEL
-}
+val hasFuel: Trigger = Trigger { Spindexer.inputs.distance > HAS_FUEL }
