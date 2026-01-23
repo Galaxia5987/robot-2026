@@ -18,7 +18,7 @@ enum class DrivetrainStates {
     }
 }
 
-@LoggedOutput(LogLevel.COMP) var state: DrivetrainStates = DrivetrainStates.IDLE
+@LoggedOutput(LogLevel.COMP)private var state: DrivetrainStates = DrivetrainStates.IDLE
 
 // Example Usage
 fun example() {
