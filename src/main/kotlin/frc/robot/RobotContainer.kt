@@ -15,6 +15,8 @@ import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.shooter.turret.Turret.setAngle
 import frc.robot.subsystems.shooter.turret.turretAngleToHub
 import frc.robot.subsystems.spindexer.Spindexer
+import frc.robot.subsystems.spindexer.ConveyorVelocity
+import frc.robot.subsystems.spindexer.Spindexer
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
@@ -59,6 +61,13 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
+        driverController.x().onTrue(Roller.setTarget(RollerPositions.INTAKE))
+        driverController
+            .b()
+            .onTrue(Spindexer.setTarget(ConveyorVelocity.REVERSE_SLOW))
+        driverController
+            .a()
+            .onTrue(Spindexer.setTarget(ConveyorVelocity.REVERSE))
     }
 
     fun getAutonomousCommand(): Command = autoChooser.get()
