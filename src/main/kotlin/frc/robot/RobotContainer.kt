@@ -8,6 +8,11 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
+import frc.robot.states.intaking.canClose
+import frc.robot.states.intaking.closed
+import frc.robot.states.intaking.intaking
+import frc.robot.states.intaking.open
+import frc.robot.states.sensors.isHalfFull
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.intake.roller.Roller
 import frc.robot.subsystems.roller.RollerPositions
@@ -59,7 +64,7 @@ object RobotContainer {
 
     private fun configureButtonBindings() {
         driverController.x().onTrue(Roller.setTarget(RollerPositions.INTAKE))
-        driverController.b()
+ //       driverController.b().onTrue(intaking()).onFalse(canClose.onFalse(open()).onTrue(closed()))
     }
 
     fun getAutonomousCommand(): Command = autoChooser.get()
