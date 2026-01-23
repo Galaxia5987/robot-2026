@@ -17,13 +17,14 @@ import frc.robot.states.setpoints_manager.setpoints_state.shootOnMoveMap
 import frc.robot.states.setpoints_manager.setpoints_state.staticShootingMap
 import frc.robot.subsystems.shooter.flywheel.Flywheel
 
-private fun <T : SubsystemBase> getSetpointByOverrides(pose: Translation2d, subsystem: T): Measure<out Unit> {
+private fun <T : SubsystemBase> getSetpointByOverrides(goal: Translation2d, subsystem: T): Measure<out Unit> {
     if (DriverOverrides.StaticShootingOverride.trigger.asBoolean) {
-        return staticShootingMap[subsystem]!!
-    }else if (!DriverOverrides.ShootOnMoveOverride.trigger.asBoolean) {
-        return interpolationShootingMap[subsystem]!!
+        return staticShootingMap[subsystem]!!(goal)
     }
-    return shootOnMoveMap[subsystem]!!
+    if (!DriverOverrides.ShootOnMoveOverride.trigger.asBoolean) {
+        return interpolationShootingMap[subsystem]!!(goal)
+    }
+    return shootOnMoveMap[subsystem]!!(goal)
 }
 
 fun <T : SubsystemBase, M : Measure<out Unit>> T.aimingSetpoint(): M {
@@ -38,6 +39,8 @@ fun <T : SubsystemBase, M : Measure<out Unit>> T.aimingSetpoint(): M {
     return getSetpointByOverrides(target, this) as M
 }
 
+
+// Don't ask questions. do this:
 fun testUsage() {
 //    val test: Angle = Turret.aimingSetpoint()
     val flywheelVelocity: AngularVelocity = Flywheel.aimingSetpoint()
