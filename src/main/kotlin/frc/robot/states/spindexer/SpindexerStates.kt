@@ -1,6 +1,8 @@
 package frc.robot.states.spindexer
 
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import org.team5987.annotation.LogLevel
+import org.team5987.annotation.LoggedOutput
 
 enum class SpindexerStates {
     SPIN,
@@ -13,8 +15,5 @@ enum class SpindexerStates {
     }
 }
 
-private var state = SpindexerStates.IDLE
+@LoggedOutput(LogLevel.COMP)private var state = SpindexerStates.IDLE
 
-fun robotContainer() {
-    SpindexerStates.SPIN.set()
-}
