@@ -1,8 +1,12 @@
-package frc.robot.states
+package frc.robot.states.sensors
 
 import com.ctre.phoenix6.configs.CANrangeConfiguration
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.lib.extensions.cm
 import frc.robot.lib.unified_canrange.UnifiedCANRange
+
+val FULL=1.cm //change the value
+val HALF_FULL=0.5.cm //change the value
 
 enum class Sensors(port: Int) {
     Spindexer(1),
@@ -11,4 +15,15 @@ enum class Sensors(port: Int) {
 
     val canRange = UnifiedCANRange(port, configuration = CANrangeConfiguration())
     val trigger = Trigger(canRange::isInRange)
+
+     val status get() = canRange.inputs.distance
+
+    val isHalfFull: Trigger= Trigger{
+        status>HALF_FULL
+    }
+
+    val isFull: Trigger= Trigger{
+        status==FULL
+    }
+
 }
