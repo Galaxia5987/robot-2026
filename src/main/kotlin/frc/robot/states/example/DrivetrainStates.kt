@@ -1,7 +1,6 @@
 package frc.robot.states.example
 
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.lib.extensions.onTrue
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
@@ -14,17 +13,14 @@ enum class DrivetrainStates {
 
     val trigger = Trigger { state == this }
 
-    fun set(){
+    fun set() {
         state = this
     }
 }
 
-@LoggedOutput(LogLevel.COMP)
-var state: DrivetrainStates = DrivetrainStates.IDLE
-
+@LoggedOutput(LogLevel.COMP) var state: DrivetrainStates = DrivetrainStates.IDLE
 
 // Example Usage
 fun example() {
     DrivetrainStates.DRIVING.set()
-    DrivetrainStates.DRIVING.trigger.onTrue()
 }
