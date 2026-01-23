@@ -15,4 +15,4 @@ enum class SpindexerStates {
     }
 }
 
-@LoggedOutput(LogLevel.COMP) var state = SpindexerStates.IDLE
+@LoggedOutput(LogLevel.COMP) private var state = SpindexerStates.IDLE
