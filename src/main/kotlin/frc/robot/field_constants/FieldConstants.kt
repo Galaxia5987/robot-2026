@@ -1,5 +1,6 @@
 package frc.robot.field_constants
 
+import com.pathplanner.lib.util.FlippingUtil
 import edu.wpi.first.math.geometry.Rectangle2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.units.measure.Distance
@@ -18,8 +19,8 @@ var DEPOT_LOCATION = Translation2d(3692.8.mm, 2641.6.mm)
 val ALLIANCE_ZONE_WIDTH: Distance = 4.03.m
 val ALLIANCE_ZONE_HEIGHT: Distance = 8.07.m
 
-val FIELD_WIDTH: Distance = 16.54.m
-val FIELD_HEIGHT: Distance = 4.03.m
+val FIELD_WIDTH: Distance = FlippingUtil.fieldSizeX.m
+val FIELD_HEIGHT: Distance = FlippingUtil.fieldSizeY.m
 
 val ALLIANCE_ZONE
     get() =
