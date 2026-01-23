@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.units.Measure
 import edu.wpi.first.units.Unit
 import edu.wpi.first.units.measure.AngularVelocity
+import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.field.DEPOT_LOCATION
 import frc.robot.field.HUB_LOCATION
@@ -16,27 +17,50 @@ import frc.robot.states.setpoints_manager.setpoints_state.interpolationShootingM
 import frc.robot.states.setpoints_manager.setpoints_state.shootOnMoveMap
 import frc.robot.states.setpoints_manager.setpoints_state.staticShootingMap
 import frc.robot.subsystems.shooter.flywheel.Flywheel
+import org.team5987.annotation.LogLevel
+import org.team5987.annotation.LoggedOutput
 
-private fun <T : SubsystemBase> getSetpointByOverrides(goal: Translation2d, subsystem: T): Measure<out Unit> {
-    if (DriverOverrides.StaticShootingOverride.trigger.asBoolean) {
-        return staticShootingMap[subsystem]!!(goal)
-    }
-    if (!DriverOverrides.ShootOnMoveOverride.trigger.asBoolean) {
-        return interpolationShootingMap[subsystem]!!(goal)
-    }
-    return shootOnMoveMap[subsystem]!!(goal)
+enum class FieldLocation(location: Translation2d) { //Flip when red
+    HUB (Translation2d()),
+    CLIMB (Translation2d()),
+    UPPER_BUMPER (Translation2d()),
+    LOWER_BUMPER (Translation2d()),
+    UPPER_TRENCH (Translation2d()),
+    LOWER_TRENCH (Translation2d()),
+    UPPER_CORNER (Translation2d()),
+    LOWER_CORNER (Translation2d());
 }
 
+@LoggedOutput(LogLevel.COMP)
+var currentGoal: Translation2d = HUB_LOCATION
+
+private val goalHubTrigger = inAllianceZone.onTrue(runOnce({
+    currentGoal = HUB_LOCATION
+}))
+
+private val goalDepotTrigger = outOfAllianceZone_AboveCrossLine.and(inAllianceZone.negate()).onTrue(runOnce({
+    currentGoal = DEPOT_LOCATION
+}))
+
+private val goalOutpostTrigger = outOfAllianceZone_BelowCrossLine.and(inAllianceZone.negate()).onTrue(runOnce({
+    currentGoal = OUTPOST_LOCATION
+}))
+
+
 fun <T : SubsystemBase, M : Measure<out Unit>> T.aimingSetpoint(): M {
-    val target = when {
-        inAllianceZone.asBoolean -> HUB_LOCATION
-        outOfAllianceZone_AboveCrossLine.asBoolean -> DEPOT_LOCATION
-        outOfAllianceZone_BelowCrossLine.asBoolean -> OUTPOST_LOCATION
-        else -> Translation2d()
+    val result = when {
+        DriverOverrides.StaticShootingOverride.trigger.asBoolean ->
+            staticShootingMap[this]!!
+
+        !DriverOverrides.ShootOnMoveOverride.trigger.asBoolean ->
+            interpolationShootingMap[this]!!
+
+        else ->
+            shootOnMoveMap[this]!!
     }
 
     @Suppress("UNCHECKED_CAST")
-    return getSetpointByOverrides(target, this) as M
+    return result as M
 }
 
 

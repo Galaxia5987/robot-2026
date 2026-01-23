@@ -12,23 +12,23 @@ import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 import frc.robot.subsystems.shooter.turret.Turret
 
 
-private fun getTurretSetpoint(goal: Translation2d): Angle {
+private fun getTurretSetpoint(): Angle {
     return TODO()
 }
 
-private fun getHoodSetpoint(goal: Translation2d): Angle {
+private fun getHoodSetpoint(): Angle {
     return TODO()
 }
 
-private fun getFlywheelSetpoint(goal: Translation2d): AngularVelocity {
+private fun getFlywheelSetpoint(): AngularVelocity {
     return TODO()
 }
 
-private fun getPreShooterSetpoint(goal: Translation2d): AngularVelocity {
+private fun getPreShooterSetpoint(): AngularVelocity {
     return TODO()
 }
 
-val shootOnMoveMap: Map<SubsystemBase, (Translation2d) -> Measure<out Unit>> = mapOf(
+val shootOnMoveMap: Map<SubsystemBase, () -> Measure<out Unit>> = mapOf(
     Turret to ::getTurretSetpoint,
     Hood to ::getHoodSetpoint,
     Flywheel to ::getFlywheelSetpoint,
