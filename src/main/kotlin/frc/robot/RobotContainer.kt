@@ -10,7 +10,12 @@ import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.states.spindexer.setFeeding
 import frc.robot.states.spindexer.stop
+import frc.robot.states.intaking.IntakingStates
+import frc.robot.states.intaking.canCloseIntake
+import frc.robot.states.intaking.cantCloseIntake
 import frc.robot.subsystems.drive.DriveCommands
+import frc.robot.subsystems.intake.roller.Roller
+import frc.robot.subsystems.roller.RollerPositions
 import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.shooter.turret.Turret.setAngle
 import frc.robot.subsystems.shooter.turret.turretAngleToHub
@@ -60,6 +65,20 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
+        driverController.x().onTrue(Roller.setTarget(RollerPositions.INTAKE))
+
+        // Intake Bindings
+        driverController.y().onTrue(IntakingStates.INTAKING.set())
+        driverController
+            .y()
+            .negate()
+            .and(canCloseIntake)
+            .onTrue(IntakingStates.CLOSED.set())
+        driverController
+            .y()
+            .negate()
+            .and(cantCloseIntake)
+            .onTrue(IntakingStates.OPEN.set())
 
         driverController
             .b()
