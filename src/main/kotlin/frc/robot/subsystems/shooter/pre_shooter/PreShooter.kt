@@ -1,9 +1,12 @@
 package frc.robot.subsystems.shooter.pre_shooter
 
 import com.ctre.phoenix6.controls.VelocityVoltage
+import edu.wpi.first.units.measure.AngularVelocity
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.lib.extensions.get
+import frc.robot.lib.extensions.rps
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.Logger
 
@@ -18,20 +21,31 @@ object PreShooter : SubsystemBase(), PreShooterVelocityCommandFactory {
         )
     private val velocityVoltage = VelocityVoltage(0.0)
 
-    private var setpoint = PreShooterVelocity.STOP
+    private var setpoint = 0.0.rps
 
-    val isAtSetpoint = Trigger {
-        mainMotor.inputs.velocity.isNear(setpoint.velocity, SETPOINT_TOLERANCE)
+    val atSetpoint = Trigger {
+        mainMotor.inputs.velocity.isNear(setpoint, SETPOINT_TOLERANCE)
     }
 
-    override fun setTarget(value: PreShooterVelocity): Command = runOnce {
-        setpoint = value
-        mainMotor.setControl(velocityVoltage.withVelocity(value.velocity))
+    fun setVelocityControl(velocity: AngularVelocity) {
+        setpoint = velocity
+        mainMotor.setControl(velocityVoltage.withVelocity(velocity))
     }
+
+    fun setVelocity(velocity: AngularVelocity): Command = runOnce {
+        setVelocityControl(velocity)
+    }
+
+    fun setVelocity(velocity: () -> AngularVelocity): Command = run {
+        setVelocityControl(velocity())
+    }
+
+    override fun setTarget(value: PreShooterVelocity): Command =
+        setVelocity(value.velocity)
 
     override fun periodic() {
         mainMotor.periodic()
-        Logger.recordOutput("Subsystems/$name/setpoint", setpoint.velocity)
-        Logger.recordOutput("Subsystems/$name/atSetpoint", isAtSetpoint)
+        Logger.recordOutput("Subsystems/$name/setpoint", setpoint)
+        Logger.recordOutput("Subsystems/$name/atSetpoint", atSetpoint)
     }
 }
