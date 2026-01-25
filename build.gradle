@@ -302,3 +302,9 @@ spotless {
         }
     }
 }
+
+apply from: "$rootDir/gradle/shotcalculator.gradle"
+
+tasks.named("compileKotlin") {
+    dependsOn("fetchShotCalculator")
+}
