@@ -10,11 +10,11 @@ import frc.robot.subsystems.intake.extender.ExtenderPositions
 import frc.robot.subsystems.spindexer.Spindexer
 import frc.robot.subsystems.spindexer.SpindexerVelocity
 
-fun closed(): Command {
+internal fun closed(): Command {
     return roller.stop().alongWith(Extender.close())
 }
 
-fun intaking(): Command {
+internal fun intaking(): Command {
     return roller
         .intake()
         .alongWith(
@@ -23,12 +23,12 @@ fun intaking(): Command {
         ) // Spindexer Intaking
 }
 
-fun open(): Command {
+internal fun open(): Command {
     return Extender.open()
         .alongWith(spindexer.setTarget(SpindexerVelocity.STOP))
 }
 
-fun pumping(): Command {
+internal fun pumping(): Command {
     return Commands.sequence(
             Extender.setTarget(ExtenderPositions.OPEN),
             Commands.waitTime(0.4.sec),
