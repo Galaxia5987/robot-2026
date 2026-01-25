@@ -14,5 +14,5 @@ val idleState = Spindexer.stop()
 @LoggedOutput(LogLevel.COMP)
 val spinRequested =
     Trigger { isFeeding || isIntaking }
-        .onTrue(Commands.runOnce({ SpindexerStates.SPIN.set() }))
-        .onFalse(Commands.runOnce({ SpindexerStates.IDLE.set() }))
+        .onTrue(Commands.runOnce(SpindexerStates.SPIN::set))
+        .onFalse(Commands.runOnce(SpindexerStates.IDLE::set))
