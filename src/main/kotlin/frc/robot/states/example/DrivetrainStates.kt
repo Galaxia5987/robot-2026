@@ -1,6 +1,8 @@
 package frc.robot.states.example
 
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.lib.logged_output.LoggedOutputManager
+import org.littletonrobotics.junction.Logger
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
@@ -14,11 +16,12 @@ enum class DrivetrainStates {
     val trigger = Trigger { state == this }
 
     fun set() {
+        LoggedOutputManager.registerField("", LogLevel.COMP, ::state,"state")
         state = this
     }
 }
 
-@LoggedOutput(LogLevel.COMP)private var state: DrivetrainStates = DrivetrainStates.IDLE
+private var state: DrivetrainStates = DrivetrainStates.IDLE
 
 // Example Usage
 fun example() {
