@@ -2,6 +2,7 @@ package frc.robot.subsystems.climb
 
 import com.ctre.phoenix6.configs.MotorOutputConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
+import com.ctre.phoenix6.signals.GravityTypeValue
 import com.ctre.phoenix6.signals.InvertedValue
 import edu.wpi.first.units.measure.Angle
 import frc.robot.lib.Gains
@@ -13,7 +14,12 @@ import org.team5987.annotation.command_enum.CommandEnum
 const val MAIN_PORT = 0
 
 val REAL_GAINS =
-    LoggedNetworkGains("ClimbRealGains", 1.0, kG = 10.0) // TODO calibrations
+    LoggedNetworkGains(
+        "ClimbRealGains",
+        1.0,
+        kG = 10.0,
+        gravityTypeValue = GravityTypeValue.Arm_Cosine
+    ) // TODO calibrations
 val SIM_GAINS = Gains(1.0, kG = 10.0)
 
 const val GEAR_RATION = 1.0
