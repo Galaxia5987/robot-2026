@@ -12,9 +12,9 @@ enum class IntakingStates {
     OPEN,
     PUMPING;
 
-  val trigger = Trigger { state == this }
+    val trigger = Trigger { state == this }
 
     fun set(): Command = runOnce({ state = this })
 }
 
-private @LoggedOutput(LogLevel.COMP) var state: IntakingStates = IntakingStates.CLOSED
+@LoggedOutput(LogLevel.COMP) var state: IntakingStates = IntakingStates.CLOSED
