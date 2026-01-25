@@ -9,7 +9,7 @@ val closedTrigger = IntakingStates.CLOSED.trigger.onTrue(closed())
 
 val openTrigger = IntakingStates.OPEN.trigger.onTrue(open())
 
-val plummingTrigger = IntakingStates.PUMPING.trigger.onTrue(pumping())
+val pumpingTrigger = IntakingStates.PUMPING.trigger.onTrue(pumping())
 
 fun canClose(): Command {
     return if (isHalfFull.asBoolean == false) {
