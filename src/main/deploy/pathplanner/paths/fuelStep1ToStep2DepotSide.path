@@ -1,0 +1,61 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.5130654761904765,
+        "y": 6.827827380952381
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.505166338801581,
+        "y": 7.200443238145629
+      },
+      "isLocked": false,
+      "linkedName": "fuelStep1DepotSide"
+    },
+    {
+      "anchor": {
+        "x": 7.655885416666667,
+        "y": 4.570381944444445
+      },
+      "prevControl": {
+        "x": 7.571997194884747,
+        "y": 4.334876602156276
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "fuelStep2DepotSide"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "intake",
+      "waypointRelativePos": 1.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -91.36392753160288
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "useDefaultConstraints": true
+}

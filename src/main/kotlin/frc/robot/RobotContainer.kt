@@ -6,6 +6,10 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
+import frc.robot.autonomous.bumpToDepot
+import frc.robot.autonomous.mio
+import frc.robot.autonomous.startToFuelDepotSide
+import frc.robot.autonomous.why
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.subsystems.drive.DriveCommands
@@ -90,6 +94,20 @@ object RobotContainer {
             "swerveFFCharacterization",
             DriveCommands.feedforwardCharacterization()
         )
+
+        autoChooser.addDefaultOption(
+            "startToFuelDepotSide",
+            startToFuelDepotSide()
+        )
+        autoChooser.addOption(
+            "bumpToDepot",
+            bumpToDepot()
+        )
+
+        autoChooser.addOption(
+            "why",
+            why()
+        )
     }
 
     fun resetSimulationField() {
@@ -99,3 +117,5 @@ object RobotContainer {
         SimulatedArena.getInstance().resetFieldForAuto()
     }
 }
+
+
