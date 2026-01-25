@@ -18,7 +18,6 @@ val overrideStates: Command = Commands.run({
 
 fun climb(): Command = Commands.sequence(
     overrideStates,
-    WaitUntilCommand(spindexer.isAtSetpoint),
     ConditionalCommand(
         Commands.none(),
         profiledAlignToPose(CLIMB_LOCATION.toPose()),
