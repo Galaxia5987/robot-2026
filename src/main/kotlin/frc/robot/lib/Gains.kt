@@ -2,7 +2,6 @@ package frc.robot.lib
 
 import com.ctre.phoenix6.configs.MotionMagicConfigs
 import com.ctre.phoenix6.configs.Slot0Configs
-import com.ctre.phoenix6.signals.GravityTypeValue
 import edu.wpi.first.units.measure.AngularAcceleration
 import edu.wpi.first.units.measure.AngularVelocity
 import frc.robot.lib.extensions.get
@@ -68,7 +67,6 @@ class LoggedNetworkGains(
     jerk: Double = 0.0, // m/s
     key: String =
         (Throwable().stackTrace[1]?.fileName?.substringBeforeLast('.') + ""),
-    val gravityTypeValue: GravityTypeValue = GravityTypeValue.Elevator_Static
 ) {
     private val path = "/Tuning/$key/$name"
     val kP: LoggedNetworkNumber = LoggedNetworkNumber("$path/kP", kP)
@@ -112,7 +110,6 @@ class LoggedNetworkGains(
             kS = this@LoggedNetworkGains.kS.get()
             kV = this@LoggedNetworkGains.kV.get()
             kG = this@LoggedNetworkGains.kG.get()
-            GravityType = gravityTypeValue
         }
 
     fun toMotionMagicConfig() =
