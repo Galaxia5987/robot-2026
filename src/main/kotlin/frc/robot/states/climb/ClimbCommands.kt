@@ -12,7 +12,7 @@ import frc.robot.subsystems.drive.profiledAlignToPose
 
 val overrideStates: Command = Commands.run({
     SpindexerStates.IDLE.set()
-    IntakeState.IDLE.set()
+    IntakeState.Closed.set()
     ShooterState.IDLE.set()
 })
 
