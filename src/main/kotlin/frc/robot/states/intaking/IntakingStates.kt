@@ -14,9 +14,7 @@ enum class IntakingStates {
 
     val trigger = Trigger { state == this }
 
-    fun set(): Command = runOnce ({
-        state = this
-    })
+    fun set(): Command = runOnce({ state = this })
 }
 
 @LoggedOutput(LogLevel.COMP) var state: IntakingStates = IntakingStates.CLOSED

@@ -10,7 +10,6 @@ import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.intaking.canClose
-import frc.robot.states.intaking.intaking
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.intake.roller.Roller
 import frc.robot.subsystems.roller.RollerPositions
@@ -62,7 +61,10 @@ object RobotContainer {
 
     private fun configureButtonBindings() {
         driverController.x().onTrue(Roller.setTarget(RollerPositions.INTAKE))
-        driverController.y().onTrue(IntakingStates.INTAKING.set()).onFalse(canClose())
+        driverController
+            .y()
+            .onTrue(IntakingStates.INTAKING.set())
+            .onFalse(canClose())
     }
 
     fun getAutonomousCommand(): Command = autoChooser.get()

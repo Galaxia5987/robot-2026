@@ -7,7 +7,7 @@ import frc.robot.lib.unified_canrange.UnifiedCANRange
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
-object Sensors : SubsystemBase (){
+object Sensors : SubsystemBase() {
 
     private val FULL = 1.m // TODO: change the value
     private val HALF_FULL = 0.5.m // TODO: change the value
