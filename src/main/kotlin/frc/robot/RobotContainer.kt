@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.states.intaking.IntakingStates
-import frc.robot.states.intaking.canClose
+import frc.robot.states.sensors.Sensors.isHalfFull
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.intake.roller.Roller
 import frc.robot.subsystems.roller.RollerPositions
@@ -43,6 +43,14 @@ object RobotContainer {
         }
 
         enableAutoLogOutputFor(this)
+    }
+
+    fun canClose(): Command {
+        return if (isHalfFull.asBoolean == false) {
+            IntakingStates.CLOSED.set()
+        } else {
+            IntakingStates.OPEN.set()
+        }
     }
 
     @AutoLogOutput(key = "MapleSimPose")

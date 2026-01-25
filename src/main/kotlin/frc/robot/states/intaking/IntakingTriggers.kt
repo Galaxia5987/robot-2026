@@ -11,10 +11,4 @@ private val openTrigger = IntakingStates.OPEN.trigger.onTrue(open())
 
 private val pumpingTrigger = IntakingStates.PUMPING.trigger.onTrue(pumping())
 
-fun canClose(): Command {
-    return if (isHalfFull.asBoolean == false) {
-        IntakingStates.CLOSED.set()
-    } else {
-        IntakingStates.OPEN.set()
-    }
-}
+
