@@ -2,7 +2,6 @@ package frc.robot.subsystems.climb
 
 import com.ctre.phoenix6.configs.MotorOutputConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
-import com.ctre.phoenix6.signals.GravityTypeValue
 import com.ctre.phoenix6.signals.InvertedValue
 import edu.wpi.first.units.measure.Angle
 import frc.robot.lib.Gains
@@ -18,7 +17,6 @@ val REAL_GAINS =
         "ClimbRealGains",
         1.0,
         kG = 10.0,
-        gravityTypeValue = GravityTypeValue.Arm_Cosine
     ) // TODO calibrations
 val SIM_GAINS = Gains(1.0, kG = 10.0)
 
@@ -40,6 +38,7 @@ val MOTOR_CONFIG =
 @CommandEnum
 enum class ClimbLevels(val angle: Angle) {
     RETRACTED(0.deg),
+    OPEN(5.deg),
     EXTENDED(90.deg),
     ENGAGED(180.deg),
 }

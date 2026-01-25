@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
-import frc.robot.subsystems.climb.Climb
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.shooter.turret.Turret.setAngle
@@ -56,12 +55,7 @@ object RobotContainer {
         Turret.defaultCommand = setAngle { turretAngleToHub }
     }
 
-    private fun configureButtonBindings() {
-
-        //        driverController.x().onTrue(Roller.setTarget(RollerPositions.INTAKE))
-        driverController.b().onTrue(Climb.ground())
-        driverController.a().onTrue(Climb.unlock())
-    }
+    private fun configureButtonBindings() {}
 
     fun getAutonomousCommand(): Command = autoChooser.get()
 

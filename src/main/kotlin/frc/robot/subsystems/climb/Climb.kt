@@ -1,6 +1,6 @@
 package frc.robot.subsystems.climb
 
-import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC
+import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
@@ -28,12 +28,12 @@ object Climb : SubsystemBase(), ClimbLevelsCommandFactory {
             gearRatio = GEAR_RATION
         )
 
-    private val positionVoltage = MotionMagicTorqueCurrentFOC(0.0)
+    private val positionVoltage = PositionTorqueCurrentFOC(0.0)
 
     private var setpoint = ClimbLevels.RETRACTED
 
     @LoggedOutput(LogLevel.COMP)
-    val isAtSetpoint = Trigger {
+    val atSetpoint = Trigger {
         setpoint.angle.isNear(motor.inputs.position, TOLERANCE)
     }
 
