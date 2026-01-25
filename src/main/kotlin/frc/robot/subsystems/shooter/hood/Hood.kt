@@ -3,6 +3,7 @@ package frc.robot.subsystems.shooter.hood
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC
 import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.CANcoder
+import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -46,10 +47,17 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
         motor.setControl(voltageRequest.withOutput(voltage))
     }
 
-    override fun setTarget(value: HoodPositions): Command = runOnce {
-        setpoint = value.angle
-        motor.setControl(positionRequest.withPosition(value.angle))
+    fun setControlAngle(angle: Angle) {
+        setpoint = angle
+        motor.setControl(positionRequest.withPosition(angle))
     }
+
+    fun setAngle(angle: Angle): Command = runOnce { setControlAngle(angle) }
+
+    fun setAngle(angle: () -> Angle): Command = run { setControlAngle(angle()) }
+
+    override fun setTarget(value: HoodPositions): Command =
+        setAngle(value.angle)
 
     override fun periodic() {
         ligament.setAngle(setpoint)
