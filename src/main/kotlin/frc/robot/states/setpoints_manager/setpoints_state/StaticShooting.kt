@@ -12,7 +12,11 @@ import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 import frc.robot.subsystems.shooter.turret.Turret
 
-enum class FieldLocation(val flywheel: AngularVelocity, val hood: Angle, val turret: Angle) {
+enum class FieldLocation(
+    val flywheel: AngularVelocity,
+    val hood: Angle,
+    val turret: Angle
+) {
     HUB(flywheel = 0.rps, hood = 0.deg, turret = 0.deg),
     CLIMB(flywheel = 0.rps, hood = 0.deg, turret = 0.deg),
     UPPER_BUMPER(flywheel = 0.rps, hood = 0.deg, turret = 0.deg),
@@ -25,9 +29,10 @@ enum class FieldLocation(val flywheel: AngularVelocity, val hood: Angle, val tur
 
 var currentArea: FieldLocation = FieldLocation.HUB
 
-val staticShootingMap: Map<SubsystemBase, () -> Measure<out Unit>> = mapOf(
-    Turret to { currentArea.turret },
-    Hood to { currentArea.hood },
-    Flywheel to { currentArea.flywheel },
-    PreShooter to { currentArea.flywheel },
-)
+val staticShootingMap: Map<SubsystemBase, () -> Measure<out Unit>> =
+    mapOf(
+        Turret to { currentArea.turret },
+        Hood to { currentArea.hood },
+        Flywheel to { currentArea.flywheel },
+        PreShooter to { currentArea.flywheel }
+    )
