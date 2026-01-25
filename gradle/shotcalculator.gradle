@@ -1,0 +1,54 @@
+tasks.register("fetchShotCalculator") {
+    description = "Fetch ShotCalculator.kt from private repo if accessible"
+    group = "build setup"
+
+    doLast {
+        def tempCloneDir = file("$buildDir/tmp/shotcalculator-repo")
+        def targetDir = file("src/main/kotlin/frc/robot")
+        targetDir.mkdirs()
+
+        // Clean previous clone
+        if (tempCloneDir.exists()) {
+            tempCloneDir.deleteDir()
+        }
+
+        try {
+            // Clone repo quietly
+            exec {
+                commandLine(
+                        "git",
+                        "clone",
+                        "--depth",
+                        "1",
+                        "https://github.com/Galaxia5987/ballistic-simulator",
+                        tempCloneDir.absolutePath
+                )
+                environment "GIT_TERMINAL_PROMPT", "0"
+                ignoreExitValue = true
+            }
+
+            // Remove .git to avoid IDE confusion
+            def gitDir = new File(tempCloneDir, ".git")
+            if (gitDir.exists()) {
+                gitDir.deleteDir()
+            }
+
+            def sourceFile = new File(tempCloneDir, "analyze/ShotCalculator.kt")
+            if (!sourceFile.exists()) {
+                logger.lifecycle("ShotCalculator.kt not found, skipping")
+                return
+            }
+
+            // Copy into project
+            copy {
+                from sourceFile
+                into targetDir
+            }
+
+            logger.lifecycle("ShotCalculator.kt synced successfully")
+
+        } catch (Exception e) {
+            logger.lifecycle("Skipping ShotCalculator sync: ${e.message}")
+        }
+    }
+}

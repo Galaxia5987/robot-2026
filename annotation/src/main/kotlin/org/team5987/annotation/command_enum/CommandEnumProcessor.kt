@@ -51,10 +51,10 @@ class CreateCommandProcessor(
             FunSpec.builder(camelEntry)
                 .returns(commandClass)
                 .addStatement(
-                    "return setTarget(%T.%L).withName(\"\$prefix/%L\")",
+                    "return setTarget(%T.%L).withName(%S)",
                     enumClass,
                     entry,
-                    camelEntry
+                    "${pkg.substringAfterLast(".")}/$camelEntry",
                 )
                 .build()
         }
@@ -66,19 +66,8 @@ class CreateCommandProcessor(
             .addModifiers(KModifier.ABSTRACT)
             .build()
 
-        val property = PropertySpec
-            .builder("prefix", String::class)
-            .getter(
-                FunSpec
-                    .getterBuilder()
-                    .addStatement(
-                        "return this::class.simpleName?.substringBefore(%S) ?: %S", "CommandFactory", ""
-                    ).build()
-            ).build()
-
         // the interface
         val interfaceSpec = TypeSpec.interfaceBuilder(fileName)
-            .addProperty(property)
             .addFunctions(entryFunctions)
             .addFunction(setTargetFun)
             .build()
