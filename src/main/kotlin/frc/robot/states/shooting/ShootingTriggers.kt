@@ -5,8 +5,8 @@ import frc.robot.drive
 import frc.robot.field_constants.ALLIANCE_ZONE
 import frc.robot.isOurHubActive
 import frc.robot.lib.LoggedNetworkTrigger
-import frc.robot.states.sensors.hasFuel
-import frc.robot.states.sensors.isPreshooterUnloaded
+import frc.robot.states.sensors.Sensors.hasFuel
+import frc.robot.states.sensors.Sensors.isPreshooterUnloaded
 import frc.robot.subsystems.shooter.flywheel.Flywheel
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
