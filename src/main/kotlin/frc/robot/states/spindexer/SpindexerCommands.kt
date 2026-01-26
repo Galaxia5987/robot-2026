@@ -8,16 +8,16 @@ import frc.robot.subsystems.spindexer.SpindexerVelocity
 var isFeeding = false
 var isIntaking = false
 
- fun setFeeding(value: Boolean) = runOnce({ isFeeding = value })
- fun setIntaking(value: Boolean) = runOnce({ isIntaking = value })
+fun setFeeding(value: Boolean) = runOnce({ isFeeding = value })
 
-private fun ideal (): Command= Spindexer.setTarget(SpindexerVelocity.STOP)
+fun setIntaking(value: Boolean) = runOnce({ isIntaking = value })
 
-private fun spin (): Command= Spindexer.setTarget(SpindexerVelocity.START)
+private fun ideal(): Command = Spindexer.setTarget(SpindexerVelocity.STOP)
 
+private fun spin(): Command = Spindexer.setTarget(SpindexerVelocity.START)
 
 fun stop() =
     runOnce({
-       isFeeding = false
+        isFeeding = false
         isIntaking = false
     })

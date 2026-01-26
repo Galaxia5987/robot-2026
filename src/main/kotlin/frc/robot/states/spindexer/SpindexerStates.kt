@@ -1,7 +1,5 @@
 package frc.robot.states.spindexer
 
-import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.logged_output.LoggedOutputManager
 import org.team5987.annotation.LogLevel
