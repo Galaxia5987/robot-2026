@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36" version="29.3.4">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:147.0) Gecko/20100101 Firefox/147.0" version="29.3.4">
   <diagram name="Page-1" id="S13gSvKKEKX4_mnb19nU">
-    <mxGraphModel dx="4293" dy="3613" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="4531" dy="3809" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -34,7 +34,7 @@
         <mxCell id="zsBP_5k4l-OqIL7ui0WU-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;font size=&quot;1&quot;&gt;&lt;b&gt;Priming&lt;/b&gt;&lt;/font&gt;&lt;div&gt;&lt;font size=&quot;1&quot;&gt;lock, set THFP&lt;/font&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="50" width="90" x="425" y="200" as="geometry" />
         </mxCell>
-        <mxCell id="zsBP_5k4l-OqIL7ui0WU-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="canShoot = isActive &amp;amp; inTeamZone &amp;amp; notShootButton.negate() &amp;amp; hasEnoughBalls" vertex="1">
+        <mxCell id="zsBP_5k4l-OqIL7ui0WU-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="canShoot = isActive &amp;amp; inTeamZone &amp;amp; notShootButton.negate()" vertex="1">
           <mxGeometry height="60" width="210" x="590" y="40" as="geometry" />
         </mxCell>
         <mxCell id="zsBP_5k4l-OqIL7ui0WU-17" edge="1" parent="1" source="zsBP_5k4l-OqIL7ui0WU-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.156;exitY=-0.026;exitDx=0;exitDy=0;exitPerimeter=0;" target="zsBP_5k4l-OqIL7ui0WU-29">
@@ -64,7 +64,7 @@
         <mxCell id="zsBP_5k4l-OqIL7ui0WU-12" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div&gt;atGoal = hood &amp;amp; turret, flywheel &amp;amp; preShooter at&amp;nbsp;setopint&lt;/div&gt;" vertex="1">
           <mxGeometry height="60" width="200" x="360" y="40" as="geometry" />
         </mxCell>
-        <mxCell id="zsBP_5k4l-OqIL7ui0WU-24" parent="1" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;" value="&lt;blockquote&gt;&lt;br&gt;&lt;/blockquote&gt;&lt;div align=&quot;left&quot;&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;Always:&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div align=&quot;left&quot;&gt;feedingButton.onTrue(setStatePriming)&lt;br&gt;&lt;div&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;can&#39;tShoot.onTrue(setIdle)&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;Idle and canShoot -&amp;gt; Priming&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;Priming and atGoal -&amp;gt; Shooting&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;Shooting and !atGoal -&amp;gt; BackFeeding&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;BackFeeding and PreShooterUnloaded -&amp;gt; Priming&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;Shooting &amp;amp; robotEmpty -&amp;gt; Idle&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="zsBP_5k4l-OqIL7ui0WU-24" parent="1" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;" value="&lt;blockquote&gt;&lt;br&gt;&lt;/blockquote&gt;&lt;div align=&quot;left&quot;&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;Always:&lt;/span&gt;&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;can&#39;tShoot.onTrue(setIdle)&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;Idle and canShoot -&amp;gt; Priming&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;Priming and atGoal -&amp;gt; Shooting&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;Shooting and !atGoal -&amp;gt; BackFeeding&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;BackFeeding and PreShooterUnloaded -&amp;gt; Priming&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;Shooting &amp;amp; robotEmpty -&amp;gt; Idle&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="310" width="280" x="680" y="250" as="geometry" />
         </mxCell>
         <mxCell id="zsBP_5k4l-OqIL7ui0WU-25" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;div&gt;can&#39;tShoot = !canShoot&lt;/div&gt;" vertex="1">
@@ -124,14 +124,6 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="cCa54Ykw0dpSAkILiJGx-5" edge="1" parent="1" source="zsBP_5k4l-OqIL7ui0WU-46" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="cCa54Ykw0dpSAkILiJGx-4">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="cCa54Ykw0dpSAkILiJGx-6" connectable="0" parent="cCa54Ykw0dpSAkILiJGx-5" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="isFull" vertex="1">
-          <mxGeometry relative="1" x="0.0922" y="-4" as="geometry">
-            <mxPoint as="offset" />
-          </mxGeometry>
-        </mxCell>
         <mxCell id="zsBP_5k4l-OqIL7ui0WU-46" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;div&gt;&lt;b&gt;Intaking&lt;/b&gt;&lt;/div&gt;&lt;div&gt;roller starts&lt;/div&gt;&lt;div&gt;extender opens&lt;/div&gt;&lt;div&gt;spindexerIntaking&lt;/div&gt;" vertex="1">
           <mxGeometry height="60" width="120" x="160" y="-880" as="geometry" />
         </mxCell>
@@ -178,8 +170,8 @@
         <mxCell id="zsBP_5k4l-OqIL7ui0WU-61" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="idle" vertex="1">
           <mxGeometry height="60" width="120" x="1090" y="-160" as="geometry" />
         </mxCell>
-        <mxCell id="zsBP_5k4l-OqIL7ui0WU-65" parent="1" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;" value="&lt;div align=&quot;left&quot;&gt;pressed -&amp;gt; Intaking&lt;/div&gt;&lt;div align=&quot;left&quot;&gt;released &amp;amp; canClose -&amp;gt; Closed&lt;/div&gt;&lt;div align=&quot;left&quot;&gt;released &amp;amp; can&#39;tClose -&amp;gt; spindexerStopIntaking,Open&lt;/div&gt;&lt;div align=&quot;left&quot;&gt;intaking &amp;amp; isFull -&amp;gt;&amp;nbsp;&lt;span style=&quot;text-align: center; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;setShootingState(Priming)&lt;/span&gt;&lt;/div&gt;&lt;div align=&quot;left&quot;&gt;intaking &amp;amp; !isFull -&amp;gt;&amp;nbsp;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255)); background-color: transparent; text-align: center;&quot;&gt;setShootingState(Idle)&lt;/span&gt;&lt;span style=&quot;text-align: center; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;/span&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="310" width="300" x="330" y="-710" as="geometry" />
+        <mxCell id="zsBP_5k4l-OqIL7ui0WU-65" parent="1" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;align=left;" value="&lt;div align=&quot;left&quot;&gt;pressed -&amp;gt; Intaking&lt;/div&gt;&lt;div align=&quot;left&quot;&gt;released &amp;amp; canClose -&amp;gt; Closed&lt;/div&gt;&lt;div align=&quot;left&quot;&gt;released &amp;amp; can&#39;tClose -&amp;gt; spindexerStopIntaking,Open&lt;/div&gt;" vertex="1">
+          <mxGeometry height="310" width="300" x="410" y="-790" as="geometry" />
         </mxCell>
         <mxCell id="zsBP_5k4l-OqIL7ui0WU-71" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="canClose = mid level sensor not triggred" vertex="1">
           <mxGeometry height="60" width="270" x="-330" y="-1080" as="geometry" />
@@ -268,7 +260,7 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="FRuHBD59czg_tZ6btXNL-5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="setSpindexerIdle&lt;br&gt;setShootingState(Idle)&lt;div&gt;setIntaking(Closed)&lt;/div&gt;" vertex="1">
+        <mxCell id="FRuHBD59czg_tZ6btXNL-5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="setSpindexerIdle" vertex="1">
           <mxGeometry height="60" width="120" x="-860" y="180" as="geometry" />
         </mxCell>
         <mxCell id="FRuHBD59czg_tZ6btXNL-7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="&lt;div align=&quot;left&quot;&gt;setSpindexerIdle = setSpindexerIntaking(False)&lt;/div&gt;&lt;div align=&quot;left&quot;&gt;setSpindexerFeeding(False)&lt;/div&gt;" vertex="1">
@@ -449,7 +441,7 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="FRuHBD59czg_tZ6btXNL-70" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="getSetpointByOverrides(pose, subsystem)" vertex="1">
+        <mxCell id="FRuHBD59czg_tZ6btXNL-70" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="getSetpointsByOverrides(pose)" vertex="1">
           <mxGeometry height="80" width="185" x="-682.5" y="-1410" as="geometry" />
         </mxCell>
         <mxCell id="FRuHBD59czg_tZ6btXNL-72" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="getSetpointsByOverrides(pose)" vertex="1">
@@ -466,26 +458,6 @@
         </mxCell>
         <mxCell id="FRuHBD59czg_tZ6btXNL-88" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="I think we should have a sort of map and pass to this function the relevant subsystems, getting the setpoints only for them instead of recomptuing all each loop&amp;nbsp;" vertex="1">
           <mxGeometry height="140" width="280" x="-460" y="-1450" as="geometry" />
-        </mxCell>
-        <mxCell id="cCa54Ykw0dpSAkILiJGx-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="inRelevantZone = by setpoint Manager" vertex="1">
-          <mxGeometry height="60" width="120" x="-340" y="45" as="geometry" />
-        </mxCell>
-        <mxCell id="cCa54Ykw0dpSAkILiJGx-8" edge="1" parent="1" source="cCa54Ykw0dpSAkILiJGx-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="cCa54Ykw0dpSAkILiJGx-7">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="cCa54Ykw0dpSAkILiJGx-10" connectable="0" parent="cCa54Ykw0dpSAkILiJGx-8" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="isFull!" vertex="1">
-          <mxGeometry relative="1" x="0.1032" y="-2" as="geometry">
-            <mxPoint as="offset" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="cCa54Ykw0dpSAkILiJGx-4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="setShootingState(Priming)" vertex="1">
-          <mxGeometry height="60" width="170" x="530" y="-880" as="geometry" />
-        </mxCell>
-        <mxCell id="cCa54Ykw0dpSAkILiJGx-7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="setShootinState(Idle)" vertex="1">
-          <mxGeometry height="40" width="120" x="320" y="-820" as="geometry" />
-        </mxCell>
-        <mxCell id="cCa54Ykw0dpSAkILiJGx-9" edge="1" parent="1" source="cCa54Ykw0dpSAkILiJGx-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.833;entryDx=0;entryDy=0;entryPerimeter=0;" target="zsBP_5k4l-OqIL7ui0WU-46">
-          <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

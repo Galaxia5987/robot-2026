@@ -4,23 +4,28 @@ import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
+import frc.robot.states.intaking.IntakingStates
+import frc.robot.states.intaking.canCloseIntake
+import frc.robot.states.intaking.cantCloseIntake
+import frc.robot.states.spindexer.startFeeding
+import frc.robot.states.spindexer.stop
+import frc.robot.states.spindexer.stopFeeding
 import frc.robot.subsystems.drive.DriveCommands
-import frc.robot.subsystems.intake.roller.Roller
-import frc.robot.subsystems.roller.RollerPositions
 import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.shooter.turret.Turret.setAngle
 import frc.robot.subsystems.shooter.turret.turretAngleToHub
 import frc.robot.subsystems.spindexer.Spindexer
+import frc.robot.subsystems.spindexer.SpindexerVelocity
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 
 object RobotContainer {
-    private val driverController = CommandXboxController(0)
+    private val driverController = CommandPS5Controller(0)
     private val autoChooser: LoggedDashboardChooser<Command>
 
     init {
@@ -59,6 +64,32 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
+        //        driverController.square().onTrue(Roller.setTarget(RollerPositions.INTAKE))
+
+        // Intake Bindings
+        driverController.triangle().onTrue(IntakingStates.INTAKING.set())
+        driverController
+            .triangle()
+            .negate()
+            .and(canCloseIntake)
+            .onTrue(IntakingStates.CLOSED.set())
+        driverController
+            .triangle()
+            .negate()
+            .and(cantCloseIntake)
+            .onTrue(IntakingStates.OPEN.set())
+
+        driverController
+            .cross()
+            .onTrue(Spindexer.setTarget(SpindexerVelocity.REVERSE_SLOW))
+        driverController
+            .circle()
+            .onTrue(Spindexer.setTarget(SpindexerVelocity.REVERSE))
+        driverController
+            .triangle()
+            .onTrue(startFeeding())
+            .onFalse(stopFeeding())
+        driverController.square().onTrue(stop())
     }
 
     fun getAutonomousCommand(): Command = autoChooser.get()
