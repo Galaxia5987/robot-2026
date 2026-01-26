@@ -8,11 +8,14 @@ import frc.robot.field_constants.CLIMB_LOCATION
 import frc.robot.lib.extensions.toPose
 import frc.robot.spindexer
 import frc.robot.states.ExternalControl
+import frc.robot.states.intaking.IntakingStates
+import frc.robot.states.spindexer.SpindexerStates
+import frc.robot.subsystems.climb.Climb
 import frc.robot.subsystems.drive.profiledAlignToPose
 
 val overrideStates: Command = Commands.run({
     SpindexerStates.IDLE.set()
-    IntakeState.Closed.set()
+    IntakingStates.CLOSED.set()
     ShooterState.IDLE.set()
 })
 
@@ -23,5 +26,5 @@ fun climb(): Command = Commands.sequence(
         profiledAlignToPose(CLIMB_LOCATION.toPose()),
         ExternalControl.AlignmentOverride.trigger,
     ),
-    ConditionalCommand(Climb.ENGAGED())
+    Climb.engaged()
 ).withName("climb")
