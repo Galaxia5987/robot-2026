@@ -18,7 +18,7 @@ object Spindexer : SubsystemBase(), SpindexerVelocityCommandFactory {
 
     private val velocityVoltage = VelocityVoltage(0.0)
 
-    private var setpoint = SpindexerVelocity.STOP
+    private var setpoint: SpindexerVelocity = SpindexerVelocity.STOP
 
     val isAtSetpoint = Trigger {
         mainMotor.inputs.velocity.isNear(setpoint.velocity, SETPOINT_TOLERANCE)
