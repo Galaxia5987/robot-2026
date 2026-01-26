@@ -33,14 +33,15 @@ object RobotContainer {
     private val autoChooser: LoggedDashboardChooser<Command>
 
     // Shooting state machine triggers
-    private object Shooting{
-        val isInTeamZone = Trigger { ALLIANCE_ZONE.contains(drive.pose.translation) }
+    private object Shooting {
+        val isInTeamZone = Trigger {
+            ALLIANCE_ZONE.contains(drive.pose.translation)
+        }
 
         val dontShoot = driverController.rightTrigger()
 
-        val canShoot = Trigger {isOurHubActive}
-            .and(isInTeamZone)
-            .and(dontShoot.negate())
+        val canShoot =
+            Trigger { isOurHubActive }.and(isInTeamZone).and(dontShoot.negate())
 
         val atGoal =
             Hood.atSetpoint
@@ -48,7 +49,7 @@ object RobotContainer {
                 .and(Flywheel.atSetpoint)
                 .and(PreShooter.atSetpoint)
 
-        fun bind(){
+        fun bind() {
             canShoot.negate().onTrue(ShootingState.IDLE.set())
 
             ShootingState.IDLE.trigger

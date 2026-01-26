@@ -18,10 +18,16 @@ enum class ShootingState(commandBind: Command) {
         trigger.onTrue(commandBind)
     }
 
-    fun set(): Command = Commands.runOnce({
-        LoggedOutputManager.registerField("", LogLevel.COMP, ::state, "state")
-        state = this
-    })
+    fun set(): Command =
+        Commands.runOnce({
+            LoggedOutputManager.registerField(
+                "",
+                LogLevel.COMP,
+                ::state,
+                "state"
+            )
+            state = this
+        })
 }
 
 private var state: ShootingState = ShootingState.IDLE
