@@ -12,10 +12,6 @@ fun setFeeding(value: Boolean) = runOnce({ isFeeding = value })
 
 fun setIntaking(value: Boolean) = runOnce({ isIntaking = value })
 
-private fun idle(): Command = Spindexer.setTarget(SpindexerVelocity.STOP)
-
-private fun spin(): Command = Spindexer.setTarget(SpindexerVelocity.START)
-
 fun stop() =
     runOnce({
         isFeeding = false
