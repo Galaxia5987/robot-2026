@@ -87,8 +87,8 @@ object RobotContainer {
             .onTrue(Spindexer.setTarget(SpindexerVelocity.REVERSE))
         driverController
             .triangle()
-            .onTrue(startFeeding(true))
-            .onFalse(stopFeeding(false))
+            .onTrue(startFeeding())
+            .onFalse(stopFeeding())
         driverController.square().onTrue(stop())
     }
 

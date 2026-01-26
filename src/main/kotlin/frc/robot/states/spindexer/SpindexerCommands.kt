@@ -9,13 +9,13 @@ private fun setFeeding(value: Boolean) = runOnce({ isFeeding = value })
 
 private fun setIntaking(value: Boolean) = runOnce({ isIntaking = value })
 
-fun startFeeding(value: Boolean) = runOnce({ isFeeding = true })
+fun startFeeding() = runOnce({ isFeeding = true })
 
-fun stopFeeding(value: Boolean) = runOnce({ isFeeding = false })
+fun stopFeeding() = runOnce({ isFeeding = false })
 
-fun startIntaking(value: Boolean) = runOnce({ isIntaking = true })
+fun startIntaking() = runOnce({ isIntaking = true })
 
-fun stopIntaking(value: Boolean) = runOnce({ isIntaking = false })
+fun stopIntaking() = runOnce({ isIntaking = false })
 
 fun stop() =
     runOnce({
