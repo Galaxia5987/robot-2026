@@ -25,12 +25,12 @@ private val goalHubTrigger =
 
 private val goalDepotTrigger =
     outOfAllianceZone_AboveCrossLine
-        .and(inAllianceZone.negate())
+        .and(!inAllianceZone)
         .onTrue(runOnce({ currentGoal = DEPOT_LOCATION }))
 
 private val goalOutpostTrigger =
     outOfAllianceZone_BelowCrossLine
-        .and(inAllianceZone.negate())
+        .and(!inAllianceZone)
         .onTrue(runOnce({ currentGoal = OUTPOST_LOCATION }))
 
 fun <T : SubsystemBase, M : Measure<out Unit>> T.aimingSetpoint(): M {
