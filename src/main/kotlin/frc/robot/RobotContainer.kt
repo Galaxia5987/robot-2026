@@ -49,7 +49,7 @@ object RobotContainer {
                 .and(Flywheel.atSetpoint)
                 .and(PreShooter.atSetpoint)
 
-        fun bind() {
+        init {
             canShoot.negate().onTrue(ShootingState.IDLE.set())
 
             ShootingState.IDLE.trigger
@@ -93,7 +93,7 @@ object RobotContainer {
         }
 
         enableAutoLogOutputFor(this)
-        Shooting.bind()
+        Shooting
     }
 
     @AutoLogOutput(key = "MapleSimPose")
