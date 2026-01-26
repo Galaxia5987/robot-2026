@@ -11,8 +11,9 @@ import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.intaking.canCloseIntake
 import frc.robot.states.intaking.cantCloseIntake
-import frc.robot.states.spindexer.setFeeding
+import frc.robot.states.spindexer.startFeeding
 import frc.robot.states.spindexer.stop
+import frc.robot.states.spindexer.stopFeeding
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.shooter.turret.Turret.setAngle
@@ -86,8 +87,8 @@ object RobotContainer {
             .onTrue(Spindexer.setTarget(SpindexerVelocity.REVERSE))
         driverController
             .triangle()
-            .onTrue(setFeeding(value = true))
-            .onFalse(setFeeding(value = false))
+            .onTrue(startFeeding(true))
+            .onFalse(stopFeeding(false))
         driverController.square().onTrue(stop())
     }
 
