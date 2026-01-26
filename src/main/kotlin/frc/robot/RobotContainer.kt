@@ -34,16 +34,16 @@ object RobotContainer {
 
     // Shooting state machine triggers
     private object Shooting {
-        val isInTeamZone = Trigger {
+        private val isInTeamZone = Trigger {
             ALLIANCE_ZONE.contains(drive.pose.translation)
         }
 
-        val dontShoot = driverController.rightTrigger()
+        private val dontShoot = driverController.rightTrigger()
 
-        val canShoot =
+        private val canShoot =
             Trigger { isOurHubActive }.and(isInTeamZone).and(dontShoot.negate())
 
-        val atGoal =
+        private val atGoal =
             Hood.atSetpoint
                 .and(Turret.atSetpoint)
                 .and(Flywheel.atSetpoint)
