@@ -7,8 +7,8 @@ import frc.robot.subsystems.spindexer.Spindexer
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
-private val idelTriger= SpindexerStates.IDLE.trigger.onTrue(Spindexer.stop())
-private val activeTrigger= SpindexerStates.ACTIVE.trigger.onTrue(spindexer.start())
+private val stopTriger = SpindexerStates.IDLE.trigger.onTrue(Spindexer.stop())
+private val activeTrigger = SpindexerStates.ACTIVE.trigger.onTrue(Spindexer.start())
 
 
 @LoggedOutput(LogLevel.COMP)

@@ -13,12 +13,9 @@ enum class SpindexerStates {
     val trigger = Trigger { state == this }
 
     fun set() {
-        LoggedOutputManager.registerField("", LogLevel.COMP, ::state,"state")
+        LoggedOutputManager.registerField("", LogLevel.COMP, ::state, "state")
         state = this
     }
 }
 
-
-    private var state:SpindexerStates= SpindexerStates.IDLE
-
-
+private var state: SpindexerStates = SpindexerStates.IDLE

@@ -16,10 +16,10 @@ import frc.robot.states.intaking.cantCloseIntake
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.intake.roller.Roller
 import frc.robot.subsystems.roller.RollerPositions
+import frc.robot.subsystems.shooter.turret.ConveyorVelocity
 import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.shooter.turret.Turret.setAngle
 import frc.robot.subsystems.shooter.turret.turretAngleToHub
-import frc.robot.subsystems.spindexer.ConveyorVelocity
 import frc.robot.subsystems.spindexer.Spindexer
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
@@ -81,11 +81,9 @@ object RobotContainer {
             .onTrue(IntakingStates.OPEN.set())
 
         driverController
-            .b()
-            .onTrue(Spindexer.setTarget(ConveyorVelocity.REVERSE_SLOW))
+            .b().onTrue(Spindexer.setTarget(ConveyorVelocity.REVERSE_SLOW))
         driverController
-            .a()
-            .onTrue(Spindexer.setTarget(ConveyorVelocity.REVERSE))
+            .a().onTrue(Spindexer.setTarget(ConveyorVelocity.REVERSE))
         driverController.y().onTrue(setFeeding(value = true))
         driverController.x().onTrue(stop())
     }
