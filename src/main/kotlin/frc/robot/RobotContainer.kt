@@ -5,9 +5,15 @@ import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import edu.wpi.first.wpilibj2.command.button.Trigger
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
+import frc.robot.field_constants.ALLIANCE_ZONE
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
+import frc.robot.lib.extensions.not
+import frc.robot.subsystems.sensors.Sensors
+import frc.robot.states.shooting.ShootingState
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.intaking.canCloseIntake
 import frc.robot.states.intaking.cantCloseIntake
@@ -15,6 +21,9 @@ import frc.robot.states.spindexer.startFeeding
 import frc.robot.states.spindexer.stop
 import frc.robot.states.spindexer.stopFeeding
 import frc.robot.subsystems.drive.DriveCommands
+import frc.robot.subsystems.shooter.flywheel.Flywheel
+import frc.robot.subsystems.shooter.hood.Hood
+import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.shooter.turret.Turret.setAngle
 import frc.robot.subsystems.shooter.turret.turretAngleToHub
@@ -27,6 +36,48 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 object RobotContainer {
     private val driverController = CommandPS5Controller(0)
     private val autoChooser: LoggedDashboardChooser<Command>
+
+    // Shooting state machine triggers
+    private object Shooting {
+        private val isInTeamZone = Trigger {
+            ALLIANCE_ZONE.contains(drive.pose.translation)
+        }
+
+        private val dontShoot = driverController.rightTrigger()
+
+        private val canShoot =
+            Trigger { isOurHubActive }.and(isInTeamZone).and(dontShoot.negate())
+
+        private val atGoal =
+            Hood.atSetpoint
+                .and(Turret.atSetpoint)
+                .and(Flywheel.atSetpoint)
+                .and(PreShooter.atSetpoint)
+
+        init {
+            canShoot.negate().onTrue(ShootingState.IDLE.set())
+
+            ShootingState.IDLE.trigger
+                .and(canShoot)
+                .onTrue(ShootingState.PRIMING.set())
+
+            ShootingState.PRIMING.trigger
+                .and(atGoal)
+                .onTrue(ShootingState.SHOOTING.set())
+
+            ShootingState.SHOOTING.trigger
+                .and(atGoal.negate())
+                .onTrue(ShootingState.BACKFEEDING.set())
+
+            ShootingState.BACKFEEDING.trigger
+                .and(!Sensors.hasFuel)
+                .onTrue(ShootingState.PRIMING.set())
+
+            ShootingState.SHOOTING.trigger
+                .and(Sensors.hasFuel.negate())
+                .onTrue(ShootingState.IDLE.set())
+        }
+    }
 
     init {
         drive // Ensure Drive is initialized
@@ -47,6 +98,7 @@ object RobotContainer {
         }
 
         enableAutoLogOutputFor(this)
+        Shooting
     }
 
     @AutoLogOutput(key = "MapleSimPose")

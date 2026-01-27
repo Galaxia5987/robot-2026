@@ -1,9 +1,10 @@
-package frc.robot.states.sensors
+package frc.robot.subsystems.sensors
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.extensions.m
 import frc.robot.lib.unified_canrange.UnifiedCANRange
+import org.littletonrobotics.junction.Logger
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
@@ -22,29 +23,27 @@ object Sensors : SubsystemBase() {
     private val auxTopSensor =
         UnifiedCANRange(AUX_TOP_SENSOR, configuration = AUX_TOP_SENSOR_CONFIG)
 
-    @LoggedOutput(LogLevel.COMP)
     val isHalfFull: Trigger = Trigger {
         (topSensor.inputs.distance < HALF_FULL).and(
             auxTopSensor.inputs.distance < HALF_FULL
         )
     }
 
-    @LoggedOutput(LogLevel.COMP)
     val isFull: Trigger = Trigger {
         (topSensor.inputs.distance <= FULL).and(
             auxTopSensor.inputs.distance <= FULL
         )
     }
 
-    @LoggedOutput(LogLevel.COMP)
     val hasFuel: Trigger = Trigger { spindexerSensor.isInRange }
-
-    @LoggedOutput(LogLevel.COMP)
-    val isPreshooterUnloaded = Trigger { false } // TODO
 
     override fun periodic() {
         spindexerSensor.periodic()
         topSensor.periodic()
         auxTopSensor.periodic()
+
+        Logger.recordOutput("Subsystems/$name/hasFuel", hasFuel)
+        Logger.recordOutput("Subsystems/$name/isHalfFull", isHalfFull)
+        Logger.recordOutput("Subsystems/$name/isFull", isFull)
     }
 }

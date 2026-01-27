@@ -1,24 +1,27 @@
 package frc.robot.states.spindexer
 
+import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands.runOnce
 
-var isFeeding = false
-var isIntaking = false
+object SpindexerCommands {
+    internal var isFeeding = false
+    internal var isIntaking = false
 
-private fun setFeeding(value: Boolean) = runOnce({ isFeeding = value })
+    private fun setFeeding(value: Boolean) = runOnce({ isFeeding = value })
 
-private fun setIntaking(value: Boolean) = runOnce({ isIntaking = value })
+    private fun setIntaking(value: Boolean) = runOnce({ isIntaking = value })
 
-fun startFeeding() = runOnce({ isFeeding = true })
+    fun startFeeding(): Command = runOnce({ isFeeding = true })
 
-fun stopFeeding() = runOnce({ isFeeding = false })
+    fun stopFeeding(): Command = runOnce({ isFeeding = false })
 
-fun startIntaking() = runOnce({ isIntaking = true })
+    fun startIntaking(): Command = runOnce({ isIntaking = true })
 
-fun stopIntaking() = runOnce({ isIntaking = false })
+    fun stopIntaking(): Command = runOnce({ isIntaking = false })
 
-fun stop() =
-    runOnce({
-        isFeeding = false
-        isIntaking = false
-    })
+    fun stop() =
+        runOnce({
+            isFeeding = false
+            isIntaking = false
+        })
+}
