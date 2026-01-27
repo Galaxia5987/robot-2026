@@ -12,7 +12,7 @@ import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 import frc.robot.subsystems.shooter.turret.Turret
 
-enum class FieldLocation(
+enum class PresetSetpoints(
     val flywheel: AngularVelocity,
     val hood: Angle,
     val turret: Angle
@@ -27,12 +27,12 @@ enum class FieldLocation(
     LOWER_CORNER(flywheel = 0.rps, hood = 0.deg, turret = 0.deg)
 }
 
-var currentArea: FieldLocation = FieldLocation.HUB
+var selectedPresetSetpoint: PresetSetpoints = PresetSetpoints.HUB
 
 val staticShootingMap: Map<SubsystemBase, () -> Measure<out Unit>> =
     mapOf(
-        Turret to { currentArea.turret },
-        Hood to { currentArea.hood },
-        Flywheel to { currentArea.flywheel },
-        PreShooter to { currentArea.flywheel }
+        Turret to { selectedPresetSetpoint.turret },
+        Hood to { selectedPresetSetpoint.hood },
+        Flywheel to { selectedPresetSetpoint.flywheel },
+        PreShooter to { selectedPresetSetpoint.flywheel }
     )
