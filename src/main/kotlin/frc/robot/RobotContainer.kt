@@ -10,14 +10,10 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import frc.robot.field_constants.ALLIANCE_ZONE
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
-import frc.robot.states.intaking.IntakingStates
-import frc.robot.states.intaking.canCloseIntake
-import frc.robot.states.intaking.cantCloseIntake
-import frc.robot.states.sensors.Sensors
+import frc.robot.lib.extensions.not
+import frc.robot.subsystems.sensors.Sensors
 import frc.robot.states.shooting.ShootingState
 import frc.robot.subsystems.drive.DriveCommands
-import frc.robot.subsystems.intake.roller.Roller
-import frc.robot.subsystems.roller.RollerPositions
 import frc.robot.subsystems.shooter.flywheel.Flywheel
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
@@ -65,7 +61,7 @@ object RobotContainer {
                 .onTrue(ShootingState.BACKFEEDING.set())
 
             ShootingState.BACKFEEDING.trigger
-                .and(Sensors.isPreshooterUnloaded)
+                .and(!Sensors.hasFuel)
                 .onTrue(ShootingState.PRIMING.set())
 
             ShootingState.SHOOTING.trigger
@@ -111,20 +107,24 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
-        driverController.x().onTrue(Roller.setTarget(RollerPositions.INTAKE))
-
-        // Intake Bindings
-        driverController.y().onTrue(IntakingStates.INTAKING.set())
-        driverController
-            .y()
-            .negate()
-            .and(canCloseIntake)
-            .onTrue(IntakingStates.CLOSED.set())
-        driverController
-            .y()
-            .negate()
-            .and(cantCloseIntake)
-            .onTrue(IntakingStates.OPEN.set())
+        //        driverController.x().onTrue(Roller.setTarget(RollerPositions.INTAKE))
+        //
+        //        // Intake Bindings
+        //        driverController.y().onTrue(IntakingStates.INTAKING.set())
+        //        driverController
+        //            .y()
+        //            .negate()
+        //            .and(canCloseIntake)
+        //            .onTrue(IntakingStates.CLOSED.set())
+        //        driverController
+        //            .y()
+        //            .negate()
+        //            .and(cantCloseIntake)
+        //            .onTrue(IntakingStates.OPEN.set())
+        driverController.x().onTrue(ShootingState.IDLE.set())
+        driverController.y().onTrue(ShootingState.SHOOTING.set())
+        driverController.b().onTrue(ShootingState.BACKFEEDING.set())
+        driverController.a().onTrue(ShootingState.PRIMING.set())
     }
 
     fun getAutonomousCommand(): Command = autoChooser.get()

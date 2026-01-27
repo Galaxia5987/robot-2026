@@ -1,6 +1,6 @@
 package frc.robot.states.intaking
 
-import frc.robot.states.sensors.Sensors.isHalfFull
+import frc.robot.subsystems.sensors.Sensors.isHalfFull
 
 private val intakingTrigger = IntakingStates.INTAKING.trigger.onTrue(intaking())
 

@@ -1,4 +1,4 @@
-package frc.robot.states.sensors
+package frc.robot.subsystems.sensors
 
 import com.ctre.phoenix6.configs.CANrangeConfiguration
 import com.ctre.phoenix6.configs.ProximityParamsConfigs
