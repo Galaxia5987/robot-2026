@@ -4,6 +4,7 @@ import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
@@ -13,6 +14,12 @@ import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.lib.extensions.not
 import frc.robot.subsystems.sensors.Sensors
 import frc.robot.states.shooting.ShootingState
+import frc.robot.states.intaking.IntakingStates
+import frc.robot.states.intaking.canCloseIntake
+import frc.robot.states.intaking.cantCloseIntake
+import frc.robot.states.spindexer.startFeeding
+import frc.robot.states.spindexer.stop
+import frc.robot.states.spindexer.stopFeeding
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.shooter.flywheel.Flywheel
 import frc.robot.subsystems.shooter.hood.Hood
@@ -20,12 +27,14 @@ import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.shooter.turret.Turret.setAngle
 import frc.robot.subsystems.shooter.turret.turretAngleToHub
+import frc.robot.subsystems.spindexer.Spindexer
+import frc.robot.subsystems.spindexer.SpindexerVelocity
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 
 object RobotContainer {
-    private val driverController = CommandXboxController(0)
+    private val driverController = CommandPS5Controller(0)
     private val autoChooser: LoggedDashboardChooser<Command>
 
     // Shooting state machine triggers
@@ -107,24 +116,32 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
-        //        driverController.x().onTrue(Roller.setTarget(RollerPositions.INTAKE))
-        //
-        //        // Intake Bindings
-        //        driverController.y().onTrue(IntakingStates.INTAKING.set())
-        //        driverController
-        //            .y()
-        //            .negate()
-        //            .and(canCloseIntake)
-        //            .onTrue(IntakingStates.CLOSED.set())
-        //        driverController
-        //            .y()
-        //            .negate()
-        //            .and(cantCloseIntake)
-        //            .onTrue(IntakingStates.OPEN.set())
-        driverController.x().onTrue(ShootingState.IDLE.set())
-        driverController.y().onTrue(ShootingState.SHOOTING.set())
-        driverController.b().onTrue(ShootingState.BACKFEEDING.set())
-        driverController.a().onTrue(ShootingState.PRIMING.set())
+        //        driverController.square().onTrue(Roller.setTarget(RollerPositions.INTAKE))
+
+        // Intake Bindings
+        driverController.triangle().onTrue(IntakingStates.INTAKING.set())
+        driverController
+            .triangle()
+            .negate()
+            .and(canCloseIntake)
+            .onTrue(IntakingStates.CLOSED.set())
+        driverController
+            .triangle()
+            .negate()
+            .and(cantCloseIntake)
+            .onTrue(IntakingStates.OPEN.set())
+
+        driverController
+            .cross()
+            .onTrue(Spindexer.setTarget(SpindexerVelocity.REVERSE_SLOW))
+        driverController
+            .circle()
+            .onTrue(Spindexer.setTarget(SpindexerVelocity.REVERSE))
+        driverController
+            .triangle()
+            .onTrue(startFeeding())
+            .onFalse(stopFeeding())
+        driverController.square().onTrue(stop())
     }
 
     fun getAutonomousCommand(): Command = autoChooser.get()
