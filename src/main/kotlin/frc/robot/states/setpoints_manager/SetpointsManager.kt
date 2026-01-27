@@ -34,13 +34,27 @@ private val goalOutpostTrigger =
         .and(!inAllianceZone)
         .onTrue(runOnce({ currentGoal = OUTPOST_LOCATION }))
 
-fun <T : SubsystemBase, M : Measure<out Unit>> T.aimingSetpoint(): M {
-    val result =
+enum class ShootingType {
+    STATIC,
+    INTERPOLATION,
+    SHOOT_ON_MOVE
+}
+
+val shootingType
+    get() =
         when {
             DriverOverrides.StaticShootingOverride.trigger.asBoolean ->
-                staticShootingMap[this]!!
+                ShootingType.STATIC
             !DriverOverrides.ShootOnMoveOverride.trigger.asBoolean ->
-                interpolationShootingMap[this]!!
+                ShootingType.INTERPOLATION
+            else -> ShootingType.SHOOT_ON_MOVE
+        }
+
+fun <T : SubsystemBase, M : Measure<out Unit>> T.aimingSetpoint(): M {
+    val result =
+        when (shootingType) {
+            ShootingType.STATIC -> staticShootingMap[this]!!
+            ShootingType.INTERPOLATION -> interpolationShootingMap[this]!!
             else -> shootOnMoveMap[this]!!
         }
 

@@ -4,23 +4,23 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.littletonrobotics.junction.Logger
-import org.team5987.annotation.LogLevel
-import org.team5987.annotation.LoggedOutput
 
-const val LOGGING_PATH = "StateMachines/Intaking"
+private const val LOGGING_PATH = "StateMachines/Intaking"
 
-enum class IntakingStates {
-    CLOSED,
-    INTAKING,
-    OPEN,
-    PUMPING;
+enum class IntakingStates(private val bindCommand: Command) {
+    CLOSED(closed()),
+    INTAKING(intaking()),
+    OPEN(open()),
+    PUMPING(pumping());
 
     val trigger = Trigger { state == this }
 
-    fun set(): Command = runOnce({
-        state = this
-        Logger.recordOutput("$LOGGING_PATH/state", state)
-    })
+    fun set(): Command =
+        runOnce({
+                state = this
+                Logger.recordOutput("$LOGGING_PATH/state", state)
+            })
+            .alongWith(bindCommand)
 }
 
 private var state: IntakingStates = IntakingStates.CLOSED

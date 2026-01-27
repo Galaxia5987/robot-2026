@@ -7,10 +7,6 @@ object SpindexerCommands {
     internal var isFeeding = false
     internal var isIntaking = false
 
-    private fun setFeeding(value: Boolean) = runOnce({ isFeeding = value })
-
-    private fun setIntaking(value: Boolean) = runOnce({ isIntaking = value })
-
     fun startFeeding(): Command = runOnce({ isFeeding = true })
 
     fun stopFeeding(): Command = runOnce({ isFeeding = false })

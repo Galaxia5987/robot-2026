@@ -7,15 +7,15 @@ import org.littletonrobotics.junction.Logger
 
 enum class SpindexerStates {
     ACTIVE,
-
     IDLE;
 
     val trigger = Trigger { state == this }
 
-    fun set(): Command = runOnce({
-        Logger.recordOutput("StateMachines/Spindexer/state", state)
-        state = this
-    })
+    fun set(): Command =
+        runOnce({
+            Logger.recordOutput("StateMachines/Spindexer/state", state)
+            state = this
+        })
 }
 
 private var state: SpindexerStates = SpindexerStates.IDLE

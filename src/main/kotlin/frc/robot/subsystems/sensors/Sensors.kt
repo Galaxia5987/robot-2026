@@ -5,8 +5,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.extensions.m
 import frc.robot.lib.unified_canrange.UnifiedCANRange
 import org.littletonrobotics.junction.Logger
-import org.team5987.annotation.LogLevel
-import org.team5987.annotation.LoggedOutput
 
 object Sensors : SubsystemBase() {
 
