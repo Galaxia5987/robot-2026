@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import frc.robot.drive
 import frc.robot.states.intaking.IntakingStates
+import frc.robot.states.spindexer.SpindexerCommands
 import frc.robot.subsystems.shooter.flywheel.Flywheel
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 import frc.robot.subsystems.spindexer.Spindexer
@@ -18,18 +19,17 @@ internal fun primeSubsystems() =
 internal fun idle(): Command =
     Commands.sequence(
         Flywheel.zero(),
-        Spindexer.stop(), // TODO: Should probably use SpindexerManager
+        SpindexerCommands.stopFeeding(),
         IntakingStates.CLOSED.set()
     )
 
 internal fun priming(): Command =
     Commands.sequence(drive.lock(), primeSubsystems())
 
-internal fun backfeeding(): Command =
-    Commands.sequence(PreShooter.reverse(), Spindexer.reverse())
+internal fun backfeeding(): Command = PreShooter.reverse()
 
 internal fun shooting(): Command =
     Commands.sequence(
-        Spindexer.start(), // TODO: ditto
+        SpindexerCommands.startFeeding(),
         IntakingStates.PUMPING.set()
     )
