@@ -2,6 +2,8 @@ package frc.robot.states.spindexer
 
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.states.spindexer.SpindexerCommands.isFeeding
+import frc.robot.states.spindexer.SpindexerCommands.isIntaking
 import frc.robot.subsystems.spindexer.Spindexer
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
