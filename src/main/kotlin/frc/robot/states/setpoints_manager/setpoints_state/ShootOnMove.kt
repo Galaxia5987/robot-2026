@@ -20,27 +20,43 @@ import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 import frc.robot.subsystems.shooter.turret.Turret
 
 private fun getTurretSetpoint(): Angle {
-    return calculateYaw(distanceFromGoal[m],
-        drive.chassisSpeeds.vxMetersPerSecond,
-        drive.chassisSpeeds.vyMetersPerSecond).deg
+    return calculateYaw(
+            distanceFromGoal[m],
+            drive.chassisSpeeds.vxMetersPerSecond,
+            drive.chassisSpeeds.vyMetersPerSecond
+        )
+        .deg
 }
 
 private fun getHoodSetpoint(): Angle {
-    return calculatePitch(distanceFromGoal[m],
-        drive.chassisSpeeds.vxMetersPerSecond,
-        drive.chassisSpeeds.vyMetersPerSecond).deg
+    return calculatePitch(
+            distanceFromGoal[m],
+            drive.chassisSpeeds.vxMetersPerSecond,
+            drive.chassisSpeeds.vyMetersPerSecond
+        )
+        .deg
 }
 
 private fun getFlywheelSetpoint(): AngularVelocity {
-    return calculateLinearToAngularVelocity(calculateVelocity(distanceFromGoal[m],
-        drive.chassisSpeeds.vxMetersPerSecond,
-        drive.chassisSpeeds.vyMetersPerSecond)).rps
+    return calculateLinearToAngularVelocity(
+            calculateVelocity(
+                distanceFromGoal[m],
+                drive.chassisSpeeds.vxMetersPerSecond,
+                drive.chassisSpeeds.vyMetersPerSecond
+            )
+        )
+        .rps
 }
 
 private fun getPreShooterSetpoint(): AngularVelocity {
-    return calculateLinearToAngularVelocity(calculateVelocity(distanceFromGoal[m],
-        drive.chassisSpeeds.vxMetersPerSecond,
-        drive.chassisSpeeds.vyMetersPerSecond)).rps
+    return calculateLinearToAngularVelocity(
+            calculateVelocity(
+                distanceFromGoal[m],
+                drive.chassisSpeeds.vxMetersPerSecond,
+                drive.chassisSpeeds.vyMetersPerSecond
+            )
+        )
+        .rps
 }
 
 val shootOnMoveMap: Map<SubsystemBase, () -> Measure<out Unit>> =

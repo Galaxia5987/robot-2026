@@ -25,7 +25,8 @@ import frc.robot.subsystems.shooter.turret.turretAngleToHub
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
-@LoggedOutput(LogLevel.COMP) val distanceFromGoal: Distance
+@LoggedOutput(LogLevel.COMP)
+val distanceFromGoal: Distance
     get() = drive.pose.distanceFromPoint(currentGoal)
 
 private val SHOOTER_VELOCITY_BY_DISTANCE: InterpolatingDoubleMap =
@@ -44,20 +45,17 @@ private fun getTurretSetpoint(): Angle {
 }
 
 private fun getHoodSetpoint(): Angle {
-    val hoodKey =
-        InterpolatingDouble(distanceFromGoal[m])
+    val hoodKey = InterpolatingDouble(distanceFromGoal[m])
     return SHOOTER_ANGLE_BY_DISTANCE.getInterpolated(hoodKey).value.degrees
 }
 
 private fun getFlywheelSetpoint(): AngularVelocity {
-    val flywheelKey =
-        InterpolatingDouble(distanceFromGoal[m])
+    val flywheelKey = InterpolatingDouble(distanceFromGoal[m])
     return SHOOTER_VELOCITY_BY_DISTANCE.getInterpolated(flywheelKey).value.rps
 }
 
 private fun getPreShooterSetpoint(): AngularVelocity {
-    val preShooterKey =
-        InterpolatingDouble(distanceFromGoal[m])
+    val preShooterKey = InterpolatingDouble(distanceFromGoal[m])
     return SHOOTER_VELOCITY_BY_DISTANCE.getInterpolated(preShooterKey).value.rps
 }
 

@@ -1,5 +1,7 @@
 package frc.robot.field
 
+import com.pathplanner.lib.util.FlippingUtil
+import edu.wpi.first.math.geometry.Rectangle2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.Trigger
@@ -13,7 +15,16 @@ var CLIMB_LOCATION = Translation2d(4090.6.mm, 5457.8.mm)
 var OUTPOST_LOCATION = Translation2d(3026.5.mm, 7940.6.mm)
 var DEPOT_LOCATION = Translation2d(3692.8.mm, 2641.6.mm)
 
-var ALLIANCE_ZONE_LIMIT = Translation2d(4.6.m, 0.m)
+var ALLIANCE_ZONE_RECTANGLE =
+    Rectangle2d(
+        Translation2d(),
+        Translation2d(3972.7.mm, FlippingUtil.fieldSizeY.m)
+    )
+var CROSS_LINE_RECTANGLE =
+    Rectangle2d(
+        Translation2d(),
+        Translation2d(FlippingUtil.fieldSizeX, FlippingUtil.fieldSizeY / 2)
+    )
 
 val allianceColorTrigger = Trigger { IS_RED }.onTrue(flipAllianceLocation())
 
@@ -24,5 +35,6 @@ private fun flipAllianceLocation() =
         OUTPOST_LOCATION = OUTPOST_LOCATION.flip()
         DEPOT_LOCATION = DEPOT_LOCATION.flip()
 
-        ALLIANCE_ZONE_LIMIT = ALLIANCE_ZONE_LIMIT.flip()
+        ALLIANCE_ZONE_RECTANGLE = ALLIANCE_ZONE_RECTANGLE.flip()
+        CROSS_LINE_RECTANGLE = CROSS_LINE_RECTANGLE.flip()
     })

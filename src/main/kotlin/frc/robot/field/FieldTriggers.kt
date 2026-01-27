@@ -2,17 +2,16 @@ package frc.robot.field
 
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.drive
-import frc.robot.lib.IS_RED
+import frc.robot.lib.extensions.not
 
 var inAllianceZone = Trigger {
-    (drive.pose.x < ALLIANCE_ZONE_LIMIT.x && !IS_RED) ||
-        (drive.pose.x > ALLIANCE_ZONE_LIMIT.x && IS_RED)
+    ALLIANCE_ZONE_RECTANGLE.contains(drive.pose.translation)
 }
-var outOfAllianceZone_BelowCrossLine = Trigger {
-    (drive.pose.x > ALLIANCE_ZONE_LIMIT.x && !IS_RED && drive.pose.y < 4.6) ||
-        (drive.pose.x < ALLIANCE_ZONE_LIMIT.x && IS_RED && drive.pose.y < 4.6)
-}
-var outOfAllianceZone_AboveCrossLine = Trigger {
-    (drive.pose.x > ALLIANCE_ZONE_LIMIT.x && !IS_RED && drive.pose.y > 4.6) ||
-        (drive.pose.x < ALLIANCE_ZONE_LIMIT.x && IS_RED && drive.pose.y > 4.6)
-}
+
+var outOfAllianceZoneBelowCrossLine: Trigger =
+    Trigger { CROSS_LINE_RECTANGLE.contains(drive.pose.translation) }
+        .and(!inAllianceZone)
+
+var outOfAllianceZoneAboveCrossLine: Trigger =
+    Trigger { !CROSS_LINE_RECTANGLE.contains(drive.pose.translation) }
+        .and(!inAllianceZone)
