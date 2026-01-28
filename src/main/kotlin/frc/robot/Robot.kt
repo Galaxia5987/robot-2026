@@ -8,6 +8,7 @@ import com.pathplanner.lib.commands.PathfindingCommand
 import edu.wpi.first.hal.FRCNetComm.tInstances
 import edu.wpi.first.hal.FRCNetComm.tResourceType
 import edu.wpi.first.hal.HAL
+import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.PowerDistribution
 import edu.wpi.first.wpilibj2.command.Command
@@ -96,32 +97,7 @@ object Robot : LoggedRobot() {
                 PathfindingCommand.warmupCommand()
             )
 
-        val commandCounts = HashMap<String, Int>()
-        val logCommandFunction =
-            { command: Command, active: Boolean, verb: String ->
-                val name = command.name
-                val count =
-                    commandCounts.getOrDefault(name, 0) +
-                        (if (active) 1 else -1)
-                commandCounts[name] = count
-                Logger.recordOutput(
-                    "Commands/Unique/" +
-                        name +
-                        "_" +
-                        Integer.toHexString(command.hashCode()),
-                    active
-                )
-                Logger.recordOutput("Commands/All/$name", count > 0)
-            }
-        CommandScheduler.getInstance().onCommandInitialize {
-            logCommandFunction(it, true, "initialized")
-        }
-        CommandScheduler.getInstance().onCommandFinish {
-            logCommandFunction(it, false, "finished")
-        }
-        CommandScheduler.getInstance().onCommandInterrupt { command ->
-            logCommandFunction(command, false, "interrupted")
-        }
+        Logger.recordOutput("Visualization/zeroedPositions", * Array(11) { Pose3d() })
     }
 
     /**

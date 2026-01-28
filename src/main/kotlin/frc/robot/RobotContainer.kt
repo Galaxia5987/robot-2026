@@ -122,24 +122,24 @@ object RobotContainer {
         //        driverController.square().onTrue(Roller.setTarget(RollerPositions.INTAKE))
 
         // Intake Bindings
-        driverController.triangle().onTrue(IntakingStates.INTAKING.set())
-        driverController
-            .triangle()
-            .negate()
-            .and(canCloseIntake)
-            .onTrue(IntakingStates.CLOSED.set())
-        driverController
-            .triangle()
-            .negate()
-            .and(cantCloseIntake)
-            .onTrue(IntakingStates.OPEN.set())
-
-        driverController
-            .cross()
-            .onTrue(Spindexer.setTarget(SpindexerVelocity.REVERSE_SLOW))
-        driverController
-            .circle()
-            .onTrue(Spindexer.setTarget(SpindexerVelocity.REVERSE))
+//        driverController.triangle().onTrue(IntakingStates.INTAKING.set())
+//        driverController
+//            .triangle()
+//            .negate()
+//            .and(canCloseIntake)
+//            .onTrue(IntakingStates.CLOSED.set())
+//        driverController
+//            .triangle()
+//            .negate()
+//            .and(cantCloseIntake)
+//            .onTrue(IntakingStates.OPEN.set())
+//
+//        driverController
+//            .cross()
+//            .onTrue(Spindexer.setTarget(SpindexerVelocity.REVERSE_SLOW))
+//        driverController
+//            .circle()
+//            .onTrue(Spindexer.setTarget(SpindexerVelocity.REVERSE))
     }
 
     fun getAutonomousCommand(): Command = autoChooser.get()

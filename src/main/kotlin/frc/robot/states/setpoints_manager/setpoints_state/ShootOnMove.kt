@@ -5,11 +5,7 @@ import edu.wpi.first.units.Unit
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.AngularVelocity
 import edu.wpi.first.wpilibj2.command.SubsystemBase
-import frc.robot.calculateAngularvelocity
-import frc.robot.calculatePitch
-import frc.robot.calculateVelocity
-import frc.robot.calculateYaw
-import frc.robot.drive
+import frc.robot.*
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.m
@@ -38,7 +34,7 @@ private fun getHoodSetpoint(): Angle {
 }
 
 private fun getFlywheelSetpoint(): AngularVelocity {
-    return calculateAngularvelocity(
+    return calculateAngularVelocity(
             calculateVelocity(
                 distanceFromGoal[m],
                 drive.chassisSpeeds.vxMetersPerSecond,
@@ -49,7 +45,7 @@ private fun getFlywheelSetpoint(): AngularVelocity {
 }
 
 private fun getPreShooterSetpoint(): AngularVelocity {
-    return calculateAngularvelocity(
+    return calculateAngularVelocity(
             calculateVelocity(
                 distanceFromGoal[m],
                 drive.chassisSpeeds.vxMetersPerSecond,
