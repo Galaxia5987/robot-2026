@@ -14,5 +14,20 @@
     0
   ],
   "cameras": [],
-  "components": []
+  "components": [
+    {
+      "_comment": "model_0 Intake Extender",
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": 90
+        }
+      ],
+      "zeroedPosition": [
+        0,
+        0,
+        0
+      ]
+    }
+  ]
 }
