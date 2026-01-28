@@ -97,7 +97,10 @@ object Robot : LoggedRobot() {
                 PathfindingCommand.warmupCommand()
             )
 
-        Logger.recordOutput("Visualization/zeroedPositions", * Array(11) { Pose3d() })
+        Logger.recordOutput(
+            "Visualization/zeroedPositions",
+            *Array(11) { Pose3d() }
+        )
     }
 
     /**
