@@ -7,6 +7,10 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
+import frc.robot.RobotContainer.Shooting.atGoal
+import frc.robot.RobotContainer.Shooting.canShoot
+import frc.robot.RobotContainer.Shooting.isShootingOnMove
+import frc.robot.field.inAllianceZone
 import frc.robot.field_constants.ALLIANCE_ZONE
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
@@ -18,6 +22,7 @@ import frc.robot.states.setpoints_manager.ShootingType
 import frc.robot.states.setpoints_manager.shootingType
 import frc.robot.states.shooting.ShootingState
 import frc.robot.subsystems.drive.DriveCommands
+import frc.robot.subsystems.drive.atGoal
 import frc.robot.subsystems.sensors.Sensors
 import frc.robot.subsystems.shooter.flywheel.Flywheel
 import frc.robot.subsystems.shooter.hood.Hood
@@ -37,48 +42,13 @@ object RobotContainer {
 
     // Shooting state machine triggers
     private object Shooting {
-        private val isInTeamZone = Trigger {
-            ALLIANCE_ZONE.contains(drive.pose.translation)
-        }
-
         private val dontShoot = driverController.L1()
 
-        private val canShoot =
-            Trigger { isOurHubActive }.and(isInTeamZone).and(dontShoot.negate())
+        val canShoot: Trigger = isHubActive.and(inAllianceZone).and(dontShoot.negate())
 
-        private val atGoal =
-            Hood.atSetpoint
-                .and(Turret.atSetpoint)
-                .and(Flywheel.atSetpoint)
-                .and(PreShooter.atSetpoint)
 
-        private val isShootingOnMove = Trigger {
+        val isShootingOnMove = Trigger {
             shootingType == ShootingType.SHOOT_ON_MOVE
-        }
-
-        init {
-            canShoot.negate().onTrue(ShootingState.IDLE.set())
-
-            ShootingState.IDLE.trigger
-                .and(canShoot)
-                .onTrue(ShootingState.PRIMING.set())
-
-            ShootingState.PRIMING.trigger
-                .onTrue(drive.lock().onlyIf(isShootingOnMove))
-                .and(atGoal)
-                .onTrue(ShootingState.SHOOTING.set())
-
-            ShootingState.SHOOTING.trigger
-                .and(atGoal.negate())
-                .onTrue(ShootingState.BACKFEEDING.set())
-
-            ShootingState.BACKFEEDING.trigger
-                .and(!Sensors.hasFuel)
-                .onTrue(ShootingState.PRIMING.set())
-
-            ShootingState.SHOOTING.trigger
-                .and(Sensors.hasFuel.negate())
-                .onTrue(ShootingState.IDLE.set())
         }
     }
 
@@ -119,8 +89,6 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
-        //        driverController.square().onTrue(Roller.setTarget(RollerPositions.INTAKE))
-
         // Intake Bindings
         driverController.triangle().onTrue(IntakingStates.INTAKING.set())
         driverController
@@ -134,12 +102,28 @@ object RobotContainer {
             .and(cantCloseIntake)
             .onTrue(IntakingStates.OPEN.set())
 
-        driverController
-            .cross()
-            .onTrue(Spindexer.setTarget(SpindexerVelocity.REVERSE_SLOW))
-        driverController
-            .circle()
-            .onTrue(Spindexer.setTarget(SpindexerVelocity.REVERSE))
+        canShoot.negate().onTrue(ShootingState.IDLE.set())
+
+        ShootingState.IDLE.trigger
+            .and(canShoot)
+            .onTrue(ShootingState.PRIMING.set())
+
+        ShootingState.PRIMING.trigger
+            .onTrue(drive.lock().onlyIf(isShootingOnMove))
+            .and(atGoal)
+            .onTrue(ShootingState.SHOOTING.set())
+
+        ShootingState.SHOOTING.trigger
+            .and(!atGoal)
+            .onTrue(ShootingState.BACKFEEDING.set())
+
+        ShootingState.BACKFEEDING.trigger
+            .and(!Sensors.hasFuel)
+            .onTrue(ShootingState.PRIMING.set())
+
+        ShootingState.SHOOTING.trigger
+            .and(!Sensors.hasFuel)
+            .onTrue(ShootingState.IDLE.set())
     }
 
     fun getAutonomousCommand(): Command = autoChooser.get()
