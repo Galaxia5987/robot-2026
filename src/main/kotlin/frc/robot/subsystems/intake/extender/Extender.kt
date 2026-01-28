@@ -3,7 +3,6 @@ package frc.robot.subsystems.intake.extender
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC
 import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.CANcoder
-import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.lib.extensions.meters
@@ -46,10 +45,6 @@ object Extender : SubsystemBase(), ExtenderPositionsCommandFactory {
                 value.distance.toAngle(DIAMETER, GEAR_RATIO)
             )
         )
-    }
-
-    fun setVoltage(voltage: Voltage) {
-        return motor.setControl(voltageOut.withOutput(voltage))
     }
 
     override fun periodic() {
