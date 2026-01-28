@@ -15,14 +15,14 @@ internal fun closed(): Command {
 internal fun intaking(): Command {
     return Roller.intake()
         .alongWith(
-            Extender.open().alongWith(SpindexerCommands.startIntaking())
+            Extender.open(),
+            (SpindexerCommands.startIntaking())
         ) // Spindexer Intaking
 }
 
 internal fun open(): Command {
     return Extender.open()
-        .alongWith(Roller.intake())
-        .alongWith(SpindexerCommands.stopIntaking())
+        .alongWith(Roller.intake(), SpindexerCommands.stopIntaking())
 }
 
 internal fun pumping(): Command {
