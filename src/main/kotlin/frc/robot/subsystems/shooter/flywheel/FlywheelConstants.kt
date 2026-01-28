@@ -1,4 +1,4 @@
-package frc.robot.subsystems.flywheel
+package frc.robot.subsystems.shooter.flywheel
 
 import com.ctre.phoenix6.configs.FeedbackConfigs
 import com.ctre.phoenix6.configs.MotorOutputConfigs
@@ -18,6 +18,8 @@ val REAL_GAINS = Gains(kP = 0.0, kS = 0.0, kV = 0.0)
 val SIM_GAINS = Gains(kP = 1.0, kS = 0.0)
 
 val MAIN_MOTOR_PORT = 0
+
+val FLYWHEEL_TOLERANCE = 0.3.rps
 
 val AUXILIARY_MOTORS_PORTS =
     mapOf<Int, MotorAlignmentValue>(

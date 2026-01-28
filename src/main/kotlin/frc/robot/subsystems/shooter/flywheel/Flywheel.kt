@@ -1,10 +1,11 @@
-package frc.robot.subsystems.flywheel
+package frc.robot.subsystems.shooter.flywheel
 
 import com.ctre.phoenix6.controls.Follower
 import com.ctre.phoenix6.controls.VelocityVoltage
 import edu.wpi.first.units.measure.AngularVelocity
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.extensions.rps
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.Logger
@@ -38,6 +39,10 @@ object Flywheel : SubsystemBase(), FlywheelVelocitiesCommandFactory {
             "/Tuning/Flywheel/calibrationFlywheelVelocity",
             40.0
         )
+
+    var atSetpoint = Trigger {
+        motor.inputs.velocity.isNear(setpoint, FLYWHEEL_TOLERANCE)
+    }
 
     fun setCalibrationVelocity(): Command = setVelocity {
         calibrationVelocity.get().rps

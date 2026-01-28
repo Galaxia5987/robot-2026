@@ -4,21 +4,53 @@ import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
+import edu.wpi.first.wpilibj2.command.button.Trigger
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
+import frc.robot.RobotContainer.Shooting.atGoal
+import frc.robot.RobotContainer.Shooting.canShoot
+import frc.robot.RobotContainer.Shooting.isShootingOnMove
+import frc.robot.field.inAllianceZone
+import frc.robot.field_constants.ALLIANCE_ZONE
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
+import frc.robot.lib.extensions.not
+import frc.robot.states.intaking.IntakingStates
+import frc.robot.states.intaking.canCloseIntake
+import frc.robot.states.intaking.cantCloseIntake
+import frc.robot.states.setpoints_manager.ShootingType
+import frc.robot.states.setpoints_manager.shootingType
+import frc.robot.states.shooting.ShootingState
 import frc.robot.subsystems.drive.DriveCommands
+import frc.robot.subsystems.drive.atGoal
+import frc.robot.subsystems.sensors.Sensors
+import frc.robot.subsystems.shooter.flywheel.Flywheel
+import frc.robot.subsystems.shooter.hood.Hood
+import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.shooter.turret.Turret.setAngle
 import frc.robot.subsystems.shooter.turret.turretAngleToHub
+import frc.robot.subsystems.spindexer.Spindexer
+import frc.robot.subsystems.spindexer.SpindexerVelocity
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 
 object RobotContainer {
-    private val driverController = CommandXboxController(0)
+    private val driverController = CommandPS5Controller(0)
     private val autoChooser: LoggedDashboardChooser<Command>
+
+    // Shooting state machine triggers
+    private object Shooting {
+        private val dontShoot = driverController.L1()
+
+        val canShoot: Trigger = isHubActive.and(inAllianceZone).and(dontShoot.negate())
+
+
+        val isShootingOnMove = Trigger {
+            shootingType == ShootingType.SHOOT_ON_MOVE
+        }
+    }
 
     init {
         drive // Ensure Drive is initialized
@@ -39,6 +71,7 @@ object RobotContainer {
         }
 
         enableAutoLogOutputFor(this)
+        Shooting
     }
 
     @AutoLogOutput(key = "MapleSimPose")
@@ -55,7 +88,43 @@ object RobotContainer {
         Turret.defaultCommand = setAngle { turretAngleToHub }
     }
 
-    private fun configureButtonBindings() {}
+    private fun configureButtonBindings() {
+        // Intake Bindings
+        driverController.triangle().onTrue(IntakingStates.INTAKING.set())
+        driverController
+            .triangle()
+            .negate()
+            .and(canCloseIntake)
+            .onTrue(IntakingStates.CLOSED.set())
+        driverController
+            .triangle()
+            .negate()
+            .and(cantCloseIntake)
+            .onTrue(IntakingStates.OPEN.set())
+
+        canShoot.negate().onTrue(ShootingState.IDLE.set())
+
+        ShootingState.IDLE.trigger
+            .and(canShoot)
+            .onTrue(ShootingState.PRIMING.set())
+
+        ShootingState.PRIMING.trigger
+            .onTrue(drive.lock().onlyIf(isShootingOnMove))
+            .and(atGoal)
+            .onTrue(ShootingState.SHOOTING.set())
+
+        ShootingState.SHOOTING.trigger
+            .and(!atGoal)
+            .onTrue(ShootingState.BACKFEEDING.set())
+
+        ShootingState.BACKFEEDING.trigger
+            .and(!Sensors.hasFuel)
+            .onTrue(ShootingState.PRIMING.set())
+
+        ShootingState.SHOOTING.trigger
+            .and(!Sensors.hasFuel)
+            .onTrue(ShootingState.IDLE.set())
+    }
 
     fun getAutonomousCommand(): Command = autoChooser.get()
 

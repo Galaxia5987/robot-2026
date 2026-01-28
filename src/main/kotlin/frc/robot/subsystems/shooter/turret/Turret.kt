@@ -31,7 +31,7 @@ object Turret : SubsystemBase() {
     private val positionTorqueCurrentFOC: PositionTorqueCurrentFOC =
         PositionTorqueCurrentFOC(0.0)
     private var setpoint = 0.deg
-    val isAtSetpoint = Trigger {
+    val atSetpoint = Trigger {
         motor.inputs.position.isNear(setpoint, SETPOINT_TOLERANCE)
     }
 
@@ -54,6 +54,6 @@ object Turret : SubsystemBase() {
         ligament.setAngle(motor.inputs.position)
         Logger.recordOutput("Subsystems/$name/mechanism", mechanism)
         Logger.recordOutput("Subsystems/$name/setpoint", setpoint)
-        Logger.recordOutput("Subsystems/$name/atSetpoint", isAtSetpoint)
+        Logger.recordOutput("Subsystems/$name/atSetpoint", atSetpoint)
     }
 }

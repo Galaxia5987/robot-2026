@@ -114,7 +114,7 @@ public class Drive extends SubsystemBase implements SysIdable {
             DriveTrainSimulationConfig.Default()
                     .withRobotMass(Kilograms.of(ROBOT_MASS_KG))
                     .withCustomModuleTranslations(getModuleTranslations())
-                    .withGyro(COTS.ofNav2X())
+                    .withGyro(COTS.ofPigeon2())
                     .withSwerveModule(
                             new SwerveModuleSimulationConfig(
                                     DCMotor.getKrakenX60(1),
@@ -247,6 +247,7 @@ public class Drive extends SubsystemBase implements SysIdable {
             ModuleIO brModuleIO,
             Consumer<Pose2d> resetSimulationPoseCallBack) {
         this.gyroIO = gyroIO;
+
         this.resetSimulationPoseCallBack = resetSimulationPoseCallBack;
         modules[0] = new Module(flModuleIO, 0, TunerConstants.FrontLeft);
         modules[1] = new Module(frModuleIO, 1, TunerConstants.FrontRight);

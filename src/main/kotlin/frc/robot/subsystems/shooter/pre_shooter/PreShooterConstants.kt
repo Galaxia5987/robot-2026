@@ -1,4 +1,4 @@
-package frc.robot.subsystems.preShooter
+package frc.robot.subsystems.shooter.pre_shooter
 
 import com.ctre.phoenix6.configs.MotorOutputConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
