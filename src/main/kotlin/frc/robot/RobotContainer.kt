@@ -180,7 +180,6 @@ object RobotContainer {
     fun resetSimulationField() {
         if (CURRENT_MODE != Mode.SIM) return
 
-        drive.resetOdometry(Pose2d(3.0, 3.0, Rotation2d()))
         SimulatedArena.getInstance().resetFieldForAuto()
     }
 }
