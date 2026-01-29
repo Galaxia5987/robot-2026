@@ -23,7 +23,7 @@ fun climb(climbLocation: Pose2d = CLIMB_LOCATION): Command =
     Commands.sequence(
         overrideStates,
         profiledAlignToPose(climbLocation)
-            .onlyIf(!DriverOverrides.AlignmentOverride.trigger),
+            .unless(DriverOverrides.AlignmentOverride.trigger),
         Climb.engaged()
     )
         .withName("climb")
