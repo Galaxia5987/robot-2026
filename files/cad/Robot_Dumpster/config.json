@@ -168,6 +168,10 @@
         {
           "axis": "x",
           "degrees": 90
+        },
+        {
+          "axis": "z",
+          "degrees": 90
         }
       ],
       "zeroedPosition": [
@@ -182,6 +186,10 @@
         {
           "axis": "x",
           "degrees": 90
+        },
+        {
+          "axis": "z",
+          "degrees": -90
         }
       ],
       "zeroedPosition": [
@@ -192,6 +200,38 @@
     },
     {
       "_comment": "model_11 Pre Shooter Third Roller",
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": 90
+        },
+        {
+          "axis": "z",
+          "degrees": -90
+        }
+      ],
+      "zeroedPosition": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "_comment": "model_12 Climb Grabber",
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": 90
+        }
+      ],
+      "zeroedPosition": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "_comment": "model_13 Climb Wrist",
       "zeroedRotations": [
         {
           "axis": "x",

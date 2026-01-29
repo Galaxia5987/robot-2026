@@ -106,7 +106,9 @@ enum class Poses(
     ),
     PRE_SHOOTER_ROLLER({ getTranslation3d((-63).mm, 90.mm, 211.mm) }),
     PRE_SHOOTER_SECOND_ROLLER({ getTranslation3d((-22).mm, 130.mm, 295.mm) }),
-    PRE_SHOOTER_THIRD_ROLLER({ getTranslation3d((-23.5).mm, 315.mm, 295.mm) });
+    PRE_SHOOTER_THIRD_ROLLER({ getTranslation3d((-23.5).mm, 315.mm, 295.mm) }),
+    CLIMB_GRABBER({ getTranslation3d(0.mm) }),
+    CLIMB_WRIST({ getTranslation3d(0.mm) });
 
     val pose: Pose3d
         get() = Pose3d(translation3d(), rotation3d())
@@ -132,8 +134,10 @@ fun mechanismPoses(): Array<Pose3d> {
     subsystemPoseArray[7] = Poses.HOOD_ROLLER.pose
     subsystemPoseArray[8] = Poses.SPINDEXER.pose
     subsystemPoseArray[9] = Poses.PRE_SHOOTER_ROLLER.pose
-    subsystemPoseArray[9] = Poses.PRE_SHOOTER_SECOND_ROLLER.pose
-    subsystemPoseArray[9] = Poses.PRE_SHOOTER_THIRD_ROLLER.pose
+    subsystemPoseArray[10] = Poses.PRE_SHOOTER_SECOND_ROLLER.pose
+    subsystemPoseArray[11] = Poses.PRE_SHOOTER_THIRD_ROLLER.pose
+    subsystemPoseArray[12] = Poses.CLIMB_GRABBER.pose
+    subsystemPoseArray[13] = Poses.CLIMB_WRIST.pose
 
     return subsystemPoseArray
 }
@@ -179,6 +183,14 @@ private val tuningSubsystemPoses =
         TunablePose3d(
             "/Tuning/Visualization/PreShooterThirdRoller",
             Poses.PRE_SHOOTER_THIRD_ROLLER.pose
+        ),
+        TunablePose3d(
+            "/Tuning/Visualization/ClimbGrabber",
+            Poses.CLIMB_GRABBER.pose
+        ),
+        TunablePose3d(
+            "/Tuning/Visualization/ClimbWrist",
+            Poses.CLIMB_WRIST.pose
         ),
     )
 
