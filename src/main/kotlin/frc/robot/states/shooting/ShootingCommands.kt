@@ -9,22 +9,22 @@ import frc.robot.subsystems.shooter.flywheel.Flywheel
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 
 // State Commands
-internal fun idle(): Command =
+fun idle(): Command =
     Commands.sequence(
         Flywheel.zero(),
         SpindexerCommands.stopFeeding(),
         IntakingStates.CLOSED.set()
     )
 
-internal fun priming(): Command =
+fun priming(): Command =
     Commands.sequence(
         Flywheel.setVelocity { Flywheel.aimingSetpoint() },
         PreShooter.setVelocity { Flywheel.aimingSetpoint() }
     )
 
-internal fun backfeeding(): Command = PreShooter.reverse()
+fun backfeeding(): Command = PreShooter.reverse()
 
-internal fun shooting(): Command =
+fun shooting(): Command =
     Commands.sequence(
         SpindexerCommands.startFeeding(),
         IntakingStates.PUMPING.set()
