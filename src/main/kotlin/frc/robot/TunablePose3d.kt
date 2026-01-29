@@ -8,12 +8,18 @@ import edu.wpi.first.units.measure.Distance
 import frc.robot.lib.extensions.*
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
-class TunableTranslation3d(key: String, x: Distance = 0.mm, y: Distance = 0.mm, z: Distance = 0.mm) {
+class TunableTranslation3d(
+    key: String,
+    x: Distance = 0.mm,
+    y: Distance = 0.mm,
+    z: Distance = 0.mm
+) {
     private val tunableX = LoggedNetworkNumber("$key/x_mm", x[mm])
     private val tunableY = LoggedNetworkNumber("$key/y_mm", y[mm])
     private val tunableZ = LoggedNetworkNumber("$key/z_mm", z[mm])
 
-    fun get(): Translation3d = Translation3d(tunableX.get().mm, tunableY.get().mm, tunableZ.get().mm)
+    fun get(): Translation3d =
+        Translation3d(tunableX.get().mm, tunableY.get().mm, tunableZ.get().mm)
 }
 
 class TunableRotation3d(
@@ -39,25 +45,26 @@ class TunablePose3d(
     translation: Translation3d = Translation3d(),
     rotation: Rotation3d = Rotation3d()
 ) {
-    constructor(key: String, pose: Pose3d) : this(key, pose.translation, pose.rotation)
+    constructor(
+        key: String,
+        pose: Pose3d
+    ) : this(key, pose.translation, pose.rotation)
 
-    private val tunableTranslation = TunableTranslation3d(
-        "$key/translation",
-        translation.x.meters,
-        translation.y.meters,
-        translation.z.meters
-    )
-
-    private val tunableRotation = TunableRotation3d(
-        "$key/rotation",
-        rotation.measureX,
-        rotation.measureY,
-        rotation.measureZ
-    )
-
-    fun get(): Pose3d =
-        Pose3d(
-            tunableTranslation.get(),
-            tunableRotation.get()
+    private val tunableTranslation =
+        TunableTranslation3d(
+            "$key/translation",
+            translation.x.meters,
+            translation.y.meters,
+            translation.z.meters
         )
+
+    private val tunableRotation =
+        TunableRotation3d(
+            "$key/rotation",
+            rotation.measureX,
+            rotation.measureY,
+            rotation.measureZ
+        )
+
+    fun get(): Pose3d = Pose3d(tunableTranslation.get(), tunableRotation.get())
 }
