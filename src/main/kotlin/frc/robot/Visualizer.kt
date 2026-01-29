@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Translation3d
 import edu.wpi.first.units.measure.Angle
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.m
+import frc.robot.lib.extensions.mm
 import frc.robot.lib.getRotation3d
 import frc.robot.lib.getTranslation3d
 import frc.robot.subsystems.drive.Drive
@@ -73,20 +74,21 @@ private fun getAllSwerveModulePoseDrive(): Array<Pose3d> {
 }
 
 enum class Poses(
-    translation3d: Translation3d = getTranslation3d(0.0),
-    rotation3d: Rotation3d = getRotation3d(0.0),
+    private val translation3d: Translation3d = getTranslation3d(0.0),
+    private val rotation3d: Rotation3d = getRotation3d(0.0),
 ) {
-    INTAKE_EXTENDER(),
-    EXTENDING_HOPPER(),
-    INTAKE_ROLLER_1(),
-    INTAKE_ROLLER_2(),
-    TURRET(),
-    HOOD(),
-    SHOOTER_MAIN_ROLLER(),
-    HOOD_ROLLER(),
-    SPINDEXER;
+    INTAKE_EXTENDER(getTranslation3d(80.mm, 10.mm, 248.mm)),
+    EXTENDING_HOPPER(getTranslation3d(346.mm, 10.mm, 235.mm)),
+    INTAKE_ROLLER_1(getTranslation3d(323.mm, 10.mm, 197.mm)),
+    INTAKE_ROLLER_2(getTranslation3d(260.mm, 10.mm, 197.mm)),
+    TURRET(getTranslation3d((-116).mm, 220.5.mm, 355.mm)),
+    HOOD(getTranslation3d((-48).mm, 220.5.mm, 436.mm)),
+    SHOOTER_MAIN_ROLLER(getTranslation3d((-48).mm, 220.5.mm, 436.mm)),
+    HOOD_ROLLER(getTranslation3d((-247).mm, 220.5.mm, 489.mm)),
+    SPINDEXER(getTranslation3d((-26).mm, 43.mm, 36.66200.mm));
 
-    val pose = Pose3d(translation3d, rotation3d)
+    val pose: Pose3d
+        get() = Pose3d(translation3d, rotation3d)
 } // TODO add translation and rotation
 
 private val subsystemPoseArray = Array(9) { Pose3d() }
@@ -111,3 +113,19 @@ fun mechanismPoses(): Array<Pose3d> {
 
     return subsystemPoseArray
 }
+
+// For Tuning !!
+//private val tuningSubsystemPoses = arrayOf(
+//    TunablePose3d("/Tuning/Visualization/IntakeExtender", getTranslation3d(z = 3.0.m)),
+//    TunablePose3d("/Tuning/Visualization/ExtendingHopper", getTranslation3d(z = 3.0.m)),
+//    TunablePose3d("/Tuning/Visualization/IntakeRoller1", getTranslation3d(z = 3.0.m)),
+//    TunablePose3d("/Tuning/Visualization/IntakeRoller2", getTranslation3d(z = 3.0.m),),
+//    TunablePose3d("/Tuning/Visualization/Turret", getTranslation3d(z = 3.0.m)),
+//    TunablePose3d("/Tuning/Visualization/Hood", getTranslation3d(z = 3.0.m)),
+//    TunablePose3d("/Tuning/Visualization/ShooterMainRoller", getTranslation3d(z = 3.0.m)),
+//    TunablePose3d("/Tuning/Visualization/HoodRoller", getTranslation3d(z = 3.0.m)),
+//    TunablePose3d("/Tuning/Visualization/Spindexer", getTranslation3d(z = 3.0.m)),
+//)
+//
+//@LoggedOutput(key = "Visualization/TuningMechanismPoses", level = LogLevel.COMP)
+//fun getTuningSubsystemPoses(): Array<Pose3d> = tuningSubsystemPoses.map { it.get() }.toTypedArray()
