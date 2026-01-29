@@ -10,17 +10,17 @@ import frc.robot.subsystems.intake.roller.Roller
 
 fun closed(): Command = Roller.stop().alongWith(Extender.close())
 
-fun intaking(): Command = Roller.intake()
-    .alongWith(
-        Extender.open(),
-        (SpindexerCommands.startIntaking())
-    )
+fun intaking(): Command =
+    Roller.intake()
+        .alongWith(Extender.open(), (SpindexerCommands.startIntaking()))
 
-fun open(): Command = Extender.open().alongWith(Roller.intake(), SpindexerCommands.stopIntaking())
+fun open(): Command =
+    Extender.open().alongWith(Roller.intake(), SpindexerCommands.stopIntaking())
 
-fun pumping(): Command = Commands.sequence(
-    Extender.setTarget(ExtenderPositions.OPEN),
-    Commands.waitTime(0.4.sec),
-    (Extender.setTarget(ExtenderPositions.CLOSE))
-)
-    .repeatedly()
+fun pumping(): Command =
+    Commands.sequence(
+            Extender.setTarget(ExtenderPositions.OPEN),
+            Commands.waitTime(0.4.sec),
+            (Extender.setTarget(ExtenderPositions.CLOSE))
+        )
+        .repeatedly()

@@ -37,8 +37,8 @@ object RobotContainer {
     private object Shooting {
         private val dontShoot = driverController.L1()
 
-        val canShoot: Trigger = isHubActive.and(inAllianceZone).and(dontShoot.negate())
-
+        val canShoot: Trigger =
+            isHubActive.and(inAllianceZone).and(dontShoot.negate())
 
         val isShootingOnMove = Trigger {
             shootingType == ShootingType.SHOOT_ON_MOVE

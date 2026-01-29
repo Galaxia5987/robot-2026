@@ -29,7 +29,8 @@ private val goalDepotTrigger =
         .onTrue(runOnce({ currentGoal = DEPOT_LOCATION }))
 
 private val goalOutpostTrigger =
-    isCloserToDepot.negate()
+    isCloserToDepot
+        .negate()
         .and(!inAllianceZone)
         .onTrue(runOnce({ currentGoal = OUTPOST_LOCATION }))
 

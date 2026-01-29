@@ -14,11 +14,12 @@ enum class IntakingStates(private val bindCommand: Command) {
     PUMPING(pumping());
 
     val trigger = Trigger { state == this }
-    private val command = runOnce({
-        state = this
-        Logger.recordOutput("$LOGGING_PATH/state", state)
-    })
-        .alongWith(bindCommand)
+    private val command =
+        runOnce({
+                state = this
+                Logger.recordOutput("$LOGGING_PATH/state", state)
+            })
+            .alongWith(bindCommand)
 
     fun set(): Command = command
 }

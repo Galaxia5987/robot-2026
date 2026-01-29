@@ -21,9 +21,9 @@ val overrideStates: Command =
 
 fun climb(climbLocation: Pose2d = CLIMB_LOCATION): Command =
     Commands.sequence(
-        overrideStates,
-        profiledAlignToPose(climbLocation)
-            .unless(DriverOverrides.AlignmentOverride.trigger),
-        Climb.engaged()
-    )
+            overrideStates,
+            profiledAlignToPose(climbLocation)
+                .unless(DriverOverrides.AlignmentOverride.trigger),
+            Climb.engaged()
+        )
         .withName("climb")
