@@ -10,7 +10,7 @@ import frc.robot.field.DEPOT_LOCATION
 import frc.robot.field.HUB_LOCATION
 import frc.robot.field.OUTPOST_LOCATION
 import frc.robot.field.inAllianceZone
-import frc.robot.field.isCloserToDepot
+import frc.robot.field.isCloserToDepotSide
 import frc.robot.lib.extensions.not
 import frc.robot.states.DriverOverrides
 import frc.robot.states.setpoints_manager.setpoints_state.interpolationShootingMap
@@ -25,12 +25,12 @@ private val goalHubTrigger =
     inAllianceZone.onTrue(runOnce({ currentGoal = HUB_LOCATION }))
 
 private val goalDepotTrigger =
-    isCloserToDepot
+    isCloserToDepotSide
         .and(!inAllianceZone)
         .onTrue(runOnce({ currentGoal = DEPOT_LOCATION }))
 
 private val goalOutpostTrigger =
-    isCloserToDepot
+    isCloserToDepotSide
         .negate()
         .and(!inAllianceZone)
         .onTrue(runOnce({ currentGoal = OUTPOST_LOCATION }))
@@ -51,17 +51,13 @@ val shootingType
             else -> ShootingType.SHOOT_ON_MOVE
         }
 
-val isShootingOnMove = Trigger {
-    shootingType == ShootingType.SHOOT_ON_MOVE
-}
+val isShootingOnMove = Trigger { shootingType == ShootingType.SHOOT_ON_MOVE }
 
 val isUsingInterpolation = Trigger {
     shootingType == ShootingType.INTERPOLATION
 }
 
-val isUsingStaticSetpoints = Trigger {
-    shootingType == ShootingType.STATIC
-}
+val isUsingStaticSetpoints = Trigger { shootingType == ShootingType.STATIC }
 
 fun <T : SubsystemBase, M : Measure<out Unit>> T.aimingSetpoint(): M {
     val result =
