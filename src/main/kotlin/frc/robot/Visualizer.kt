@@ -74,21 +74,22 @@ private fun getAllSwerveModulePoseDrive(): Array<Pose3d> {
 }
 
 enum class Poses(
-    private val translation3d: Translation3d = getTranslation3d(0.0),
-    private val rotation3d: Rotation3d = getRotation3d(0.0),
+    private val translation3d: () -> Translation3d = { getTranslation3d(0.0) },
+    private val rotation3d: () -> Rotation3d = { getRotation3d(0.0) },
 ) {
-    INTAKE_EXTENDER(getTranslation3d(80.mm, 10.mm, 248.mm)),
-    EXTENDING_HOPPER(getTranslation3d(346.mm, 10.mm, 235.mm)),
-    INTAKE_ROLLER_1(getTranslation3d(323.mm, 10.mm, 197.mm)),
-    INTAKE_ROLLER_2(getTranslation3d(260.mm, 10.mm, 197.mm)),
-    TURRET(getTranslation3d((-116).mm, 220.5.mm, 355.mm)),
-    HOOD(getTranslation3d((-48).mm, 220.5.mm, 436.mm)),
-    SHOOTER_MAIN_ROLLER(getTranslation3d((-48).mm, 220.5.mm, 436.mm)),
-    HOOD_ROLLER(getTranslation3d((-247).mm, 220.5.mm, 489.mm)),
-    SPINDEXER(getTranslation3d((-26).mm, 43.mm, 36.66200.mm));
+    INTAKE_EXTENDER({ getTranslation3d(80.mm, 10.mm, 248.mm) }),
+    EXTENDING_HOPPER({ getTranslation3d(346.mm, 10.mm, 235.mm) }),
+    INTAKE_ROLLER_1({ getTranslation3d(323.mm, 10.mm, 197.mm) }),
+    INTAKE_ROLLER_2({ getTranslation3d(260.mm, 10.mm, 197.mm) }),
+    TURRET(
+        { getTranslation3d((-116).mm, 220.5.mm, 355.mm) }),
+    HOOD({ getTranslation3d((-48).mm, 220.5.mm, 436.mm) }),
+    SHOOTER_MAIN_ROLLER({ getTranslation3d((-48).mm, 220.5.mm, 436.mm) }),
+    HOOD_ROLLER({ getTranslation3d((-247).mm, 220.5.mm, 489.mm) }),
+    SPINDEXER({ getTranslation3d((-26).mm, 43.mm, 36.66200.mm) });
 
     val pose: Pose3d
-        get() = Pose3d(translation3d, rotation3d)
+        get() = Pose3d(translation3d(), rotation3d())
 } // TODO add translation and rotation
 
 private val subsystemPoseArray = Array(9) { Pose3d() }
