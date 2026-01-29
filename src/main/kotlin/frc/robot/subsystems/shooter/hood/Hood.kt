@@ -38,6 +38,8 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
 
     private val positionRequest = PositionTorqueCurrentFOC(0.deg)
     private val voltageRequest = VoltageOut(0.volts)
+    val inputs
+        get() = motor.inputs
 
     init {
         encoder.configurator.apply(ENCODER_CONFIG)

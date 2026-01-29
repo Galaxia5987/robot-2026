@@ -31,6 +31,8 @@ object Turret : SubsystemBase() {
     private val positionTorqueCurrentFOC: PositionTorqueCurrentFOC =
         PositionTorqueCurrentFOC(0.0)
     private var setpoint = 0.deg
+    val inputs
+        get() = motor.inputs
     val atSetpoint = Trigger {
         motor.inputs.position.isNear(setpoint, SETPOINT_TOLERANCE)
     }

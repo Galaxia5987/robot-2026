@@ -11,6 +11,8 @@ import frc.robot.lib.extensions.mm
 import frc.robot.lib.getRotation3d
 import frc.robot.lib.getTranslation3d
 import frc.robot.subsystems.drive.Drive
+import frc.robot.subsystems.shooter.hood.Hood
+import frc.robot.subsystems.shooter.turret.Turret
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
@@ -82,8 +84,13 @@ enum class Poses(
     INTAKE_ROLLER_1({ getTranslation3d(323.mm, 10.mm, 197.mm) }),
     INTAKE_ROLLER_2({ getTranslation3d(260.mm, 10.mm, 197.mm) }),
     TURRET(
-        { getTranslation3d((-116).mm, 220.5.mm, 355.mm) }),
-    HOOD({ getTranslation3d((-48).mm, 220.5.mm, 436.mm) }),
+        { getTranslation3d((-116).mm, 220.5.mm, 355.mm) },
+        { getRotation3d(yaw = Turret.inputs.position) }
+    ),
+    HOOD(
+        { getTranslation3d((-48).mm, 220.5.mm, 436.mm) },
+        { getRotation3d(pitch = Hood.inputs.position) + TURRET.rotation3d() }
+    ),
     SHOOTER_MAIN_ROLLER({ getTranslation3d((-48).mm, 220.5.mm, 436.mm) }),
     HOOD_ROLLER({ getTranslation3d((-247).mm, 220.5.mm, 489.mm) }),
     SPINDEXER({ getTranslation3d((-26).mm, 43.mm, 36.66200.mm) });
@@ -116,7 +123,7 @@ fun mechanismPoses(): Array<Pose3d> {
 }
 
 // For Tuning !!
-//private val tuningSubsystemPoses = arrayOf(
+// private val tuningSubsystemPoses = arrayOf(
 //    TunablePose3d("/Tuning/Visualization/IntakeExtender", getTranslation3d(z = 3.0.m)),
 //    TunablePose3d("/Tuning/Visualization/ExtendingHopper", getTranslation3d(z = 3.0.m)),
 //    TunablePose3d("/Tuning/Visualization/IntakeRoller1", getTranslation3d(z = 3.0.m)),
@@ -126,7 +133,8 @@ fun mechanismPoses(): Array<Pose3d> {
 //    TunablePose3d("/Tuning/Visualization/ShooterMainRoller", getTranslation3d(z = 3.0.m)),
 //    TunablePose3d("/Tuning/Visualization/HoodRoller", getTranslation3d(z = 3.0.m)),
 //    TunablePose3d("/Tuning/Visualization/Spindexer", getTranslation3d(z = 3.0.m)),
-//)
+// )
 //
-//@LoggedOutput(key = "Visualization/TuningMechanismPoses", level = LogLevel.COMP)
-//fun getTuningSubsystemPoses(): Array<Pose3d> = tuningSubsystemPoses.map { it.get() }.toTypedArray()
+// @LoggedOutput(key = "Visualization/TuningMechanismPoses", level = LogLevel.COMP)
+// fun getTuningSubsystemPoses(): Array<Pose3d> = tuningSubsystemPoses.map { it.get()
+// }.toTypedArray()
