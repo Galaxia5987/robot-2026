@@ -108,7 +108,7 @@ enum class Poses(
     PRE_SHOOTER_SECOND_ROLLER({ getTranslation3d((-22).mm, 130.mm, 295.mm) }),
     PRE_SHOOTER_THIRD_ROLLER({ getTranslation3d((-23.5).mm, 315.mm, 295.mm) }),
     CLIMB_GRABBER({ getTranslation3d(0.mm) }),
-    CLIMB_WRIST({ getTranslation3d(0.mm) });
+    CLIMB_WRIST({ getTranslation3d((-250).mm, (-380).mm, 460.mm) });
 
     val pose: Pose3d
         get() = Pose3d(translation3d(), rotation3d())
