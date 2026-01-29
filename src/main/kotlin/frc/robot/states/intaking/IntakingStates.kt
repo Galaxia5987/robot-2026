@@ -15,10 +15,11 @@ enum class IntakingStates {
 
     val trigger = Trigger { state == this }
 
-    fun set(): Command = runOnce({
-        state = this
-        Logger.recordOutput("$LOGGING_PATH/state", state)
-    })
+    fun set(): Command =
+        runOnce({
+            state = this
+            Logger.recordOutput("$LOGGING_PATH/state", state)
+        })
 }
 
 private var state: IntakingStates = IntakingStates.CLOSED

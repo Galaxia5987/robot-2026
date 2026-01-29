@@ -122,7 +122,7 @@ fun enableAutoLogOutputFor(vararg roots: Any) {
     }
 }
 
-fun Any.log(key: String){
+fun Any.log(key: String) {
     when (this) {
         is String -> recordOutput(key, this)
         is Int -> recordOutput(key, this)
@@ -141,8 +141,8 @@ fun Any.log(prefix: String, key: String) {
     log(fullLoggingPath)
 }
 
-fun Trigger.logTrigger(key: String): Trigger{
-    onChange(Commands.runOnce({log(key)}))
+fun Trigger.logTrigger(key: String): Trigger {
+    onChange(Commands.runOnce({ log(key) }))
     return this
 }
 

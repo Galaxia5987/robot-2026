@@ -16,8 +16,7 @@ fun idle(): Command =
         IntakingStates.CLOSED.set()
     )
 
-fun priming(): Command =
-        Flywheel.setVelocity(Flywheel::aimingSetpoint)
+fun priming(): Command = Flywheel.setVelocity(Flywheel::aimingSetpoint)
 
 fun backfeeding(): Command = PreShooter.reverse()
 
