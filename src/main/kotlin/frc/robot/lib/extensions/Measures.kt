@@ -3,6 +3,8 @@ package frc.robot.lib.extensions
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.*
 import edu.wpi.first.units.measure.*
+import frc.robot.lib.getRotation3d
+import frc.robot.lib.getTranslation3d
 import kotlin.math.PI
 
 /**
@@ -255,3 +257,15 @@ operator fun AngularAcceleration.get(unit: AngularAccelerationUnit): Double =
 
 operator fun LinearVelocity.get(unit: LinearVelocityUnit): Double =
     this.`in`(unit)
+
+fun Angle.toYaw() = getRotation3d(yaw = this)
+
+fun Angle.toRoll() = getRotation3d(roll = this)
+
+fun Angle.toPitch() = getRotation3d(pitch = this)
+
+fun Distance.toX() = getTranslation3d(x = this)
+
+fun Distance.toY() = getTranslation3d(y = this)
+
+fun Distance.toZ() = getTranslation3d(z = this)

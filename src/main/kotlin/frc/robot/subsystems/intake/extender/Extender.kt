@@ -38,6 +38,9 @@ object Extender : SubsystemBase(), ExtenderPositionsCommandFactory {
         encoder.configurator.apply(ENCODER_CONFIG)
     }
 
+    val inputs
+        get() = motor.inputs
+
     override fun setTarget(value: ExtenderPositions): Command = runOnce {
         setpoint = value.distance
         motor.setControl(
