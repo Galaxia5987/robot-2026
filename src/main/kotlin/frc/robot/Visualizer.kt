@@ -114,7 +114,7 @@ enum class Poses(
         get() = Pose3d(translation3d(), rotation3d())
 }
 
-private val subsystemPoseArray = Array(12) { Pose3d() }
+private val subsystemPoseArray = Array(14) { Pose3d() }
 
 @LoggedOutput(key = "Visualization/mechanismPoses", level = LogLevel.COMP)
 fun mechanismPoses(): Array<Pose3d> {
