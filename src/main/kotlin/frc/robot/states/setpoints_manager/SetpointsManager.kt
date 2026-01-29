@@ -1,6 +1,5 @@
 package frc.robot.states.setpoints_manager
 
-// import frc.robot.states.setpoints_manager.setpoints_state.shootOnMoveMap
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.units.Measure
 import edu.wpi.first.units.Unit
@@ -10,8 +9,7 @@ import frc.robot.field.DEPOT_LOCATION
 import frc.robot.field.HUB_LOCATION
 import frc.robot.field.OUTPOST_LOCATION
 import frc.robot.field.inAllianceZone
-import frc.robot.field.outOfAllianceZoneAboveCrossLine
-import frc.robot.field.outOfAllianceZoneBelowCrossLine
+import frc.robot.field.isCloserToDepot
 import frc.robot.lib.extensions.not
 import frc.robot.states.DriverOverrides
 import frc.robot.states.setpoints_manager.setpoints_state.interpolationShootingMap
@@ -26,12 +24,12 @@ private val goalHubTrigger =
     inAllianceZone.onTrue(runOnce({ currentGoal = HUB_LOCATION }))
 
 private val goalDepotTrigger =
-    outOfAllianceZoneAboveCrossLine
+    isCloserToDepot
         .and(!inAllianceZone)
         .onTrue(runOnce({ currentGoal = DEPOT_LOCATION }))
 
 private val goalOutpostTrigger =
-    outOfAllianceZoneBelowCrossLine
+    isCloserToDepot.negate()
         .and(!inAllianceZone)
         .onTrue(runOnce({ currentGoal = OUTPOST_LOCATION }))
 

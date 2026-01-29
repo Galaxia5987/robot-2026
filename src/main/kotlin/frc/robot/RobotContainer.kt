@@ -7,11 +7,9 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
-import frc.robot.RobotContainer.Shooting.atGoal
 import frc.robot.RobotContainer.Shooting.canShoot
 import frc.robot.RobotContainer.Shooting.isShootingOnMove
 import frc.robot.field.inAllianceZone
-import frc.robot.field_constants.ALLIANCE_ZONE
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.lib.extensions.not
@@ -24,14 +22,9 @@ import frc.robot.states.shooting.ShootingState
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.drive.atGoal
 import frc.robot.subsystems.sensors.Sensors
-import frc.robot.subsystems.shooter.flywheel.Flywheel
-import frc.robot.subsystems.shooter.hood.Hood
-import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.shooter.turret.Turret.setAngle
 import frc.robot.subsystems.shooter.turret.turretAngleToHub
-import frc.robot.subsystems.spindexer.Spindexer
-import frc.robot.subsystems.spindexer.SpindexerVelocity
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser

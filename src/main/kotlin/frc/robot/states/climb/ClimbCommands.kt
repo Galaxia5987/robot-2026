@@ -3,7 +3,7 @@ package frc.robot.states.climb
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
-import frc.robot.field_constants.CLIMB_LOCATION
+import frc.robot.field.CLIMB_LOCATION
 import frc.robot.lib.extensions.not
 import frc.robot.states.DriverOverrides
 import frc.robot.states.intaking.IntakingStates
