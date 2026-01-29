@@ -30,6 +30,7 @@ val MOTOR_CONFIG =
         CurrentLimits = createCurrentLimits(20.amps, 10.amps)
     }
 
+
 @CommandEnum
 enum class PreShooterVelocity(val velocity: AngularVelocity) {
     STOP(0.rps),

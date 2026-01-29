@@ -31,7 +31,7 @@ object Roller : SubsystemBase(), RollerPositionsCommandFactory {
                     Follower(MAIN_MOTOR_PORT, MotorAlignmentValue.Aligned)
                 )
             }
-
+    val inputs= motor.inputs
     private val voltageRequest = VoltageOut(0.0)
 
     override fun setTarget(value: RollerPositions): Command = runOnce {
