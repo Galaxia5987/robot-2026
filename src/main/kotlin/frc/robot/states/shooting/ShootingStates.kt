@@ -5,17 +5,13 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.littletonrobotics.junction.Logger
 
-enum class ShootingState(commandBind: Command) {
-    IDLE(idle()),
-    PRIMING(priming()),
-    BACKFEEDING(backfeeding()),
-    SHOOTING(shooting());
+enum class ShootingState {
+    IDLE,
+    PRIMING,
+    BACKFEEDING,
+    SHOOTING;
 
     val trigger = Trigger { state == this }
-
-    init {
-        trigger.onTrue(commandBind)
-    }
 
     fun set(): Command =
         Commands.runOnce({

@@ -7,21 +7,18 @@ import org.littletonrobotics.junction.Logger
 
 private const val LOGGING_PATH = "StateMachines/Intaking"
 
-enum class IntakingStates(private val bindCommand: Command) {
-    CLOSED(closed()),
-    INTAKING(intaking()),
-    OPEN(open()),
-    PUMPING(pumping());
+enum class IntakingStates {
+    CLOSED,
+    INTAKING,
+    OPEN,
+    PUMPING;
 
     val trigger = Trigger { state == this }
-    private val command =
-        runOnce({
-                state = this
-                Logger.recordOutput("$LOGGING_PATH/state", state)
-            })
-            .alongWith(bindCommand)
 
-    fun set(): Command = command
+    fun set(): Command = runOnce({
+        state = this
+        Logger.recordOutput("$LOGGING_PATH/state", state)
+    })
 }
 
 private var state: IntakingStates = IntakingStates.CLOSED

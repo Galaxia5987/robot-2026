@@ -26,7 +26,7 @@ val ALLIANCE_ZONE_HEIGHT: Distance = 8.07.m
 val isCloserToDepot = Trigger {
     if (IS_RED) drive.pose.translation.y <= FlippingUtil.fieldSizeY / 2
     else drive.pose.translation.y > FlippingUtil.fieldSizeY / 2
-}
+} // TODO: Change
 
 val FIELD_WIDTH: Distance = FlippingUtil.fieldSizeX.m
 val FIELD_HEIGHT: Distance = FlippingUtil.fieldSizeY.m
@@ -48,7 +48,7 @@ private object AllianceZone {
 val ALLIANCE_ZONE
     get() =
         if (IS_RED) AllianceZone.RED_ALLIANCE_ZONE
-        else AllianceZone.BLUE_ALLIANCE_ZONE
+        else AllianceZone.BLUE_ALLIANCE_ZONE // TODO: Change
 
 val allianceColorTrigger = Trigger { IS_RED }.onTrue(flipAllianceLocation())
 
