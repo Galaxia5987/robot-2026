@@ -12,6 +12,7 @@ import frc.robot.subsystems.drive.Drive
 import frc.robot.subsystems.intake.extender.Extender
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.turret.Turret
+import frc.robot.subsystems.spindexer.Spindexer
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
@@ -103,6 +104,13 @@ enum class Poses(
     PRE_SHOOTER_ROLLER({ getTranslation3d((-63).mm, 90.mm, 211.mm) }),
     PRE_SHOOTER_SECOND_ROLLER({ getTranslation3d((-22).mm, 130.mm, 295.mm) }),
     PRE_SHOOTER_THIRD_ROLLER({ getTranslation3d((-23.5).mm, 315.mm, 295.mm) });
+    SPINDEXER(
+        { getTranslation3d((-26).mm, 43.mm, 36.66200.mm) },
+        { getRotation3d(yaw= Spindexer.inputs.position) }
+    ),
+    PRE_SHOOTER_ROLLER({ getTranslation3d((-63).mm, 90.mm, 211.mm) }),
+    PRE_SHOOTER_SECOND_ROLLER({ getTranslation3d((-22).mm, 130.mm, 295.mm) }),
+    PRE_SHOOTER_THIRD_ROLLER({ getTranslation3d((-23.5).mm, 315.mm, 295.mm) });
 
     val pose: Pose3d
         get() = Pose3d(translation3d(), rotation3d())
@@ -127,9 +135,9 @@ fun mechanismPoses(): Array<Pose3d> {
     subsystemPoseArray[6] = Poses.SHOOTER_MAIN_ROLLER.pose
     subsystemPoseArray[7] = Poses.HOOD_ROLLER.pose
     subsystemPoseArray[8] = Poses.SPINDEXER.pose
-    subsystemPoseArray[8] = Poses.PRE_SHOOTER_ROLLER.pose
-    subsystemPoseArray[8] = Poses.PRE_SHOOTER_SECOND_ROLLER.pose
-    subsystemPoseArray[8] = Poses.PRE_SHOOTER_THIRD_ROLLER.pose
+    subsystemPoseArray[9] = Poses.PRE_SHOOTER_ROLLER.pose
+    subsystemPoseArray[9] = Poses.PRE_SHOOTER_SECOND_ROLLER.pose
+    subsystemPoseArray[9] = Poses.PRE_SHOOTER_THIRD_ROLLER.pose
 
     return subsystemPoseArray
 }
