@@ -6,11 +6,7 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.lib.universal_motor.UniversalTalonFX
-import frc.robot.subsystems.roller.AUX_MOTOR_PORT
-import frc.robot.subsystems.roller.MAIN_MOTOR_PORT
-import frc.robot.subsystems.roller.MOTOR_CONFIG
-import frc.robot.subsystems.roller.RollerPositions
-import frc.robot.subsystems.roller.RollerPositionsCommandFactory
+import frc.robot.subsystems.roller.*
 
 object Roller : SubsystemBase(), RollerPositionsCommandFactory {
     private val motor =
@@ -31,8 +27,11 @@ object Roller : SubsystemBase(), RollerPositionsCommandFactory {
                     Follower(MAIN_MOTOR_PORT, MotorAlignmentValue.Aligned)
                 )
             }
-    val inputs= motor.inputs
+
     private val voltageRequest = VoltageOut(0.0)
+
+    val inputs
+        get() = motor.inputs
 
     override fun setTarget(value: RollerPositions): Command = runOnce {
         motor.setControl(voltageRequest.withOutput(value.voltage))

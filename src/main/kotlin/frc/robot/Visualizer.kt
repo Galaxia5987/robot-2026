@@ -10,7 +10,9 @@ import frc.robot.lib.getRotation3d
 import frc.robot.lib.getTranslation3d
 import frc.robot.subsystems.drive.Drive
 import frc.robot.subsystems.intake.extender.Extender
+import frc.robot.subsystems.intake.roller.Roller
 import frc.robot.subsystems.shooter.hood.Hood
+import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.spindexer.Spindexer
 import org.team5987.annotation.LogLevel
@@ -88,8 +90,14 @@ enum class Poses(
                 Extender.inputs.distance.toX()
         },
     ),
-    INTAKE_ROLLER_1({ getTranslation3d(323.mm, 10.mm, 197.mm) }),
-    INTAKE_ROLLER_2({ getTranslation3d(260.mm, 10.mm, 197.mm) }),
+    INTAKE_ROLLER_1(
+        { getTranslation3d(323.mm, 10.mm, 197.mm) },
+        { Roller.inputs.position.toPitch() }
+    ),
+    INTAKE_ROLLER_2(
+        { getTranslation3d(260.mm, 10.mm, 197.mm) },
+        { Roller.inputs.position.toPitch() }
+    ),
     TURRET(
         { getTranslation3d((-116).mm, 220.5.mm, 355.mm) },
         { Turret.inputs.position.toYaw() }
@@ -98,17 +106,30 @@ enum class Poses(
         TURRET.translation3d,
         { Hood.inputs.position.toPitch() + TURRET.rotation3d() }
     ),
-    SHOOTER_MAIN_ROLLER({ getTranslation3d((-48).mm, 220.5.mm, 436.mm) }),
-    HOOD_ROLLER({ getTranslation3d((-247).mm, 220.5.mm, 489.mm) }),
+
+    //    getTranslation3d((-48).mm, 220.5.mm, 436.mm)
+    SHOOTER_MAIN_ROLLER(TURRET.translation3d, TURRET.rotation3d),
+
+    //    getTranslation3d((-247).mm, 220.5.mm, 489.mm)
+    HOOD_ROLLER(TURRET.translation3d, TURRET.rotation3d),
     SPINDEXER(
         { getTranslation3d((-26).mm, 43.mm, 36.66200.mm) },
-        { getRotation3d(yaw = Spindexer.inputs.position) }
+        { Spindexer.inputs.position.toYaw() }
     ),
-    PRE_SHOOTER_ROLLER({ getTranslation3d((-63).mm, 90.mm, 211.mm) }),
-    PRE_SHOOTER_SECOND_ROLLER({ getTranslation3d((-22).mm, 130.mm, 295.mm) }),
-    PRE_SHOOTER_THIRD_ROLLER({ getTranslation3d((-23.5).mm, 315.mm, 295.mm) }),
+    PRE_SHOOTER_ROLLER(
+        { getTranslation3d((-63).mm, 90.mm, 211.mm) },
+        { PreShooter.inputs.position.toPitch() }
+    ),
     CLIMB_GRABBER({ getTranslation3d(0.mm) }),
-    CLIMB_WRIST({ getTranslation3d(0.mm) });
+    CLIMB_WRIST({ getTranslation3d(0.mm) }),
+    PRE_SHOOTER_SECOND_ROLLER(
+        { getTranslation3d((-22).mm, 130.mm, 295.mm) },
+        { PreShooter.inputs.position.toPitch() }
+    ),
+    PRE_SHOOTER_THIRD_ROLLER(
+        { getTranslation3d((-23.5).mm, 315.mm, 295.mm) },
+        { PreShooter.inputs.position.toPitch() }
+    );
 
     val pose: Pose3d
         get() = Pose3d(translation3d(), rotation3d())
