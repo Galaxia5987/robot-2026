@@ -23,28 +23,32 @@ var DEPOT_LOCATION = Translation2d(3692.8.mm, 2641.6.mm)
 val ALLIANCE_ZONE_WIDTH: Distance = 4.03.m
 val ALLIANCE_ZONE_HEIGHT: Distance = 8.07.m
 
-val isCloserToDepot = Trigger { if(IS_RED) drive.pose.translation.y <= FlippingUtil.fieldSizeY/ 2 else drive.pose.translation.y > FlippingUtil.fieldSizeY/ 2 }
+val isCloserToDepot = Trigger {
+    if (IS_RED) drive.pose.translation.y <= FlippingUtil.fieldSizeY / 2
+    else drive.pose.translation.y > FlippingUtil.fieldSizeY / 2
+}
 
 val FIELD_WIDTH: Distance = FlippingUtil.fieldSizeX.m
 val FIELD_HEIGHT: Distance = FlippingUtil.fieldSizeY.m
 
-private object AllianceZone{
-    val BLUE_ALLIANCE_ZONE = Rectangle2d(
-        Translation2d(0.m, 0.m),
-        Translation2d(ALLIANCE_ZONE_WIDTH, ALLIANCE_ZONE_HEIGHT)
-    )
+private object AllianceZone {
+    val BLUE_ALLIANCE_ZONE =
+        Rectangle2d(
+            Translation2d(0.m, 0.m),
+            Translation2d(ALLIANCE_ZONE_WIDTH, ALLIANCE_ZONE_HEIGHT)
+        )
 
-    val RED_ALLIANCE_ZONE = Rectangle2d(
-        Translation2d(
-            FIELD_WIDTH - ALLIANCE_ZONE_WIDTH,
-            0.m
-        ),
-        Translation2d(FIELD_WIDTH, ALLIANCE_ZONE_HEIGHT)
-    )
+    val RED_ALLIANCE_ZONE =
+        Rectangle2d(
+            Translation2d(FIELD_WIDTH - ALLIANCE_ZONE_WIDTH, 0.m),
+            Translation2d(FIELD_WIDTH, ALLIANCE_ZONE_HEIGHT)
+        )
 }
 
 val ALLIANCE_ZONE
-    get() = if (IS_RED) AllianceZone.RED_ALLIANCE_ZONE else AllianceZone.BLUE_ALLIANCE_ZONE
+    get() =
+        if (IS_RED) AllianceZone.RED_ALLIANCE_ZONE
+        else AllianceZone.BLUE_ALLIANCE_ZONE
 
 val allianceColorTrigger = Trigger { IS_RED }.onTrue(flipAllianceLocation())
 
