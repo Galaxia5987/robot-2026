@@ -39,6 +39,8 @@ class TunablePose3d(
     translation: Translation3d = Translation3d(),
     rotation: Rotation3d = Rotation3d()
 ) {
+    constructor(key: String, pose: Pose3d) : this(key, pose.translation, pose.rotation)
+
     private val tunableTranslation = TunableTranslation3d(
         "$key/translation",
         translation.x.meters,
