@@ -59,7 +59,7 @@ class Shooting(shootingAllowed: Trigger) {
 
     private val setPrimingIfHasFuel =
         ShootingState.BACKFEEDING.trigger
-            .and(!Sensors.hasFuel)
+            .and(Sensors.hasFuel)
             .onTrue(ShootingState.PRIMING.set())
 
     private val setIdleIfHasNoFuel =
