@@ -100,13 +100,9 @@ enum class Poses(
     ),
     SHOOTER_MAIN_ROLLER({ getTranslation3d((-48).mm, 220.5.mm, 436.mm) }),
     HOOD_ROLLER({ getTranslation3d((-247).mm, 220.5.mm, 489.mm) }),
-    SPINDEXER({ getTranslation3d((-26).mm, 43.mm, 36.66200.mm) }),
-    PRE_SHOOTER_ROLLER({ getTranslation3d((-63).mm, 90.mm, 211.mm) }),
-    PRE_SHOOTER_SECOND_ROLLER({ getTranslation3d((-22).mm, 130.mm, 295.mm) }),
-    PRE_SHOOTER_THIRD_ROLLER({ getTranslation3d((-23.5).mm, 315.mm, 295.mm) });
     SPINDEXER(
         { getTranslation3d((-26).mm, 43.mm, 36.66200.mm) },
-        { getRotation3d(yaw= Spindexer.inputs.position) }
+        { getRotation3d(yaw = Spindexer.inputs.position) }
     ),
     PRE_SHOOTER_ROLLER({ getTranslation3d((-63).mm, 90.mm, 211.mm) }),
     PRE_SHOOTER_SECOND_ROLLER({ getTranslation3d((-22).mm, 130.mm, 295.mm) }),
