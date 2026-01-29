@@ -58,5 +58,6 @@ private fun flipAllianceLocation() =
         OUTPOST_LOCATION = OUTPOST_LOCATION.flip()
         DEPOT_LOCATION = DEPOT_LOCATION.flip()
         ALLIANCE_ZONE = ALLIANCE_ZONE.flip()
-        OUTPOST_CROSS_LINE_RECTANGLE.flip()
+        OUTPOST_CROSS_LINE_RECTANGLE = OUTPOST_CROSS_LINE_RECTANGLE.flip()
+
     })
