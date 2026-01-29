@@ -27,7 +27,7 @@ object PreShooter : SubsystemBase(), PreShooterVelocityCommandFactory {
         mainMotor.inputs.velocity.isNear(setpoint, SETPOINT_TOLERANCE)
     }
 
-    fun setVelocityControl(velocity: AngularVelocity) {
+    private fun setVelocityControl(velocity: AngularVelocity) {
         setpoint = velocity
         mainMotor.setControl(velocityVoltage.withVelocity(velocity))
     }
