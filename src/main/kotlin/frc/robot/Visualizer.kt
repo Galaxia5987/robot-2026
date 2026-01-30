@@ -121,7 +121,7 @@ enum class Poses(
     SHOOTER_MAIN_ROLLER(
         { getTranslation3d((-115).mm, 220.5.mm, 358.mm) }, TURRET.rotation3d
     ),
-    HOOD_ROLLER({ getTranslation3d((-378).mm, 220.5.mm, 349.mm) }, TURRET.rotation3d),
+    HOOD_ROLLER({ getTranslation3d((-378).mm, 220.5.mm, 349.mm).rotateAround(TURRET.pose.translation, TURRET.rotation3d()) }, TURRET.rotation3d),
     SPINDEXER(
         { getTranslation3d((-26).mm, 43.mm, 36.66200.mm) },
         { Spindexer.inputs.position.toYaw() }

@@ -33,7 +33,7 @@ val ALLIANCE_ZONE
             Translation2d(if (IS_RED) FIELD_WIDTH else 0.m, 0.m)
         )
 
-val allianceColorTrigger = Trigger { IS_RED }.onTrue(flipAllianceLocation())
+val allianceColorTrigger = Trigger { IS_RED }.onChange(flipAllianceLocation())
 
 private fun flipAllianceLocation() =
     runOnce({
