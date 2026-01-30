@@ -4,8 +4,8 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands.runOnce
 
 object SpindexerCommands {
-    internal var isFeeding = false
-    internal var isIntaking = false
+    var isFeeding = false
+    var isIntaking = false
 
     fun startFeeding(): Command = runOnce({ isFeeding = true })
 

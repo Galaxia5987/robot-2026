@@ -29,7 +29,7 @@ object PreShooter : SubsystemBase(), PreShooterVelocityCommandFactory {
     val inputs
         get() = mainMotor.inputs
 
-    fun setVelocityControl(velocity: AngularVelocity) {
+    private fun setVelocityControl(velocity: AngularVelocity) {
         setpoint = velocity
         mainMotor.setControl(velocityVoltage.withVelocity(velocity))
     }

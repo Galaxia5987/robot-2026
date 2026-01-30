@@ -8,28 +8,26 @@ import frc.robot.subsystems.intake.extender.Extender
 import frc.robot.subsystems.intake.extender.ExtenderPositions
 import frc.robot.subsystems.intake.roller.Roller
 
-internal fun closed(): Command {
-    return Roller.stop().alongWith(Extender.close())
-}
+fun closed(): Command = Roller.stop().alongWith(Extender.close())
 
-internal fun intaking(): Command {
-    return Roller.intake()
-        .alongWith(
-            Extender.open().alongWith(SpindexerCommands.startIntaking())
-        ) // Spindexer Intaking
-}
+fun intaking(): Command =
+    Commands.sequence(
+        Roller.intake(),
+        Extender.open(),
+        SpindexerCommands.startIntaking()
+    )
 
-internal fun open(): Command {
-    return Extender.open()
-        .alongWith(Roller.intake())
-        .alongWith(SpindexerCommands.stopIntaking())
-}
+fun open(): Command =
+    Commands.sequence(
+        Extender.open(),
+        Roller.intake(),
+        SpindexerCommands.stopIntaking()
+    )
 
-internal fun pumping(): Command {
-    return Commands.sequence(
+fun pumping(): Command =
+    Commands.sequence(
             Extender.setTarget(ExtenderPositions.OPEN),
             Commands.waitTime(0.4.sec),
-            (Extender.setTarget(ExtenderPositions.CLOSE))
+            Extender.setTarget(ExtenderPositions.CLOSE)
         )
         .repeatedly()
-}
