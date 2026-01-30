@@ -15,13 +15,9 @@ import org.team5987.annotation.LoggedOutput
 
 const val HUB_PATH = "Subsystems/Hub"
 
-@LoggedOutput(LogLevel.COMP, path = HUB_PATH)
-val robotDistanceFromHub
-    get() = drive.localPose.distanceFromPoint(currentGoal)
-
 @LoggedOutput(LogLevel.DEV, path = HUB_PATH)
 val angleFromRobotToHub
-    get() = (drive.localPose.translation.rotationToPoint(currentGoal))
+    get() = (drive.localPose.translation.rotationToPoint(currentGoal.translation))
 
 @LoggedOutput(LogLevel.DEV, path = HUB_PATH)
 // +180 degrees since the turret's zero angle is exactly opposite of the swerve's zero angle.

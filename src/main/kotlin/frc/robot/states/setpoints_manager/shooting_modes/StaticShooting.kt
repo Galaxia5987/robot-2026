@@ -1,4 +1,4 @@
-package frc.robot.states.setpoints_manager.setpoints_state
+package frc.robot.states.setpoints_manager.shooting_modes
 
 import edu.wpi.first.units.Measure
 import edu.wpi.first.units.Unit

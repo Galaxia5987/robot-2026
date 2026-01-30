@@ -2,34 +2,46 @@ package frc.robot.field
 
 import com.pathplanner.lib.util.FlippingUtil
 import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.math.geometry.Rectangle2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.TunablePose3d
 import frc.robot.drive
 import frc.robot.lib.IS_RED
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.flip
 import frc.robot.lib.extensions.m
 import frc.robot.lib.extensions.mm
-
-val FIELD_WIDTH: Distance = FlippingUtil.fieldSizeX.m
-val FIELD_HEIGHT: Distance = FlippingUtil.fieldSizeY.m
+import org.team5987.annotation.LogLevel
+import org.team5987.annotation.LoggedOutput
 
 val ALLIANCE_ZONE_WIDTH: Distance = 4.03.m
 
 val ALLIANCE_ZONE_HEIGHT: Distance = 8.07.m
 
-var HUB_LOCATION = Translation2d(4572.mm, 7632.7.mm)
+var HUB_LOCATION = Translation2d(4620.41.mm, 4034.63.mm)
     private set
 var CLIMB_LOCATION = Pose2d(4090.6.mm, 5457.8.mm, Rotation2d(90.deg))
     private set
-var OUTPOST_LOCATION = Translation2d(3026.5.mm, 7940.6.mm)
+
+private val OFFSET_OF_FEED_LOCATION = Translation2d(700.mm, 700.mm)
+
+var OUTPOST_LOCATION = OFFSET_OF_FEED_LOCATION
     private set
-var DEPOT_LOCATION = Translation2d(3692.8.mm, 2641.6.mm)
+var DEPOT_LOCATION: Translation2d = Translation2d(OFFSET_OF_FEED_LOCATION.measureX, FlippingUtil.fieldSizeY.m - OFFSET_OF_FEED_LOCATION.measureY)
     private set
+
+var temp = TunablePose3d(key="/Tuning/TempPose")
+    private set
+
+@LoggedOutput(LogLevel.COMP)
+fun getTempPose(): Pose3d = temp.get()
+
+
 
 var ALLIANCE_ZONE =
     Rectangle2d(
@@ -49,7 +61,7 @@ val isCloserToDepotSide =
     Trigger { OUTPOST_CROSS_LINE_RECTANGLE.contains(drive.pose.translation) }
         .negate()
 
-val allianceColorTrigger = Trigger { IS_RED }.onTrue(flipAllianceLocation())
+val allianceColorTrigger = Trigger { IS_RED }.onChange(flipAllianceLocation())
 
 private fun flipAllianceLocation() =
     runOnce({

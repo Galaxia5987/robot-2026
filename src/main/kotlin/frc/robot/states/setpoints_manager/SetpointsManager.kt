@@ -1,6 +1,6 @@
 package frc.robot.states.setpoints_manager
 
-import edu.wpi.first.math.geometry.Translation2d
+import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.units.Measure
 import edu.wpi.first.units.Unit
 import edu.wpi.first.wpilibj2.command.Commands.runOnce
@@ -12,28 +12,29 @@ import frc.robot.field.OUTPOST_LOCATION
 import frc.robot.field.inAllianceZone
 import frc.robot.field.isCloserToDepotSide
 import frc.robot.lib.extensions.not
+import frc.robot.lib.extensions.toPose
 import frc.robot.states.DriverOverrides
-import frc.robot.states.setpoints_manager.setpoints_state.interpolationShootingMap
-import frc.robot.states.setpoints_manager.setpoints_state.shootOnMoveMap
-import frc.robot.states.setpoints_manager.setpoints_state.staticShootingMap
+import frc.robot.states.setpoints_manager.shooting_modes.interpolationShootingMap
+import frc.robot.states.setpoints_manager.shooting_modes.shootOnMoveMap
+import frc.robot.states.setpoints_manager.shooting_modes.staticShootingMap
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
-@LoggedOutput(LogLevel.COMP) var currentGoal: Translation2d = HUB_LOCATION
+@LoggedOutput(LogLevel.COMP) var currentGoal: Pose2d = HUB_LOCATION.toPose()
 
 private val goalHubTrigger =
-    inAllianceZone.onTrue(runOnce({ currentGoal = HUB_LOCATION }))
+    inAllianceZone.onTrue(runOnce({ currentGoal = HUB_LOCATION.toPose() }))
 
 private val goalDepotTrigger =
     isCloserToDepotSide
         .and(!inAllianceZone)
-        .onTrue(runOnce({ currentGoal = DEPOT_LOCATION }))
+        .onTrue(runOnce({ currentGoal = DEPOT_LOCATION.toPose() }))
 
 private val goalOutpostTrigger =
     isCloserToDepotSide
         .negate()
         .and(!inAllianceZone)
-        .onTrue(runOnce({ currentGoal = OUTPOST_LOCATION }))
+        .onTrue(runOnce({ currentGoal = OUTPOST_LOCATION.toPose() }))
 
 enum class ShootingType {
     STATIC,

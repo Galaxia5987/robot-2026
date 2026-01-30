@@ -1,4 +1,4 @@
-package frc.robot.states.setpoints_manager.setpoints_state
+package frc.robot.states.setpoints_manager.shooting_modes
 
 import edu.wpi.first.units.Measure
 import edu.wpi.first.units.Unit
@@ -27,7 +27,7 @@ import org.team5987.annotation.LoggedOutput
 
 @LoggedOutput(LogLevel.COMP)
 val distanceFromGoal: Distance
-    get() = drive.pose.distanceFromPoint(currentGoal)
+    get() = drive.pose.distanceFromPoint(currentGoal.translation)
 
 private val SHOOTER_VELOCITY_BY_DISTANCE: InterpolatingDoubleMap =
     ShootingTableReader.parse(
