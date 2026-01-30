@@ -16,6 +16,8 @@ object Spindexer : SubsystemBase(), SpindexerVelocityCommandFactory {
             simGains = SIM_GAINS
         )
 
+    val inputs
+        get() = mainMotor.inputs
     private val velocityVoltage = VelocityVoltage(0.0)
 
     private var setpoint: SpindexerVelocity = SpindexerVelocity.STOP

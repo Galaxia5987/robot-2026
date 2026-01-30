@@ -5,7 +5,6 @@ import com.ctre.phoenix6.controls.ControlRequest
 import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.controller.ProfiledPIDController
 import edu.wpi.first.math.trajectory.TrapezoidProfile
-import edu.wpi.first.units.Units.Rotations
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.MomentOfInertia
 import edu.wpi.first.wpilibj.Timer
@@ -63,7 +62,6 @@ class MotorIOSim(
         inputs.position = motor.position.rot
         inputs.voltage = motor.appliedVoltage
         inputs.velocity = motor.velocity
-        inputs.distance =
-            Rotations.of(motor.position).toDistance(diameter, gearRatio)
+        inputs.distance = motor.position.rot.toDistance(diameter, gearRatio)
     }
 }

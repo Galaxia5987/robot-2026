@@ -26,6 +26,8 @@ object PreShooter : SubsystemBase(), PreShooterVelocityCommandFactory {
     val atSetpoint = Trigger {
         mainMotor.inputs.velocity.isNear(setpoint, SETPOINT_TOLERANCE)
     }
+    val inputs
+        get() = mainMotor.inputs
 
     private fun setVelocityControl(velocity: AngularVelocity) {
         setpoint = velocity

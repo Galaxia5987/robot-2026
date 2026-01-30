@@ -19,7 +19,8 @@ object Extender : SubsystemBase(), ExtenderPositionsCommandFactory {
             config = CONFIG,
             simGains = SIM_GAINS,
             absoluteEncoderOffset = ABSOLUTE_ENCODER_OFFSET,
-            gearRatio = GEAR_RATIO
+            gearRatio = GEAR_RATIO,
+            linearSystemWheelDiameter = DIAMETER
         )
 
     private var setpoint = 0.meters
@@ -37,6 +38,9 @@ object Extender : SubsystemBase(), ExtenderPositionsCommandFactory {
     init {
         encoder.configurator.apply(ENCODER_CONFIG)
     }
+
+    val inputs
+        get() = motor.inputs
 
     override fun setTarget(value: ExtenderPositions): Command = runOnce {
         setpoint = value.distance

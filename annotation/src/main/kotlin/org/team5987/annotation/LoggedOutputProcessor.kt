@@ -69,11 +69,11 @@ class LoggedOutputProcessor(
                                     path = "Subsystems/$simpleName"
                             }
                         }
-                        if (path.isNullOrEmpty())
-                            path = simpleName
-
                         if (key.isNullOrEmpty())
                             key = ""
+
+                        if (path.isNullOrEmpty() && key.isBlank())
+                            path = simpleName
 
                         logger.info("Registering field: $className.$fieldName with key=$key")
 
@@ -92,11 +92,12 @@ class LoggedOutputProcessor(
                         // TOP-LEVEL FUNCTION
                         val pkg = symbol.containingFile?.packageName?.asString() ?: continue
                         val member = MemberName(pkg, methodName)
-                        if (path.isNullOrEmpty())
-                            path = methodName
-
                         if (key.isNullOrEmpty())
                             key = ""
+
+                        if (path.isNullOrEmpty() && key.isBlank())
+                            path = methodName
+
 
                         funSpecBuilder.addStatement(
                             "LoggedOutputManager.registerField(%S, %T.%L, ::%M,%S)",
@@ -119,11 +120,11 @@ class LoggedOutputProcessor(
                         val pkg = symbol.containingFile?.packageName?.asString() ?: continue
                         val member = MemberName(pkg, methodName)
 
-                        if (path.isNullOrEmpty())
-                            path = methodName
-
                         if (key.isNullOrEmpty())
                             key = ""
+
+                        if (path.isNullOrEmpty() && key.isBlank())
+                            path = methodName
 
                         logger.info("Registering TOP-LEVEL method: $pkg.$methodName with key=$key")
 
@@ -143,11 +144,12 @@ class LoggedOutputProcessor(
                         val simpleName = classFqName.substringAfterLast(".")
                         val classType = ClassName(packageName, simpleName)
 
-                        if (path.isNullOrEmpty())
-                            path = simpleName
 
                         if (key.isNullOrEmpty())
                             key = ""
+
+                        if (path.isNullOrEmpty() && key.isBlank())
+                            path = simpleName
 
                         logger.info("Registering MEMBER method: $classFqName.$methodName with key=$key")
 
@@ -174,11 +176,11 @@ class LoggedOutputProcessor(
                         val methodName = it.simpleName.asString()
                         val pkg = it.containingFile?.packageName?.asString()
 
-                        if (path.isNullOrEmpty())
-                            path = methodName
-
                         if (key.isNullOrEmpty())
                             key = ""
+
+                        if (path.isNullOrEmpty() && key!!.isBlank())
+                            path = methodName
 
                         if (pkg != null) {
                             funSpecBuilder.addStatement(

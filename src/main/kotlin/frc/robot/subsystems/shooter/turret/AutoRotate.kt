@@ -13,7 +13,7 @@ import frc.robot.states.setpoints_manager.currentGoal
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
-const val HUB_PATH = "Subsystem/Hub"
+const val HUB_PATH = "Subsystems/Hub"
 
 @LoggedOutput(LogLevel.COMP, path = HUB_PATH)
 val robotDistanceFromHub
