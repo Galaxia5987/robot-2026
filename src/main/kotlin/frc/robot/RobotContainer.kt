@@ -63,26 +63,26 @@ object RobotContainer {
 
     private fun configureButtonBindings() {
         // Intake Bindings
-        driverController.triangle().onTrue(IntakingStates.INTAKING.set())
-        driverController
-            .triangle()
+        val intakeButton = driverController.R2()
+
+        intakeButton.onTrue(IntakingStates.INTAKING.set())
+        intakeButton
             .negate()
             .and(canCloseIntake)
             .onTrue(IntakingStates.CLOSED.set())
-        driverController
-            .triangle()
+        intakeButton
             .negate()
             .and(cantCloseIntake)
             .onTrue(IntakingStates.OPEN.set())
 
-        driverController
-            .cross()
-            .onTrue(Spindexer.setTarget(SpindexerVelocity.REVERSE_SLOW))
-        driverController
-            .circle()
-            .onTrue(Spindexer.setTarget(SpindexerVelocity.REVERSE))
+//        driverController
+//            .cross()
+//            .onTrue(Spindexer.setTarget(SpindexerVelocity.REVERSE_SLOW))
+//        driverController
+//            .circle()
+//            .onTrue(Spindexer.setTarget(SpindexerVelocity.REVERSE))
 
-        Shooting(driverController.L1())
+        Shooting(driverController.L2())
     }
 
     fun getAutonomousCommand(): Command = autoChooser.get()

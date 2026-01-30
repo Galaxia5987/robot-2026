@@ -13,7 +13,7 @@ private val activeTrigger =
     SpindexerStates.ACTIVE.trigger.onTrue(Spindexer.start())
 
 @LoggedOutput(LogLevel.COMP)
-val spinRequested =
+val spinRequested: Trigger =
     Trigger { isFeeding || isIntaking }
-        .onTrue(Commands.runOnce(SpindexerStates.ACTIVE::set))
-        .onFalse(Commands.runOnce(SpindexerStates.IDLE::set))
+        .onTrue(SpindexerStates.ACTIVE.set())
+        .onFalse(SpindexerStates.IDLE.set())

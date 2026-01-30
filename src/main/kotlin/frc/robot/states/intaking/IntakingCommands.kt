@@ -8,19 +8,19 @@ import frc.robot.subsystems.intake.extender.Extender
 import frc.robot.subsystems.intake.extender.ExtenderPositions
 import frc.robot.subsystems.intake.roller.Roller
 
-fun closed(): Command = Roller.stop().alongWith(Extender.close())
+fun closed(): Command = Commands.parallel(Roller.stop(), Extender.close(), SpindexerCommands.stopIntaking())
 
 fun intaking(): Command =
-    Commands.sequence(
+    Commands.parallel(
         Roller.intake(),
         Extender.open(),
         SpindexerCommands.startIntaking()
     )
 
 fun open(): Command =
-    Commands.sequence(
+    Commands.parallel(
         Extender.open(),
-        Roller.intake(),
+        Roller.stop(),
         SpindexerCommands.stopIntaking()
     )
 

@@ -35,6 +35,6 @@ enum class SpindexerVelocity(val velocity: AngularVelocity) {
     STOP(0.rps),
     START(10.rps),
     SLOW(4.rps),
-    REVERSE(-10.rps),
+    REVERSE((-10).rps),
     REVERSE_SLOW(-SLOW.velocity)
 }

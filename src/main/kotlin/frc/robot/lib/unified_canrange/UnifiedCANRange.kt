@@ -18,7 +18,7 @@ class UnifiedCANRange(
         if (CURRENT_MODE == Mode.REAL) {
             CANRangeIOReal(port, canbus, configuration)
         } else {
-            CANRangeIOSim(subsystemName)
+            CANRangeIOSim(subsystemName, sensorName)
         }
     val isInRange: Boolean
         get() = sensorIO.inputs.isDetecting

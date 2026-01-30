@@ -144,7 +144,7 @@ private object Shooter {
             hoodRotation
         )
 
-    val shooterMainRoller
+    val shooterMainRoller: Pose3d
         get() = getPose3d(
             getTranslation3d((-48).mm, 220.5.mm, 436.mm).rotateAround(turretTranslation, turretRotation),
             turretRotation
@@ -224,57 +224,58 @@ fun mechanismPoses(): Array<Pose3d> {
 }
 
 // For Tuning !!
-private val tuningSubsystemPoses =
-    arrayOf(
-        TunablePose3d(
-            "/Tuning/Visualization/IntakeExtender",
-            Intake.extender
-        ),
-        TunablePose3d(
-            "/Tuning/Visualization/ExtendingHopper",
-            Intake.extendingHopper
-        ),
-        TunablePose3d(
-            "/Tuning/Visualization/IntakeRoller1",
-            Intake.roller1
-        ),
-        TunablePose3d(
-            "/Tuning/Visualization/IntakeRoller2",
-            Intake.roller2
-        ),
-        TunablePose3d("/Tuning/Visualization/Turret", Shooter.turret),
-        TunablePose3d("/Tuning/Visualization/Hood", Shooter.hood),
-        TunablePose3d(
-            "/Tuning/Visualization/ShooterMainRoller",
-            Shooter.shooterMainRoller
-        ),
-        TunablePose3d(
-            "/Tuning/Visualization/HoodRoller",
-            Shooter.hoodRoller
-        ),
-        TunablePose3d("/Tuning/Visualization/Spindexer", Conveyors.spindexer),
-        TunablePose3d(
-            "/Tuning/Visualization/PreShooterRoller",
-            Conveyors.firstRoller
-        ),
-        TunablePose3d(
-            "/Tuning/Visualization/PreShooterSecondRoller",
-            Conveyors.secondRoller
-        ),
-        TunablePose3d(
-            "/Tuning/Visualization/PreShooterThirdRoller",
-            Conveyors.thirdRoller
-        ),
-        TunablePose3d(
-            "/Tuning/Visualization/ClimbGrabber",
-            Climb.grabber
-        ),
-        TunablePose3d(
-            "/Tuning/Visualization/ClimbWrist",
-            Climb.wrist
-        ),
-    )
-
-@LoggedOutput(key = "Visualization/TuningMechanismPoses", level = LogLevel.COMP)
-fun getTuningSubsystemPoses(): Array<Pose3d> =
-    tuningSubsystemPoses.map { it.get() }.toTypedArray()
+//private val tuningSubsystemPoses =
+//    arrayOf(
+//        TunablePose3d(
+//            "/Tuning/Visualization/IntakeExtender",
+//            Intake.extender
+//        ),
+//        TunablePose3d(
+//            "/Tuning/Visualization/ExtendingHopper",
+//            Intake.extendingHopper
+//        ),
+//        TunablePose3d(
+//            "/Tuning/Visualization/IntakeRoller1",
+//            Intake.roller1
+//        ),
+//        TunablePose3d(
+//            "/Tuning/Visualization/IntakeRoller2",
+//            Intake.roller2
+//        ),
+//        TunablePose3d("/Tuning/Visualization/Turret", Shooter.turret),
+//        TunablePose3d("/Tuning/Visualization/Hood", Shooter.hood),
+//        TunablePose3d(
+//            "/Tuning/Visualization/ShooterMainRoller",
+//            Shooter.shooterMainRoller
+//        ),
+//        TunablePose3d(
+//            "/Tuning/Visualization/HoodRoller",
+//            Shooter.hoodRoller
+//        ),
+//        TunablePose3d("/Tuning/Visualization/Spindexer", Conveyors.spindexer),
+//        TunablePose3d(
+//            "/Tuning/Visualization/PreShooterRoller",
+//            Conveyors.firstRoller
+//        ),
+//        TunablePose3d(
+//            "/Tuning/Visualization/PreShooterSecondRoller",
+//            Conveyors.secondRoller
+//        ),
+//        TunablePose3d(
+//            "/Tuning/Visualization/PreShooterThirdRoller",
+//            Conveyors.thirdRoller
+//        ),
+//        TunablePose3d(
+//            "/Tuning/Visualization/ClimbGrabber",
+//            Climb.grabber
+//        ),
+//        TunablePose3d(
+//            "/Tuning/Visualization/ClimbWrist",
+//            Climb.wrist
+//        ),
+//    )
+//
+//@LoggedOutput(key = "Visualization/TuningMechanismPoses", level = LogLevel.COMP)
+//fun getTuningSubsystemPoses(): Array<Pose3d> =
+//    tuningSubsystemPoses.map { it.get() }.toTypedArray()
+//
