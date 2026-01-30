@@ -35,11 +35,12 @@ var OUTPOST_LOCATION = OFFSET_OF_FEED_LOCATION
 var DEPOT_LOCATION: Translation2d = Translation2d(OFFSET_OF_FEED_LOCATION.measureX, FlippingUtil.fieldSizeY.m - OFFSET_OF_FEED_LOCATION.measureY)
     private set
 
-var temp = TunablePose3d(key="/Tuning/TempPose")
-    private set
-
-@LoggedOutput(LogLevel.COMP)
-fun getTempPose(): Pose3d = temp.get()
+// For Debugging and tuning if necessary
+//var temp = TunablePose3d(key="/Tuning/TempPose")
+//    private set
+//
+//@LoggedOutput(LogLevel.COMP)
+//fun getTempPose(): Pose3d = temp.get()
 
 
 
