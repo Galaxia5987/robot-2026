@@ -87,7 +87,7 @@ enum class Poses(
     EXTENDING_HOPPER(
         {
             getTranslation3d(346.mm, 10.mm, 235.mm) +
-                Extender.inputs.distance.toX()
+                    Extender.inputs.distance.toX()
         },
     ),
     INTAKE_ROLLER_1(
@@ -103,15 +103,14 @@ enum class Poses(
         { Turret.inputs.position.toYaw() }
     ),
     HOOD(
-        TURRET.translation3d,
+        { getTranslation3d((-116).mm, 220.5.mm, 450.mm) },
         { Hood.inputs.position.toPitch() + TURRET.rotation3d() }
     ),
 
-    //    getTranslation3d((-48).mm, 220.5.mm, 436.mm)
-    SHOOTER_MAIN_ROLLER(TURRET.translation3d, TURRET.rotation3d),
-
-    //    getTranslation3d((-247).mm, 220.5.mm, 489.mm)
-    HOOD_ROLLER(TURRET.translation3d, TURRET.rotation3d),
+    SHOOTER_MAIN_ROLLER(
+        { getTranslation3d((-115).mm, 220.5.mm, 358.mm) }, TURRET.rotation3d
+    ),
+    HOOD_ROLLER({ getTranslation3d((-378).mm, 220.5.mm, 349.mm) }, TURRET.rotation3d),
     SPINDEXER(
         { getTranslation3d((-26).mm, 43.mm, 36.66200.mm) },
         { Spindexer.inputs.position.toYaw() }
@@ -120,8 +119,6 @@ enum class Poses(
         { getTranslation3d((-63).mm, 90.mm, 211.mm) },
         { PreShooter.inputs.position.toPitch() }
     ),
-    CLIMB_GRABBER({ getTranslation3d(0.mm) }),
-    CLIMB_WRIST({ getTranslation3d(0.mm) }),
     PRE_SHOOTER_SECOND_ROLLER(
         { getTranslation3d((-22).mm, 130.mm, 295.mm) },
         { PreShooter.inputs.position.toPitch() }
@@ -129,7 +126,9 @@ enum class Poses(
     PRE_SHOOTER_THIRD_ROLLER(
         { getTranslation3d((-23.5).mm, 315.mm, 295.mm) },
         { PreShooter.inputs.position.toPitch() }
-    );
+    ),
+    CLIMB_GRABBER({ getTranslation3d((-30).mm, (-242).mm, 420.mm) }),
+    CLIMB_WRIST({ getTranslation3d((-250).mm, (-380).mm, 460.mm) });
 
     val pose: Pose3d
         get() = Pose3d(translation3d(), rotation3d())

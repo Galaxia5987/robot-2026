@@ -221,7 +221,7 @@
       "zeroedRotations": [
         {
           "axis": "x",
-          "degrees": 90
+          "degrees": 0
         }
       ],
       "zeroedPosition": [
@@ -231,7 +231,7 @@
       ]
     },
     {
-      "_comment": "model_13 Climb Grabber",
+      "_comment": "model_13 Climb Wrist",
       "zeroedRotations": [
         {
           "axis": "x",
