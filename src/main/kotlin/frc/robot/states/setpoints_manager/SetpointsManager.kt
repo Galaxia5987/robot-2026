@@ -20,7 +20,7 @@ import frc.robot.states.setpoints_manager.shooting_modes.staticShootingMap
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
-@LoggedOutput(LogLevel.COMP) var currentGoal: Pose2d = HUB_LOCATION.toPose()
+@LoggedOutput(key = "/StateMachines/Shooting/currentGoal", level = LogLevel.COMP) var currentGoal: Pose2d = HUB_LOCATION.toPose()
 
 private val goalHubTrigger =
     inAllianceZone.onTrue(runOnce({ currentGoal = HUB_LOCATION.toPose() }))
@@ -68,5 +68,5 @@ fun <T : SubsystemBase, M : Measure<out Unit>> T.aimingSetpoint(): M {
             else -> shootOnMoveMap[this]!!
         }
 
-    @Suppress("UNCHECKED_CAST") return result as M
+    @Suppress("UNCHECKED_CAST") return result.invoke() as M
 }

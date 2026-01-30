@@ -5,7 +5,6 @@ import frc.robot.drive
 import frc.robot.field.inAllianceZone
 import frc.robot.field.isHubActive
 import frc.robot.lib.extensions.logTrigger
-import frc.robot.lib.extensions.not
 import frc.robot.states.setpoints_manager.isShootingOnMove
 import frc.robot.subsystems.sensors.Sensors
 import frc.robot.subsystems.shooter.flywheel.Flywheel
@@ -28,12 +27,12 @@ val shooterAtSetpoint =
         .and(Flywheel.atSetpoint)
         .and(PreShooter.atSetpoint)
 
-class Shooting(shootingAllowed: Trigger) {
+class Shooting(dontShootTrigger: Trigger) {
     private val canShoot =
         isHubActive
+            .and(dontShootTrigger.negate())
             .and(inAllianceZone)
-            .and(shootingAllowed)
-            .logTrigger("States/Shooting/canShoot")
+            .logTrigger("StateMachines/Shooting/canShoot")
 
     private val cantShoot = canShoot.negate().onTrue(ShootingState.IDLE.set())
 
