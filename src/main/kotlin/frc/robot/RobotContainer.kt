@@ -8,9 +8,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import frc.robot.field_constants.ALLIANCE_ZONE
 import frc.robot.lib.Mode
-import frc.robot.lib.extensions.enableAutoLogOutputFor
-import frc.robot.lib.extensions.not
-import frc.robot.lib.extensions.onFalse
+import frc.robot.lib.extensions.*
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.intaking.changeIntakingStates
 import frc.robot.states.setpoints_manager.ShootingType
@@ -121,7 +119,9 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
-        driverController.b().onTrue(Extender.open()).onFalse(Extender.close())
+        driverController.b().onTrue(Hood.setAngle(40.deg))
+        driverController.a().onTrue(Hood.setAngle(0.deg))
+        driverController.x().onTrue(Flywheel.setVelocity { 30.rps })
 
         //         Intake Bindings
 //        driverController

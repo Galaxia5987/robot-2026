@@ -22,6 +22,8 @@ object Flywheel : SubsystemBase(), FlywheelVelocitiesCommandFactory {
 
     private val velocityOut = VelocityVoltage(0.0)
     private var setpoint = 0.rps
+    val inputs
+            get() = motor.inputs
 
     init {
         AUXILIARY_MOTORS_PORTS.forEach {

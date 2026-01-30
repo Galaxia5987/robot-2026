@@ -2,15 +2,19 @@ package frc.robot
 
 import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.math.geometry.Rotation3d
+import edu.wpi.first.math.geometry.Transform3d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.geometry.Translation3d
+import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import frc.robot.lib.extensions.*
+import frc.robot.lib.getPose3d
 import frc.robot.lib.getRotation3d
 import frc.robot.lib.getTranslation3d
 import frc.robot.subsystems.drive.Drive
 import frc.robot.subsystems.intake.extender.Extender
 import frc.robot.subsystems.intake.roller.Roller
+import frc.robot.subsystems.shooter.flywheel.Flywheel
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 import frc.robot.subsystems.shooter.turret.Turret
@@ -79,70 +83,116 @@ private fun getAllSwerveModulePoseDrive(): Array<Pose3d> {
     return swervePosesDrive
 }
 
-private val INTAKE_ANGLE = 9.deg
+private object Swerve {
 
-private val EXTENDER_ANGLE_POSE: Translation3d
-    get() = getTranslation3d(
-        x = Extender.inputs.distance * cos(INTAKE_ANGLE[rad]),
-        z = -Extender.inputs.distance * sin(
-            INTAKE_ANGLE[rad]
+}
+
+private object Intake {
+    private val INTAKE_ANGLE = 9.deg
+    private val EXTENDER_ANGLE_POSE: Translation3d
+        get() = getTranslation3d(
+            x = Extender.inputs.distance * cos(INTAKE_ANGLE[rad]),
+            z = -Extender.inputs.distance * sin(
+                INTAKE_ANGLE[rad]
+            )
         )
-    )
 
-enum class Poses(
-    private val translation3d: () -> Translation3d = { getTranslation3d(0.0) },
-    private val rotation3d: () -> Rotation3d = { getRotation3d(0.0) },
-) {
-    INTAKE_EXTENDER({
-        getTranslation3d(80.mm, 10.mm, 248.mm) + EXTENDER_ANGLE_POSE
-    }),
-    EXTENDING_HOPPER(
-        {
+    val extender: Pose3d
+        get() = getPose3d(
+            getTranslation3d(80.mm, 10.mm, 248.mm) + EXTENDER_ANGLE_POSE
+        )
+
+    val extendingHopper: Pose3d
+        get() = getPose3d(
             getTranslation3d(346.mm, 10.mm, 235.mm) + Extender.inputs.distance.toX()
-        },
-    ),
-    INTAKE_ROLLER_1(
-        { getTranslation3d(323.mm, 10.mm, 197.mm) + EXTENDER_ANGLE_POSE },
-        { Roller.inputs.position.toPitch() }
-    ),
-    INTAKE_ROLLER_2(
-        { getTranslation3d(260.mm, 10.mm, 197.mm) + EXTENDER_ANGLE_POSE },
-        { Roller.inputs.position.toPitch() }
-    ),
-    TURRET(
-        { getTranslation3d((-116).mm, 220.5.mm, 355.mm) },
-        { Turret.inputs.position.toYaw() }
-    ),
-    HOOD(
-        { getTranslation3d((-116).mm, 220.5.mm, 450.mm) },
-        { Hood.inputs.position.toPitch() + TURRET.rotation3d() }
-    ),
+        )
 
-    SHOOTER_MAIN_ROLLER(
-        { getTranslation3d((-115).mm, 220.5.mm, 358.mm) }, TURRET.rotation3d
-    ),
-    HOOD_ROLLER({ getTranslation3d((-378).mm, 220.5.mm, 349.mm).rotateAround(TURRET.pose.translation, TURRET.rotation3d()) }, TURRET.rotation3d),
-    SPINDEXER(
-        { getTranslation3d((-26).mm, 43.mm, 36.66200.mm) },
-        { Spindexer.inputs.position.toYaw() }
-    ),
-    PRE_SHOOTER_ROLLER(
-        { getTranslation3d((-63).mm, 90.mm, 211.mm) },
-        { PreShooter.inputs.position.toPitch() }
-    ),
-    PRE_SHOOTER_SECOND_ROLLER(
-        { getTranslation3d((-22).mm, 130.mm, 295.mm) },
-        { PreShooter.inputs.position.toPitch() }
-    ),
-    PRE_SHOOTER_THIRD_ROLLER(
-        { getTranslation3d((-23.5).mm, 315.mm, 295.mm) },
-        { PreShooter.inputs.position.toPitch() }
-    ),
-    CLIMB_GRABBER({ getTranslation3d((-30).mm, (-242).mm, 420.mm) }),
-    CLIMB_WRIST({ getTranslation3d((-250).mm, (-380).mm, 460.mm) });
+    val roller1
+        get() = getPose3d(
+            getTranslation3d(323.mm, 10.mm, 197.mm) + EXTENDER_ANGLE_POSE,
+            Roller.inputs.position.toPitch()
+        )
 
-    val pose: Pose3d
-        get() = Pose3d(translation3d(), rotation3d())
+    val roller2
+        get() = getPose3d(
+            getTranslation3d(260.mm, 10.mm, 197.mm) + EXTENDER_ANGLE_POSE,
+            Roller.inputs.position.toPitch()
+        )
+}
+
+private object Shooter {
+    private val turretRotation
+        get() = Turret.inputs.position.toYaw()
+
+    private val turretTranslation
+        get() = getTranslation3d((-116).mm, 220.5.mm, 355.mm)
+
+    private val hoodTranslation
+        get() = getTranslation3d((-48).mm, 220.5.mm, 435.mm).rotateAround(turretTranslation, turretRotation)
+
+    private val hoodRotation
+        get() = Hood.inputs.position.toPitch() + turretRotation
+
+    val turret
+        get() = getPose3d(
+            turretTranslation, turretRotation
+        )
+
+    val hood
+        get() = getPose3d(
+            hoodTranslation,
+            hoodRotation
+        )
+
+    val shooterMainRoller
+        get() = getPose3d(
+            getTranslation3d((-48).mm, 220.5.mm, 436.mm).rotateAround(turretTranslation, turretRotation),
+            turretRotation
+        ).plus(Transform3d(Translation3d(), Flywheel.inputs.position.toPitch()))
+
+    val hoodRoller: Pose3d
+        get() = hood.plus(
+            Transform3d(
+                getTranslation3d((-247).mm, 220.5.mm, 489.mm) - getTranslation3d(
+                    (-48).mm,
+                    220.5.mm,
+                    435.mm
+                ), Flywheel.inputs.position.toPitch()
+            )
+        )
+}
+
+private object Conveyors {
+    val spindexer
+        get() = getPose3d(
+            getTranslation3d((-26).mm, 43.mm, 36.66200.mm),
+            Spindexer.inputs.position.toYaw()
+        )
+    val firstRoller
+        get() = getPose3d(
+            getTranslation3d((-63).mm, 90.mm, 211.mm),
+            PreShooter.inputs.position.toPitch()
+        )
+    val secondRoller
+        get() = getPose3d(
+            getTranslation3d((-22).mm, 130.mm, 295.mm),
+            PreShooter.inputs.position.toPitch()
+        )
+
+    val thirdRoller
+        get() = getPose3d(
+            getTranslation3d((-23.5).mm, 315.mm, 295.mm),
+            PreShooter.inputs.position.toPitch()
+        )
+}
+
+private object Climb {
+    val grabber
+        get() = getPose3d(
+            getTranslation3d((-30).mm, (-242).mm, 420.mm)
+        )
+    val wrist
+        get() = getPose3d(getTranslation3d((-250).mm, (-380).mm, 460.mm))
 }
 
 private val subsystemPoseArray = Array(14) { Pose3d() }
@@ -155,20 +205,20 @@ fun mechanismPoses(): Array<Pose3d> {
     //        subsystemPoseArray[2 * i + 1] = modulePose
     //    }
 
-    subsystemPoseArray[0] = Poses.INTAKE_EXTENDER.pose
-    subsystemPoseArray[1] = Poses.EXTENDING_HOPPER.pose
-    subsystemPoseArray[2] = Poses.INTAKE_ROLLER_1.pose
-    subsystemPoseArray[3] = Poses.INTAKE_ROLLER_2.pose
-    subsystemPoseArray[4] = Poses.TURRET.pose
-    subsystemPoseArray[5] = Poses.HOOD.pose
-    subsystemPoseArray[6] = Poses.SHOOTER_MAIN_ROLLER.pose
-    subsystemPoseArray[7] = Poses.HOOD_ROLLER.pose
-    subsystemPoseArray[8] = Poses.SPINDEXER.pose
-    subsystemPoseArray[9] = Poses.PRE_SHOOTER_ROLLER.pose
-    subsystemPoseArray[10] = Poses.PRE_SHOOTER_SECOND_ROLLER.pose
-    subsystemPoseArray[11] = Poses.PRE_SHOOTER_THIRD_ROLLER.pose
-    subsystemPoseArray[12] = Poses.CLIMB_GRABBER.pose
-    subsystemPoseArray[13] = Poses.CLIMB_WRIST.pose
+    subsystemPoseArray[0] = Intake.extender
+    subsystemPoseArray[1] = Intake.extendingHopper
+    subsystemPoseArray[2] = Intake.roller1
+    subsystemPoseArray[3] = Intake.roller2
+    subsystemPoseArray[4] = Shooter.turret
+    subsystemPoseArray[5] = Shooter.hood
+    subsystemPoseArray[6] = Shooter.shooterMainRoller
+    subsystemPoseArray[7] = Shooter.hoodRoller
+    subsystemPoseArray[8] = Conveyors.spindexer
+    subsystemPoseArray[9] = Conveyors.firstRoller
+    subsystemPoseArray[10] = Conveyors.secondRoller
+    subsystemPoseArray[11] = Conveyors.thirdRoller
+    subsystemPoseArray[12] = Climb.grabber
+    subsystemPoseArray[13] = Climb.wrist
 
     return subsystemPoseArray
 }
@@ -178,50 +228,50 @@ private val tuningSubsystemPoses =
     arrayOf(
         TunablePose3d(
             "/Tuning/Visualization/IntakeExtender",
-            Poses.INTAKE_EXTENDER.pose
+            Intake.extender
         ),
         TunablePose3d(
             "/Tuning/Visualization/ExtendingHopper",
-            Poses.EXTENDING_HOPPER.pose
+            Intake.extendingHopper
         ),
         TunablePose3d(
             "/Tuning/Visualization/IntakeRoller1",
-            Poses.INTAKE_ROLLER_1.pose
+            Intake.roller1
         ),
         TunablePose3d(
             "/Tuning/Visualization/IntakeRoller2",
-            Poses.INTAKE_ROLLER_2.pose
+            Intake.roller2
         ),
-        TunablePose3d("/Tuning/Visualization/Turret", Poses.TURRET.pose),
-        TunablePose3d("/Tuning/Visualization/Hood", Poses.HOOD.pose),
+        TunablePose3d("/Tuning/Visualization/Turret", Shooter.turret),
+        TunablePose3d("/Tuning/Visualization/Hood", Shooter.hood),
         TunablePose3d(
             "/Tuning/Visualization/ShooterMainRoller",
-            Poses.SHOOTER_MAIN_ROLLER.pose
+            Shooter.shooterMainRoller
         ),
         TunablePose3d(
             "/Tuning/Visualization/HoodRoller",
-            Poses.HOOD_ROLLER.pose
+            Shooter.hoodRoller
         ),
-        TunablePose3d("/Tuning/Visualization/Spindexer", Poses.SPINDEXER.pose),
+        TunablePose3d("/Tuning/Visualization/Spindexer", Conveyors.spindexer),
         TunablePose3d(
             "/Tuning/Visualization/PreShooterRoller",
-            Poses.PRE_SHOOTER_ROLLER.pose
+            Conveyors.firstRoller
         ),
         TunablePose3d(
             "/Tuning/Visualization/PreShooterSecondRoller",
-            Poses.PRE_SHOOTER_SECOND_ROLLER.pose
+            Conveyors.secondRoller
         ),
         TunablePose3d(
             "/Tuning/Visualization/PreShooterThirdRoller",
-            Poses.PRE_SHOOTER_THIRD_ROLLER.pose
+            Conveyors.thirdRoller
         ),
         TunablePose3d(
             "/Tuning/Visualization/ClimbGrabber",
-            Poses.CLIMB_GRABBER.pose
+            Climb.grabber
         ),
         TunablePose3d(
             "/Tuning/Visualization/ClimbWrist",
-            Poses.CLIMB_WRIST.pose
+            Climb.wrist
         ),
     )
 
