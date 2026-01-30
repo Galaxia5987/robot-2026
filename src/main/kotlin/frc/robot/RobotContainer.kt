@@ -121,7 +121,7 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
-        driverController.b().onTrue(Roller.intake()).onFalse(Roller.stop())
+        driverController.b().onTrue(Extender.open()).onFalse(Extender.close())
 
         //         Intake Bindings
 //        driverController

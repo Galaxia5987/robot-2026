@@ -17,6 +17,8 @@ import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.spindexer.Spindexer
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
+import kotlin.math.cos
+import kotlin.math.sin
 
 private val swerveModulePose: Array<Translation2d> =
     Drive.getModuleTranslations()
@@ -77,25 +79,34 @@ private fun getAllSwerveModulePoseDrive(): Array<Pose3d> {
     return swervePosesDrive
 }
 
+private val INTAKE_ANGLE = 9.deg
+
+private val EXTENDER_ANGLE_POSE: Translation3d
+    get() = getTranslation3d(
+        x = Extender.inputs.distance * cos(INTAKE_ANGLE[rad]),
+        z = -Extender.inputs.distance * sin(
+            INTAKE_ANGLE[rad]
+        )
+    )
+
 enum class Poses(
     private val translation3d: () -> Translation3d = { getTranslation3d(0.0) },
     private val rotation3d: () -> Rotation3d = { getRotation3d(0.0) },
 ) {
     INTAKE_EXTENDER({
-        getTranslation3d(80.mm, 10.mm, 248.mm) + Extender.inputs.distance.toX()
+        getTranslation3d(80.mm, 10.mm, 248.mm) + EXTENDER_ANGLE_POSE
     }),
     EXTENDING_HOPPER(
         {
-            getTranslation3d(346.mm, 10.mm, 235.mm) +
-                    Extender.inputs.distance.toX()
+            getTranslation3d(346.mm, 10.mm, 235.mm) + Extender.inputs.distance.toX()
         },
     ),
     INTAKE_ROLLER_1(
-        { getTranslation3d(323.mm, 10.mm, 197.mm) },
+        { getTranslation3d(323.mm, 10.mm, 197.mm) + EXTENDER_ANGLE_POSE },
         { Roller.inputs.position.toPitch() }
     ),
     INTAKE_ROLLER_2(
-        { getTranslation3d(260.mm, 10.mm, 197.mm) },
+        { getTranslation3d(260.mm, 10.mm, 197.mm) + EXTENDER_ANGLE_POSE },
         { Roller.inputs.position.toPitch() }
     ),
     TURRET(
