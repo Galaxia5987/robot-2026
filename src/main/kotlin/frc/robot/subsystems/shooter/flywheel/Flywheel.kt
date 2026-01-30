@@ -60,6 +60,6 @@ object Flywheel : SubsystemBase(), FlywheelVelocitiesCommandFactory {
 
     override fun periodic() {
         motor.periodic()
-        Logger.recordOutput("subsystems/$name/setpoint", setpoint)
+        Logger.recordOutput("Subsystems/$name/setpoint", setpoint)
     }
 }

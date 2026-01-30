@@ -10,6 +10,7 @@ import frc.robot.field_constants.ALLIANCE_ZONE
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.lib.extensions.not
+import frc.robot.lib.extensions.onFalse
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.intaking.changeIntakingStates
 import frc.robot.states.setpoints_manager.ShootingType
@@ -120,14 +121,14 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
-        driverController.b().onTrue(Roller.setTarget(RollerPositions.INTAKE))
+        driverController.b().onTrue(Roller.intake()).onFalse(Roller.stop())
 
         //         Intake Bindings
-        driverController
-            .a()
-            .onTrue(IntakingStates.INTAKING.set())
-            .onFalse(changeIntakingStates())
-        driverController.b().onTrue(Extender.open())
+//        driverController
+//            .a()
+//            .onTrue(IntakingStates.INTAKING.set())
+//            .onFalse(changeIntakingStates())
+//        driverController.b().onTrue(Extender.open())
         //                driverController
         //                    .a()
         //                    .negate()
@@ -139,12 +140,12 @@ object RobotContainer {
         //                    .and(cantCloseIntake)
         //            .onTrue(IntakingStates.OPEN.set())
 
-        driverController
-            .y()
-            .onTrue(Spindexer.setTarget(SpindexerVelocity.REVERSE_SLOW))
-        driverController
-            .x()
-            .onTrue(Spindexer.setTarget(SpindexerVelocity.REVERSE))
+//        driverController
+//            .y()
+//            .onTrue(Spindexer.setTarget(SpindexerVelocity.REVERSE_SLOW))
+//        driverController
+//            .x()
+//            .onTrue(Spindexer.setTarget(SpindexerVelocity.REVERSE))
     }
 
     fun getAutonomousCommand(): Command = autoChooser.get()
