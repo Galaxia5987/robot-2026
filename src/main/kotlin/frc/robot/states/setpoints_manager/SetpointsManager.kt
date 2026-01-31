@@ -42,6 +42,7 @@ enum class ShootingType {
     SHOOT_ON_MOVE
 }
 
+@LoggedOutput(key = "StateMachines/Shooting/shootingType", level = LogLevel.COMP)
 val shootingType
     get() =
         when {
