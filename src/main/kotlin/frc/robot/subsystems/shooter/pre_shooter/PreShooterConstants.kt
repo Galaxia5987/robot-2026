@@ -12,13 +12,13 @@ import org.team5987.annotation.command_enum.CommandEnum
 
 val GAINS = Gains(1.0) // TODO calibration
 
-val SIM_GAINS = Gains(1.0, 0.0)
+val SIM_GAINS = Gains(0.04, kV = 0.001)
 
 const val MAIN_MOTOR_ID = 0
 
 const val GEAR_RATIO = 1.0
 
-val SETPOINT_TOLERANCE = 0.5.rps
+val SETPOINT_TOLERANCE = 1.rps
 
 val MOTOR_CONFIG =
     TalonFXConfiguration().apply {

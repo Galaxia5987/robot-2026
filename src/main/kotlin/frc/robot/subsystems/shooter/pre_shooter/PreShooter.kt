@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.extensions.get
+import frc.robot.lib.extensions.kg2m
+import frc.robot.lib.extensions.radiansPerSecond
 import frc.robot.lib.extensions.rps
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.Logger
@@ -17,11 +19,12 @@ object PreShooter : SubsystemBase(), PreShooterVelocityCommandFactory {
             MAIN_MOTOR_ID,
             config = MOTOR_CONFIG,
             gearRatio = GEAR_RATIO,
-            simGains = SIM_GAINS
+            simGains = SIM_GAINS,
+            momentOfInertia = 0.03.kg2m
         )
     private val velocityVoltage = VelocityVoltage(0.0)
 
-    private var setpoint = 0.0.rps
+    private var setpoint = 0.0.radiansPerSecond
 
     val atSetpoint = Trigger {
         mainMotor.inputs.velocity.isNear(setpoint, SETPOINT_TOLERANCE)

@@ -2,6 +2,10 @@ package frc.robot.lib.universal_motor
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.controls.ControlRequest
+import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC
+import com.ctre.phoenix6.controls.PositionVoltage
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC
+import com.ctre.phoenix6.controls.VelocityVoltage
 import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.controller.ProfiledPIDController
 import edu.wpi.first.math.trajectory.TrapezoidProfile
@@ -15,6 +19,7 @@ import frc.robot.lib.extensions.rot
 import frc.robot.lib.extensions.toDistance
 import frc.robot.lib.motors.TalonFXSim
 import frc.robot.lib.motors.TalonType
+import kotlin.time.times
 
 /**
  * Simulated implementation of [MotorIO] for use during robot simulation.
@@ -29,7 +34,7 @@ class MotorIOSim(
     override val config: TalonFXConfiguration,
     private val simGains: Gains,
     private val gearRatio: Double,
-    private val diameter: Distance
+    private val diameter: Distance,
 ) : MotorIO {
     override val inputs = LoggedMotorInputs()
     private val profiledPIDController =
@@ -53,11 +58,19 @@ class MotorIOSim(
     }
 
     override fun setRequest(controlRequest: ControlRequest) {
+        when (controlRequest) {
+            is VelocityVoltage -> controlRequest.FeedForward = controlRequest.Velocity * simGains.kV
+            is VelocityTorqueCurrentFOC -> controlRequest.FeedForward = controlRequest.Velocity * simGains.kV
+            is PositionVoltage -> controlRequest.FeedForward = controlRequest.Position * simGains.kV
+            is PositionTorqueCurrentFOC -> controlRequest.FeedForward = controlRequest.Position * simGains.kV
+        }
+
+
         motor.setControl(controlRequest)
     }
 
     override fun updateInputs() {
-        motor.update(Timer.getTimestamp())
+        motor.update(Timer.getFPGATimestamp())
         inputs.current = motor.appliedCurrent
         inputs.position = motor.position.rot
         inputs.voltage = motor.appliedVoltage

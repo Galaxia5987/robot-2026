@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.extensions.deg
+import frc.robot.lib.extensions.radians
 import frc.robot.lib.extensions.volts
 import frc.robot.lib.sysid.SysIdable
 import frc.robot.lib.universal_motor.UniversalTalonFX
@@ -31,7 +32,7 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
         )
     private val encoder = CANcoder(ENCODER_ID)
 
-    private var setpoint = 0.deg
+    private var setpoint = 0.radians
     var atSetpoint = Trigger {
         motor.inputs.position.isNear(setpoint, TOLERANCE)
     }
