@@ -171,18 +171,18 @@ private object Conveyors {
     val firstRoller
         get() = getPose3d(
             getTranslation3d((-63).mm, 90.mm, 211.mm),
-            PreShooter.inputs.position.toPitch()
+            PreShooter.inputs.position.toRoll()
         )
     val secondRoller
         get() = getPose3d(
             getTranslation3d((-22).mm, 130.mm, 295.mm),
-            PreShooter.inputs.position.toPitch()
+            PreShooter.inputs.position.toRoll()
         )
 
     val thirdRoller
         get() = getPose3d(
             getTranslation3d((-23.5).mm, 315.mm, 295.mm),
-            PreShooter.inputs.position.toPitch()
+            PreShooter.inputs.position.toRoll()
         )
 }
 
