@@ -37,7 +37,6 @@ object RobotContainer {
         configureDefaultCommands()
 
         if (CURRENT_MODE == Mode.SIM) {
-            SimulatedArena.overrideInstance(EmptyArena())
             SimulatedArena.getInstance()
                 .addDriveTrainSimulation(driveSimulation)
             SimulatedArena.getInstance().resetFieldForAuto()
@@ -45,10 +44,6 @@ object RobotContainer {
 
         enableAutoLogOutputFor(this)
     }
-
-    @AutoLogOutput(key = "MapleSimPose")
-    private fun getMapleSimPose(): Pose2d? =
-        driveSimulation?.simulatedDriveTrainPose
 
     private fun configureDefaultCommands() {
         drive.defaultCommand =
@@ -110,11 +105,5 @@ object RobotContainer {
             "swerveFFCharacterization",
             DriveCommands.feedforwardCharacterization()
         )
-    }
-
-    fun resetSimulationField() {
-        if (CURRENT_MODE != Mode.SIM) return
-
-        SimulatedArena.getInstance().resetFieldForAuto()
     }
 }

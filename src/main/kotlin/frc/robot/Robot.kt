@@ -8,9 +8,10 @@ import com.pathplanner.lib.commands.PathfindingCommand
 import edu.wpi.first.hal.FRCNetComm.tInstances
 import edu.wpi.first.hal.FRCNetComm.tResourceType
 import edu.wpi.first.hal.HAL
-import edu.wpi.first.math.geometry.Pose3d
+import edu.wpi.first.math.VecBuilder
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.PowerDistribution
+import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.lib.Mode
@@ -65,7 +66,7 @@ object Robot : LoggedRobot() {
         )
 
         when (CURRENT_MODE) {
-            Mode.REAL -> {
+            frc.robot.lib.Mode.REAL -> {
                 LoggedPowerDistribution.getInstance(
                     1,
                     PowerDistribution.ModuleType.kRev
@@ -73,8 +74,8 @@ object Robot : LoggedRobot() {
                 Logger.addDataReceiver(WPILOGWriter())
                 Logger.addDataReceiver(NT4Publisher())
             }
-            Mode.SIM -> Logger.addDataReceiver(NT4Publisher())
-            Mode.REPLAY -> {
+            frc.robot.lib.Mode.SIM -> Logger.addDataReceiver(NT4Publisher())
+            frc.robot.lib.Mode.REPLAY -> {
                 setUseTiming(false)
                 val logPath = LogFileUtil.findReplayLog()
                 Logger.setReplaySource(WPILOGReader(logPath))
@@ -96,11 +97,6 @@ object Robot : LoggedRobot() {
                 FollowPathCommand.warmupCommand(),
                 PathfindingCommand.warmupCommand()
             )
-
-        Logger.recordOutput(
-            "Visualization/zeroedPositions",
-            *Array(11) { Pose3d() }
-        )
     }
 
     /**
@@ -146,6 +142,14 @@ object Robot : LoggedRobot() {
 
     override fun simulationPeriodic() {
         val arena = SimulatedArena.getInstance()
+        Logger.recordOutput("Visualization/Fuels", *arena.getGamePiecesArrayByType("Fuel"))
+
+        val pose = getMapleSimPose()
+        val timestamp = Timer.getFPGATimestamp()
+        val stdDevs = VecBuilder.fill(0.01, 0.01, 0.01)
+
+        drive.addGlobalVisionMeasurement(pose, timestamp, stdDevs)
+        drive.addLocalVisionMeasurement(pose, timestamp, stdDevs)
         arena.simulationPeriodic()
     }
 
@@ -154,7 +158,7 @@ object Robot : LoggedRobot() {
 
     /** This function is called once when the robot is disabled. */
     override fun disabledInit() {
-        RobotContainer.resetSimulationField()
+        resetSimulationField()
     }
 
     /** This function is called periodically when disabled. */
