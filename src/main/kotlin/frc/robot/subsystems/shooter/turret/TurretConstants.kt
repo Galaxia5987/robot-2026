@@ -11,6 +11,7 @@ import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.amps
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
+import frc.robot.lib.extensions.rotations
 import frc.robot.lib.extensions.rps
 import org.team5987.annotation.command_enum.CommandEnum
 
@@ -29,9 +30,9 @@ val ABSOLUTE_ENCODER_OFFSET = 0.rps
 val SOFTWARE_LIMIT_CONFIG =
     SoftwareLimitSwitchConfigs().apply { // TODO: Configure
         ForwardSoftLimitEnable = false
-        ForwardSoftLimitThreshold = 0.0
+        ForwardSoftLimitThreshold = 270.0.deg[rotations]
         ReverseSoftLimitEnable = false
-        ReverseSoftLimitThreshold = 0.0
+        ReverseSoftLimitThreshold = -3.0.deg[rotations]
     }
 
 val ENCODER_CONFIG =
