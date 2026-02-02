@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Rotation3d
 import edu.wpi.first.math.geometry.Transform2d
 import edu.wpi.first.math.geometry.Transform3d
 import edu.wpi.first.math.geometry.Translation2d
+import edu.wpi.first.math.geometry.Translation3d
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.Units.Rotations
 import edu.wpi.first.units.measure.Angle
@@ -75,6 +76,8 @@ fun Translation2d.flipIfNeeded(): Translation2d =
 fun Translation2d.toTransform(): Transform2d = Transform2d(this, Rotation2d())
 
 fun Translation2d.toPose(): Pose2d = Pose2d(this, Rotation2d())
+
+fun Translation2d.toTranslation3d(z: Distance = 0.meters): Translation3d = Translation3d(this.measureX, this.measureY, z)
 
 fun Translation2d.rotationToPoint(targetPoint: Translation2d): Rotation2d =
     Rotation2d(targetPoint.x - this.x, targetPoint.y - this.y)

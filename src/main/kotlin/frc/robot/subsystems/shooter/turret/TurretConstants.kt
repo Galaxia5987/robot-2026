@@ -27,11 +27,11 @@ val ENCODER_ID = 0
 val ABSOLUTE_ENCODER_OFFSET = 0.rps
 
 val SOFTWARE_LIMIT_CONFIG =
-    SoftwareLimitSwitchConfigs().apply {
-        ForwardSoftLimitEnable = true
-        ForwardSoftLimitThreshold = 0.73291
-        ReverseSoftLimitEnable = true
-        ReverseSoftLimitThreshold = -0.005
+    SoftwareLimitSwitchConfigs().apply { // TODO: Configure
+        ForwardSoftLimitEnable = false
+        ForwardSoftLimitThreshold = 0.0
+        ReverseSoftLimitEnable = false
+        ReverseSoftLimitThreshold = 0.0
     }
 
 val ENCODER_CONFIG =
