@@ -30,7 +30,7 @@ val shooterAtSetpoint: Trigger =
         .and(Turret.atSetpoint)
         .and(Flywheel.atSetpoint)
         .and(PreShooter.atSetpoint).logTrigger(
-            "$LOGGING_PATH/shooterAtSetpoint"
+            "$LOGGING_PATH/allSubsystemsAtSetpoint"
         )
 
 class Shooting(dontShootTrigger: Trigger) {
@@ -47,9 +47,11 @@ class Shooting(dontShootTrigger: Trigger) {
             .and(canShoot)
             .onTrue(ShootingState.PRIMING.set()).logTrigger("$LOGGING_PATH/idleAndCanShoot")
 
+    private val shootingStatePrimingOrShooting = ShootingState.PRIMING.trigger.or(ShootingState.SHOOTING.trigger)
+
     private val lockIfNeeded =
-        ShootingState.PRIMING.trigger.and(isShootingOnMove.negate()).onTrue(
-            drive.lock()
+        shootingStatePrimingOrShooting.and(isShootingOnMove.negate()).onTrue(
+            drive.continousLock()
         ).logTrigger("$LOGGING_PATH/lockIfNeeded")
 
     private val setShootingIfPrimed =

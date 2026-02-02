@@ -440,6 +440,10 @@ public class Drive extends SubsystemBase implements SysIdable {
         return runOnce(this::stopWithX);
     }
 
+    public Command continousLock() {
+        return run(this::stopWithX);
+    }
+
     /** Returns a command to run a quasistatic test in the specified direction. */
     public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
         return run(() -> runCharacterization(0.0))

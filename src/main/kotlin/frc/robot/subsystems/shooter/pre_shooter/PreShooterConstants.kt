@@ -18,7 +18,7 @@ const val MAIN_MOTOR_ID = 0
 
 const val GEAR_RATIO = 1.0
 
-val SETPOINT_TOLERANCE = 1.rps
+val SETPOINT_TOLERANCE = 2.rps
 
 val MOTOR_CONFIG =
     TalonFXConfiguration().apply {

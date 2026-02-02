@@ -2,7 +2,9 @@ package frc.robot
 
 import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.wpilibj.PS5Controller
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import frc.robot.field.EmptyArena
@@ -10,6 +12,7 @@ import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.lib.extensions.onFalse
 import frc.robot.lib.extensions.rps
+import frc.robot.lib.unified_controller.UnifiedController
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.intaking.canCloseIntake
 import frc.robot.states.intaking.cantCloseIntake
@@ -60,8 +63,6 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
-        driverController.povDown().onTrue(Flywheel.setVelocity({26.rps})).onFalse(Flywheel.setVelocity({0.rps}))
-
         // Intake Bindings
         val intakeButton = driverController.R2()
 
@@ -75,6 +76,7 @@ object RobotContainer {
             .and(cantCloseIntake)
             .onTrue(IntakingStates.OPEN.set())
 
+        driverController.L2().onTrue(Commands.run({println("PRESSED")}))
         Shooting(driverController.L2())
     }
 
