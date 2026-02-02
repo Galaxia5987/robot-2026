@@ -6,6 +6,8 @@ import edu.wpi.first.units.measure.AngularVelocity
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.lib.extensions.get
+import frc.robot.lib.extensions.rad_ps
 import frc.robot.lib.extensions.radiansPerSecond
 import frc.robot.lib.extensions.rps
 import frc.robot.lib.universal_motor.UniversalTalonFX
@@ -64,6 +66,6 @@ object Flywheel : SubsystemBase(), FlywheelVelocitiesCommandFactory {
     override fun periodic() {
         motor.periodic()
         Logger.recordOutput("Subsystems/$name/atSetpoint", atSetpoint)
-        Logger.recordOutput("Subsystems/$name/setpoint", setpoint)
+        Logger.recordOutput("Subsystems/$name/setpoint", setpoint[rad_ps], rad_ps)
     }
 }

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.extensions.deg
+import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.radians
 import frc.robot.lib.extensions.volts
 import frc.robot.lib.sysid.SysIdable
@@ -67,6 +68,6 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
         motor.periodic()
         Logger.recordOutput("Subsystems/$name/mechanism", mechanism)
         Logger.recordOutput("Subsystems/$name/atSetpoint", atSetpoint)
-        Logger.recordOutput("Subsystems/$name/setpoint", setpoint)
+        Logger.recordOutput("Subsystems/$name/setpoint", setpoint[radians], radians)
     }
 }

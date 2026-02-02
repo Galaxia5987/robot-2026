@@ -9,11 +9,13 @@ import frc.robot.field.EmptyArena
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.lib.extensions.onFalse
+import frc.robot.lib.extensions.rps
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.intaking.canCloseIntake
 import frc.robot.states.intaking.cantCloseIntake
 import frc.robot.states.shooting.Shooting
 import frc.robot.subsystems.drive.DriveCommands
+import frc.robot.subsystems.shooter.flywheel.Flywheel
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.shooter.turret.Turret.setAngle
@@ -58,7 +60,7 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
-        driverController.povDown().onTrue(PreShooter.fast()).onFalse(PreShooter.stop())
+        driverController.povDown().onTrue(Flywheel.setVelocity({26.rps})).onFalse(Flywheel.setVelocity({0.rps}))
 
         // Intake Bindings
         val intakeButton = driverController.R2()

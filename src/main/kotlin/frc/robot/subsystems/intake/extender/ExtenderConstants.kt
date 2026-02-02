@@ -12,6 +12,8 @@ import org.team5987.annotation.command_enum.CommandEnum
 
 val DIAMETER = 12.7.mm
 
+val TOLERANCE = 4.cm
+
 val PORT = 0
 // TODO: actual port
 

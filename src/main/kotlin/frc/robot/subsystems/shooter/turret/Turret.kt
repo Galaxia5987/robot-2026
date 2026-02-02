@@ -6,6 +6,7 @@ import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.extensions.deg
+import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.radians
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.AutoLogOutput
@@ -56,7 +57,7 @@ object Turret : SubsystemBase() {
         motor.periodic()
         ligament.setAngle(motor.inputs.position)
         Logger.recordOutput("Subsystems/$name/mechanism", mechanism)
-        Logger.recordOutput("Subsystems/$name/setpoint", setpoint)
+        Logger.recordOutput("Subsystems/$name/setpoint", setpoint[radians], radians)
         Logger.recordOutput("Subsystems/$name/atSetpoint", atSetpoint)
     }
 }
