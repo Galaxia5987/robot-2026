@@ -12,6 +12,7 @@ import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.lib.extensions.onFalse
 import frc.robot.lib.extensions.rps
+import frc.robot.lib.unified_controller.PS5LinuxController
 import frc.robot.lib.unified_controller.UnifiedController
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.intaking.canCloseIntake
@@ -28,7 +29,7 @@ import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 
 object RobotContainer {
-    private val driverController = CommandPS5Controller(0)
+    private val driverController = PS5LinuxController(0)
     private val autoChooser: LoggedDashboardChooser<Command>
 
     init {
@@ -76,7 +77,6 @@ object RobotContainer {
             .and(cantCloseIntake)
             .onTrue(IntakingStates.OPEN.set())
 
-        driverController.L2().onTrue(Commands.run({println("PRESSED")}))
         Shooting(driverController.L2())
     }
 

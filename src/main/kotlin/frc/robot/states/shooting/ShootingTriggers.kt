@@ -7,7 +7,9 @@ import frc.robot.field.inAllianceZone
 import frc.robot.field.isHubActive
 import frc.robot.lib.extensions.and
 import frc.robot.lib.extensions.logTrigger
+import frc.robot.lib.extensions.whileTrue
 import frc.robot.states.setpoints_manager.isShootingOnMove
+import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.sensors.Sensors
 import frc.robot.subsystems.shooter.flywheel.Flywheel
 import frc.robot.subsystems.shooter.hood.Hood
@@ -50,9 +52,10 @@ class Shooting(dontShootTrigger: Trigger) {
     private val shootingStatePrimingOrShooting = ShootingState.PRIMING.trigger.or(ShootingState.SHOOTING.trigger)
 
     private val lockIfNeeded =
-        shootingStatePrimingOrShooting.and(isShootingOnMove.negate()).onTrue(
+        shootingStatePrimingOrShooting.and(isShootingOnMove.negate()).whileTrue(
             drive.continousLock()
-        ).logTrigger("$LOGGING_PATH/lockIfNeeded")
+        )
+            .logTrigger("$LOGGING_PATH/lockIfNeeded")
 
     private val setShootingIfPrimed =
         ShootingState.PRIMING.trigger

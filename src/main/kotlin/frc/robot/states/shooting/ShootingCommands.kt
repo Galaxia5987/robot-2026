@@ -12,6 +12,7 @@ import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 fun idle(): Command =
     Commands.sequence(
         Flywheel.zero(),
+        PreShooter.stop(),
         SpindexerCommands.stopFeeding(),
         IntakingStates.CLOSED.set()
     )
