@@ -153,7 +153,7 @@ object Robot : LoggedRobot() {
         Logger.recordOutput("Visualization/Fuels", *arena.getGamePiecesArrayByType("Fuel"))
 
         val pose = getMapleSimPose()
-        val timestamp = Timer.getFPGATimestamp()
+        val timestamp = Timer.getTimestamp()
         val stdDevs = VecBuilder.fill(0.01, 0.01, 0.01)
 
         drive.addGlobalVisionMeasurement(pose, timestamp, stdDevs)
