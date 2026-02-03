@@ -15,8 +15,8 @@ import frc.robot.lib.extensions.rps
 import frc.robot.lib.unified_controller.PS5LinuxController
 import frc.robot.lib.unified_controller.UnifiedController
 import frc.robot.states.intaking.IntakingStates
-import frc.robot.states.intaking.canCloseIntake
-import frc.robot.states.intaking.cantCloseIntake
+import frc.robot.states.intaking.IntakingTriggers.canCloseIntake
+import frc.robot.states.intaking.IntakingTriggers.cantCloseIntake
 import frc.robot.states.shooting.Shooting
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.shooter.flywheel.Flywheel

@@ -16,7 +16,7 @@ import frc.robot.lib.extensions.rps
 import frc.robot.lib.math.interpolation.InterpolatingDouble
 import frc.robot.lib.math.interpolation.InterpolatingDoubleMap
 import frc.robot.lib.shooting.ShootingTableReader
-import frc.robot.states.setpoints_manager.currentGoal
+import frc.robot.states.setpoints_manager.SetpointsManager.currentGoal
 import frc.robot.subsystems.shooter.flywheel.Flywheel
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter

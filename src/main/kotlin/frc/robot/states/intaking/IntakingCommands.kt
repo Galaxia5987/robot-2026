@@ -8,6 +8,8 @@ import frc.robot.subsystems.intake.extender.Extender
 import frc.robot.subsystems.intake.extender.ExtenderPositions
 import frc.robot.subsystems.intake.roller.Roller
 
+private val PUMP_TIME = 0.3.sec
+
 fun closed(): Command = Commands.parallel(Roller.stop(), Extender.close(), SpindexerCommands.stopIntaking())
 
 fun intaking(): Command =
@@ -24,10 +26,12 @@ fun open(): Command =
         SpindexerCommands.stopIntaking()
     )
 
-fun pumping(): Command =
-    Commands.sequence(
-            Extender.setTarget(ExtenderPositions.OPEN),
-            Commands.waitTime(0.4.sec),
-            Extender.setTarget(ExtenderPositions.CLOSE)
-        )
+fun pumping(): Command {
+    return Commands.sequence(
+        Extender.setTarget(ExtenderPositions.CLOSE),
+        Commands.waitTime(PUMP_TIME),
+        Extender.setTarget(ExtenderPositions.OPEN),
+        Commands.waitTime(PUMP_TIME),
+    )
         .repeatedly()
+}

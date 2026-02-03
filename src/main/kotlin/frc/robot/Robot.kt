@@ -17,6 +17,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.lib.logged_output.LoggedOutputManager
+import frc.robot.states.intaking.IntakingTriggers
+import frc.robot.states.setpoints_manager.SetpointsManager
+import frc.robot.states.spindexer.SpindexerTriggers
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.*
 import org.littletonrobotics.junction.networktables.NT4Publisher
@@ -86,6 +89,11 @@ object Robot : LoggedRobot() {
         }
         Logger.start()
         RobotContainer // Initialize robot container.
+
+        // Bind state Machines
+        SetpointsManager
+        IntakingTriggers
+        SpindexerTriggers
 
         enableAutoLogOutputFor(this)
 

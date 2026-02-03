@@ -11,11 +11,13 @@ import org.team5987.annotation.LoggedOutput
 
 const val LOGGING_PATH = "StateMachines/Spindexer"
 
-private val stopTrigger = SpindexerStates.IDLE.trigger.onTrue(Spindexer.stop())
-private val activeTrigger =
-    SpindexerStates.ACTIVE.trigger.onTrue(Spindexer.start())
+object SpindexerTriggers {
+    private val stopTrigger = SpindexerStates.IDLE.trigger.onTrue(Spindexer.stop())
+    private val activeTrigger =
+        SpindexerStates.ACTIVE.trigger.onTrue(Spindexer.start())
 
-val spinRequested: Trigger =
-    Trigger { isFeeding || isIntaking }
-        .onTrue(SpindexerStates.ACTIVE.set())
-        .onFalse(SpindexerStates.IDLE.set()).logTrigger("$LOGGING_PATH/spinRequested")
+    val spinRequested: Trigger =
+        Trigger { isFeeding || isIntaking }
+            .onTrue(SpindexerStates.ACTIVE.set())
+            .onFalse(SpindexerStates.IDLE.set())
+}

@@ -8,7 +8,7 @@ import frc.robot.field.isHubActive
 import frc.robot.lib.extensions.and
 import frc.robot.lib.extensions.logTrigger
 import frc.robot.lib.extensions.whileTrue
-import frc.robot.states.setpoints_manager.isShootingOnMove
+import frc.robot.states.setpoints_manager.SetpointsManager.isShootingOnMove
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.sensors.Sensors
 import frc.robot.subsystems.shooter.flywheel.Flywheel
