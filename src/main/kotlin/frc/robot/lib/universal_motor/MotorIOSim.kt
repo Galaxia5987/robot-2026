@@ -19,7 +19,6 @@ import frc.robot.lib.extensions.rot
 import frc.robot.lib.extensions.toDistance
 import frc.robot.lib.motors.TalonFXSim
 import frc.robot.lib.motors.TalonType
-import kotlin.time.times
 
 /**
  * Simulated implementation of [MotorIO] for use during robot simulation.
@@ -48,7 +47,11 @@ class MotorIOSim(
             )
         )
     private val controller =
-        PIDController(simGains.kP, simGains.kI, simGains.kD)
+        PIDController(simGains.kP, simGains.kI, simGains.kD).apply {
+            if (config.ClosedLoopGeneral.ContinuousWrap) {
+                enableContinuousInput(-0.5, 0.5)
+            }
+        }
     private val motor =
         TalonFXSim(1, 1.0, momentOfInertia[kg2m], 1.0, TalonType.KRAKEN_FOC)
 

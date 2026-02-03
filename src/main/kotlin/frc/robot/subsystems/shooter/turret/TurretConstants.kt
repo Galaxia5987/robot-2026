@@ -30,9 +30,9 @@ val ABSOLUTE_ENCODER_OFFSET = 0.rps
 val SOFTWARE_LIMIT_CONFIG =
     SoftwareLimitSwitchConfigs().apply { // TODO: Configure
         ForwardSoftLimitEnable = false
-        ForwardSoftLimitThreshold = 270.0.deg[rotations]
+        ForwardSoftLimitThreshold = (-90).deg[rotations]
         ReverseSoftLimitEnable = false
-        ReverseSoftLimitThreshold = -3.0.deg[rotations]
+        ReverseSoftLimitThreshold = (-3).deg[rotations]
     }
 
 val ENCODER_CONFIG =
@@ -51,6 +51,9 @@ val CONFIG =
                 Inverted = InvertedValue.Clockwise_Positive
             }
         Slot0 = Slot0Configs().apply { Slot0 = REAL_GAINS.toSlotConfig() }
+        ClosedLoopGeneral = ClosedLoopGeneralConfigs().apply {
+            ContinuousWrap = true
+        }
         Feedback =
             FeedbackConfigs().apply {
                 SensorToMechanismRatio = RATIO

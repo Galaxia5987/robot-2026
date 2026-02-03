@@ -154,19 +154,21 @@ fun Color.colorSimilarity(color: Color): Double {
     return similarity.coerceIn(0.0, 1.0)
 }
 
+// min -> reverse
+// max -> forward
 fun <T : Comparable<T>> T.wrapAround(minimumValue: T, maximumValue: T): T {
-    if (minimumValue > maximumValue)
-        throw IllegalArgumentException(
-            "Cannot coerce value to an empty range: maximum $maximumValue is less than minimum $minimumValue."
-        )
-    if (this < minimumValue) return maximumValue
-    if (this > maximumValue) return maximumValue
+//    if (minimumValue > maximumValue)
+//        throw IllegalArgumentException(
+//            "Cannot coerce value to an empty range: maximum $maximumValue is less than minimum $minimumValue."
+//        )
+    if (this < minimumValue && this > maximumValue) return maximumValue
+//    if (this > maximumValue) return minimumValue
     return this
 }
 
 fun Rotation2d.convertTo360():
     Rotation2d { // Convert angle from (-180,180) -> (0,360)
-    val deg = (this.degrees + 180.0)
+    val deg = (this.degrees + 360.0) % 360.0
     return Rotation2d.fromDegrees(deg)
 }
 
