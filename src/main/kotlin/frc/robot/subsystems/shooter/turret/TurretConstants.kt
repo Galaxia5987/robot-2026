@@ -54,6 +54,7 @@ val CONFIG =
         ClosedLoopGeneral = ClosedLoopGeneralConfigs().apply {
             ContinuousWrap = true
         }
+        SoftwareLimitSwitch = SOFTWARE_LIMIT_CONFIG
         Feedback =
             FeedbackConfigs().apply {
                 SensorToMechanismRatio = RATIO

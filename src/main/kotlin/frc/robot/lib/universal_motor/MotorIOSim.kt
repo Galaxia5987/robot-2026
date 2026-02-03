@@ -49,7 +49,7 @@ class MotorIOSim(
     private val controller =
         PIDController(simGains.kP, simGains.kI, simGains.kD).apply {
             if (config.ClosedLoopGeneral.ContinuousWrap) {
-                enableContinuousInput(-0.5, 0.5)
+                enableContinuousInput(0.0, 1.0)
             }
         }
     private val motor =
