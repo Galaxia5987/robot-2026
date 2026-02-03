@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.lib.logged_output.LoggedOutputManager
+import frc.robot.sim.MapleSimIntake
 import frc.robot.states.intaking.IntakingTriggers
 import frc.robot.states.setpoints_manager.SetpointsManager
 import frc.robot.states.spindexer.SpindexerTriggers
@@ -148,9 +149,17 @@ object Robot : LoggedRobot() {
         }
     }
 
+    override fun simulationInit() {
+        resetSimulationField()
+        val mapleSimIntake = MapleSimIntake()
+    }
+
     override fun simulationPeriodic() {
         val arena = SimulatedArena.getInstance()
-        Logger.recordOutput("Visualization/Fuels", *arena.getGamePiecesArrayByType("Fuel"))
+        Logger.recordOutput(
+            "Visualization/Fuels",
+            *arena.getGamePiecesArrayByType("Fuel")
+        )
 
         val pose = getMapleSimPose()
         val timestamp = Timer.getTimestamp()
@@ -160,13 +169,11 @@ object Robot : LoggedRobot() {
         drive.addLocalVisionMeasurement(pose, timestamp, stdDevs)
         arena.simulationPeriodic()
     }
-
     /** This function is called periodically during operator control. */
     override fun teleopPeriodic() {}
 
     /** This function is called once when the robot is disabled. */
     override fun disabledInit() {
-        resetSimulationField()
     }
 
     /** This function is called periodically when disabled. */
