@@ -10,7 +10,12 @@ import frc.robot.subsystems.intake.roller.Roller
 
 private val PUMP_TIME = 0.3.sec
 
-fun closed(): Command = Commands.parallel(Roller.stop(), Extender.close(), SpindexerCommands.stopIntaking())
+fun closed(): Command =
+    Commands.parallel(
+        Roller.stop(),
+        Extender.close(),
+        SpindexerCommands.stopIntaking()
+    )
 
 fun intaking(): Command =
     Commands.parallel(
@@ -28,10 +33,10 @@ fun open(): Command =
 
 fun pumping(): Command {
     return Commands.sequence(
-        Extender.setTarget(ExtenderPositions.CLOSE),
-        Commands.waitTime(PUMP_TIME),
-        Extender.setTarget(ExtenderPositions.OPEN),
-        Commands.waitTime(PUMP_TIME),
-    )
+            Extender.setTarget(ExtenderPositions.CLOSE),
+            Commands.waitTime(PUMP_TIME),
+            Extender.setTarget(ExtenderPositions.OPEN),
+            Commands.waitTime(PUMP_TIME),
+        )
         .repeatedly()
 }

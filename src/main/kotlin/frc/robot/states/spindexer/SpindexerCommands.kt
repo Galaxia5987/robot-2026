@@ -7,13 +7,9 @@ object SpindexerCommands {
     var isFeeding = false
     var isIntaking = false
 
-    fun startFeeding(): Command = runOnce({
-        isFeeding = true
-    })
+    fun startFeeding(): Command = runOnce({ isFeeding = true })
 
-    fun stopFeeding(): Command = runOnce({
-        isFeeding = false
-    })
+    fun stopFeeding(): Command = runOnce({ isFeeding = false })
 
     fun startIntaking(): Command = runOnce({ isIntaking = true })
 

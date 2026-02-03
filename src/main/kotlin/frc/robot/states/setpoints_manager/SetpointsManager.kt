@@ -24,7 +24,10 @@ import org.team5987.annotation.LoggedOutput
 
 object SetpointsManager {
 
-    @LoggedOutput(key = "/StateMachines/Shooting/currentGoal", level = LogLevel.COMP)
+    @LoggedOutput(
+        key = "/StateMachines/Shooting/currentGoal",
+        level = LogLevel.COMP
+    )
     var currentGoal: Pose2d = HUB_LOCATION.toPose()
 
     private val goalHubTrigger =
@@ -47,20 +50,23 @@ object SetpointsManager {
         SHOOT_ON_MOVE
     }
 
-    @LoggedOutput(key = "StateMachines/Shooting/shootingType", level = LogLevel.COMP)
+    @LoggedOutput(
+        key = "StateMachines/Shooting/shootingType",
+        level = LogLevel.COMP
+    )
     val shootingType
         get() =
             when {
                 DriverOverrides.StaticShootingOverride.trigger.asBoolean ->
                     ShootingType.STATIC
-
                 !DriverOverrides.ShootOnMoveOverride.trigger.asBoolean ->
                     ShootingType.INTERPOLATION
-
                 else -> ShootingType.SHOOT_ON_MOVE
             }
 
-    val isShootingOnMove = Trigger { shootingType == ShootingType.SHOOT_ON_MOVE }
+    val isShootingOnMove = Trigger {
+        shootingType == ShootingType.SHOOT_ON_MOVE
+    }
 
     val isUsingInterpolation = Trigger {
         shootingType == ShootingType.INTERPOLATION

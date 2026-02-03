@@ -14,12 +14,21 @@ object Sensors : SubsystemBase() {
     private val spindexerSensor =
         UnifiedCANRange(
             SPINDEXER_SENSOR_PORT,
-            configuration = SPINDEXER_SENSOR_CONFIG, sensorName = "spindexerSensor"
+            configuration = SPINDEXER_SENSOR_CONFIG,
+            sensorName = "spindexerSensor"
         )
     private val topSensor =
-        UnifiedCANRange(TOP_SENSOR_PORT, configuration = TOP_SENSOR_CONFIG, sensorName = "topSensor")
+        UnifiedCANRange(
+            TOP_SENSOR_PORT,
+            configuration = TOP_SENSOR_CONFIG,
+            sensorName = "topSensor"
+        )
     private val auxTopSensor =
-        UnifiedCANRange(AUX_TOP_SENSOR, configuration = AUX_TOP_SENSOR_CONFIG, sensorName = "auxTopSensor")
+        UnifiedCANRange(
+            AUX_TOP_SENSOR,
+            configuration = AUX_TOP_SENSOR_CONFIG,
+            sensorName = "auxTopSensor"
+        )
 
     val isHalfFull: Trigger = Trigger {
         (topSensor.inputs.distance < HALF_FULL).and(

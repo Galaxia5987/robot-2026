@@ -1,4 +1,3 @@
-
 package frc.robot.field
 
 import org.ironmaple.simulation.SimulatedArena

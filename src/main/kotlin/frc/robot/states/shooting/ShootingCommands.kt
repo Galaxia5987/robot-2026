@@ -17,12 +17,15 @@ fun idle(): Command =
         IntakingStates.CLOSED.set()
     )
 
-fun priming(): Command = Flywheel.setVelocity(Flywheel::aimingSetpoint).alongWith(PreShooter.setVelocity(PreShooter::aimingSetpoint))
+fun priming(): Command =
+    Flywheel.setVelocity(Flywheel::aimingSetpoint)
+        .alongWith(PreShooter.setVelocity(PreShooter::aimingSetpoint))
 
 fun backfeeding(): Command = PreShooter.reverse()
 
 fun shooting(): Command =
     Commands.sequence(
-        SpindexerCommands.startFeeding(),
-        IntakingStates.PUMPING.set()
-    ).alongWith(priming())
+            SpindexerCommands.startFeeding(),
+            IntakingStates.PUMPING.set()
+        )
+        .alongWith(priming())

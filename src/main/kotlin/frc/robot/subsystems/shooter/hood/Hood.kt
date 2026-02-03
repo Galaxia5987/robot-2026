@@ -68,6 +68,10 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
         motor.periodic()
         Logger.recordOutput("Subsystems/$name/mechanism", mechanism)
         Logger.recordOutput("Subsystems/$name/atSetpoint", atSetpoint)
-        Logger.recordOutput("Subsystems/$name/setpoint", setpoint[radians], radians)
+        Logger.recordOutput(
+            "Subsystems/$name/setpoint",
+            setpoint[radians],
+            radians
+        )
     }
 }

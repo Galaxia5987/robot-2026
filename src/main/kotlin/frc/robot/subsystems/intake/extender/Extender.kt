@@ -26,7 +26,9 @@ object Extender : SubsystemBase(), ExtenderPositionsCommandFactory {
         )
 
     private var setpoint = 0.meters
-    val atSetpoint = Trigger { setpoint.isNear(motor.inputs.distance, TOLERANCE) }
+    val atSetpoint = Trigger {
+        setpoint.isNear(motor.inputs.distance, TOLERANCE)
+    }
 
     private var mechanism = LoggedMechanism2d(5.0, 5.0)
     private var root = mechanism.getRoot(name, 2.5, 2.5)
@@ -56,7 +58,11 @@ object Extender : SubsystemBase(), ExtenderPositionsCommandFactory {
 
     override fun periodic() {
         motor.periodic()
-        Logger.recordOutput("Subsystems/$name/setpoint", setpoint[meters], meters)
+        Logger.recordOutput(
+            "Subsystems/$name/setpoint",
+            setpoint[meters],
+            meters
+        )
         Logger.recordOutput("Subsystems/$name/mechanism", mechanism)
     }
 }

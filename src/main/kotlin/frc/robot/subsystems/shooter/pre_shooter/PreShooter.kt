@@ -9,7 +9,6 @@ import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.kg2m
 import frc.robot.lib.extensions.rad_ps
 import frc.robot.lib.extensions.radiansPerSecond
-import frc.robot.lib.extensions.rps
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.Logger
 
@@ -51,7 +50,11 @@ object PreShooter : SubsystemBase(), PreShooterVelocityCommandFactory {
 
     override fun periodic() {
         mainMotor.periodic()
-        Logger.recordOutput("Subsystems/$name/setpoint", setpoint[rad_ps], rad_ps)
+        Logger.recordOutput(
+            "Subsystems/$name/setpoint",
+            setpoint[rad_ps],
+            rad_ps
+        )
         Logger.recordOutput("Subsystems/$name/atSetpoint", atSetpoint)
     }
 }

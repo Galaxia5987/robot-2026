@@ -1,11 +1,9 @@
 package frc.robot
 
 import edu.wpi.first.math.geometry.Pose3d
-import edu.wpi.first.math.geometry.Rotation3d
 import edu.wpi.first.math.geometry.Transform3d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.geometry.Translation3d
-import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Angle
 import frc.robot.lib.extensions.*
 import frc.robot.lib.getPose3d
@@ -19,10 +17,10 @@ import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.spindexer.Spindexer
-import org.team5987.annotation.LogLevel
-import org.team5987.annotation.LoggedOutput
 import kotlin.math.cos
 import kotlin.math.sin
+import org.team5987.annotation.LogLevel
+import org.team5987.annotation.LoggedOutput
 
 private val swerveModulePose: Array<Translation2d> =
     Drive.getModuleTranslations()
@@ -83,41 +81,43 @@ private fun getAllSwerveModulePoseDrive(): Array<Pose3d> {
     return swervePosesDrive
 }
 
-private object Swerve {
-
-}
+private object Swerve {}
 
 private object Intake {
     private val INTAKE_ANGLE = 9.deg
     private val EXTENDER_ANGLE_POSE: Translation3d
-        get() = getTranslation3d(
-            x = Extender.inputs.distance * cos(INTAKE_ANGLE[rad]),
-            z = -Extender.inputs.distance * sin(
-                INTAKE_ANGLE[rad]
+        get() =
+            getTranslation3d(
+                x = Extender.inputs.distance * cos(INTAKE_ANGLE[rad]),
+                z = -Extender.inputs.distance * sin(INTAKE_ANGLE[rad])
             )
-        )
 
     val extender: Pose3d
-        get() = getPose3d(
-            getTranslation3d(80.mm, 10.mm, 248.mm) + EXTENDER_ANGLE_POSE
-        )
+        get() =
+            getPose3d(
+                getTranslation3d(80.mm, 10.mm, 248.mm) + EXTENDER_ANGLE_POSE
+            )
 
     val extendingHopper: Pose3d
-        get() = getPose3d(
-            getTranslation3d(346.mm, 10.mm, 235.mm) + Extender.inputs.distance.toX()
-        )
+        get() =
+            getPose3d(
+                getTranslation3d(346.mm, 10.mm, 235.mm) +
+                    Extender.inputs.distance.toX()
+            )
 
     val roller1
-        get() = getPose3d(
-            getTranslation3d(323.mm, 10.mm, 197.mm) + EXTENDER_ANGLE_POSE,
-            Roller.inputs.position.toPitch()
-        )
+        get() =
+            getPose3d(
+                getTranslation3d(323.mm, 10.mm, 197.mm) + EXTENDER_ANGLE_POSE,
+                Roller.inputs.position.toPitch()
+            )
 
     val roller2
-        get() = getPose3d(
-            getTranslation3d(260.mm, 10.mm, 197.mm) + EXTENDER_ANGLE_POSE,
-            Roller.inputs.position.toPitch()
-        )
+        get() =
+            getPose3d(
+                getTranslation3d(260.mm, 10.mm, 197.mm) + EXTENDER_ANGLE_POSE,
+                Roller.inputs.position.toPitch()
+            )
 }
 
 private object Shooter {
@@ -128,69 +128,75 @@ private object Shooter {
         get() = getTranslation3d((-116).mm, 220.5.mm, 355.mm)
 
     private val hoodTranslation
-        get() = getTranslation3d((-48).mm, 220.5.mm, 435.mm).rotateAround(turretTranslation, turretRotation)
+        get() =
+            getTranslation3d((-48).mm, 220.5.mm, 435.mm)
+                .rotateAround(turretTranslation, turretRotation)
 
     private val hoodRotation
         get() = Hood.inputs.position.toPitch() + turretRotation
 
     val turret
-        get() = getPose3d(
-            turretTranslation, turretRotation
-        )
+        get() = getPose3d(turretTranslation, turretRotation)
 
     val hood
-        get() = getPose3d(
-            hoodTranslation,
-            hoodRotation
-        )
+        get() = getPose3d(hoodTranslation, hoodRotation)
 
     val shooterMainRoller: Pose3d
-        get() = getPose3d(
-            getTranslation3d((-48).mm, 220.5.mm, 436.mm).rotateAround(turretTranslation, turretRotation),
-            turretRotation
-        ).plus(Transform3d(Translation3d(), Flywheel.inputs.position.toPitch()))
+        get() =
+            getPose3d(
+                    getTranslation3d((-48).mm, 220.5.mm, 436.mm)
+                        .rotateAround(turretTranslation, turretRotation),
+                    turretRotation
+                )
+                .plus(
+                    Transform3d(
+                        Translation3d(),
+                        Flywheel.inputs.position.toPitch()
+                    )
+                )
 
     val hoodRoller: Pose3d
-        get() = hood.plus(
-            Transform3d(
-                getTranslation3d((-247).mm, 220.5.mm, 489.mm) - getTranslation3d(
-                    (-48).mm,
-                    220.5.mm,
-                    435.mm
-                ), Flywheel.inputs.position.toPitch()
+        get() =
+            hood.plus(
+                Transform3d(
+                    getTranslation3d((-247).mm, 220.5.mm, 489.mm) -
+                        getTranslation3d((-48).mm, 220.5.mm, 435.mm),
+                    Flywheel.inputs.position.toPitch()
+                )
             )
-        )
 }
 
 private object Conveyors {
     val spindexer
-        get() = getPose3d(
-            getTranslation3d((-26).mm, 43.mm, 36.66200.mm),
-            Spindexer.inputs.position.toYaw()
-        )
+        get() =
+            getPose3d(
+                getTranslation3d((-26).mm, 43.mm, 36.66200.mm),
+                Spindexer.inputs.position.toYaw()
+            )
     val firstRoller
-        get() = getPose3d(
-            getTranslation3d((-63).mm, 90.mm, 211.mm),
-            PreShooter.inputs.position.toRoll()
-        )
+        get() =
+            getPose3d(
+                getTranslation3d((-63).mm, 90.mm, 211.mm),
+                PreShooter.inputs.position.toRoll()
+            )
     val secondRoller
-        get() = getPose3d(
-            getTranslation3d((-22).mm, 130.mm, 295.mm),
-            PreShooter.inputs.position.toRoll()
-        )
+        get() =
+            getPose3d(
+                getTranslation3d((-22).mm, 130.mm, 295.mm),
+                PreShooter.inputs.position.toRoll()
+            )
 
     val thirdRoller
-        get() = getPose3d(
-            getTranslation3d((-23.5).mm, 315.mm, 295.mm),
-            PreShooter.inputs.position.toRoll()
-        )
+        get() =
+            getPose3d(
+                getTranslation3d((-23.5).mm, 315.mm, 295.mm),
+                PreShooter.inputs.position.toRoll()
+            )
 }
 
 private object Climb {
     val grabber
-        get() = getPose3d(
-            getTranslation3d((-30).mm, (-242).mm, 420.mm)
-        )
+        get() = getPose3d(getTranslation3d((-30).mm, (-242).mm, 420.mm))
     val wrist
         get() = getPose3d(getTranslation3d((-250).mm, (-380).mm, 460.mm))
 }
@@ -224,7 +230,7 @@ fun mechanismPoses(): Array<Pose3d> {
 }
 
 // For Tuning !!
-//private val tuningSubsystemPoses =
+// private val tuningSubsystemPoses =
 //    arrayOf(
 //        TunablePose3d(
 //            "/Tuning/Visualization/IntakeExtender",
@@ -275,7 +281,7 @@ fun mechanismPoses(): Array<Pose3d> {
 //        ),
 //    )
 //
-//@LoggedOutput(key = "Visualization/TuningMechanismPoses", level = LogLevel.COMP)
-//fun getTuningSubsystemPoses(): Array<Pose3d> =
+// @LoggedOutput(key = "Visualization/TuningMechanismPoses", level = LogLevel.COMP)
+// fun getTuningSubsystemPoses(): Array<Pose3d> =
 //    tuningSubsystemPoses.map { it.get() }.toTypedArray()
 //

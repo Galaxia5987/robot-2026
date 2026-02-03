@@ -51,9 +51,8 @@ val CONFIG =
                 Inverted = InvertedValue.Clockwise_Positive
             }
         Slot0 = Slot0Configs().apply { Slot0 = REAL_GAINS.toSlotConfig() }
-        ClosedLoopGeneral = ClosedLoopGeneralConfigs().apply {
-            ContinuousWrap = true
-        }
+        ClosedLoopGeneral =
+            ClosedLoopGeneralConfigs().apply { ContinuousWrap = true }
         SoftwareLimitSwitch = SOFTWARE_LIMIT_CONFIG
         Feedback =
             FeedbackConfigs().apply {

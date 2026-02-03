@@ -173,8 +173,7 @@ object Robot : LoggedRobot() {
     override fun teleopPeriodic() {}
 
     /** This function is called once when the robot is disabled. */
-    override fun disabledInit() {
-    }
+    override fun disabledInit() {}
 
     /** This function is called periodically when disabled. */
     override fun disabledPeriodic() {}

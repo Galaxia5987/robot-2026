@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.rad_ps
-import frc.robot.lib.extensions.rps
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.Logger
 
@@ -36,7 +35,11 @@ object Spindexer : SubsystemBase(), SpindexerVelocityCommandFactory {
 
     override fun periodic() {
         mainMotor.periodic()
-        Logger.recordOutput("Subsystems/$name/setpoint", setpoint.velocity[rad_ps], rad_ps)
+        Logger.recordOutput(
+            "Subsystems/$name/setpoint",
+            setpoint.velocity[rad_ps],
+            rad_ps
+        )
         Logger.recordOutput("Subsystems/$name/atSetpoint", isAtSetpoint)
     }
 }

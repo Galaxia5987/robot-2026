@@ -1,31 +1,20 @@
 package frc.robot
 
 import com.pathplanner.lib.auto.AutoBuilder
-import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.wpilibj.PS5Controller
 import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.Commands
-import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
-import frc.robot.field.EmptyArena
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
-import frc.robot.lib.extensions.onFalse
-import frc.robot.lib.extensions.rps
 import frc.robot.lib.unified_controller.PS5LinuxController
-import frc.robot.lib.unified_controller.UnifiedController
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.intaking.IntakingTriggers.canCloseIntake
 import frc.robot.states.intaking.IntakingTriggers.cantCloseIntake
 import frc.robot.states.shooting.Shooting
 import frc.robot.subsystems.drive.DriveCommands
-import frc.robot.subsystems.shooter.flywheel.Flywheel
-import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.shooter.turret.Turret.setAngle
 import frc.robot.subsystems.shooter.turret.turretAngleToHub
 import org.ironmaple.simulation.SimulatedArena
-import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 
 object RobotContainer {

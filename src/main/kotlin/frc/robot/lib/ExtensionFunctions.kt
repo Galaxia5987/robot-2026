@@ -170,8 +170,7 @@ fun Rotation2d.convertTo360():
     return Rotation2d.fromDegrees(deg)
 }
 
-fun Angle.convertTo360():
-        Angle { // Convert angle from (-180,180) -> (0,360)
+fun Angle.convertTo360(): Angle { // Convert angle from (-180,180) -> (0,360)
     val deg = (this + 180.0.deg)
     return deg
 }

@@ -62,12 +62,19 @@ class MotorIOSim(
 
     override fun setRequest(controlRequest: ControlRequest) {
         when (controlRequest) {
-            is VelocityVoltage -> controlRequest.FeedForward = controlRequest.Velocity * simGains.kV
-            is VelocityTorqueCurrentFOC -> controlRequest.FeedForward = controlRequest.Velocity * simGains.kV
-            is PositionVoltage -> controlRequest.FeedForward = controlRequest.Position * simGains.kV
-            is PositionTorqueCurrentFOC -> controlRequest.FeedForward = controlRequest.Position * simGains.kV
+            is VelocityVoltage ->
+                controlRequest.FeedForward =
+                    controlRequest.Velocity * simGains.kV
+            is VelocityTorqueCurrentFOC ->
+                controlRequest.FeedForward =
+                    controlRequest.Velocity * simGains.kV
+            is PositionVoltage ->
+                controlRequest.FeedForward =
+                    controlRequest.Position * simGains.kV
+            is PositionTorqueCurrentFOC ->
+                controlRequest.FeedForward =
+                    controlRequest.Position * simGains.kV
         }
-
 
         motor.setControl(controlRequest)
     }

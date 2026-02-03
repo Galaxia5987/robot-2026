@@ -7,7 +7,10 @@ import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean
 class CANRangeIOSim(subsystemName: String, sensorName: String) : CANRangeIO {
     override val inputs = LoggedSensorInputs()
     private val isDetecting =
-        LoggedNetworkBoolean("/Tuning/$subsystemName/$sensorName/IsDetecting", false)
+        LoggedNetworkBoolean(
+            "/Tuning/$subsystemName/$sensorName/IsDetecting",
+            false
+        )
 
     override fun updateInputs() {
         val detecting = this.isDetecting.get()

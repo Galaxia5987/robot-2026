@@ -26,7 +26,7 @@ object Flywheel : SubsystemBase(), FlywheelVelocitiesCommandFactory {
     private val velocityOut = VelocityVoltage(0.0)
     private var setpoint = 0.radiansPerSecond
     val inputs
-            get() = motor.inputs
+        get() = motor.inputs
 
     init {
         AUXILIARY_MOTORS_PORTS.forEach {
@@ -66,6 +66,10 @@ object Flywheel : SubsystemBase(), FlywheelVelocitiesCommandFactory {
     override fun periodic() {
         motor.periodic()
         Logger.recordOutput("Subsystems/$name/atSetpoint", atSetpoint)
-        Logger.recordOutput("Subsystems/$name/setpoint", setpoint[rad_ps], rad_ps)
+        Logger.recordOutput(
+            "Subsystems/$name/setpoint",
+            setpoint[rad_ps],
+            rad_ps
+        )
     }
 }
