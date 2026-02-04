@@ -12,8 +12,6 @@ import frc.robot.lib.extensions.toPose3d
 import frc.robot.lib.extensions.toTranslation3d
 import frc.robot.lib.getTranslation2d
 import frc.robot.subsystems.sensors.Sensors
-import org.team5987.annotation.LogLevel
-import org.team5987.annotation.LoggedOutput
 import kotlin.collections.flatMap
 
 class MapleSimHopper {
@@ -46,10 +44,14 @@ class MapleSimHopper {
             }
         })
 
-    val empty = listOf<Pose3d>().toTypedArray()
-    val thirdFull = createLayers(1).toTypedArray()
-    val halfFull = createLayers(2).toTypedArray()
-    val full = createLayers(3).toTypedArray()
+    val thirdFull
+        get() = createLayers(1).toTypedArray()
+    val empty
+        get() = listOf<Pose3d>().toTypedArray()
+    val halfFull
+        get() = createLayers(2).toTypedArray()
+    val full
+        get() = createLayers(3).toTypedArray()
 
     val setEmpty =
         Sensors.hasFuel
@@ -68,6 +70,4 @@ class MapleSimHopper {
         Sensors.isFull.onTrue(Commands.runOnce({ fuelInRobotPoses = full }))
 
     var fuelInRobotPoses = empty
-
 }
-

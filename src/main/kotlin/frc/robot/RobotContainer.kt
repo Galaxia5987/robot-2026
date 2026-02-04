@@ -83,7 +83,7 @@ object RobotContainer {
         // Intake Bindings
         val intakeButton = driverController.R2()
 
-        intakeButton.onTrue(IntakingStates.INTAKING.set())
+        intakeButton.onTrue(IntakingStates.INTAKING.set().also {})
         intakeButton
             .negate()
             .and(canCloseIntake)
