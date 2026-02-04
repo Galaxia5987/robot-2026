@@ -163,7 +163,10 @@ object Robot : LoggedRobot() {
             "Visualization/Fuels",
             *arena.getGamePiecesArrayByType("Fuel")
         )
-        Logger.recordOutput("Visualization/FuelsInRobot", mapleSimHopper?.fuelInRobotPoses)
+        Logger.recordOutput(
+            "Visualization/FuelsInRobot",
+            *mapleSimHopper!!.fuelInRobotPoses
+        )
 
         val pose = getMapleSimPose()
         val timestamp = Timer.getTimestamp()

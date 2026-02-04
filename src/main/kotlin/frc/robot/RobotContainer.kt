@@ -22,7 +22,6 @@ import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.shooter.turret.Turret.setAngle
 import frc.robot.subsystems.shooter.turret.turretAngleToHub
 import org.ironmaple.simulation.SimulatedArena
-import org.ironmaple.simulation.seasonspecific.rebuilt2026.RebuiltFuelOnField
 import org.ironmaple.simulation.seasonspecific.rebuilt2026.RebuiltFuelOnFly
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 
@@ -62,9 +61,24 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
-        driverController.cross().onTrue(Commands.runOnce({ // Add the projectile to the simulated arena
-            SimulatedArena.getInstance().addGamePieceProjectile(RebuiltFuelOnFly(drive.pose.translation, Translation2d(),
-            ChassisSpeeds(), Rotation2d(), 0.5.m, 1.mps, 90.deg))}))
+        driverController
+            .cross()
+            .onTrue(
+                Commands.runOnce({ // Add the projectile to the simulated arena
+                    SimulatedArena.getInstance()
+                        .addGamePieceProjectile(
+                            RebuiltFuelOnFly(
+                                drive.pose.translation,
+                                Translation2d(),
+                                ChassisSpeeds(),
+                                Rotation2d(),
+                                0.5.m,
+                                1.mps,
+                                90.deg
+                            )
+                        )
+                })
+            )
 
         // Intake Bindings
         val intakeButton = driverController.R2()
