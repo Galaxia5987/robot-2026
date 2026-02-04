@@ -1,10 +1,10 @@
 package frc.robot.sim
 
+import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.math.geometry.Rotation3d
 import edu.wpi.first.math.geometry.Transform3d
-import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj2.command.Commands
-import frc.robot.IS_SIM
 import frc.robot.drive
 import frc.robot.lib.extensions.cm
 import frc.robot.lib.extensions.m
@@ -15,89 +15,46 @@ import frc.robot.lib.getTranslation2d
 import frc.robot.subsystems.sensors.Sensors
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
+import kotlin.collections.flatMap
 
-private val BALL_POSES_RELATIVE_TO_ROBOT = arrayOf(
-    getTranslation2d(5.cm, 0.cm),
-    getTranslation2d(25.cm, 0.cm),
-    getTranslation2d(-20.cm, 0.cm),
-    getTranslation2d(5.cm, (-20).cm),
-    getTranslation2d(25.cm, (-20).cm),
-    getTranslation2d(-20.cm,-20.cm)
-
-)
-@LoggedOutput(LogLevel.COMP, key = "MapleSim/EMPTY")
-val empty
-    get()= arrayOf(0)
-
-@LoggedOutput(LogLevel.COMP, key = "MapleSim/fuel15")
-val fuel15
-    get() = BALL_POSES_RELATIVE_TO_ROBOT.map {
-    it.toPose().toPose3d()+(
-        Transform3d(
-            drive.pose.translation.toTranslation3d(0.2.m),
-            Rotation3d()
-        )
+class MapleSimHopper {
+    private val BALL_POSES_RELATIVE_TO_ROBOT = arrayOf(
+        getTranslation2d((-5).cm, (-5).cm),
+        getTranslation2d((-5).cm, (-15).cm),
+        getTranslation2d(5.cm, 0.cm),
+        getTranslation2d((-20).cm, (-5).cm),
+        getTranslation2d(5.cm, (-15).cm),
+        getTranslation2d(15.cm, 30.cm),
+        getTranslation2d(15.cm, 15.cm),
+        getTranslation2d(15.cm, 0.cm),
+        getTranslation2d(15.cm, (-15).cm),
+        getTranslation2d(15.cm, (-30).cm),
+        getTranslation2d(15.cm, (0).cm),
+        getTranslation2d((-15).cm, (15).cm)
     )
-}.toTypedArray()
-
-@LoggedOutput(LogLevel.COMP, key = "MapleSim/fuel30")
-val fuel30
-    get() = BALL_POSES_RELATIVE_TO_ROBOT.map {
-        it.toPose().toPose3d()+(
-            Transform3d(
-                drive.pose.translation.toTranslation3d(0.4.m),
-                Rotation3d()
-            )
-        )
-    }.toTypedArray()+(BALL_POSES_RELATIVE_TO_ROBOT.map {
-        it.toPose().toPose3d()+(
-            Transform3d(
-                drive.pose.translation.toTranslation3d(0.2.m),
-                Rotation3d()
-            )
-        )
-    }.toTypedArray())
-
-@LoggedOutput(LogLevel.COMP, key = "MapleSim/fuel50")
-val fuel50
-    get() = BALL_POSES_RELATIVE_TO_ROBOT.map {
-        it.toPose().toPose3d()+(
-            Transform3d(
-                drive.pose.translation.toTranslation3d(0.4.m),
-                Rotation3d()
-            )
-        )
-    }.toTypedArray()+(BALL_POSES_RELATIVE_TO_ROBOT.map {
-        it.toPose().toPose3d()+(
-            Transform3d(
-                drive.pose.translation.toTranslation3d(0.2.m),
-                Rotation3d()
-            )
-        )
-    }.toTypedArray())+BALL_POSES_RELATIVE_TO_ROBOT.map {
-        it.toPose().toPose3d()+(
-            Transform3d(
-                drive.pose.translation.toTranslation3d(0.6.m),
-                Rotation3d()
-            )
-        )
-    }.toTypedArray()
 
 
+    private fun createLayers(numberOfLayers: Int): List<Pose3d> =
+        ((0 until numberOfLayers).flatMap { layer ->
+            val heightOffset = (0.2 + 0.15 * layer).m
 
-fun HopperFuel(): Command {
-    return Commands.runOnce({
-        if (Sensors.isHalfFull.asBoolean == false) {
-        fuel15
-    }
-    else if (Sensors.isHalfFull.asBoolean.and(Sensors.isFull.asBoolean==false )){
-        fuel30
-    }
-    if (Sensors.isFull.asBoolean){
-        fuel50
-    }
-    })
+            BALL_POSES_RELATIVE_TO_ROBOT.map {
+                it.toPose().toPose3d() + Transform3d(
+                    drive.pose.translation.toTranslation3d(heightOffset),
+                    Rotation3d()
+                )
+            }
+        })
 
+    val empty = listOf<Pose3d>()
+    val thirdFull = createLayers(1)
+    val halfFull = createLayers(2)
+    val full = createLayers(3)
 
+    val setEmpty = Sensors.hasFuel.negate().onTrue(Commands.runOnce({fuelInRobotPoses = empty}))
+    val setThirdFull = Sensors.hasFuel.and(Sensors.isHalfFull.negate()).onTrue(Commands.runOnce({fuelInRobotPoses = thirdFull}))
+    val setHalfFull = Sensors.isHalfFull.negate().and(Sensors.isFull.negate()).onTrue(Commands.runOnce({fuelInRobotPoses = halfFull}))
+    val setFull = Sensors.isFull.onTrue(Commands.runOnce({fuelInRobotPoses = full}))
+
+    var fuelInRobotPoses = empty
 }
-
