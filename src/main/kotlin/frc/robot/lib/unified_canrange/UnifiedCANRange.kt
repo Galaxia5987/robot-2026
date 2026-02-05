@@ -12,13 +12,14 @@ class UnifiedCANRange(
     private val canbus: CANBus = CANBus("rio"),
     private val subsystemName: String = getFileNameFromStack(),
     private val sensorName: String = "CANRangeId $port",
-    configuration: CANrangeConfiguration
+    configuration: CANrangeConfiguration,
+    private val simulationUsesNumber: Boolean = false
 ) {
     private val sensorIO: CANRangeIO =
         if (CURRENT_MODE == Mode.REAL) {
             CANRangeIOReal(port, canbus, configuration)
         } else {
-            CANRangeIOSim(subsystemName, sensorName)
+            CANRangeIOSim(subsystemName, sensorName, simulationUsesNumber)
         }
     val isInRange: Boolean
         get() = sensorIO.inputs.isDetecting

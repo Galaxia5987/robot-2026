@@ -21,13 +21,15 @@ object Sensors : SubsystemBase() {
         UnifiedCANRange(
             TOP_SENSOR_PORT,
             configuration = TOP_SENSOR_CONFIG,
-            sensorName = "topSensor"
+            sensorName = "topSensor",
+            simulationUsesNumber = true
         )
     private val auxTopSensor =
         UnifiedCANRange(
             AUX_TOP_SENSOR,
             configuration = AUX_TOP_SENSOR_CONFIG,
-            sensorName = "auxTopSensor"
+            sensorName = "auxTopSensor",
+            simulationUsesNumber = true
         )
 
     fun AverageFuelDistance()= (topSensor.inputs.distance+auxTopSensor.inputs.distance)*0.5
