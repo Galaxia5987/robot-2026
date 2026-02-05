@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Transform3d
 import edu.wpi.first.wpilibj2.command.Commands
 import frc.robot.drive
 import frc.robot.lib.extensions.cm
+import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.m
 import frc.robot.lib.extensions.toPose
 import frc.robot.lib.extensions.toPose3d
@@ -53,21 +54,23 @@ class MapleSimHopper {
     val full
         get() = createLayers(3).toTypedArray()
 
-    val setEmpty =
-        Sensors.hasFuel
-            .negate()
-            .onTrue(Commands.runOnce({ fuelInRobotPoses = empty }))
-    val setThirdFull =
-        Sensors.hasFuel
-            .and(Sensors.isHalfFull.negate())
-            .onTrue(Commands.runOnce({ fuelInRobotPoses = thirdFull }))
-    val setHalfFull =
-        Sensors.isHalfFull
-            .negate()
-            .and(Sensors.isFull.negate())
-            .onTrue(Commands.runOnce({ fuelInRobotPoses = halfFull }))
-    val setFull =
-        Sensors.isFull.onTrue(Commands.runOnce({ fuelInRobotPoses = full }))
-
     var fuelInRobotPoses = empty
+    fun Updatefuel(){
+         val hasFuel= Sensors.hasFuel.asBoolean
+        val isHalfFull= Sensors.isHalfFull.asBoolean
+        val isFull= Sensors.isFull.asBoolean
+
+        fuelInRobotPoses = when {
+            !hasFuel   -> empty
+            isFull     -> full
+            isHalfFull -> halfFull
+            else       -> thirdFull
+        }
+    }
+
+    val hasFuelChanged = Sensors.hasFuel.onChange(Commands.runOnce({Updatefuel()}))
+    val isHalfFullChanged = Sensors.isHalfFull.onChange(Commands.runOnce({Updatefuel()}))
+    val isFullChanged = Sensors.isFull.onChange(Commands.runOnce({Updatefuel()}))
+
+
 }
