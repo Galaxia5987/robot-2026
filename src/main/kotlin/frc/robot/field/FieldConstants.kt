@@ -20,8 +20,6 @@ val ALLIANCE_ZONE_WIDTH: Distance = 4.03.m
 
 val ALLIANCE_ZONE_HEIGHT: Distance = 8.07.m
 
-val HUB_HEIGHT = 182.cm
-
 var HUB_LOCATION = Translation2d(4620.41.mm, 4034.63.mm)
     private set
 var CLIMB_LOCATION = Pose2d(4090.6.mm, 5457.8.mm, Rotation2d(90.deg))
