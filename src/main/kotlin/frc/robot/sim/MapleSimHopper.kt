@@ -61,6 +61,8 @@ class MapleSimHopper {
         val isFull= Sensors.isFull.asBoolean
 
         fuelInRobotPoses = when {
+            //Shouldn't happen, Paulo requested for finding sensor errors
+            !hasFuel && isHalfFull -> full.sliceArray(14..21)
             !hasFuel   -> empty
             isFull     -> full
             isHalfFull -> halfFull
