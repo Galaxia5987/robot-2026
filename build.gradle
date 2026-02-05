@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     id "java"
     id "org.jetbrains.kotlin.jvm" version "2.0.0"
-    id "edu.wpi.first.GradleRIO" version "2026.1.1"
+    id "edu.wpi.first.GradleRIO" version "2026.2.1"
     id "com.diffplug.spotless" version "6.12.0"
     id "com.peterabeles.gversion" version "1.10"
     id 'com.google.devtools.ksp' version '2.0.0-1.0.21'
