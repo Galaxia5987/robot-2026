@@ -8,26 +8,36 @@ import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 class CANRangeIOSim(subsystemName: String, sensorName: String, private val usesNumber: Boolean = false) : CANRangeIO {
     override val inputs = LoggedSensorInputs()
 
-    private val metersDetected =
-        LoggedNetworkNumber(
-            "/Tuning/$subsystemName/$sensorName/MetersDetected", 1.0)
-    private val isDetecting = LoggedNetworkBoolean(
-            "/Tuning/$subsystemName/$sensorName/isDetecting", false)
+    private val metersDetected : LoggedNetworkNumber?
+    private val isDetecting : LoggedNetworkBoolean?
 
-
+    init {
+        if (usesNumber) {
+            metersDetected = LoggedNetworkNumber(
+                "/Tuning/$subsystemName/$sensorName/MetersDetected", 1.0
+            )
+            isDetecting = null
+        }
+        else {
+            isDetecting = LoggedNetworkBoolean(
+                "/Tuning/$subsystemName/$sensorName/isDetecting", false
+            )
+            metersDetected = null
+        }
+    }
     override fun updateInputs() {
 
 
         var meters_value = 0.0
         var boolean_value = false
-
-        if(usesNumber) {
+        // usesNumber decided which one, but now we check not null just to be sure it doesn't crash
+        if(usesNumber && metersDetected != null) {
             meters_value = metersDetected.get()
             boolean_value = meters_value < 0.5
         }
-        else {
+        else if (isDetecting != null){
             boolean_value = isDetecting.get()
-            if(isDetecting.get()){
+            if(boolean_value){
                 meters_value = 0.01
             }
             else{
