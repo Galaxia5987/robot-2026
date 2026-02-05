@@ -30,16 +30,14 @@ object Sensors : SubsystemBase() {
             sensorName = "auxTopSensor"
         )
 
+    fun AverageFuelDistance()= (topSensor.inputs.distance+auxTopSensor.inputs.distance)*0.5
+
     val isHalfFull: Trigger = Trigger {
-        (topSensor.inputs.distance < HALF_FULL).and(
-            auxTopSensor.inputs.distance < HALF_FULL
-        )
+        (AverageFuelDistance() < HALF_FULL)
     }
 
     val isFull: Trigger = Trigger {
-        (topSensor.inputs.distance <= FULL).and(
-            auxTopSensor.inputs.distance <= FULL
-        )
+        (AverageFuelDistance() < FULL)
     }
 
     val hasFuel: Trigger = Trigger { spindexerSensor.isInRange }
