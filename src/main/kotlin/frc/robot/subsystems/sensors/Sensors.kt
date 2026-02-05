@@ -8,7 +8,7 @@ import org.littletonrobotics.junction.Logger
 
 object Sensors : SubsystemBase() {
 
-    private val FULL = 1.m // TODO: change the value
+    private val FULL = 0.2.m // TODO: change the value
     private val HALF_FULL = 0.5.m // TODO: change the value
 
     private val spindexerSensor =
