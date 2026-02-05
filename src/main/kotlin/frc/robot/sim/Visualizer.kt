@@ -1,11 +1,13 @@
-package frc.robot
+package frc.robot.sim
 
 import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.math.geometry.Transform3d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.geometry.Translation3d
 import edu.wpi.first.units.measure.Angle
+import frc.robot.drive
 import frc.robot.lib.extensions.*
+import frc.robot.lib.extensions.get
 import frc.robot.lib.getPose3d
 import frc.robot.lib.getRotation3d
 import frc.robot.lib.getTranslation3d
@@ -120,12 +122,14 @@ private object Intake {
             )
 }
 
+val SHOOTER_TO_ROBOT_POSE = Translation2d((-116).mm, 220.5.mm)
+
 private object Shooter {
     private val turretRotation
         get() = Turret.inputs.position.toYaw()
 
     private val turretTranslation
-        get() = getTranslation3d((-116).mm, 220.5.mm, 355.mm)
+        get() = SHOOTER_TO_ROBOT_POSE.toTranslation3d(355.mm)
 
     private val hoodTranslation
         get() =

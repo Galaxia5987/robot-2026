@@ -13,6 +13,7 @@ import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.lib.extensions.m
 import frc.robot.lib.extensions.mps
 import frc.robot.lib.unified_controller.PS5LinuxController
+import frc.robot.sim.MapleSimShooter
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.intaking.IntakingTriggers.canCloseIntake
 import frc.robot.states.intaking.IntakingTriggers.cantCloseIntake
@@ -67,15 +68,7 @@ object RobotContainer {
                 Commands.runOnce({ // Add the projectile to the simulated arena
                     SimulatedArena.getInstance()
                         .addGamePieceProjectile(
-                            RebuiltFuelOnFly(
-                                drive.pose.translation,
-                                Translation2d(),
-                                ChassisSpeeds(),
-                                Rotation2d(),
-                                0.5.m,
-                                1.mps,
-                                90.deg
-                            )
+                            MapleSimShooter.createFuelOnFly()
                         )
                 })
             )

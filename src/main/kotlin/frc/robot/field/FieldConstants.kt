@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.drive
 import frc.robot.lib.IS_RED
+import frc.robot.lib.extensions.cm
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.flip
 import frc.robot.lib.extensions.m
@@ -18,6 +19,8 @@ import frc.robot.lib.extensions.mm
 val ALLIANCE_ZONE_WIDTH: Distance = 4.03.m
 
 val ALLIANCE_ZONE_HEIGHT: Distance = 8.07.m
+
+val HUB_HEIGHT = 182.cm
 
 var HUB_LOCATION = Translation2d(4620.41.mm, 4034.63.mm)
     private set
