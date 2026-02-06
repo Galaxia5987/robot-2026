@@ -9,6 +9,7 @@ import edu.wpi.first.units.MutableMeasure
 import edu.wpi.first.units.Unit as WPIUnit
 import edu.wpi.first.util.struct.Struct
 import edu.wpi.first.util.struct.StructSerializable
+import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import kotlin.reflect.KProperty
 import org.littletonrobotics.junction.AutoLogOutputManager
@@ -121,19 +122,28 @@ fun enableAutoLogOutputFor(vararg roots: Any) {
     }
 }
 
+fun Any.log(key: String) {
+    when (this) {
+        is String -> recordOutput(key, this)
+        is Int -> recordOutput(key, this)
+        is Double -> recordOutput(key, this)
+        is Boolean -> recordOutput(key, this)
+        is Measure<*> -> recordOutput(key, this)
+        is StructSerializable -> recordOutput(key, this)
+        is LoggedMechanism2d -> recordOutput(key, this)
+        is Trigger -> recordOutput(key, this)
+        else -> recordOutput(key, this.toString())
+    }
+}
+
 fun Any.log(prefix: String, key: String) {
     val fullLoggingPath = "$prefix/$key"
-    when (this) {
-        is String -> recordOutput(fullLoggingPath, this)
-        is Int -> recordOutput(fullLoggingPath, this)
-        is Double -> recordOutput(fullLoggingPath, this)
-        is Boolean -> recordOutput(fullLoggingPath, this)
-        is Measure<*> -> recordOutput(fullLoggingPath, this)
-        is StructSerializable -> recordOutput(fullLoggingPath, this)
-        is LoggedMechanism2d -> recordOutput(fullLoggingPath, this)
-        is Trigger -> recordOutput(fullLoggingPath, this)
-        else -> recordOutput(fullLoggingPath, this.toString())
-    }
+    log(fullLoggingPath)
+}
+
+fun Trigger.logTrigger(key: String): Trigger {
+    onChange(Commands.runOnce({ log(key) }))
+    return this
 }
 
 fun Map<String, Any>.log(loggingPath: String = "") {

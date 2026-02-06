@@ -5,41 +5,45 @@ import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.drive
-import frc.robot.lib.convertTo360
-import frc.robot.lib.extensions.distanceFromPoint
+import frc.robot.lib.extensions.cm
+import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.mm
-import frc.robot.lib.extensions.rot
 import frc.robot.lib.extensions.rotationToPoint
-import frc.robot.lib.wrapAround
+import frc.robot.lib.extensions.toTranslation3d
+import frc.robot.lib.getPose3d
+import frc.robot.lib.getRotation3d
+import frc.robot.states.setpoints_manager.SetpointsManager.currentGoal
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
-val HUB_LOCATION = Translation2d(4572.mm, 7632.7.mm)
-const val HUB_PATH = "Subsystem/Hub"
+const val HUB_PATH = "Subsystems/Hub"
 
-@LoggedOutput(LogLevel.COMP, path = HUB_PATH)
-val robotDistanceFromHub
-    get() = drive.localPose.distanceFromPoint(HUB_LOCATION)
+val TURRET_TO_ROBOT = Translation2d((-117.5).mm, 207.5.mm)
 
-@LoggedOutput(LogLevel.DEV, path = HUB_PATH)
-val angleFromRobotToHub
-    get() = (drive.localPose.translation.rotationToPoint(HUB_LOCATION))
-
-@LoggedOutput(LogLevel.DEV, path = HUB_PATH)
-// +180 degrees since the turret's zero angle is exactly opposite of the swerve's zero angle.
-val turretToRobotHubAngle: Rotation2d
+val turretTranslationFieldOriented: Translation2d
     get() =
-        (-angleFromRobotToHub + Rotation2d.k180deg + drive.localPose.rotation)
-            .convertTo360()
-
-val turretAngleToHub: Angle
-    get() =
-        turretToRobotHubAngle.measure.wrapAround(
-            SOFTWARE_LIMIT_CONFIG.ReverseSoftLimitThreshold.rot,
-            SOFTWARE_LIMIT_CONFIG.ForwardSoftLimitThreshold.rot
+        drive.localPose.translation.plus(
+            TURRET_TO_ROBOT.rotateBy(drive.localPose.rotation)
         )
+
+@LoggedOutput(LogLevel.DEV, path = HUB_PATH)
+val turretPose
+    get() =
+        getPose3d(
+            turretTranslationFieldOriented.toTranslation3d(50.cm),
+            getRotation3d(pitch = (-90).deg)
+        )
+
+@LoggedOutput(LogLevel.DEV, path = HUB_PATH)
+val angleFromRobotToHub: Rotation2d
+    get() =
+        turretTranslationFieldOriented.rotationToPoint(currentGoal.translation)
+
+@LoggedOutput(LogLevel.DEV, path = HUB_PATH)
+val turretAngleToHub: Angle
+    get() = (-drive.localPose.rotation + angleFromRobotToHub).measure
 
 @LoggedOutput(LogLevel.COMP, path = HUB_PATH)
 val isTurretAligned = Trigger {
-    turretAngleToHub.isNear(turretToRobotHubAngle.measure, TOLERANCE)
+    Turret.inputs.position.isNear(turretAngleToHub, TOLERANCE)
 }

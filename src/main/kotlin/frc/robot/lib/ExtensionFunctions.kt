@@ -2,11 +2,13 @@ package frc.robot.lib
 
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
+import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj.GenericHID
 import edu.wpi.first.wpilibj.util.Color
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import frc.robot.lib.extensions.deg
 import kotlin.math.*
 import org.littletonrobotics.junction.LogTable
 
@@ -157,7 +159,7 @@ fun <T : Comparable<T>> T.wrapAround(minimumValue: T, maximumValue: T): T {
         throw IllegalArgumentException(
             "Cannot coerce value to an empty range: maximum $maximumValue is less than minimum $minimumValue."
         )
-    if (this < minimumValue) return maximumValue
+    if (this < minimumValue && this > maximumValue) return maximumValue
     if (this > maximumValue) return minimumValue
     return this
 }
@@ -166,4 +168,9 @@ fun Rotation2d.convertTo360():
     Rotation2d { // Convert angle from (-180,180) -> (0,360)
     val deg = (this.degrees + 360.0) % 360.0
     return Rotation2d.fromDegrees(deg)
+}
+
+fun Angle.convertTo360(): Angle { // Convert angle from (-180,180) -> (0,360)
+    val deg = (this + 180.0.deg)
+    return deg
 }

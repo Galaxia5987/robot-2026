@@ -2,10 +2,13 @@ package frc.robot.lib.universal_motor
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.controls.ControlRequest
+import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC
+import com.ctre.phoenix6.controls.PositionVoltage
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC
+import com.ctre.phoenix6.controls.VelocityVoltage
 import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.controller.ProfiledPIDController
 import edu.wpi.first.math.trajectory.TrapezoidProfile
-import edu.wpi.first.units.Units.Rotations
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.MomentOfInertia
 import edu.wpi.first.wpilibj.Timer
@@ -30,7 +33,7 @@ class MotorIOSim(
     override val config: TalonFXConfiguration,
     private val simGains: Gains,
     private val gearRatio: Double,
-    private val diameter: Distance
+    private val diameter: Distance,
 ) : MotorIO {
     override val inputs = LoggedMotorInputs()
     private val profiledPIDController =
@@ -44,7 +47,11 @@ class MotorIOSim(
             )
         )
     private val controller =
-        PIDController(simGains.kP, simGains.kI, simGains.kD)
+        PIDController(simGains.kP, simGains.kI, simGains.kD).apply {
+            if (config.ClosedLoopGeneral.ContinuousWrap) {
+                enableContinuousInput(0.0, 1.0)
+            }
+        }
     private val motor =
         TalonFXSim(1, 1.0, momentOfInertia[kg2m], 1.0, TalonType.KRAKEN_FOC)
 
@@ -54,16 +61,30 @@ class MotorIOSim(
     }
 
     override fun setRequest(controlRequest: ControlRequest) {
+        when (controlRequest) {
+            is VelocityVoltage ->
+                controlRequest.FeedForward =
+                    controlRequest.Velocity * simGains.kV
+            is VelocityTorqueCurrentFOC ->
+                controlRequest.FeedForward =
+                    controlRequest.Velocity * simGains.kV
+            is PositionVoltage ->
+                controlRequest.FeedForward =
+                    controlRequest.Position * simGains.kV
+            is PositionTorqueCurrentFOC ->
+                controlRequest.FeedForward =
+                    controlRequest.Position * simGains.kV
+        }
+
         motor.setControl(controlRequest)
     }
 
     override fun updateInputs() {
-        motor.update(Timer.getTimestamp())
+        motor.update(Timer.getFPGATimestamp())
         inputs.current = motor.appliedCurrent
         inputs.position = motor.position.rot
         inputs.voltage = motor.appliedVoltage
         inputs.velocity = motor.velocity
-        inputs.distance =
-            Rotations.of(motor.position).toDistance(diameter, gearRatio)
+        inputs.distance = motor.position.rot.toDistance(diameter, gearRatio)
     }
 }

@@ -5,7 +5,8 @@ import com.ctre.phoenix6.hardware.CANcoder
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.lib.extensions.deg
+import frc.robot.lib.extensions.get
+import frc.robot.lib.extensions.radians
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
@@ -30,8 +31,10 @@ object Turret : SubsystemBase() {
 
     private val positionTorqueCurrentFOC: PositionTorqueCurrentFOC =
         PositionTorqueCurrentFOC(0.0)
-    private var setpoint = 0.deg
-    val isAtSetpoint = Trigger {
+    private var setpoint = 0.radians
+    val inputs
+        get() = motor.inputs
+    val atSetpoint = Trigger {
         motor.inputs.position.isNear(setpoint, SETPOINT_TOLERANCE)
     }
 
@@ -53,7 +56,11 @@ object Turret : SubsystemBase() {
         motor.periodic()
         ligament.setAngle(motor.inputs.position)
         Logger.recordOutput("Subsystems/$name/mechanism", mechanism)
-        Logger.recordOutput("Subsystems/$name/setpoint", setpoint)
-        Logger.recordOutput("Subsystems/$name/atSetpoint", isAtSetpoint)
+        Logger.recordOutput(
+            "Subsystems/$name/setpoint",
+            setpoint[radians],
+            radians
+        )
+        Logger.recordOutput("Subsystems/$name/atSetpoint", atSetpoint)
     }
 }

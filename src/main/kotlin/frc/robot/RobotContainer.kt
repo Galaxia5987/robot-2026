@@ -1,23 +1,27 @@
 package frc.robot
 
 import com.pathplanner.lib.auto.AutoBuilder
-import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController
+import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
+import frc.robot.lib.unified_controller.PS5LinuxController
+import frc.robot.sim.MapleSimShooter
+import frc.robot.states.intaking.IntakingStates
+import frc.robot.states.intaking.IntakingTriggers
+import frc.robot.states.intaking.IntakingTriggers.canCloseIntake
+import frc.robot.states.intaking.IntakingTriggers.cantCloseIntake
+import frc.robot.states.setpoints_manager.aimingSetpoint
+import frc.robot.states.shooting.Shooting
 import frc.robot.subsystems.drive.DriveCommands
+import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.turret.Turret
-import frc.robot.subsystems.shooter.turret.Turret.setAngle
-import frc.robot.subsystems.shooter.turret.turretAngleToHub
 import org.ironmaple.simulation.SimulatedArena
-import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 
 object RobotContainer {
-    private val driverController = CommandXboxController(0)
+    private val driverController = PS5LinuxController(0)
     private val autoChooser: LoggedDashboardChooser<Command>
 
     init {
@@ -41,10 +45,6 @@ object RobotContainer {
         enableAutoLogOutputFor(this)
     }
 
-    @AutoLogOutput(key = "MapleSimPose")
-    private fun getMapleSimPose(): Pose2d? =
-        driveSimulation?.simulatedDriveTrainPose
-
     private fun configureDefaultCommands() {
         drive.defaultCommand =
             DriveCommands.joystickDrive(
@@ -52,10 +52,26 @@ object RobotContainer {
                 { -driverController.leftX },
                 { -driverController.rightX * 0.8 }
             )
-        Turret.defaultCommand = setAngle { turretAngleToHub }
+        Turret.defaultCommand = Turret.setAngle { Turret.aimingSetpoint() }
+        Hood.defaultCommand = Hood.setAngle { Hood.aimingSetpoint() }
     }
 
-    private fun configureButtonBindings() {}
+    private fun configureButtonBindings() {
+        // Intake Bindings
+        val intakeButton = driverController.R2()
+
+        intakeButton.onTrue(IntakingStates.INTAKING.set())
+        intakeButton
+            .negate()
+            .and(canCloseIntake)
+            .onTrue(IntakingStates.CLOSED.set())
+        intakeButton
+            .negate()
+            .and(IntakingTriggers.cantCloseIntake)
+            .onTrue(IntakingStates.OPEN.set())
+
+        Shooting(driverController.L2())
+    }
 
     fun getAutonomousCommand(): Command = autoChooser.get()
 
@@ -90,12 +106,5 @@ object RobotContainer {
             "swerveFFCharacterization",
             DriveCommands.feedforwardCharacterization()
         )
-    }
-
-    fun resetSimulationField() {
-        if (CURRENT_MODE != Mode.SIM) return
-
-        drive.resetOdometry(Pose2d(3.0, 3.0, Rotation2d()))
-        SimulatedArena.getInstance().resetFieldForAuto()
     }
 }

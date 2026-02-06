@@ -8,13 +8,21 @@ import com.pathplanner.lib.commands.PathfindingCommand
 import edu.wpi.first.hal.FRCNetComm.tInstances
 import edu.wpi.first.hal.FRCNetComm.tResourceType
 import edu.wpi.first.hal.HAL
+import edu.wpi.first.math.VecBuilder
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.PowerDistribution
+import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.lib.logged_output.LoggedOutputManager
+import frc.robot.sim.MapleSimHopper
+import frc.robot.sim.MapleSimIntake
+import frc.robot.sim.MapleSimShooter
+import frc.robot.states.intaking.IntakingTriggers
+import frc.robot.states.setpoints_manager.SetpointsManager
+import frc.robot.states.spindexer.SpindexerTriggers
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.*
 import org.littletonrobotics.junction.networktables.NT4Publisher
@@ -30,6 +38,9 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter
  */
 object Robot : LoggedRobot() {
     private lateinit var autonomousCommand: Command
+    var mapleSimHopper: MapleSimHopper? = null
+    var mapleSimIntake: MapleSimIntake? = null
+    var mapleSimShooter: MapleSimShooter? = null
 
     /**
      * This function is run when the robot is first started up and should be
@@ -64,7 +75,7 @@ object Robot : LoggedRobot() {
         )
 
         when (CURRENT_MODE) {
-            Mode.REAL -> {
+            frc.robot.lib.Mode.REAL -> {
                 LoggedPowerDistribution.getInstance(
                     1,
                     PowerDistribution.ModuleType.kRev
@@ -72,8 +83,8 @@ object Robot : LoggedRobot() {
                 Logger.addDataReceiver(WPILOGWriter())
                 Logger.addDataReceiver(NT4Publisher())
             }
-            Mode.SIM -> Logger.addDataReceiver(NT4Publisher())
-            Mode.REPLAY -> {
+            frc.robot.lib.Mode.SIM -> Logger.addDataReceiver(NT4Publisher())
+            frc.robot.lib.Mode.REPLAY -> {
                 setUseTiming(false)
                 val logPath = LogFileUtil.findReplayLog()
                 Logger.setReplaySource(WPILOGReader(logPath))
@@ -85,6 +96,11 @@ object Robot : LoggedRobot() {
         Logger.start()
         RobotContainer // Initialize robot container.
 
+        // Bind state Machines
+        SetpointsManager
+        IntakingTriggers
+        SpindexerTriggers
+
         enableAutoLogOutputFor(this)
 
         LoggedOutputManager
@@ -95,33 +111,6 @@ object Robot : LoggedRobot() {
                 FollowPathCommand.warmupCommand(),
                 PathfindingCommand.warmupCommand()
             )
-
-        val commandCounts = HashMap<String, Int>()
-        val logCommandFunction =
-            { command: Command, active: Boolean, verb: String ->
-                val name = command.name
-                val count =
-                    commandCounts.getOrDefault(name, 0) +
-                        (if (active) 1 else -1)
-                commandCounts[name] = count
-                Logger.recordOutput(
-                    "Commands/Unique/" +
-                        name +
-                        "_" +
-                        Integer.toHexString(command.hashCode()),
-                    active
-                )
-                Logger.recordOutput("Commands/All/$name", count > 0)
-            }
-        CommandScheduler.getInstance().onCommandInitialize {
-            logCommandFunction(it, true, "initialized")
-        }
-        CommandScheduler.getInstance().onCommandFinish {
-            logCommandFunction(it, false, "finished")
-        }
-        CommandScheduler.getInstance().onCommandInterrupt { command ->
-            logCommandFunction(command, false, "interrupted")
-        }
     }
 
     /**
@@ -165,18 +154,37 @@ object Robot : LoggedRobot() {
         }
     }
 
-    override fun simulationPeriodic() {
-        val arena = SimulatedArena.getInstance()
-        arena.simulationPeriodic()
+    override fun simulationInit() {
+        resetSimulationField()
+        mapleSimHopper = MapleSimHopper()
+        mapleSimIntake = MapleSimIntake()
+        mapleSimShooter = MapleSimShooter(mapleSimIntake!!)
     }
 
+    override fun simulationPeriodic() {
+        val arena = SimulatedArena.getInstance()
+        Logger.recordOutput(
+            "Visualization/Fuels",
+            *arena.getGamePiecesArrayByType("Fuel")
+        )
+        Logger.recordOutput(
+            "Visualization/FuelsInRobot",
+            *mapleSimHopper!!.fuelInRobotPoses.invoke()
+        )
+
+        val pose = getMapleSimPose()
+        val timestamp = Timer.getTimestamp()
+        val stdDevs = VecBuilder.fill(0.01, 0.01, 0.01)
+
+        drive.addGlobalVisionMeasurement(pose, timestamp, stdDevs)
+        drive.addLocalVisionMeasurement(pose, timestamp, stdDevs)
+        arena.simulationPeriodic()
+    }
     /** This function is called periodically during operator control. */
     override fun teleopPeriodic() {}
 
     /** This function is called once when the robot is disabled. */
-    override fun disabledInit() {
-        RobotContainer.resetSimulationField()
-    }
+    override fun disabledInit() {}
 
     /** This function is called periodically when disabled. */
     override fun disabledPeriodic() {}

@@ -11,6 +11,7 @@ import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.amps
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
+import frc.robot.lib.extensions.rotations
 import frc.robot.lib.extensions.rps
 import org.team5987.annotation.command_enum.CommandEnum
 
@@ -27,11 +28,11 @@ val ENCODER_ID = 0
 val ABSOLUTE_ENCODER_OFFSET = 0.rps
 
 val SOFTWARE_LIMIT_CONFIG =
-    SoftwareLimitSwitchConfigs().apply {
-        ForwardSoftLimitEnable = true
-        ForwardSoftLimitThreshold = 0.73291
-        ReverseSoftLimitEnable = true
-        ReverseSoftLimitThreshold = -0.005
+    SoftwareLimitSwitchConfigs().apply { // TODO: Configure
+        ForwardSoftLimitEnable = false
+        ForwardSoftLimitThreshold = (-90).deg[rotations]
+        ReverseSoftLimitEnable = false
+        ReverseSoftLimitThreshold = (-3).deg[rotations]
     }
 
 val ENCODER_CONFIG =
@@ -50,6 +51,9 @@ val CONFIG =
                 Inverted = InvertedValue.Clockwise_Positive
             }
         Slot0 = Slot0Configs().apply { Slot0 = REAL_GAINS.toSlotConfig() }
+        ClosedLoopGeneral =
+            ClosedLoopGeneralConfigs().apply { ContinuousWrap = true }
+        SoftwareLimitSwitch = SOFTWARE_LIMIT_CONFIG
         Feedback =
             FeedbackConfigs().apply {
                 SensorToMechanismRatio = RATIO
