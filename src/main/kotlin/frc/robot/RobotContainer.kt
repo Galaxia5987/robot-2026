@@ -57,17 +57,6 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
-        driverController
-            .cross()
-            .onTrue(
-                Commands.runOnce({ // Add the projectile to the simulated arena
-                    SimulatedArena.getInstance()
-                        .addGamePieceProjectile(
-                            MapleSimShooter.createFuelOnFly()
-                        )
-                })
-            )
-
         // Intake Bindings
         val intakeButton = driverController.R2()
 

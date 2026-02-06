@@ -19,6 +19,7 @@ import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.lib.logged_output.LoggedOutputManager
 import frc.robot.sim.MapleSimHopper
 import frc.robot.sim.MapleSimIntake
+import frc.robot.sim.MapleSimShooter
 import frc.robot.states.intaking.IntakingTriggers
 import frc.robot.states.setpoints_manager.SetpointsManager
 import frc.robot.states.spindexer.SpindexerTriggers
@@ -37,7 +38,9 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter
  */
 object Robot : LoggedRobot() {
     private lateinit var autonomousCommand: Command
-    private var mapleSimHopper: MapleSimHopper? = null
+    var mapleSimHopper: MapleSimHopper? = null
+    var mapleSimIntake: MapleSimIntake? = null
+    var mapleSimShooter: MapleSimShooter? = null
 
     /**
      * This function is run when the robot is first started up and should be
@@ -153,8 +156,9 @@ object Robot : LoggedRobot() {
 
     override fun simulationInit() {
         resetSimulationField()
-        val mapleSimIntake = MapleSimIntake()
         mapleSimHopper = MapleSimHopper()
+        mapleSimIntake = MapleSimIntake()
+        mapleSimShooter = MapleSimShooter(mapleSimIntake!!)
     }
 
     override fun simulationPeriodic() {

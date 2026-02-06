@@ -2,6 +2,8 @@ package frc.robot.sim
 
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.geometry.Translation3d
+import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.Commands
 import frc.robot.calculateVelocity
 import frc.robot.drive
 import frc.robot.field.HUB_LOCATION
@@ -14,13 +16,15 @@ import frc.robot.lib.extensions.mps
 import frc.robot.lib.extensions.toRotation2d
 import frc.robot.lib.extensions.toTranslation3d
 import frc.robot.states.setpoints_manager.shooting_modes.distanceFromGoal
+import frc.robot.states.shooting.ShootingState
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.turret.Turret
+import org.ironmaple.simulation.SimulatedArena
 import org.ironmaple.simulation.seasonspecific.rebuilt2026.RebuiltFuelOnFly
 
 val HUB_HEIGHT = 177.cm // ONLY USED FOR MAPLE SIM!!!!
 
-object MapleSimShooter {
+class MapleSimShooter(private val mapleSimIntake: MapleSimIntake) {
     fun createFuelOnFly(): RebuiltFuelOnFly {
         val robotSpeeds = drive.chassisSpeeds
 
@@ -49,4 +53,14 @@ object MapleSimShooter {
             )
         return fuelOnFly
     }
+
+    fun createFuelCommand(): Command = (Commands.runOnce({
+        mapleSimIntake.obtainBallFromIntake()
+        SimulatedArena.getInstance()
+            .addGamePieceProjectile(
+                createFuelOnFly()
+            )
+    }).andThen(Commands.waitSeconds(0.1))).repeatedly()
+
+    private val launchBallTrigger = ShootingState.SHOOTING.trigger.whileTrue(createFuelCommand())
 }

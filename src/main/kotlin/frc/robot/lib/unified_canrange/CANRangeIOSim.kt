@@ -1,7 +1,7 @@
 package frc.robot.lib.unified_canrange
 
+import frc.robot.Robot
 import frc.robot.lib.extensions.m
-import frc.robot.lib.extensions.meters
 import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
@@ -44,12 +44,27 @@ class CANRangeIOSim(
     override fun updateInputs() {
         val (distance, detecting) =
             when {
+                Robot.mapleSimIntake!!.useIntakeCounting.get().and(usesNumber) -> getMapleSimIntakingNumberModeValues()
+                Robot.mapleSimIntake!!.useIntakeCounting.get().and(!usesNumber) -> getMapleSmIntakingBooleanModeValues()
                 usesNumber -> getNumberModeValues()
                 else -> getBooleanModeValues()
             }
 
         inputs.distance = distance.m
         inputs.isDetecting = detecting
+    }
+
+    private fun getMapleSimIntakingNumberModeValues(): Pair<Double, Boolean> {
+        val ballCount = Robot.mapleSimIntake!!.ballCount
+        val meters = 1.5 - (ballCount / 60.0 * 1.49)
+        val isDetecting = meters < DETECTION_THRESHOLD
+        return Pair(meters, isDetecting)
+    }
+
+    private fun getMapleSmIntakingBooleanModeValues(): Pair<Double, Boolean> {
+        val isDetecting = Robot.mapleSimIntake!!.ballCount > 0
+        val meters = if (isDetecting) CLOSE_DISTANCE else FAR_DISTANCE
+        return Pair(meters, isDetecting)
     }
 
     private fun getNumberModeValues(): Pair<Double, Boolean> {
