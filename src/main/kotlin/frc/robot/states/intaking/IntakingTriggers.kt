@@ -1,13 +1,14 @@
 package frc.robot.states.intaking
 
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.subsystems.sensors.Sensors.isHalfFull
+import frc.robot.subsystems.sensors.Sensors
+import frc.robot.subsystems.sensors.Sensors.cantCloseIntake
 
 object IntakingTriggers {
 
-    val canCloseIntake: Trigger = isHalfFull.negate()
+    val cantCloseIntake = Sensors.cantCloseIntake
 
-    val cantCloseIntake = isHalfFull
+    val canCloseIntake: Trigger = cantCloseIntake.negate()
 
     private val isClosed = IntakingStates.CLOSED.trigger.onTrue(closed())
     private val isIntaking = IntakingStates.INTAKING.trigger.onTrue(intaking())

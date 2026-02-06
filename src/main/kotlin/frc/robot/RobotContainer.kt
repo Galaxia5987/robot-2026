@@ -9,6 +9,7 @@ import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.lib.unified_controller.PS5LinuxController
 import frc.robot.sim.MapleSimShooter
 import frc.robot.states.intaking.IntakingStates
+import frc.robot.states.intaking.IntakingTriggers
 import frc.robot.states.intaking.IntakingTriggers.canCloseIntake
 import frc.robot.states.intaking.IntakingTriggers.cantCloseIntake
 import frc.robot.states.setpoints_manager.aimingSetpoint
@@ -77,7 +78,7 @@ object RobotContainer {
             .onTrue(IntakingStates.CLOSED.set())
         intakeButton
             .negate()
-            .and(cantCloseIntake)
+            .and(IntakingTriggers.cantCloseIntake)
             .onTrue(IntakingStates.OPEN.set())
 
         Shooting(driverController.L2())

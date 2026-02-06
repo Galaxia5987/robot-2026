@@ -122,13 +122,12 @@ private object Intake {
             )
 }
 
-
 private object Shooter {
     private val turretRotation
         get() = Turret.inputs.position.toYaw()
 
     private val turretTranslation
-        get() = Translation3d((-116).mm, 220.5.mm,355.mm)
+        get() = Translation3d((-116).mm, 220.5.mm, 355.mm)
 
     private val hoodTranslation
         get() =

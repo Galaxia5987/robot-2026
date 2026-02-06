@@ -94,6 +94,9 @@ fun Rotation2d.toTransform(): Transform2d = Transform2d(Translation2d(), this)
 
 fun Rotation2d.toPose(): Pose2d = Pose2d(Translation2d(), this)
 
+fun Rotation2d.toRotation3d(): Rotation3d =
+    Rotation3d(0.deg, 0.deg, this.measure)
+
 fun Transform2d.toPose(): Pose2d = Pose2d(this.translation, this.rotation)
 
 fun Transform3d.toPose(): Pose3d = Pose3d(this.translation, this.rotation)

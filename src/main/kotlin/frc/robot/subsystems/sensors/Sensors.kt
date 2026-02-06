@@ -1,5 +1,6 @@
 package frc.robot.subsystems.sensors
 
+import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.extensions.m
@@ -32,15 +33,14 @@ object Sensors : SubsystemBase() {
             simulationUsesNumber = true
         )
 
-    fun AverageFuelDistance()= (topSensor.inputs.distance+auxTopSensor.inputs.distance)*0.5
+    fun averageFuelDistance(): Distance =
+        (topSensor.inputs.distance + auxTopSensor.inputs.distance) / 2.0
 
-    val isHalfFull: Trigger = Trigger {
-        (AverageFuelDistance() < HALF_FULL)
+    val cantCloseIntake: Trigger = Trigger {
+        (averageFuelDistance() < HALF_FULL)
     }
 
-    val isFull: Trigger = Trigger {
-        (AverageFuelDistance() < FULL)
-    }
+    val isFull: Trigger = Trigger { (averageFuelDistance() < FULL) }
 
     val hasFuel: Trigger = Trigger { spindexerSensor.isInRange }
 
@@ -50,7 +50,7 @@ object Sensors : SubsystemBase() {
         auxTopSensor.periodic()
 
         Logger.recordOutput("Subsystems/$name/hasFuel", hasFuel)
-        Logger.recordOutput("Subsystems/$name/isHalfFull", isHalfFull)
+        Logger.recordOutput("Subsystems/$name/cantCloseIntake", cantCloseIntake)
         Logger.recordOutput("Subsystems/$name/isFull", isFull)
     }
 }

@@ -32,14 +32,15 @@ object MapleSimShooter {
                 robotSpeeds,
                 Turret.inputs.position.toRotation2d() + drive.pose.rotation,
                 0.47865.m,
-                if (distanceFromGoal > 10.m) 13.mps else
-                calculateVelocity(
-                        distanceFromGoal[m],
-                        robotSpeeds.vxMetersPerSecond,
-                        robotSpeeds.vyMetersPerSecond
-                    )
-                    .mps + 1.mps,
-                90.deg - Hood.inputs.position -15.deg
+                if (distanceFromGoal > 10.m) 13.mps
+                else
+                    calculateVelocity(
+                            distanceFromGoal[m],
+                            robotSpeeds.vxMetersPerSecond,
+                            robotSpeeds.vyMetersPerSecond
+                        )
+                        .mps + 1.mps,
+                90.deg - Hood.inputs.position - 15.deg
             )
         fuelOnFly
             .withTargetPosition { HUB_LOCATION.toTranslation3d(HUB_HEIGHT) }
@@ -48,5 +49,4 @@ object MapleSimShooter {
             )
         return fuelOnFly
     }
-
 }

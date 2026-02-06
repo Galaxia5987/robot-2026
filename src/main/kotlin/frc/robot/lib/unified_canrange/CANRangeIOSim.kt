@@ -5,47 +5,68 @@ import frc.robot.lib.extensions.meters
 import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
-class CANRangeIOSim(subsystemName: String, sensorName: String, private val usesNumber: Boolean = false) : CANRangeIO {
+/**
+ * Simulation implementation of CANRangeIO for testing.
+ *
+ * Supports two modes:
+ * - Number mode: Uses a LoggedNetworkNumber for distance in meters
+ * - Boolean mode: Uses a LoggedNetworkBoolean for detection state
+ */
+class CANRangeIOSim(
+    subsystemName: String,
+    sensorName: String,
+    private val usesNumber: Boolean = false
+) : CANRangeIO {
+
     override val inputs = LoggedSensorInputs()
 
-    private val metersDetected : LoggedNetworkNumber?
-    private val isDetecting : LoggedNetworkBoolean?
+    private val metersDetected: LoggedNetworkNumber?
+    private val isDetecting: LoggedNetworkBoolean?
 
     init {
         if (usesNumber) {
-            metersDetected = LoggedNetworkNumber(
-                "/Tuning/$subsystemName/$sensorName/MetersDetected", 1.0
-            )
+            metersDetected =
+                LoggedNetworkNumber(
+                    "/Tuning/$subsystemName/$sensorName/metersDetected",
+                    1.0
+                )
             isDetecting = null
-        }
-        else {
-            isDetecting = LoggedNetworkBoolean(
-                "/Tuning/$subsystemName/$sensorName/isDetecting", false
-            )
+        } else {
+            isDetecting =
+                LoggedNetworkBoolean(
+                    "/Tuning/$subsystemName/$sensorName/IsDetecting",
+                    false
+                )
             metersDetected = null
         }
     }
+
     override fun updateInputs() {
-
-
-        var meters_value = 0.0
-        var boolean_value = false
-        // usesNumber decided which one, but now we check not null just to be sure it doesn't crash
-        if(usesNumber && metersDetected != null) {
-            meters_value = metersDetected.get()
-            boolean_value = meters_value < 0.5
-        }
-        else if (isDetecting != null){
-            boolean_value = isDetecting.get()
-            if(boolean_value){
-                meters_value = 0.01
+        val (distance, detecting) =
+            when {
+                usesNumber -> getNumberModeValues()
+                else -> getBooleanModeValues()
             }
-            else{
-                meters_value = 3.0
-            }
-        }
 
-        inputs.distance= meters_value.m
-        inputs.isDetecting= boolean_value
+        inputs.distance = distance.m
+        inputs.isDetecting = detecting
+    }
+
+    private fun getNumberModeValues(): Pair<Double, Boolean> {
+        val meters = metersDetected?.get() ?: 0.0
+        val isDetecting = meters < DETECTION_THRESHOLD
+        return Pair(meters, isDetecting)
+    }
+
+    private fun getBooleanModeValues(): Pair<Double, Boolean> {
+        val isDetecting = this.isDetecting?.get() ?: false
+        val meters = if (isDetecting) CLOSE_DISTANCE else FAR_DISTANCE
+        return Pair(meters, isDetecting)
+    }
+
+    private companion object {
+        const val DETECTION_THRESHOLD = 0.5
+        const val CLOSE_DISTANCE = 0.01
+        const val FAR_DISTANCE = 1.5
     }
 }

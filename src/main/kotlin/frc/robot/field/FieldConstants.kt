@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.drive
 import frc.robot.lib.IS_RED
-import frc.robot.lib.extensions.cm
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.flip
 import frc.robot.lib.extensions.m

@@ -165,7 +165,7 @@ object Robot : LoggedRobot() {
         )
         Logger.recordOutput(
             "Visualization/FuelsInRobot",
-            *mapleSimHopper!!.fuelInRobotPoses
+            *mapleSimHopper!!.fuelInRobotPoses.invoke()
         )
 
         val pose = getMapleSimPose()
