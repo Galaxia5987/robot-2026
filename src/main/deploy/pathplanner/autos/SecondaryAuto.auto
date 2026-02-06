@@ -7,31 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "startToFuelOutpostSide"
+            "pathName": "StartToFuelOutpostSide"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "fuelStep1ToStep2OutpostSide"
+            "pathName": "FuelOutpostSideToShooting"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "stopBeforeOutpost"
+            "pathName": "OutposeStartToScatteredFuel"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "bumpToOutpost"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "NiceToHavePathOutpost"
+            "pathName": "ScatteredFuelOutpostSideToShooting"
           }
         }
       ]

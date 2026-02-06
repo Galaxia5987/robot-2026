@@ -11,40 +11,22 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "startToFuelDepotSide"
+                  "pathName": "StartToFuelDepotSide"
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "fuelStep1ToStep2DepotSide"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "intake"
+                  "pathName": "FuelDepotSideToDepot"
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "stopBeforeDepot"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "bumpToDepot"
+                  "pathName": "FuelFromDepot"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "NiceToHaveDepot "
           }
         }
       ]

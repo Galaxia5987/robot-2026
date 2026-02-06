@@ -3,29 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.718871527777777,
-        "y": 3.4366319444444446
+        "x": 7.8055144993546985,
+        "y": 3.33
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.3250046464085,
-        "y": 3.6001911404250353
+        "x": 7.801997008775858,
+        "y": 2.9039430705282405
       },
       "isLocked": false,
-      "linkedName": "fuelStep2OutPostSide"
+      "linkedName": "fuelEndOutpostSide"
     },
     {
       "anchor": {
-        "x": 2.821376488095238,
-        "y": 1.8881770833333338
+        "x": 7.201947083900417,
+        "y": 1.0440428013610221
       },
       "prevControl": {
-        "x": 3.0558787800314855,
-        "y": 1.9748296948153137
+        "x": 7.99193120846932,
+        "y": 1.5575761453554153
+      },
+      "nextControl": {
+        "x": 6.469614482307462,
+        "y": 0.5679861337446064
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.5,
+        "y": 0.602
+      },
+      "prevControl": {
+        "x": 4.734502291936248,
+        "y": 0.6886526114819799
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "stopBeforeOutpost"
+      "linkedName": "startOutpostSide"
     }
   ],
   "rotationTargets": [],
@@ -42,10 +58,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 92.67721722468895
+    "rotation": 90.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "SecondaryAuto",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 90.0

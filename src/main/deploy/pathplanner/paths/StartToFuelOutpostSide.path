@@ -3,29 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.5130654761904765,
-        "y": 6.827827380952381
+        "x": 4.5,
+        "y": 0.602
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.505166338801581,
-        "y": 7.200443238145629
+        "x": 7.436493505976003,
+        "y": 0.581787574913851
       },
       "isLocked": false,
-      "linkedName": "fuelStep1DepotSide"
+      "linkedName": "startOutpostSide"
     },
     {
       "anchor": {
-        "x": 7.655885416666667,
-        "y": 4.570381944444445
+        "x": 7.8055144993546985,
+        "y": 1.4789638407518908
       },
       "prevControl": {
-        "x": 7.571997194884747,
-        "y": 4.334876602156276
+        "x": 7.821141683979398,
+        "y": 1.051802153374739
+      },
+      "nextControl": {
+        "x": 7.788222008930594,
+        "y": 1.9516458731147994
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.8055144993546985,
+        "y": 3.33
+      },
+      "prevControl": {
+        "x": 7.8055144993546985,
+        "y": 2.8596226012430574
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "fuelStep2DepotSide"
+      "linkedName": "fuelEndOutpostSide"
     }
   ],
   "rotationTargets": [],
@@ -34,7 +50,7 @@
   "eventMarkers": [
     {
       "name": "intake",
-      "waypointRelativePos": 1.0,
+      "waypointRelativePos": 2.0,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -49,13 +65,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -91.36392753160288
+    "rotation": 90.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "SecondaryAuto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }
