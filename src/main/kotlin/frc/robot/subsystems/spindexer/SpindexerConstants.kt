@@ -1,5 +1,6 @@
 package frc.robot.subsystems.spindexer
 
+import com.ctre.phoenix6.configs.FeedbackConfigs
 import com.ctre.phoenix6.configs.MotorOutputConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.signals.InvertedValue
@@ -16,7 +17,7 @@ val SIM_GAINS = Gains(1.0)
 
 const val MAIN_MOTOR_ID = 0
 
-const val GEAR_RATIO = 1.0
+const val GEAR_RATIO = 9.0
 
 val SETPOINT_TOLERANCE = 0.5.rps
 
@@ -28,10 +29,13 @@ val MOTOR_CONFIG =
                 Inverted = InvertedValue.Clockwise_Positive
             }
         CurrentLimits = createCurrentLimits(40.amps, 5.0.amps)
+        Feedback = FeedbackConfigs().apply {
+            SensorToMechanismRatio = GEAR_RATIO
+        }
     }
 
 @CommandEnum
-enum class SpindexerVelocity(val velocity: AngularVelocity) {
+enum class SpindexerConstants(val velocity: AngularVelocity) {
     STOP(0.rps),
     START(10.rps),
     SLOW(4.rps),

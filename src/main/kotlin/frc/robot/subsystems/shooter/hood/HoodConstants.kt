@@ -14,17 +14,18 @@ import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.*
 import org.team5987.annotation.command_enum.CommandEnum
 
-val PORT = 0
+const val PORT = 0
 // TODO: check port
 
-val ENCODER_ID = 10
+const val ENCODER_ID = 10
+const val ENCODER_GEAR_RATIO = 0.5 // TODO: Might be 2
 
 val TOLERANCE = 0.5.deg
 
 val SIM_GAINS = Gains(kP = 1.7, kD = 0.3)
 val REAL_GAINS = Gains(kP = 1.7)
 
-val GEAR_RATIO = 1.0
+const val GEAR_RATIO = 156.83
 
 val ABSOLUTE_ENCODER_OFFSET = 0.rad
 
@@ -49,7 +50,7 @@ val CONFIG =
         Feedback =
             FeedbackConfigs().apply {
                 SensorToMechanismRatio = GEAR_RATIO
-                RotorToSensorRatio = 1.0
+                RotorToSensorRatio = ENCODER_GEAR_RATIO
                 FeedbackRemoteSensorID = ENCODER_ID
                 FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder
             }

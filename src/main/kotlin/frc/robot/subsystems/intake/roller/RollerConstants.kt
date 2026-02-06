@@ -1,5 +1,6 @@
 package frc.robot.subsystems.roller
 
+import com.ctre.phoenix6.configs.FeedbackConfigs
 import com.ctre.phoenix6.configs.MotorOutputConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.signals.InvertedValue
@@ -16,8 +17,9 @@ enum class RollerPositions(val voltage: Voltage) {
     STOP(0.volts)
 }
 
-val MAIN_MOTOR_PORT = 0
-val AUX_MOTOR_PORT = 0
+const val MAIN_MOTOR_PORT = 0
+const val AUX_MOTOR_PORT = 0
+const val GEAR_RATIO = 2.5
 
 val MOTOR_CONFIG =
     TalonFXConfiguration().apply {
@@ -26,4 +28,7 @@ val MOTOR_CONFIG =
                 Inverted = InvertedValue.Clockwise_Positive
             }
         CurrentLimits = createCurrentLimits(30.amps, 5.amps)
+        Feedback = FeedbackConfigs().apply {
+            SensorToMechanismRatio = GEAR_RATIO
+        }
     }

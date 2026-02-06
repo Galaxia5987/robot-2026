@@ -17,7 +17,7 @@ val TOLERANCE = 4.cm
 val PORT = 0
 // TODO: actual port
 
-val GEAR_RATIO = 1.0
+val GEAR_RATIO = 3.17
 // TODO: actual value
 
 val SIM_GAINS = Gains(kP = 1.4, kD = 0.3)
@@ -50,7 +50,9 @@ val CONFIG =
 
         Slot0 = Slot0Configs().apply { REAL_GAINS }
         Feedback =
-            FeedbackConfigs().apply { SensorToMechanismRatio = GEAR_RATIO }
+            FeedbackConfigs().apply {
+                SensorToMechanismRatio = GEAR_RATIO
+            }
 
         CurrentLimits = createCurrentLimits(30.amps, 5.amps)
     }

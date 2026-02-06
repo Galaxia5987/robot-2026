@@ -1,5 +1,6 @@
 package frc.robot.subsystems.shooter.pre_shooter
 
+import com.ctre.phoenix6.configs.FeedbackConfigs
 import com.ctre.phoenix6.configs.MotorOutputConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.signals.InvertedValue
@@ -16,7 +17,7 @@ val SIM_GAINS = Gains(0.6, kV = 0.1)
 
 const val MAIN_MOTOR_ID = 0
 
-const val GEAR_RATIO = 1.0
+const val GEAR_RATIO = 2.5
 
 val SETPOINT_TOLERANCE = 2.rps
 
@@ -28,10 +29,13 @@ val MOTOR_CONFIG =
                 Inverted = InvertedValue.Clockwise_Positive
             }
         CurrentLimits = createCurrentLimits(20.amps, 10.amps)
+        Feedback = FeedbackConfigs().apply {
+            SensorToMechanismRatio = GEAR_RATIO
+        }
     }
 
 @CommandEnum
-enum class PreShooterVelocity(val velocity: AngularVelocity) {
+enum class PreShooterConstants(val velocity: AngularVelocity) {
     STOP(0.rps),
     START(10.rps),
     FAST(20.rps),
