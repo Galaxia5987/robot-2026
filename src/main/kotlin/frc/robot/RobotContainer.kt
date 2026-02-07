@@ -1,21 +1,15 @@
 package frc.robot
 
 import com.pathplanner.lib.auto.AutoBuilder
+import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
-import frc.robot.autonomous.bumpToDepot
-import frc.robot.autonomous.mio
-import frc.robot.autonomous.startToFuelDepotSide
-import frc.robot.autonomous.why
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.lib.unified_controller.PS5LinuxController
-import frc.robot.sim.MapleSimShooter
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.intaking.IntakingTriggers
 import frc.robot.states.intaking.IntakingTriggers.canCloseIntake
-import frc.robot.states.intaking.IntakingTriggers.cantCloseIntake
 import frc.robot.states.setpoints_manager.aimingSetpoint
 import frc.robot.states.shooting.Shooting
 import frc.robot.subsystems.drive.DriveCommands
@@ -77,7 +71,10 @@ object RobotContainer {
         Shooting(driverController.L2())
     }
 
-    fun getAutonomousCommand(): Command = autoChooser.get()
+    fun getAutonomousCommand(): Command =
+        AutoBuilder.followPath(
+            PathPlannerPath.fromPathFile("StartToFuelDepotSide")
+        )
 
     private fun registerAutoCommands() {
         // SysIds
@@ -110,21 +107,5 @@ object RobotContainer {
             "swerveFFCharacterization",
             DriveCommands.feedforwardCharacterization()
         )
-
-        autoChooser.addDefaultOption(
-            "startToFuelDepotSide",
-            startToFuelDepotSide()
-        )
-        autoChooser.addOption(
-            "bumpToDepot",
-            bumpToDepot()
-        )
-
-        autoChooser.addOption(
-            "why",
-            why()
-        )
     }
 }
-
-

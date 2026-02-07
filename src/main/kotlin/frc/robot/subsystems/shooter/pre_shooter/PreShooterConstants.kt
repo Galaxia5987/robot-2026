@@ -29,13 +29,12 @@ val MOTOR_CONFIG =
                 Inverted = InvertedValue.Clockwise_Positive
             }
         CurrentLimits = createCurrentLimits(20.amps, 10.amps)
-        Feedback = FeedbackConfigs().apply {
-            SensorToMechanismRatio = GEAR_RATIO
-        }
+        Feedback =
+            FeedbackConfigs().apply { SensorToMechanismRatio = GEAR_RATIO }
     }
 
 @CommandEnum
-enum class PreShooterConstants(val velocity: AngularVelocity) {
+enum class PreShooterVelocity(val velocity: AngularVelocity) {
     STOP(0.rps),
     START(10.rps),
     FAST(20.rps),

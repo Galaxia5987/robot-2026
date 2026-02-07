@@ -54,13 +54,15 @@ class MapleSimShooter(private val mapleSimIntake: MapleSimIntake) {
         return fuelOnFly
     }
 
-    fun createFuelCommand(): Command = (Commands.runOnce({
-        mapleSimIntake.obtainBallFromIntake()
-        SimulatedArena.getInstance()
-            .addGamePieceProjectile(
-                createFuelOnFly()
-            )
-    }).andThen(Commands.waitSeconds(0.1))).repeatedly()
+    fun createFuelCommand(): Command =
+        (Commands.runOnce({
+                    mapleSimIntake.obtainBallFromIntake()
+                    SimulatedArena.getInstance()
+                        .addGamePieceProjectile(createFuelOnFly())
+                })
+                .andThen(Commands.waitSeconds(0.1)))
+            .repeatedly()
 
-    private val launchBallTrigger = ShootingState.SHOOTING.trigger.whileTrue(createFuelCommand())
+    private val launchBallTrigger =
+        ShootingState.SHOOTING.trigger.whileTrue(createFuelCommand())
 }

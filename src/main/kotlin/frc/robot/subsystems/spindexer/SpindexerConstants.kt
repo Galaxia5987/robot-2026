@@ -29,13 +29,12 @@ val MOTOR_CONFIG =
                 Inverted = InvertedValue.Clockwise_Positive
             }
         CurrentLimits = createCurrentLimits(40.amps, 5.0.amps)
-        Feedback = FeedbackConfigs().apply {
-            SensorToMechanismRatio = GEAR_RATIO
-        }
+        Feedback =
+            FeedbackConfigs().apply { SensorToMechanismRatio = GEAR_RATIO }
     }
 
 @CommandEnum
-enum class SpindexerConstants(val velocity: AngularVelocity) {
+enum class SpindexerVelocity(val velocity: AngularVelocity) {
     STOP(0.rps),
     START(10.rps),
     SLOW(4.rps),

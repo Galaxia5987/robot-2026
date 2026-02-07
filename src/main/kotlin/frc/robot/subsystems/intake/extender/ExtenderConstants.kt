@@ -50,9 +50,7 @@ val CONFIG =
 
         Slot0 = Slot0Configs().apply { REAL_GAINS }
         Feedback =
-            FeedbackConfigs().apply {
-                SensorToMechanismRatio = GEAR_RATIO
-            }
+            FeedbackConfigs().apply { SensorToMechanismRatio = GEAR_RATIO }
 
         CurrentLimits = createCurrentLimits(30.amps, 5.amps)
     }
