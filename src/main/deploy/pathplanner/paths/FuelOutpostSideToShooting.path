@@ -61,7 +61,7 @@
     "rotation": 90.0
   },
   "reversed": false,
-  "folder": "SecondaryAuto",
+  "folder": "Outpost",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 90.0

@@ -21,7 +21,7 @@
       },
       "prevControl": {
         "x": 6.226771884882976,
-        "y": 0.782290028043309
+        "y": 0.7822900280433092
       },
       "nextControl": {
         "x": 7.328705379028052,
@@ -41,7 +41,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "depotSideScattered"
+      "linkedName": "outpostSideScattered"
     }
   ],
   "rotationTargets": [],
@@ -61,7 +61,7 @@
     "rotation": 74.77308108238554
   },
   "reversed": false,
-  "folder": "SecondaryAuto",
+  "folder": "Outpost",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 90.0

@@ -49,7 +49,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "intake",
+      "name": "",
       "waypointRelativePos": 2.0,
       "endWaypointRelativePos": null,
       "command": null
@@ -68,7 +68,7 @@
     "rotation": 90.0
   },
   "reversed": false,
-  "folder": "SecondaryAuto",
+  "folder": "Outpost",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 90.0
