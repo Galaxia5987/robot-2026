@@ -93,6 +93,8 @@ object Robot : LoggedRobot() {
             }
         }
         Logger.start()
+
+        drive
         RobotContainer // Initialize robot container.
 
         // Bind state Machines
