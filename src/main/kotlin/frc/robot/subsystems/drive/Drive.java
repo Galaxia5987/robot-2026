@@ -120,7 +120,7 @@ public class Drive extends SubsystemBase implements SysIdable {
                     .withSwerveModule(
                             new SwerveModuleSimulationConfig(
                                     DCMotor.getKrakenX60(1),
-                                    DCMotor.getFalcon500(1),
+                                    DCMotor.getKrakenX44Foc(1),
                                     TunerConstants.FrontLeft.DriveMotorGearRatio,
                                     TunerConstants.FrontLeft.SteerMotorGearRatio,
                                     Volts.of(TunerConstants.FrontLeft.DriveFrictionVoltage),

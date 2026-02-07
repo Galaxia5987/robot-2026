@@ -1,11 +1,18 @@
 package frc.robot
 
 import com.pathplanner.lib.auto.AutoBuilder
+import com.pathplanner.lib.path.PathConstraints
 import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
+import frc.robot.field.HUB_LOCATION
 import frc.robot.lib.Mode
+import frc.robot.lib.extensions.deg_ps
+import frc.robot.lib.extensions.deg_ps_ps
 import frc.robot.lib.extensions.enableAutoLogOutputFor
+import frc.robot.lib.extensions.mps
+import frc.robot.lib.extensions.mps_ps
+import frc.robot.lib.extensions.toPose
 import frc.robot.lib.unified_controller.PS5LinuxController
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.intaking.IntakingTriggers
@@ -71,10 +78,12 @@ object RobotContainer {
         Shooting(driverController.L2())
     }
 
-    fun getAutonomousCommand(): Command =
-        AutoBuilder.followPath(
-            PathPlannerPath.fromPathFile("StartToFuelDepotSide")
-        )
+    fun getAutonomousCommand(): Command {
+        val path = PathPlannerPath.fromPathFile("StartToFuelDepotSide")
+        val startPose = path.pathPoses[0]
+        return AutoBuilder.resetOdom(startPose).andThen(AutoBuilder.followPath(path))
+//        return AutoBuilder.pathfindToPose(HUB_LOCATION.toPose(), PathConstraints(5.0.mps, 8.4.mps_ps, 360.deg_ps, 720.deg_ps_ps))
+    }
 
     private fun registerAutoCommands() {
         // SysIds
