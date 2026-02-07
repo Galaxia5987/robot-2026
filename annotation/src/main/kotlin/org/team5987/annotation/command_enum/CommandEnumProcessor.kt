@@ -13,7 +13,7 @@ val snakeRegex = "_[a-zA-Z]".toRegex()
 
 fun String.snakeToCamelCase(): String {
     return snakeRegex.replace(lowercase()) {
-        it.value.replace("_","")
+        it.value.replace("_", "")
             .uppercase()
     }
 }
@@ -47,9 +47,15 @@ class CreateCommandProcessor(
 
         // generate all default entry functions
         val entryFunctions = entries.map { entry ->
-            FunSpec.builder(entry.snakeToCamelCase())
+            val camelEntry = entry.snakeToCamelCase()
+            FunSpec.builder(camelEntry)
                 .returns(commandClass)
-                .addStatement("return setTarget(%T.%L)", enumClass, entry)
+                .addStatement(
+                    "return setTarget(%T.%L).withName(%S)",
+                    enumClass,
+                    entry,
+                    "${pkg.substringAfterLast(".")}/$camelEntry",
+                )
                 .build()
         }
 

@@ -7,11 +7,7 @@ import edu.wpi.first.units.measure.AngularVelocity
 import edu.wpi.first.units.measure.Current
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
-import frc.robot.lib.extensions.amps
-import frc.robot.lib.extensions.deg
-import frc.robot.lib.extensions.m
-import frc.robot.lib.extensions.sec
-import frc.robot.lib.extensions.volts
+import frc.robot.lib.extensions.*
 import org.team5987.annotation.Logged
 
 /**
@@ -58,7 +54,7 @@ interface MotorIO {
          */
         var distance: Distance = 0.m
 
-        var velocity: AngularVelocity = 0.deg.per(sec)
+        var velocity: AngularVelocity = 0.rps
 
         /** Voltage applied to the motor. */
         var voltage: Voltage = 0.volts

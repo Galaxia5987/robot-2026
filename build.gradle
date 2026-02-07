@@ -302,3 +302,5 @@ spotless {
         }
     }
 }
+
+apply from: "$rootDir/gradle/shotcalculator.gradle"

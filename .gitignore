@@ -171,3 +171,4 @@ networktables.json
 /log-downloader/venv/
 /src/main/kotlin/frc/robot/BuildConstants.java
 /.kotlin/sessions/
+/src/main/kotlin/frc/robot/ShotCalculator.kt

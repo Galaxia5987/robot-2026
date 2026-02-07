@@ -14,22 +14,17 @@
 package frc.robot.subsystems.vision
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout
+import edu.wpi.first.apriltag.AprilTagFields
 import edu.wpi.first.math.geometry.Rotation3d
 import edu.wpi.first.math.geometry.Transform3d
 import edu.wpi.first.math.geometry.Translation3d
-import edu.wpi.first.wpilibj.Filesystem
-import java.io.File
 
 const val LOG_PREFIX = "Subsystems/Vision/"
 
 // AprilTag layout
 val APRILTAG_LAYOUT:
     AprilTagFieldLayout = // TODO: Replace with correct apriltag layout when it comes out
-    AprilTagFieldLayout(
-        File(Filesystem.getDeployDirectory(), "apriltag-locations.json")
-            .toPath()
-    )
-
+    AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark)
 // stddevFactor - Standard deviation multipliers for each camera
 // (Adjust to trust some cameras more than others)
 data class CameraConfig(

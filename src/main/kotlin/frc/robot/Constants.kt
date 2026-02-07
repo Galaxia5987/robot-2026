@@ -1,6 +1,8 @@
 package frc.robot
 
+import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.Mode
+import frc.robot.lib.extensions.get
 import org.littletonrobotics.junction.LoggedRobot
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
@@ -21,3 +23,5 @@ val CURRENT_MODE: Mode
                 Mode.SIM
             }
         }
+
+val IS_SIM = Trigger { CURRENT_MODE == Mode.SIM }

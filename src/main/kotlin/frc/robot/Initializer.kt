@@ -12,14 +12,22 @@ import frc.robot.subsystems.drive.gyroIOs.GyroIO
 import frc.robot.subsystems.drive.gyroIOs.GyroIOPigeon2
 import frc.robot.subsystems.drive.gyroIOs.GyroIOSim
 import frc.robot.subsystems.vision.*
+import org.ironmaple.simulation.SimulatedArena
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation
+
+val MAPLE_SIM_STARTING_POSE = Pose2d(3.0, 3.0, Rotation2d())
+
+fun resetSimulationField() {
+    if (CURRENT_MODE != Mode.SIM) return
+    drive.resetOdometry(MAPLE_SIM_STARTING_POSE)
+    SimulatedArena.getInstance().resetFieldForAuto()
+}
+
+fun getMapleSimPose(): Pose2d? = driveSimulation?.simulatedDriveTrainPose
 
 val driveSimulation: SwerveDriveSimulation? =
     if (CURRENT_MODE == Mode.SIM)
-        SwerveDriveSimulation(
-            Drive.mapleSimConfig,
-            Pose2d(3.0, 3.0, Rotation2d())
-        )
+        SwerveDriveSimulation(Drive.mapleSimConfig, MAPLE_SIM_STARTING_POSE)
     else null
 
 private val driveModuleIOs =
