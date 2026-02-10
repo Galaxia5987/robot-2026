@@ -14,7 +14,7 @@ import frc.robot.lib.extensions.rps
 import org.team5987.annotation.command_enum.CommandEnum
 
 const val GEAR_RATIO = 1.33
-val REAL_GAINS = Gains(kP = 0.0, kS = 0.0, kV = 0.0)
+val REAL_GAINS = Gains(kP = 0.3, kS = 0.5, kV = 0.12)
 val SIM_GAINS = Gains(kP = 1.0, kV = 0.12)
 
 const val MAIN_MOTOR_PORT = 16
@@ -23,7 +23,7 @@ val FLYWHEEL_TOLERANCE = 0.3.rps
 
 val AUXILIARY_MOTORS_PORTS =
     mapOf<Int, MotorAlignmentValue>(
-        17 to MotorAlignmentValue.Aligned,
+        17 to MotorAlignmentValue.Opposed,
         18 to MotorAlignmentValue.Aligned
     )
 
@@ -40,7 +40,7 @@ val MOTOR_CONFIG =
         MotorOutput =
             MotorOutputConfigs().apply {
                 NeutralMode = NeutralModeValue.Coast
-                Inverted = InvertedValue.CounterClockwise_Positive
+                Inverted = InvertedValue.Clockwise_Positive
             }
         Feedback = FeedbackConfigs().apply { GEAR_RATIO }
         Slot0 = REAL_GAINS.toSlotConfig()

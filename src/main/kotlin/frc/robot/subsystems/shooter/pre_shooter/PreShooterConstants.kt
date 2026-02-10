@@ -11,7 +11,7 @@ import frc.robot.lib.extensions.amps
 import frc.robot.lib.extensions.rps
 import org.team5987.annotation.command_enum.CommandEnum
 
-val GAINS = Gains(1.0) // TODO calibration
+val GAINS = Gains(kP = 1.0, kV = 0.25 ,kS = 3.0)
 
 val SIM_GAINS = Gains(0.6, kV = 0.1)
 

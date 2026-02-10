@@ -11,7 +11,7 @@ import frc.robot.lib.extensions.amps
 import frc.robot.lib.extensions.rps
 import org.team5987.annotation.command_enum.CommandEnum
 
-val GAINS = Gains(1.3) // TODO calibration
+val GAINS = Gains(kP = 0.4, kV = 1.1)
 
 val SIM_GAINS = Gains(1.0)
 
@@ -19,14 +19,14 @@ const val MAIN_MOTOR_ID = 12
 
 const val GEAR_RATIO = 9.0
 
-val SETPOINT_TOLERANCE = 0.5.rps
+val SETPOINT_TOLERANCE = 1.0.rps
 
 val MOTOR_CONFIG =
     TalonFXConfiguration().apply {
         Slot0 = GAINS.toSlotConfig()
         MotorOutput =
             MotorOutputConfigs().apply {
-                Inverted = InvertedValue.Clockwise_Positive
+                Inverted = InvertedValue.CounterClockwise_Positive
             }
         CurrentLimits = createCurrentLimits(40.amps, 5.0.amps)
         Feedback = FeedbackConfigs().apply {

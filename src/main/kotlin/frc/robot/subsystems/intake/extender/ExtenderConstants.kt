@@ -48,5 +48,5 @@ val CONFIG =
 @CommandEnum
 enum class ExtenderPositions(val distance: Distance) {
     OPEN(0.303224.meters),
-    CLOSE(0.meters)
+    CLOSE(0.004.meters)
 }

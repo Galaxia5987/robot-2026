@@ -63,7 +63,7 @@ object RobotContainer {
         driverController.options().onTrue(DriveCommands.resetGyro())
 
         // Intake Bindings
-        driverController.R2().onTrue(Roller.intake().alongWith(Extender.open())).onFalse(Roller.stop().alongWith(Extender.close()))
+        driverController.R2().onTrue(Roller.intake()).onFalse(Roller.stop())
 
 //        val intakeButton = driverController.R2()
 //
