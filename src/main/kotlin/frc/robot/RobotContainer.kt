@@ -3,8 +3,12 @@ package frc.robot
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.path.PathConstraints
 import com.pathplanner.lib.path.PathPlannerPath
+import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.Commands
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
+import frc.robot.autonomous.Test
 import frc.robot.field.HUB_LOCATION
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.deg_ps
@@ -14,11 +18,14 @@ import frc.robot.lib.extensions.mps
 import frc.robot.lib.extensions.mps_ps
 import frc.robot.lib.extensions.toPose
 import frc.robot.lib.unified_controller.PS5LinuxController
+import frc.robot.sim.MapleSimShooter
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.intaking.IntakingTriggers
 import frc.robot.states.intaking.IntakingTriggers.canCloseIntake
+import frc.robot.states.intaking.IntakingTriggers.cantCloseIntake
 import frc.robot.states.setpoints_manager.aimingSetpoint
 import frc.robot.states.shooting.Shooting
+import frc.robot.states.shooting.ShootingState
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.turret.Turret
@@ -26,7 +33,7 @@ import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 
 object RobotContainer {
-    private val driverController = PS5LinuxController(0)
+    private val driverController = CommandXboxController(0)
     private val autoChooser: LoggedDashboardChooser<Command>
 
     init {
@@ -61,21 +68,32 @@ object RobotContainer {
         Hood.defaultCommand = Hood.setAngle { Hood.aimingSetpoint() }
     }
 
-    private fun configureButtonBindings() {
-        // Intake Bindings
-        val intakeButton = driverController.R2()
+  private fun configureButtonBindings() {
+//        driverController.b().onTrue(
+//                Commands.runOnce({ // Add the projectile to the simulated arena
+//                    SimulatedArena.getInstance()
+//                        .addGamePieceProjectile(
+//                            MapleSimShooter.createFuelOnFly()
+//                        )
+//                })
+//            )
 
-        intakeButton.onTrue(IntakingStates.INTAKING.set())
-        intakeButton
+        // Intake Bindings
+//        val intakeButton = driverController.R2()
+
+
+
+       driverController.rightTrigger().onTrue(IntakingStates.INTAKING.set())
+        driverController.rightTrigger()
             .negate()
             .and(canCloseIntake)
             .onTrue(IntakingStates.CLOSED.set())
-        intakeButton
+        driverController.rightTrigger()
             .negate()
             .and(IntakingTriggers.cantCloseIntake)
             .onTrue(IntakingStates.OPEN.set())
 
-        Shooting(driverController.L2())
+        Shooting(driverController.leftTrigger())
     }
 
     fun getAutonomousCommand(): Command {
@@ -87,6 +105,14 @@ object RobotContainer {
 
     private fun registerAutoCommands() {
         // SysIds
+        autoChooser.addOption(
+            "Test",
+            Test()
+        )
+//        autoChooser.addOption(
+//            "bumbIntoDepot",
+//            depotDoubleCycle()
+//        )
         autoChooser.addOption(
             "Drive Wheel Radius Characterization",
             DriveCommands.wheelRadiusCharacterization()
