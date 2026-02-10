@@ -14,10 +14,10 @@ import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.*
 import org.team5987.annotation.command_enum.CommandEnum
 
-const val PORT = 0
+const val PORT = 15
 // TODO: check port
 
-const val ENCODER_ID = 10
+const val ENCODER_ID = 4
 const val ENCODER_GEAR_RATIO = 0.5 // TODO: Might be 2
 
 val TOLERANCE = 0.5.deg

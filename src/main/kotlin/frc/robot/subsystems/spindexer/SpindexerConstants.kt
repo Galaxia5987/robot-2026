@@ -15,7 +15,7 @@ val GAINS = Gains(1.3) // TODO calibration
 
 val SIM_GAINS = Gains(1.0)
 
-const val MAIN_MOTOR_ID = 0
+const val MAIN_MOTOR_ID = 12
 
 const val GEAR_RATIO = 9.0
 
@@ -35,7 +35,7 @@ val MOTOR_CONFIG =
     }
 
 @CommandEnum
-enum class SpindexerConstants(val velocity: AngularVelocity) {
+enum class SpindexerVelocity(val velocity: AngularVelocity) {
     STOP(0.rps),
     START(10.rps),
     SLOW(4.rps),

@@ -15,7 +15,7 @@ import frc.robot.lib.extensions.rotations
 import frc.robot.lib.extensions.rps
 import org.team5987.annotation.command_enum.CommandEnum
 
-const val PORT = 0
+const val PORT = 14
 const val RATIO = 1.0
 const val ENCODER_RATIO = 1.0
 val SIM_GAINS = Gains(kP = 0.5, kD = 0.075)
@@ -24,7 +24,7 @@ val REAL_GAINS = Gains(kP = 0.5, kD = 0.075)
 val TOLERANCE = 2.deg
 val SETPOINT_TOLERANCE = 1.deg
 
-val ENCODER_ID = 0
+const val ENCODER_ID = 5
 val ABSOLUTE_ENCODER_OFFSET = 0.rps
 
 val SOFTWARE_LIMIT_CONFIG =
@@ -63,12 +63,3 @@ val CONFIG =
             }
         CurrentLimits = createCurrentLimits(20.amps, 5.amps)
     }
-
-@CommandEnum
-enum class ConveyorVelocity(val velocity: AngularVelocity) {
-    STOP(0.rps),
-    START(10.rps),
-    SLOW(4.rps),
-    REVERSE(-START.velocity),
-    REVERSE_SLOW(-SLOW.velocity)
-}

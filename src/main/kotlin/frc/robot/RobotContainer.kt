@@ -3,6 +3,7 @@ package frc.robot
 import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
@@ -15,13 +16,15 @@ import frc.robot.states.intaking.IntakingTriggers.cantCloseIntake
 import frc.robot.states.setpoints_manager.aimingSetpoint
 import frc.robot.states.shooting.Shooting
 import frc.robot.subsystems.drive.DriveCommands
+import frc.robot.subsystems.intake.extender.Extender
+import frc.robot.subsystems.intake.roller.Roller
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.turret.Turret
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 
 object RobotContainer {
-    private val driverController = PS5LinuxController(0)
+    private val driverController = CommandPS5Controller(0)
     private val autoChooser: LoggedDashboardChooser<Command>
 
     init {
@@ -57,20 +60,24 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
+        driverController.options().onTrue(DriveCommands.resetGyro())
+
         // Intake Bindings
-        val intakeButton = driverController.R2()
+        driverController.R2().onTrue(Roller.intake().alongWith(Extender.open())).onFalse(Roller.stop().alongWith(Extender.close()))
 
-        intakeButton.onTrue(IntakingStates.INTAKING.set())
-        intakeButton
-            .negate()
-            .and(canCloseIntake)
-            .onTrue(IntakingStates.CLOSED.set())
-        intakeButton
-            .negate()
-            .and(IntakingTriggers.cantCloseIntake)
-            .onTrue(IntakingStates.OPEN.set())
-
-        Shooting(driverController.L2())
+//        val intakeButton = driverController.R2()
+//
+//        intakeButton.onTrue(IntakingStates.INTAKING.set())
+//        intakeButton
+//            .negate()
+//            .and(canCloseIntake)
+//            .onTrue(IntakingStates.CLOSED.set())
+//        intakeButton
+//            .negate()
+//            .and(IntakingTriggers.cantCloseIntake)
+//            .onTrue(IntakingStates.OPEN.set())
+//
+//        Shooting(driverController.L2())
     }
 
     fun getAutonomousCommand(): Command = autoChooser.get()

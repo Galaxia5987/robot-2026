@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.radians
 import frc.robot.lib.universal_motor.UniversalTalonFX
+import frc.robot.subsystems.intake.extender.Extender
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
@@ -39,6 +40,7 @@ object Turret : SubsystemBase() {
     }
 
     init {
+        motor.reset()
         absoluteEncoder.configurator.apply(ENCODER_CONFIG)
     }
 

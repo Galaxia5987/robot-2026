@@ -10,56 +10,43 @@ import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.*
 import org.team5987.annotation.command_enum.CommandEnum
 
-val DIAMETER = 12.7.mm
+val DIAMETER = 25.4.mm
 
 val TOLERANCE = 4.cm
 
-val PORT = 0
-// TODO: actual port
+const val PORT = 11
 
-val GEAR_RATIO = 3.17
+const val GEAR_RATIO = 1 / 3.17
 // TODO: actual value
 
 val SIM_GAINS = Gains(kP = 1.4, kD = 0.3)
 
-val REAL_GAINS = Gains(kP = 1.4, kD = 0.3)
-// TODO: actual values
+val REAL_GAINS = Gains(kP = 3.5, kI = 1.0, kS = 2.0, kV = 2.5)
 
-val ENCODER_ID = 10
-// TODO: actual value
-
-val ABSOLUTE_ENCODER_OFFSET = 0.rad
-// TODO: actual value
-
-val ENCODER_CONFIG =
-    CANcoderConfiguration().apply {
-        MagnetSensor.SensorDirection =
-            SensorDirectionValue.CounterClockwise_Positive
-        MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.9
-        MagnetSensor.MagnetOffset = ABSOLUTE_ENCODER_OFFSET[rot]
-    }
+val FORWARD_LIMIT = 12.054.rot
+val REVERSE_LIMIT = 0.rot
 
 val CONFIG =
     TalonFXConfiguration().apply {
         MotorOutput =
             MotorOutputConfigs().apply {
                 NeutralMode = NeutralModeValue.Brake
-                Inverted = InvertedValue.Clockwise_Positive
-                // TODO: check motor direction
+                Inverted = InvertedValue.CounterClockwise_Positive
             }
 
-        Slot0 = Slot0Configs().apply { REAL_GAINS }
-        Feedback =
-            FeedbackConfigs().apply {
-                SensorToMechanismRatio = GEAR_RATIO
-            }
+        Slot0 = REAL_GAINS.toSlotConfig()
+        SoftwareLimitSwitch = SoftwareLimitSwitchConfigs().apply {
+            ForwardSoftLimitEnable = true
+            ReverseSoftLimitEnable = true
+            ForwardSoftLimitThreshold = FORWARD_LIMIT[rot]
+            ReverseSoftLimitThreshold = REVERSE_LIMIT[rot]
+        }
 
         CurrentLimits = createCurrentLimits(30.amps, 5.amps)
     }
 
 @CommandEnum
 enum class ExtenderPositions(val distance: Distance) {
-    OPEN(0.3.meters),
+    OPEN(0.303224.meters),
     CLOSE(0.meters)
-    // TODO: actual values
 }

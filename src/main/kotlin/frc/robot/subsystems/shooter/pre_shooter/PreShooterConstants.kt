@@ -15,7 +15,7 @@ val GAINS = Gains(1.0) // TODO calibration
 
 val SIM_GAINS = Gains(0.6, kV = 0.1)
 
-const val MAIN_MOTOR_ID = 0
+const val MAIN_MOTOR_ID = 13
 
 const val GEAR_RATIO = 2.5
 
@@ -35,7 +35,7 @@ val MOTOR_CONFIG =
     }
 
 @CommandEnum
-enum class PreShooterConstants(val velocity: AngularVelocity) {
+enum class PreShooterVelocity(val velocity: AngularVelocity) {
     STOP(0.rps),
     START(10.rps),
     FAST(20.rps),
