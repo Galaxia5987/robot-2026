@@ -23,7 +23,7 @@ val SIM_GAINS = Gains(kP = 1.4, kD = 0.3)
 
 val REAL_GAINS = Gains(kP = 3.5, kI = 1.0, kS = 2.0, kV = 2.5)
 
-val FORWARD_LIMIT = 12.054.rot
+val FORWARD_LIMIT = 0.103.rot
 val REVERSE_LIMIT = 0.rot
 
 val CONFIG =

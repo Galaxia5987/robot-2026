@@ -44,7 +44,6 @@ object Extender : SubsystemBase(), ExtenderPositionsCommandFactory {
 
     override fun setTarget(value: ExtenderPositions): Command = runOnce {
         setpoint = value.distance
-        Logger.recordOutput("Test", value.distance.toAngle(DIAMETER, GEAR_RATIO))
         motor.setControl(
             positionRequest.withPosition(
                 value.distance.toAngle(DIAMETER, GEAR_RATIO)

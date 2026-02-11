@@ -1,13 +1,7 @@
 package frc.robot.subsystems.shooter.hood
 
-import com.ctre.phoenix6.configs.CANcoderConfiguration
-import com.ctre.phoenix6.configs.FeedbackConfigs
-import com.ctre.phoenix6.configs.MotorOutputConfigs
-import com.ctre.phoenix6.configs.TalonFXConfiguration
-import com.ctre.phoenix6.signals.FeedbackSensorSourceValue
-import com.ctre.phoenix6.signals.InvertedValue
-import com.ctre.phoenix6.signals.NeutralModeValue
-import com.ctre.phoenix6.signals.SensorDirectionValue
+import com.ctre.phoenix6.configs.*
+import com.ctre.phoenix6.signals.*
 import edu.wpi.first.units.measure.Angle
 import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
@@ -15,26 +9,28 @@ import frc.robot.lib.extensions.*
 import org.team5987.annotation.command_enum.CommandEnum
 
 const val PORT = 15
-// TODO: check port
 
 const val ENCODER_ID = 4
-const val ENCODER_GEAR_RATIO = 0.5 // TODO: Might be 2
+const val ENCODER_GEAR_RATIO = 2.0
 
 val TOLERANCE = 0.5.deg
 
 val SIM_GAINS = Gains(kP = 1.7, kD = 0.3)
-val REAL_GAINS = Gains(kP = 1.7)
+val REAL_GAINS = Gains(kP = 51.0, kD = 1.0, kS = 0.4)
 
-const val GEAR_RATIO = 156.83
+const val GEAR_RATIO = 46.77199935913086
 
-val ABSOLUTE_ENCODER_OFFSET = 0.rad
+val ABSOLUTE_ENCODER_OFFSET = (0.07373046875).rot
+
+val FORWARD_LIMIT = 0.061.rot
+val REVERSE_LIMIT = 0.rot
 
 val ENCODER_CONFIG =
     CANcoderConfiguration().apply {
         MagnetSensor.SensorDirection =
-            SensorDirectionValue.CounterClockwise_Positive
+            SensorDirectionValue.Clockwise_Positive
         MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.9
-        MagnetSensor.MagnetOffset = ABSOLUTE_ENCODER_OFFSET[rot]
+        MagnetSensor.MagnetOffset = -ABSOLUTE_ENCODER_OFFSET[rot]
     }
 
 val CONFIG =
@@ -43,14 +39,20 @@ val CONFIG =
             MotorOutputConfigs().apply {
                 NeutralMode = NeutralModeValue.Brake
                 Inverted = InvertedValue.Clockwise_Positive
-                // TODO: check motor direction
             }
 
-        Slot0 = REAL_GAINS.toSlotConfig()
+        SoftwareLimitSwitch = SoftwareLimitSwitchConfigs().apply {
+            ForwardSoftLimitEnable = true
+            ReverseSoftLimitEnable = true
+            ForwardSoftLimitThreshold = FORWARD_LIMIT[rot]
+            ReverseSoftLimitThreshold = REVERSE_LIMIT[rot]
+        }
+
+        Slot0 = REAL_GAINS.toSlotConfig().withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign)
         Feedback =
             FeedbackConfigs().apply {
-                SensorToMechanismRatio = GEAR_RATIO
-                RotorToSensorRatio = ENCODER_GEAR_RATIO
+                RotorToSensorRatio = GEAR_RATIO // TODO: Change when absolute encoder works
+                SensorToMechanismRatio = ENCODER_GEAR_RATIO
                 FeedbackRemoteSensorID = ENCODER_ID
                 FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder
             }

@@ -53,7 +53,7 @@ object RobotContainer {
             DriveCommands.joystickDrive(
                 { -driverController.leftY },
                 { -driverController.leftX },
-                { -driverController.rightX * 0.8 }
+                { -driverController.rightX * 1.2 }
             )
         Turret.defaultCommand = Turret.setAngle { Turret.aimingSetpoint() }
         Hood.defaultCommand = Hood.setAngle { Hood.aimingSetpoint() }
