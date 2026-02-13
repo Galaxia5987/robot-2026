@@ -1,15 +1,22 @@
 package frc.robot
 
+import choreo.Choreo
+import choreo.auto.AutoFactory
+import choreo.trajectory.Trajectory
+import choreo.trajectory.TrajectorySample
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.path.PathConstraints
 import com.pathplanner.lib.path.PathPlannerPath
+import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import frc.robot.autonomous.Test
+import frc.robot.autonomous.smt
 import frc.robot.field.HUB_LOCATION
+import frc.robot.lib.IS_RED
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.deg_ps
 import frc.robot.lib.extensions.deg_ps_ps
@@ -17,6 +24,8 @@ import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.lib.extensions.mps
 import frc.robot.lib.extensions.mps_ps
 import frc.robot.lib.extensions.toPose
+import frc.robot.lib.getFileNameFromStack
+import frc.robot.lib.getPose2d
 import frc.robot.lib.unified_controller.PS5LinuxController
 import frc.robot.sim.MapleSimShooter
 import frc.robot.states.intaking.IntakingStates
@@ -26,15 +35,26 @@ import frc.robot.states.intaking.IntakingTriggers.cantCloseIntake
 import frc.robot.states.setpoints_manager.aimingSetpoint
 import frc.robot.states.shooting.Shooting
 import frc.robot.states.shooting.ShootingState
+import frc.robot.subsystems.drive.Drive
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.turret.Turret
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
+import java.util.Optional
 
 object RobotContainer {
     private val driverController = CommandXboxController(0)
     private val autoChooser: LoggedDashboardChooser<Command>
+    fun autoFactory(): AutoFactory {
+        return AutoFactory(
+            drive::getPose,
+             drive::resetOdometry,
+            drive::followTrajectory,
+            true,
+            drive
+        )
+    }
 
     init {
         drive // Ensure Drive is initialized
@@ -68,7 +88,7 @@ object RobotContainer {
         Hood.defaultCommand = Hood.setAngle { Hood.aimingSetpoint() }
     }
 
-  private fun configureButtonBindings() {
+    private fun configureButtonBindings() {
 //        driverController.b().onTrue(
 //                Commands.runOnce({ // Add the projectile to the simulated arena
 //                    SimulatedArena.getInstance()
@@ -80,10 +100,7 @@ object RobotContainer {
 
         // Intake Bindings
 //        val intakeButton = driverController.R2()
-
-
-
-       driverController.rightTrigger().onTrue(IntakingStates.INTAKING.set())
+        driverController.rightTrigger().onTrue(IntakingStates.INTAKING.set())
         driverController.rightTrigger()
             .negate()
             .and(canCloseIntake)
@@ -94,20 +111,24 @@ object RobotContainer {
             .onTrue(IntakingStates.OPEN.set())
 
         Shooting(driverController.leftTrigger())
+
     }
 
-    fun getAutonomousCommand(): Command {
-        val path = PathPlannerPath.fromPathFile("StartToFuelDepotSide")
-        val startPose = path.pathPoses[0]
-        return AutoBuilder.resetOdom(startPose).andThen(AutoBuilder.followPath(path))
-//        return AutoBuilder.pathfindToPose(HUB_LOCATION.toPose(), PathConstraints(5.0.mps, 8.4.mps_ps, 360.deg_ps, 720.deg_ps_ps))
-    }
+    fun getAutonomousCommand(): Command = autoChooser.get()
 
-    private fun registerAutoCommands() {
-        // SysIds
+    @Override
+    fun autonomousInit() {
+        if (Choreo.loadTrajectory(getFileNameFromStack()).isPresent) {
+            val initialPose: Optional<Pose2d> =
+                Choreo.loadTrajectory(getFileNameFromStack()).get().getInitialPose(IS_RED)
+            if (initialPose.isPresent) {
+                drive.resetOdometry(initialPose.get())
+            }
+        }
+    }
+    fun registerAutoCommands() {
         autoChooser.addOption(
-            "Test",
-            Test()
+            "smt", smt()
         )
 //        autoChooser.addOption(
 //            "bumbIntoDepot",
@@ -144,3 +165,4 @@ object RobotContainer {
         )
     }
 }
+

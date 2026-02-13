@@ -14,7 +14,10 @@
 package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
+import static frc.robot.subsystems.drive.ProfiledPosePIDKt.*;
 
+import choreo.auto.AutoFactory;
+import choreo.trajectory.SwerveSample;
 import com.ctre.phoenix6.CANBus;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.ModuleConfig;
@@ -286,6 +289,18 @@ public class Drive extends SubsystemBase implements SysIdable {
                 this);
     }
 
+    public void followTrajectory(SwerveSample sample){
+
+        Pose2d pose= getPose();
+        Pose2d samplePose = new Pose2d(sample.x, sample.y, new Rotation2d(sample.heading));
+        setGoal(samplePose);
+        ChassisSpeeds speeds= new ChassisSpeeds(
+                sample.vx + getXController().calculate(pose.getX(),sample.x),
+                sample.vy + getYController().calculate(pose.getY(),sample.y),
+                sample.omega + getThetaController().calculate(pose.getRotation().getRadians(), sample.heading)
+        );
+        runVelocity(speeds);
+    }
     @Override
     public void periodic() {
         odometryLock.lock(); // Prevents odometry updates while reading data
