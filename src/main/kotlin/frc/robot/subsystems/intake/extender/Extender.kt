@@ -43,20 +43,21 @@ object Extender : SubsystemBase() {
     private val isStalling =
         Trigger { motor.inputs.statorCurrent > STATOR_STALL_CURRENT }
             .debounce(STALL_DEBOUNCE[sec])
-            .onTrue(
+            .whileTrue(
                 runOnce {
                     lastStallingDistance = motor.inputs.distance
                 }
             )
 
-    private val shouldStop = isStalling.and(IntakingStates.CLOSED.trigger).onTrue(
-        stop()
-    )
-
     private var mechanism = LoggedMechanism2d(5.0, 5.0)
+
     private var root = mechanism.getRoot(name, 2.5, 2.5)
     private val ligament =
         root.append(LoggedMechanismLigament2d("ExtenderLigament", 1.0, 0.0))
+
+    val shouldStop = isStalling.and(IntakingStates.INTAKING.trigger.negate()).whileTrue(
+        stop()
+    )
 
     val inputs
         get() = motor.inputs
@@ -109,5 +110,6 @@ object Extender : SubsystemBase() {
         )
         Logger.recordOutput("Subsystems/$name/mechanism", mechanism)
         Logger.recordOutput("Subsystems/$name/isStalling", isStalling)
+        Logger.recordOutput("Subsystems/$name/lastStallDistance", lastStallingDistance)
     }
 }

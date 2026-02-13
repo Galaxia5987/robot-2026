@@ -24,11 +24,13 @@ fun intaking(): Command =
     )
 
 fun pumping(): Command {
-    val lastStallPoint = Extender.lastStallingDistance
-    return Commands.sequence(
+    return Commands.defer({
+        Commands.sequence(
             Extender.close(),
-            Extender.setPosition(lastStallPoint),
+            Commands.waitUntil(Extender.shouldStop),
+            Extender.setPosition(Extender.lastStallingDistance),
             Commands.waitTime(PUMP_TIME),
-        )
-        .repeatedly()
+        ).repeatedly()
+    }, setOf(Extender))
+
 }
