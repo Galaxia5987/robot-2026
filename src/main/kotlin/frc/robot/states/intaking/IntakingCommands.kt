@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj2.command.Commands
 import frc.robot.lib.extensions.sec
 import frc.robot.states.spindexer.SpindexerCommands
 import frc.robot.subsystems.intake.extender.Extender
-import frc.robot.subsystems.intake.extender.ExtenderPositions
 import frc.robot.subsystems.intake.roller.Roller
 
 private val PUMP_TIME = 0.3.sec
@@ -24,18 +23,11 @@ fun intaking(): Command =
         SpindexerCommands.startIntaking()
     )
 
-fun open(): Command =
-    Commands.parallel(
-        Extender.open(),
-        Roller.stop(),
-        SpindexerCommands.stopIntaking()
-    )
-
 fun pumping(): Command {
+    val lastStallPoint = Extender.lastStallingDistance
     return Commands.sequence(
-            Extender.setTarget(ExtenderPositions.CLOSE),
-            Commands.waitTime(PUMP_TIME),
-            Extender.setTarget(ExtenderPositions.OPEN),
+            Extender.close(),
+            Extender.setPosition(lastStallPoint),
             Commands.waitTime(PUMP_TIME),
         )
         .repeatedly()

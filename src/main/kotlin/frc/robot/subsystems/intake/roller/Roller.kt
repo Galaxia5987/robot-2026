@@ -7,11 +7,7 @@ import frc.robot.lib.universal_motor.UniversalTalonFX
 
 object Roller : SubsystemBase(), RollerPositionsCommandFactory {
     private val motor =
-        UniversalTalonFX(
-            port = PORT,
-            config = MOTOR_CONFIG,
-            subsystem = name
-        )
+        UniversalTalonFX(port = PORT, config = MOTOR_CONFIG, subsystem = name)
 
     private val voltageRequest = VoltageOut(0.0)
 

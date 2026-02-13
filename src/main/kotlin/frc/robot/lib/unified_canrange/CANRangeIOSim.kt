@@ -44,8 +44,14 @@ class CANRangeIOSim(
     override fun updateInputs() {
         val (distance, detecting) =
             when {
-                Robot.mapleSimIntake!!.useIntakeCounting.get().and(usesNumber) -> getMapleSimIntakingNumberModeValues()
-                Robot.mapleSimIntake!!.useIntakeCounting.get().and(!usesNumber) -> getMapleSmIntakingBooleanModeValues()
+                Robot.mapleSimIntake!!
+                    .useIntakeCounting
+                    .get()
+                    .and(usesNumber) -> getMapleSimIntakingNumberModeValues()
+                Robot.mapleSimIntake!!
+                    .useIntakeCounting
+                    .get()
+                    .and(!usesNumber) -> getMapleSmIntakingBooleanModeValues()
                 usesNumber -> getNumberModeValues()
                 else -> getBooleanModeValues()
             }

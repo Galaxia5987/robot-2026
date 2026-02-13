@@ -1,6 +1,5 @@
 package frc.robot.subsystems.shooter.hood
 
-import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC
 import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.CANcoder
@@ -9,6 +8,7 @@ import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.lib.createDisableTriggerForCoast
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.radians
@@ -46,6 +46,7 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
 
     init {
         encoder.configurator.apply(ENCODER_CONFIG)
+        createDisableTriggerForCoast(motor)
     }
 
     override fun setVoltage(voltage: Voltage) {

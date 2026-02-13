@@ -27,7 +27,6 @@ val MOTOR_CONFIG =
                 Inverted = InvertedValue.Clockwise_Positive
             }
         CurrentLimits = createCurrentLimits(30.amps, 5.amps)
-        Feedback = FeedbackConfigs().apply {
-            SensorToMechanismRatio = GEAR_RATIO
-        }
+        Feedback =
+            FeedbackConfigs().apply { SensorToMechanismRatio = GEAR_RATIO }
     }

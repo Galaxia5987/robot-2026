@@ -61,6 +61,9 @@ interface MotorIO {
 
         /** Current drawn by the motor. */
         var current: Current = 0.amps
+
+        var statorCurrent = 0.amps
+
         var absoluteEncoderPositionNoOffset: Angle = 0.deg
     }
 }

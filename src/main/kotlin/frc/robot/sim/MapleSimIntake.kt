@@ -6,7 +6,6 @@ import frc.robot.IS_SIM
 import frc.robot.driveSimulation
 import frc.robot.lib.extensions.cm
 import frc.robot.states.intaking.IntakingStates
-import frc.robot.subsystems.sensors.Sensors
 import org.ironmaple.simulation.IntakeSimulation
 import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean
 
@@ -24,7 +23,8 @@ class MapleSimIntake {
     val ballCount: Int
         get() = intakeSimulation.gamePiecesAmount
 
-    val useIntakeCounting: LoggedNetworkBoolean = LoggedNetworkBoolean("/Tuning/Sensors/useIntakeCounting", true)
+    val useIntakeCounting: LoggedNetworkBoolean =
+        LoggedNetworkBoolean("/Tuning/Sensors/useIntakeCounting", true)
 
     private val intakeMapleSim: Trigger =
         IntakingStates.INTAKING.trigger
@@ -33,5 +33,4 @@ class MapleSimIntake {
             .onFalse(Commands.runOnce({ intakeSimulation.stopIntake() }))
 
     fun obtainBallFromIntake() = intakeSimulation.obtainGamePieceFromIntake()
-
 }

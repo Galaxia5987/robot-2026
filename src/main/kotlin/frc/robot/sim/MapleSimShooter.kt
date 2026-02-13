@@ -34,7 +34,7 @@ class MapleSimShooter(private val mapleSimIntake: MapleSimIntake) {
                 Translation2d((-116).mm, 220.5.mm)
                     .rotateBy(drive.pose.rotation),
                 robotSpeeds,
-                Turret.inputs.position.toRotation2d() + drive.pose.rotation,
+                Turret.wrappedPosition.toRotation2d() + drive.pose.rotation,
                 0.47865.m,
                 if (distanceFromGoal > 10.m) 13.mps
                 else
@@ -54,13 +54,15 @@ class MapleSimShooter(private val mapleSimIntake: MapleSimIntake) {
         return fuelOnFly
     }
 
-    fun createFuelCommand(): Command = (Commands.runOnce({
-        mapleSimIntake.obtainBallFromIntake()
-        SimulatedArena.getInstance()
-            .addGamePieceProjectile(
-                createFuelOnFly()
-            )
-    }).andThen(Commands.waitSeconds(0.1))).repeatedly()
+    fun createFuelCommand(): Command =
+        (Commands.runOnce({
+                    mapleSimIntake.obtainBallFromIntake()
+                    SimulatedArena.getInstance()
+                        .addGamePieceProjectile(createFuelOnFly())
+                })
+                .andThen(Commands.waitSeconds(0.1)))
+            .repeatedly()
 
-    private val launchBallTrigger = ShootingState.SHOOTING.trigger.whileTrue(createFuelCommand())
+    private val launchBallTrigger =
+        ShootingState.SHOOTING.trigger.whileTrue(createFuelCommand())
 }

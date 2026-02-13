@@ -5,18 +5,15 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import com.ctre.phoenix6.signals.SensorDirectionValue
-import edu.wpi.first.units.measure.AngularVelocity
 import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.*
-import org.team5987.annotation.command_enum.CommandEnum
 
 const val PORT = 14
 const val RATIO = 55.0
 const val ENCODER_RATIO = 1.0
 val SIM_GAINS = Gains(kP = 0.5, kD = 0.075)
 val REAL_GAINS = Gains(kP = 100.0, kS = 0.5)
-
 
 val TOLERANCE = 2.deg
 val SETPOINT_TOLERANCE = 1.deg
@@ -44,7 +41,7 @@ val CONFIG =
     TalonFXConfiguration().apply {
         MotorOutput =
             MotorOutputConfigs().apply {
-                NeutralMode = NeutralModeValue.Coast
+                NeutralMode = NeutralModeValue.Brake
                 Inverted = InvertedValue.Clockwise_Positive
             }
         Slot0 = Slot0Configs().apply { Slot0 = REAL_GAINS.toSlotConfig() }

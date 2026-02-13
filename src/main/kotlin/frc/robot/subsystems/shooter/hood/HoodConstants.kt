@@ -27,8 +27,7 @@ val REVERSE_LIMIT = 0.rot
 
 val ENCODER_CONFIG =
     CANcoderConfiguration().apply {
-        MagnetSensor.SensorDirection =
-            SensorDirectionValue.Clockwise_Positive
+        MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive
         MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.9
         MagnetSensor.MagnetOffset = -ABSOLUTE_ENCODER_OFFSET[rot]
     }
@@ -41,17 +40,23 @@ val CONFIG =
                 Inverted = InvertedValue.Clockwise_Positive
             }
 
-        SoftwareLimitSwitch = SoftwareLimitSwitchConfigs().apply {
-            ForwardSoftLimitEnable = true
-            ReverseSoftLimitEnable = true
-            ForwardSoftLimitThreshold = FORWARD_LIMIT[rot]
-            ReverseSoftLimitThreshold = REVERSE_LIMIT[rot]
-        }
+        SoftwareLimitSwitch =
+            SoftwareLimitSwitchConfigs().apply {
+                ForwardSoftLimitEnable = true
+                ReverseSoftLimitEnable = true
+                ForwardSoftLimitThreshold = FORWARD_LIMIT[rot]
+                ReverseSoftLimitThreshold = REVERSE_LIMIT[rot]
+            }
 
-        Slot0 = REAL_GAINS.toSlotConfig().withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign)
+        Slot0 =
+            REAL_GAINS.toSlotConfig()
+                .withStaticFeedforwardSign(
+                    StaticFeedforwardSignValue.UseClosedLoopSign
+                )
         Feedback =
             FeedbackConfigs().apply {
-                RotorToSensorRatio = GEAR_RATIO // TODO: Change when absolute encoder works
+                RotorToSensorRatio =
+                    GEAR_RATIO // TODO: Change when absolute encoder works
                 SensorToMechanismRatio = ENCODER_GEAR_RATIO
                 FeedbackRemoteSensorID = ENCODER_ID
                 FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder

@@ -11,7 +11,7 @@ import frc.robot.lib.extensions.amps
 import frc.robot.lib.extensions.rps
 import org.team5987.annotation.command_enum.CommandEnum
 
-val GAINS = Gains(kP = 1.0, kV = 0.25 ,kS = 3.0)
+val GAINS = Gains(kP = 1.0, kV = 0.25, kS = 3.0)
 
 val SIM_GAINS = Gains(0.6, kV = 0.1)
 
@@ -29,9 +29,8 @@ val MOTOR_CONFIG =
                 Inverted = InvertedValue.Clockwise_Positive
             }
         CurrentLimits = createCurrentLimits(20.amps, 10.amps)
-        Feedback = FeedbackConfigs().apply {
-            SensorToMechanismRatio = GEAR_RATIO
-        }
+        Feedback =
+            FeedbackConfigs().apply { SensorToMechanismRatio = GEAR_RATIO }
     }
 
 @CommandEnum

@@ -5,6 +5,7 @@ import com.ctre.phoenix6.hardware.CANcoder
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.lib.createDisableTriggerForCoast
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.radians
@@ -13,7 +14,6 @@ import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
-import org.team5987.annotation.LoggedOutput
 
 @AutoLogOutput(key = "Turret/mechanism")
 private var mechanism = LoggedMechanism2d(5.0, 5.0)
@@ -39,8 +39,7 @@ object Turret : SubsystemBase() {
         get() {
             val raw = motor.inputs.position
             return if (raw > 180.0.deg) raw - 360.0.deg
-            else if (raw < (-180.0).deg) raw + 360.0.deg
-            else raw
+            else if (raw < (-180.0).deg) raw + 360.0.deg else raw
         }
     val atSetpoint = Trigger {
         motor.inputs.position.isNear(setpoint, SETPOINT_TOLERANCE)
@@ -49,6 +48,7 @@ object Turret : SubsystemBase() {
     init {
         absoluteEncoder.configurator.apply(ENCODER_CONFIG)
         motor.reset(absoluteEncoder.absolutePosition.value)
+        createDisableTriggerForCoast(motor)
     }
 
     fun setAngle(angle: Angle) = runOnce {

@@ -45,5 +45,5 @@ val turretAngleToHub: Angle
 
 @LoggedOutput(LogLevel.COMP, path = HUB_PATH)
 val isTurretAligned = Trigger {
-    Turret.inputs.position.isNear(turretAngleToHub, TOLERANCE)
+    Turret.wrappedPosition.isNear(turretAngleToHub, TOLERANCE)
 }

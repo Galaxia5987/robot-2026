@@ -3,7 +3,6 @@ package frc.robot.subsystems.intake.extender
 import com.ctre.phoenix6.configs.*
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
-import com.ctre.phoenix6.signals.SensorDirectionValue
 import edu.wpi.first.units.measure.Distance
 import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
@@ -17,14 +16,21 @@ val TOLERANCE = 4.cm
 const val PORT = 11
 
 const val GEAR_RATIO = 1 / 3.17
-// TODO: actual value
 
 val SIM_GAINS = Gains(kP = 1.4, kD = 0.3)
 
 val REAL_GAINS = Gains(kP = 3.5, kI = 2.0, kS = 2.0, kV = 2.5)
 
+// Minimum current for when the motor is stalled (can't close anymore)
+val STATOR_STALL_CURRENT = 50.amps
+
+val STALL_DEBOUNCE = 0.3.sec
+
 val FORWARD_LIMIT = 11.63.rot
-val REVERSE_LIMIT = 0.rot
+
+val CLOSE_VOLTAGE = (-6).volts
+
+val RESET_VOLTAGE = 6.0.volts
 
 val CONFIG =
     TalonFXConfiguration().apply {
@@ -35,12 +41,11 @@ val CONFIG =
             }
 
         Slot0 = REAL_GAINS.toSlotConfig()
-        SoftwareLimitSwitch = SoftwareLimitSwitchConfigs().apply {
-            ForwardSoftLimitEnable = true
-            ReverseSoftLimitEnable = true
-            ForwardSoftLimitThreshold = FORWARD_LIMIT[rot]
-            ReverseSoftLimitThreshold = REVERSE_LIMIT[rot]
-        }
+        SoftwareLimitSwitch =
+            SoftwareLimitSwitchConfigs().apply {
+                ForwardSoftLimitEnable = true
+                ForwardSoftLimitThreshold = FORWARD_LIMIT[rot]
+            }
 
         CurrentLimits = createCurrentLimits(30.amps, 5.amps)
     }
@@ -48,5 +53,5 @@ val CONFIG =
 @CommandEnum
 enum class ExtenderPositions(val distance: Distance) {
     OPEN(0.303224.meters),
-    CLOSE(0.004.meters)
+    CLOSE(0.0.meters)
 }

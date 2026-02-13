@@ -47,6 +47,7 @@ class MotorIOReal(
 
     override fun updateInputs() {
         inputs.current = motor.supplyCurrent.value
+        inputs.statorCurrent = motor.statorCurrent.value
         inputs.position = motor.position.value
         inputs.voltage = motor.motorVoltage.value
         inputs.velocity = motor.velocity.value
