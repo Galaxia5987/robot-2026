@@ -8,24 +8,21 @@ import com.ctre.phoenix6.signals.SensorDirectionValue
 import edu.wpi.first.units.measure.AngularVelocity
 import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
-import frc.robot.lib.extensions.amps
-import frc.robot.lib.extensions.deg
-import frc.robot.lib.extensions.get
-import frc.robot.lib.extensions.rotations
-import frc.robot.lib.extensions.rps
+import frc.robot.lib.extensions.*
 import org.team5987.annotation.command_enum.CommandEnum
 
 const val PORT = 14
-const val RATIO = 1.0
+const val RATIO = 55.0
 const val ENCODER_RATIO = 1.0
 val SIM_GAINS = Gains(kP = 0.5, kD = 0.075)
-val REAL_GAINS = Gains(kP = 0.5, kD = 0.075)
+val REAL_GAINS = Gains(kP = 100.0, kS = 0.5)
+
 
 val TOLERANCE = 2.deg
 val SETPOINT_TOLERANCE = 1.deg
 
 const val ENCODER_ID = 5
-val ABSOLUTE_ENCODER_OFFSET = 0.rps
+val ABSOLUTE_ENCODER_OFFSET = (0.497).rot
 
 val SOFTWARE_LIMIT_CONFIG =
     SoftwareLimitSwitchConfigs().apply { // TODO: Configure
@@ -39,8 +36,8 @@ val ENCODER_CONFIG =
     CANcoderConfiguration().apply {
         MagnetSensor.SensorDirection =
             SensorDirectionValue.CounterClockwise_Positive
-        MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.0
-        MagnetSensor.MagnetOffset = ABSOLUTE_ENCODER_OFFSET[rps]
+        MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5
+        MagnetSensor.MagnetOffset = ABSOLUTE_ENCODER_OFFSET[rotations]
     }
 
 val CONFIG =
@@ -56,8 +53,8 @@ val CONFIG =
         SoftwareLimitSwitch = SOFTWARE_LIMIT_CONFIG
         Feedback =
             FeedbackConfigs().apply {
-                SensorToMechanismRatio = RATIO
-                RotorToSensorRatio = ENCODER_RATIO
+                RotorToSensorRatio = RATIO
+                SensorToMechanismRatio = ENCODER_RATIO
                 FeedbackRemoteSensorID = ENCODER_ID
                 FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder
             }

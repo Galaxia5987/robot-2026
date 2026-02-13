@@ -170,10 +170,9 @@ public class TunerConstants {
     /**
      * Bevel gear to the right of the robot!!!!!!!!!!!!!!!!
      */
-    //
     private static final double[] absoluteEncoderOffsets =
             new double[]{
-                    2.728952, -2.350059, 0.860563, 2.488117
+                    2.773437 ,-2.382272 ,0.906583 ,2.480447
             };
 
     // Front Left

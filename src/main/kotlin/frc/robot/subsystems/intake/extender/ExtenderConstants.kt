@@ -21,9 +21,9 @@ const val GEAR_RATIO = 1 / 3.17
 
 val SIM_GAINS = Gains(kP = 1.4, kD = 0.3)
 
-val REAL_GAINS = Gains(kP = 3.5, kI = 1.0, kS = 2.0, kV = 2.5)
+val REAL_GAINS = Gains(kP = 3.5, kI = 2.0, kS = 2.0, kV = 2.5)
 
-val FORWARD_LIMIT = 0.103.rot
+val FORWARD_LIMIT = 11.63.rot
 val REVERSE_LIMIT = 0.rot
 
 val CONFIG =
