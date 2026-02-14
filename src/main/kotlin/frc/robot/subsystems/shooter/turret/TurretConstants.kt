@@ -21,12 +21,15 @@ val SETPOINT_TOLERANCE = 1.deg
 const val ENCODER_ID = 5
 val ABSOLUTE_ENCODER_OFFSET = (0.497).rot
 
+val FORWARD_LIMIT = 0.668457.rot
+val REVERSE_LIMIT = (-0.121582).rot
+
 val SOFTWARE_LIMIT_CONFIG =
     SoftwareLimitSwitchConfigs().apply { // TODO: Configure
-        ForwardSoftLimitEnable = false
-        ForwardSoftLimitThreshold = (-90).deg[rotations]
-        ReverseSoftLimitEnable = false
-        ReverseSoftLimitThreshold = (-3).deg[rotations]
+        ForwardSoftLimitEnable = true
+        ReverseSoftLimitEnable = true
+        ForwardSoftLimitThreshold = FORWARD_LIMIT[rot]
+        ReverseSoftLimitThreshold = REVERSE_LIMIT[rot]
     }
 
 val ENCODER_CONFIG =
