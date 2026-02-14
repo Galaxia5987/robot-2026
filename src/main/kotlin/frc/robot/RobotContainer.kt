@@ -56,13 +56,6 @@ object RobotContainer {
     private fun configureButtonBindings() {
         driverController.create().onTrue(DriveCommands.resetGyro())
 
-        driverController.povDown().whileTrue(Extender.close())
-
-        driverController
-            .L2()
-            .onTrue(IntakingStates.PUMPING.set())
-            .onFalse(IntakingStates.CLOSED.set())
-
         // Intake Bindings
         val intakeButton = driverController.R2()
 

@@ -32,7 +32,7 @@ private val matchTime
 private val SHIFT_CHANGES =
     listOf(2.min + 10.sec, 1.min + 45.sec, 1.min + 20.sec, 55.sec, 30.sec)
 
-@LoggedOutput(LogLevel.COMP)
+@LoggedOutput(LogLevel.DEV)
 val isOurHubActive: Boolean
     get() {
         // Both Hubs are active in the beginning and end of the match.

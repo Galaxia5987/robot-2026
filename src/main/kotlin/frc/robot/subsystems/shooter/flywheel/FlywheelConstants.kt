@@ -14,12 +14,12 @@ import frc.robot.lib.extensions.rps
 import org.team5987.annotation.command_enum.CommandEnum
 
 const val GEAR_RATIO = 1.33
-val REAL_GAINS = Gains(kP = 0.3, kS = 0.5, kV = 0.12)
+val REAL_GAINS = Gains(kP = 0.3, kS = 0.3, kV = 0.12)
 val SIM_GAINS = Gains(kP = 1.0, kV = 0.12)
 
 const val MAIN_MOTOR_PORT = 16
 
-val FLYWHEEL_TOLERANCE = 0.3.rps
+val FLYWHEEL_TOLERANCE = 0.55.rps
 
 val AUXILIARY_MOTORS_PORTS =
     mapOf<Int, MotorAlignmentValue>(

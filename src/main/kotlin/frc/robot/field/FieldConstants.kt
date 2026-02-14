@@ -47,9 +47,6 @@ val OUTPOST_CROSS_LINE_RECTANGLE: Rectangle2d
         Translation2d(FlippingUtil.fieldSizeX, FlippingUtil.fieldSizeY / 2)
     ).flipIfNeeded()
 
-val isCloserToDepotSide: Trigger =
-    Trigger { OUTPOST_CROSS_LINE_RECTANGLE.contains(drive.pose.translation) }
-        .negate()
 
 // For Debugging and tuning if necessary
 // var temp = TunablePose3d(key="/Tuning/TempPose")

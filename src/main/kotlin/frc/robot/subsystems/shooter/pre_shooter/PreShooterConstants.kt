@@ -11,7 +11,7 @@ import frc.robot.lib.extensions.amps
 import frc.robot.lib.extensions.rps
 import org.team5987.annotation.command_enum.CommandEnum
 
-val GAINS = Gains(kP = 1.0, kV = 0.25, kS = 3.0)
+val REAL_GAINS = Gains(kP = 1.0, kV = 0.2, kS = 2.0)
 
 val SIM_GAINS = Gains(0.6, kV = 0.1)
 
@@ -23,7 +23,7 @@ val SETPOINT_TOLERANCE = 2.rps
 
 val MOTOR_CONFIG =
     TalonFXConfiguration().apply {
-        Slot0 = GAINS.toSlotConfig()
+        Slot0 = REAL_GAINS.toSlotConfig()
         MotorOutput =
             MotorOutputConfigs().apply {
                 Inverted = InvertedValue.Clockwise_Positive
@@ -36,8 +36,6 @@ val MOTOR_CONFIG =
 @CommandEnum
 enum class PreShooterVelocity(val velocity: AngularVelocity) {
     STOP(0.rps),
-    START(10.rps),
-    FAST(20.rps),
-    SLOW(4.rps),
-    REVERSE(-START.velocity),
+    SHOOTING(25.rps),
+    REVERSE(((-10).rps)),
 }

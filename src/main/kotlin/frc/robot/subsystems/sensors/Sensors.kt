@@ -1,9 +1,12 @@
 package frc.robot.subsystems.sensors
 
+import edu.wpi.first.math.filter.Debouncer
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.m
+import frc.robot.lib.extensions.sec
 import frc.robot.lib.unified_canrange.UnifiedCANRange
 import org.littletonrobotics.junction.Logger
 
@@ -42,7 +45,7 @@ object Sensors : SubsystemBase() {
 
     val isFull: Trigger = Trigger { (averageFuelDistance() < FULL) }
 
-    val hasFuel: Trigger = Trigger { spindexerSensor.inputs.signalStrength > MIN_SIGNAL_STRENGTH_FOR_MEASUREMENT }
+    val hasFuel: Trigger = Trigger { spindexerSensor.inputs.signalStrength > MIN_SIGNAL_STRENGTH_FOR_MEASUREMENT }.debounce(HAS_FUEL_DEBOUNCE[sec], Debouncer.DebounceType.kFalling)
     val isSpindexerLoaded: Trigger = Trigger { spindexerSensor.isInRange }
 
     override fun periodic() {

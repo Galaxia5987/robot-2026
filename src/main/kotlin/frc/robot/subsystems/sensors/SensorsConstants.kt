@@ -6,12 +6,16 @@ import com.ctre.phoenix6.configs.ProximityParamsConfigs
 import frc.robot.lib.extensions.cm
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.m
+import frc.robot.lib.extensions.sec
 
-val SPINDEXER_SENSOR_PORT = 0
-val TOP_SENSOR_PORT = 1
-val AUX_TOP_SENSOR = 2
+const val SPINDEXER_SENSOR_PORT = 0
+const val TOP_SENSOR_PORT = 1
+const val AUX_TOP_SENSOR = 2
 
 private val HAS_FUEL = 0.19.m
+
+// This should be equal to the time it takes for a ball in the preShooter to exit through the shooter
+val HAS_FUEL_DEBOUNCE = 0.3.sec
 
 const val MIN_SIGNAL_STRENGTH_FOR_MEASUREMENT = 15015.0
 

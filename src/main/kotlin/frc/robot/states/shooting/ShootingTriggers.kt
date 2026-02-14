@@ -7,12 +7,15 @@ import frc.robot.field.isHubActive
 import frc.robot.lib.extensions.and
 import frc.robot.lib.extensions.logTrigger
 import frc.robot.lib.extensions.whileTrue
+import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.setpoints_manager.SetpointsManager.isShootingOnMove
 import frc.robot.subsystems.sensors.Sensors
 import frc.robot.subsystems.shooter.flywheel.Flywheel
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 import frc.robot.subsystems.shooter.turret.Turret
+import org.team5987.annotation.LogLevel
+import org.team5987.annotation.LoggedOutput
 
 private const val LOGGING_PATH = "StateMachines/Shooting"
 
@@ -22,21 +25,21 @@ private val isBackfeeding =
     ShootingState.BACKFEEDING.trigger.onTrue(backfeeding())
 private val isShooting = ShootingState.SHOOTING.trigger.onTrue(shooting())
 
-
+@LoggedOutput(path = LOGGING_PATH, level = LogLevel.COMP)
+val shooterAtSetpoint: Trigger = // TODO: Find a better name
+    Hood.atSetpoint
+        .and(Turret.atSetpoint)
+        .and(Flywheel.atSetpoint)
+        .and(PreShooter.atSetpoint)
+        .logTrigger("$LOGGING_PATH/allSubsystemsAtSetpoint")
 
 class Shooting(dontShootTrigger: Trigger) {
-    val shooterAtSetpoint: Trigger =
-        Hood.atSetpoint
-            .and(Turret.atSetpoint)
-            .and(Flywheel.atSetpoint)
-            .and(PreShooter.atSetpoint)
-            .logTrigger("$LOGGING_PATH/allSubsystemsAtSetpoint")
-
     private val canShoot =
         isHubActive
             .and(dontShootTrigger.negate())
             .and(inAllianceZone)
             .and(Sensors.hasFuel)
+            .and(IntakingStates.INTAKING.trigger.negate())
             .logTrigger("$LOGGING_PATH/canShoot")
 
     private val cantShoot = canShoot.negate().onTrue(ShootingState.IDLE.set())
