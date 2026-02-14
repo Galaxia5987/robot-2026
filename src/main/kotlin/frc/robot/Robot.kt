@@ -14,8 +14,10 @@ import edu.wpi.first.wpilibj.PowerDistribution
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
-import frc.robot.lib.Mode
+import frc.robot.field.ALLIANCE_ZONE
+import frc.robot.field.HUB_TRANSLATION
 import frc.robot.lib.extensions.enableAutoLogOutputFor
+import frc.robot.lib.extensions.toPose
 import frc.robot.lib.logged_output.LoggedOutputManager
 import frc.robot.sim.MapleSimHopper
 import frc.robot.sim.MapleSimIntake
@@ -123,6 +125,9 @@ object Robot : LoggedRobot() {
      */
     override fun robotPeriodic() {
         CommandScheduler.getInstance().run()
+        Logger.recordOutput("ALLIANCE_ZONE", ALLIANCE_ZONE)
+        Logger.recordOutput("OUTPOST_CROSS_LINE_RECTANGLE", ALLIANCE_ZONE)
+        Logger.recordOutput("ALLIANCE_ZONE", ALLIANCE_ZONE)
     }
 
     /**

@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import frc.robot.calculateVelocity
 import frc.robot.drive
-import frc.robot.field.HUB_LOCATION
+import frc.robot.field.HUB_TRANSLATION
 import frc.robot.lib.extensions.cm
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
@@ -47,7 +47,7 @@ class MapleSimShooter(private val mapleSimIntake: MapleSimIntake) {
                 90.deg - Hood.inputs.position - 15.deg
             )
         fuelOnFly
-            .withTargetPosition { HUB_LOCATION.toTranslation3d(HUB_HEIGHT) }
+            .withTargetPosition { HUB_TRANSLATION.toTranslation3d(HUB_HEIGHT) }
             .withTargetTolerance(
                 Translation3d(122.186335.cm, 122.186335.cm, 3.cm)
             )

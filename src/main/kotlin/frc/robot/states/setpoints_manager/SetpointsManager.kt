@@ -6,8 +6,8 @@ import edu.wpi.first.units.Unit
 import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.field.DEPOT_LOCATION
-import frc.robot.field.HUB_LOCATION
+import frc.robot.field.DEPOT_TRANSLATION
+import frc.robot.field.HUB_TRANSLATION
 import frc.robot.field.OUTPOST_LOCATION
 import frc.robot.field.inAllianceZone
 import frc.robot.field.isCloserToDepotSide
@@ -28,15 +28,15 @@ object SetpointsManager {
         key = "/StateMachines/Shooting/currentGoal",
         level = LogLevel.COMP
     )
-    var currentGoal: Pose2d = HUB_LOCATION.toPose()
+    var currentGoal: Pose2d = HUB_TRANSLATION.toPose()
 
     private val goalHubTrigger =
-        inAllianceZone.onTrue(runOnce({ currentGoal = HUB_LOCATION.toPose() }))
+        inAllianceZone.onTrue(runOnce({ currentGoal = HUB_TRANSLATION.toPose() }))
 
     private val goalDepotTrigger =
         isCloserToDepotSide
             .and(!inAllianceZone)
-            .onTrue(runOnce({ currentGoal = DEPOT_LOCATION.toPose() }))
+            .onTrue(runOnce({ currentGoal = DEPOT_TRANSLATION.toPose() }))
 
     private val goalOutpostTrigger =
         isCloserToDepotSide

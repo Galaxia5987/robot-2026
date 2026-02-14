@@ -3,8 +3,7 @@ package frc.robot.states.climb
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
-import frc.robot.field.CLIMB_LOCATION
-import frc.robot.lib.extensions.not
+import frc.robot.field.CLIMB_TRANSLATION
 import frc.robot.states.DriverOverrides
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.shooting.ShootingState
@@ -19,7 +18,7 @@ val overrideStates: Command =
         ShootingState.IDLE.set()
     })
 
-fun climb(climbLocation: Pose2d = CLIMB_LOCATION): Command =
+fun climb(climbLocation: Pose2d = CLIMB_TRANSLATION): Command =
     Commands.sequence(
             overrideStates,
             profiledAlignToPose(climbLocation)
