@@ -27,7 +27,7 @@ import org.team5987.annotation.LoggedOutput
 
 @LoggedOutput(LogLevel.COMP)
 val distanceFromGoal: Distance
-    get() = drive.pose.distanceFromPoint(currentGoal.translation)
+    get() = drive.localPose.distanceFromPoint(currentGoal.translation)
 
 private val SHOOTER_VELOCITY_BY_DISTANCE: InterpolatingDoubleMap =
     ShootingTableReader.parse(

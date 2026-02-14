@@ -21,7 +21,7 @@ val REAL_GAINS = Gains(kP = 51.0, kD = 1.0, kS = 0.4)
 const val GEAR_RATIO = 46.77199935913086
 
 // The actual angle, (relative to the ground) of the hood on the robot.
-val HOOD_STARTING_ANGLE = 17.5.deg
+val HOOD_STARTING_ANGLE = 15.deg
 
 val ABSOLUTE_ENCODER_OFFSET = (-0.0092).rot
 
