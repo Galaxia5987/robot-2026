@@ -68,22 +68,25 @@ private val visionIOs =
     when (CURRENT_MODE) {
         Mode.REAL ->
             OV_NAME_TO_CONFIG.map {
+                val config = it.value
                 VisionIOPhotonVision(
                     it.key,
-                    { it.value.robotToCamera },
-                    { drive.gyroRotation },
-                    { listOf() } // TODO:
+                    config.robotToCamera,
+                    config.botRotation,
+                    config.tagIdsToFilter
                 )
             }
         Mode.SIM ->
             OV_NAME_TO_CONFIG.map {
+                val config = it.value
                 VisionIOPhotonVisionSim(
                     it.key,
-                    { it.value.robotToCamera },
-                    { drive.gyroRotation },
-                    { listOf() }, // TODO:
-                    { drive.pose },
-                )
+                    config.robotToCamera,
+                    config.botRotation,
+                    config.tagIdsToFilter,
+                ) {
+                    drive.pose
+                }
             }
         Mode.REPLAY -> emptyList()
     }.toTypedArray()

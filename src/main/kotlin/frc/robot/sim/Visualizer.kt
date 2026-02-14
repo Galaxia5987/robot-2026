@@ -124,7 +124,7 @@ private object Intake {
 
 private object Shooter {
     private val turretRotation
-        get() = Turret.wrappedPosition.toYaw()
+        get() = -Turret.wrappedPosition.toYaw()
 
     private val turretTranslation
         get() = Translation3d((-116).mm, 220.5.mm, 355.mm)

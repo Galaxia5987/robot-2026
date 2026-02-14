@@ -1,6 +1,6 @@
 package frc.robot.subsystems.shooter.turret
 
-import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC
+import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.hardware.CANcoder
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -31,8 +31,7 @@ object Turret : SubsystemBase() {
         )
     private val absoluteEncoder = CANcoder(ENCODER_ID)
 
-    private val positionTorqueCurrentFOC: PositionTorqueCurrentFOC =
-        PositionTorqueCurrentFOC(0.0)
+    private val positionVoltage: PositionVoltage = PositionVoltage(0.0)
     private var setpoint = 0.radians
 
     val wrappedPosition: Angle
@@ -53,12 +52,12 @@ object Turret : SubsystemBase() {
 
     fun setAngle(angle: Angle) = runOnce {
         setpoint = angle
-        motor.setControl(positionTorqueCurrentFOC.withPosition(angle))
+        motor.setControl(positionVoltage.withPosition(angle))
     }
 
     fun setAngle(angleSupplier: () -> Angle) = run {
         setpoint = angleSupplier()
-        motor.setControl(positionTorqueCurrentFOC.withPosition(setpoint))
+        motor.setControl(positionVoltage.withPosition(setpoint))
     }
 
     override fun periodic() {

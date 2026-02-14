@@ -3,9 +3,7 @@ package frc.robot.states.intaking
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import frc.robot.lib.extensions.cm
-import frc.robot.lib.extensions.m
 import frc.robot.lib.extensions.sec
-import frc.robot.lib.extensions.volts
 import frc.robot.states.spindexer.SpindexerCommands
 import frc.robot.subsystems.intake.extender.Extender
 import frc.robot.subsystems.intake.roller.Roller
@@ -26,11 +24,16 @@ fun intaking(): Command =
         SpindexerCommands.startIntaking()
     )
 
-fun pumping(): Command = Commands.repeatingSequence(Extender.defer {
-    Commands.sequence(
-        Extender.close(),
-        Commands.waitUntil(Extender.shouldStop),
-        Extender.defer { Extender.setPosition(Extender.lastStallingDistance + 10.cm) },
-        Commands.waitTime(PUMP_TIME),
+fun pumping(): Command =
+    Commands.repeatingSequence(
+        Extender.defer {
+            Commands.sequence(
+                Extender.close(),
+                Commands.waitUntil(Extender.shouldStop),
+                Extender.defer {
+                    Extender.setPosition(Extender.lastStallingDistance + 10.cm)
+                },
+                Commands.waitTime(PUMP_TIME),
+            )
+        }
     )
-})

@@ -15,30 +15,65 @@ package frc.robot.subsystems.vision
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout
 import edu.wpi.first.apriltag.AprilTagFields
+import edu.wpi.first.math.geometry.Pose3d
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Rotation3d
 import edu.wpi.first.math.geometry.Transform3d
 import edu.wpi.first.math.geometry.Translation3d
+import frc.robot.drive
+import frc.robot.lib.extensions.deg
+import frc.robot.lib.extensions.mm
+import frc.robot.lib.extensions.toTransform
+import frc.robot.lib.extensions.toYaw
+import frc.robot.lib.getRotation3d
+import frc.robot.subsystems.shooter.turret.Turret
 
 const val LOG_PREFIX = "Subsystems/Vision/"
 
 // AprilTag layout
-val APRILTAG_LAYOUT:
-    AprilTagFieldLayout = // TODO: Replace with correct apriltag layout when it comes out
-    AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark)
+val APRILTAG_LAYOUT: AprilTagFieldLayout =
+    AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark)
+
 // stddevFactor - Standard deviation multipliers for each camera
 // (Adjust to trust some cameras more than others)
 data class CameraConfig(
-    val robotToCamera: Transform3d,
+    val robotToCamera: () -> Transform3d,
+    val botRotation: () -> Rotation2d = { drive.gyroRotation },
+    val tagIdsToFilter: () -> List<Int>,
     val stddevFactor: Double
 )
 
 // Camera names, must match names configured on coprocessor
-const val EXMAPLE = "example"
+const val TURRET_CAMERA_NAME = "turret"
 
-// Robot to camera transforms
-// (Not used by Limelight, configure in web UI instead)
+val TURRET_TRANSLATION = Translation3d((-117.5).mm, 207.5.mm, 360.888.mm)
+val CAMERA_TO_TURRET_TRANSLATION =
+    Translation3d((-70.403).mm, 122.mm, 169.633.mm)
 
-val OV_NAME_TO_CONFIG = mapOf<String, CameraConfig>()
+val TURRET_CAMERA_ROBOT_TO_CAMERA: Transform3d
+    get() =
+        Pose3d(
+                (TURRET_TRANSLATION.plus(CAMERA_TO_TURRET_TRANSLATION)
+                    .rotateAround(
+                        TURRET_TRANSLATION,
+                        -Turret.wrappedPosition.toYaw()
+                    )),
+                getRotation3d(
+                    yaw = -Turret.wrappedPosition,
+                    pitch = ((-25).deg)
+                )
+            )
+            .toTransform()
+
+val TURRET_CONFIG =
+    CameraConfig(
+        robotToCamera = { TURRET_CAMERA_ROBOT_TO_CAMERA },
+        tagIdsToFilter = { listOf(9, 10, 26, 25) },
+        stddevFactor = 1.0
+    )
+
+val OV_NAME_TO_CONFIG =
+    mapOf<String, CameraConfig>(TURRET_CAMERA_NAME to TURRET_CONFIG)
 
 var realsenseRobotToCamera = Transform3d(Translation3d(), Rotation3d())
 

@@ -50,7 +50,8 @@ object Extender : SubsystemBase() {
     private val ligament =
         root.append(LoggedMechanismLigament2d("ExtenderLigament", 1.0, 0.0))
 
-    val shouldStop: Trigger = isStalling.and(IntakingStates.INTAKING.trigger.negate())
+    val shouldStop: Trigger =
+        isStalling.and(IntakingStates.INTAKING.trigger.negate())
 
     val inputs
         get() = motor.inputs
@@ -60,41 +61,46 @@ object Extender : SubsystemBase() {
         createDisableTriggerForCoast(motor)
     }
 
-    fun setPosition(value: Distance): Command = this.runOnce {
-        setpoint = value
-        motor.setControl(
-            positionRequest.withPosition(
-                value.toAngle(DIAMETER, GEAR_RATIO)
+    fun setPosition(value: Distance): Command =
+        this.runOnce {
+            setpoint = value
+            motor.setControl(
+                positionRequest.withPosition(
+                    value.toAngle(DIAMETER, GEAR_RATIO)
+                )
             )
-        )
-    }
+        }
 
-    fun setVoltage(value: Voltage): Command = this.runOnce {
-        motor.setControl(
-            voltageRequest.withOutput(value)
-        )
-    }
+    fun setVoltage(value: Voltage): Command =
+        this.runOnce { motor.setControl(voltageRequest.withOutput(value)) }
 
     private fun stop(): Command = setVoltage(0.volts)
 
     fun open(): Command = setPosition(ExtenderPositions.OPEN.distance)
 
-    fun close(): Command = Commands.sequence(setVoltage(CLOSE_VOLTAGE), Commands.print("FINISHED SETTING VOLTAGE!!!"), Commands.waitSeconds(1.0), Commands.print("SHOULD STOP IS TRUE!!!"),
-        stop()
-    )
+    fun close(): Command =
+        Commands.sequence(
+            setVoltage(CLOSE_VOLTAGE),
+            Commands.print("FINISHED SETTING VOLTAGE!!!"),
+            Commands.waitSeconds(1.0),
+            Commands.print("SHOULD STOP IS TRUE!!!"),
+            stop()
+        )
 
     fun openAndReset(): Command =
         StartEndCommand(
             {
-                motor.setControl(voltageRequest.withOutput(RESET_VOLTAGE)
-                    .withIgnoreSoftwareLimits(true))
-            }, {
-            motor.reset(
-                FORWARD_LIMIT
-            )
+                motor.setControl(
+                    voltageRequest
+                        .withOutput(RESET_VOLTAGE)
+                        .withIgnoreSoftwareLimits(true)
+                )
+            },
+            {
+                motor.reset(FORWARD_LIMIT)
                 motor.setControl(neutralOut)
-        })
-
+            }
+        )
 
     override fun periodic() {
         motor.periodic()
@@ -111,6 +117,9 @@ object Extender : SubsystemBase() {
         Logger.recordOutput("Subsystems/$name/mechanism", mechanism)
         Logger.recordOutput("Subsystems/$name/isStalling", isStalling)
         Logger.recordOutput("Subsystems/$name/shouldStop", shouldStop)
-        Logger.recordOutput("Subsystems/$name/lastStallDistance", lastStallingDistance)
+        Logger.recordOutput(
+            "Subsystems/$name/lastStallDistance",
+            lastStallingDistance
+        )
     }
 }

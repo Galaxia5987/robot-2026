@@ -11,9 +11,6 @@ private val coastOut = CoastOut()
 fun createDisableTriggerForCoast(motor: UniversalTalonFX) {
     val coast = { motor.setControl(coastOut) }
     Trigger { DriverStation.isDisabled() }
-        .onTrue(
-            Commands.runOnce(coast)
-                .ignoringDisable(true)
-        )
+        .onTrue(Commands.runOnce(coast).ignoringDisable(true))
     coast.invoke()
 }
