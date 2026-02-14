@@ -16,7 +16,7 @@ const val ENCODER_GEAR_RATIO = 2.0
 val TOLERANCE = 0.5.deg
 
 val SIM_GAINS = Gains(kP = 1.7, kD = 0.3)
-val REAL_GAINS = Gains(kP = 51.0, kD = 1.0, kS = 0.4)
+val REAL_GAINS = Gains(kP = 55.0)
 
 const val GEAR_RATIO = 46.77199935913086
 

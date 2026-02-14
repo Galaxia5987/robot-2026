@@ -22,14 +22,16 @@ private val isBackfeeding =
     ShootingState.BACKFEEDING.trigger.onTrue(backfeeding())
 private val isShooting = ShootingState.SHOOTING.trigger.onTrue(shooting())
 
-val shooterAtSetpoint: Trigger =
-    Hood.atSetpoint
-        .and(Turret.atSetpoint)
-        .and(Flywheel.atSetpoint)
-        .and(PreShooter.atSetpoint)
-        .logTrigger("$LOGGING_PATH/allSubsystemsAtSetpoint")
+
 
 class Shooting(dontShootTrigger: Trigger) {
+    val shooterAtSetpoint: Trigger =
+        Hood.atSetpoint
+            .and(Turret.atSetpoint)
+            .and(Flywheel.atSetpoint)
+            .and(PreShooter.atSetpoint)
+            .logTrigger("$LOGGING_PATH/allSubsystemsAtSetpoint")
+
     private val canShoot =
         isHubActive
             .and(dontShootTrigger.negate())
