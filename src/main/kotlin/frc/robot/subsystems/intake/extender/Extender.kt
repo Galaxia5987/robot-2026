@@ -43,11 +43,6 @@ object Extender : SubsystemBase() {
     private val isStalling =
         Trigger { motor.inputs.statorCurrent > STATOR_STALL_CURRENT }
             .debounce(STALL_DEBOUNCE[sec])
-            .whileTrue(
-                runOnce {
-                    lastStallingDistance = motor.inputs.distance
-                }
-            )
 
     private var mechanism = LoggedMechanism2d(5.0, 5.0)
 
@@ -55,9 +50,7 @@ object Extender : SubsystemBase() {
     private val ligament =
         root.append(LoggedMechanismLigament2d("ExtenderLigament", 1.0, 0.0))
 
-    val shouldStop = isStalling.and(IntakingStates.INTAKING.trigger.negate()).whileTrue(
-        stop()
-    )
+    val shouldStop: Trigger = isStalling.and(IntakingStates.INTAKING.trigger.negate())
 
     val inputs
         get() = motor.inputs
@@ -67,7 +60,7 @@ object Extender : SubsystemBase() {
         createDisableTriggerForCoast(motor)
     }
 
-    fun setPosition(value: Distance): Command = runOnce {
+    fun setPosition(value: Distance): Command = this.runOnce {
         setpoint = value
         motor.setControl(
             positionRequest.withPosition(
@@ -76,17 +69,19 @@ object Extender : SubsystemBase() {
         )
     }
 
-    private fun setVoltage(value: Voltage): Command = runOnce {
+    fun setVoltage(value: Voltage): Command = this.runOnce {
         motor.setControl(
             voltageRequest.withOutput(value)
         )
     }
 
-    private fun stop(): Command = setVoltage(0.volts).alongWith(Commands.runOnce({ println("STOPPEDDDD!!!") }))
+    private fun stop(): Command = setVoltage(0.volts)
 
     fun open(): Command = setPosition(ExtenderPositions.OPEN.distance)
 
-    fun close(): Command = setVoltage(CLOSE_VOLTAGE)
+    fun close(): Command = Commands.sequence(setVoltage(CLOSE_VOLTAGE), Commands.print("FINISHED SETTING VOLTAGE!!!"), Commands.waitSeconds(1.0), Commands.print("SHOULD STOP IS TRUE!!!"),
+        stop()
+    )
 
     fun openAndReset(): Command =
         StartEndCommand(
@@ -103,6 +98,11 @@ object Extender : SubsystemBase() {
 
     override fun periodic() {
         motor.periodic()
+
+        if (isStalling.asBoolean) {
+            lastStallingDistance = motor.inputs.distance
+        }
+
         Logger.recordOutput(
             "Subsystems/$name/setpoint",
             setpoint[meters],
@@ -110,6 +110,7 @@ object Extender : SubsystemBase() {
         )
         Logger.recordOutput("Subsystems/$name/mechanism", mechanism)
         Logger.recordOutput("Subsystems/$name/isStalling", isStalling)
+        Logger.recordOutput("Subsystems/$name/shouldStop", shouldStop)
         Logger.recordOutput("Subsystems/$name/lastStallDistance", lastStallingDistance)
     }
 }

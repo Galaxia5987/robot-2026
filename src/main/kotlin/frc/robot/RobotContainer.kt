@@ -53,6 +53,8 @@ object RobotContainer {
     private fun configureButtonBindings() {
         driverController.create().onTrue(DriveCommands.resetGyro())
 
+        driverController.povDown().whileTrue(Extender.close())
+
         driverController
             .L2()
             .onTrue(IntakingStates.PUMPING.set())
