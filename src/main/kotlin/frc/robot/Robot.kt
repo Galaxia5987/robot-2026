@@ -25,6 +25,7 @@ import frc.robot.sim.MapleSimShooter
 import frc.robot.states.intaking.IntakingTriggers
 import frc.robot.states.setpoints_manager.SetpointsManager
 import frc.robot.states.spindexer.SpindexerTriggers
+import frc.robot.subsystems.sensors.Sensors
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.*
 import org.littletonrobotics.junction.networktables.NT4Publisher
@@ -96,6 +97,7 @@ object Robot : LoggedRobot() {
             }
         }
         Logger.start()
+        Sensors
         RobotContainer // Initialize robot container.
 
         // Bind state Machines
@@ -125,9 +127,6 @@ object Robot : LoggedRobot() {
      */
     override fun robotPeriodic() {
         CommandScheduler.getInstance().run()
-        Logger.recordOutput("ALLIANCE_ZONE", ALLIANCE_ZONE)
-        Logger.recordOutput("OUTPOST_CROSS_LINE_RECTANGLE", ALLIANCE_ZONE)
-        Logger.recordOutput("ALLIANCE_ZONE", ALLIANCE_ZONE)
     }
 
     /**

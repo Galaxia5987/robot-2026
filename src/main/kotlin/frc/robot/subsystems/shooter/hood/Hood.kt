@@ -54,8 +54,8 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
     }
 
     fun setControlAngle(angle: Angle) {
-        setpoint = angle
-        motor.setControl(positionRequest.withPosition(angle))
+        setpoint = angle - HOOD_STARTING_ANGLE
+        motor.setControl(positionRequest.withPosition(setpoint))
     }
 
     fun setAngle(angle: Angle): Command = runOnce { setControlAngle(angle) }

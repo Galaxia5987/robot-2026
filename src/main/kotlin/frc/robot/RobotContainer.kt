@@ -9,8 +9,10 @@ import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.lib.extensions.onFalse
 import frc.robot.lib.extensions.whileTrue
 import frc.robot.states.intaking.IntakingStates
+import frc.robot.states.setpoints_manager.aimingSetpoint
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.intake.extender.Extender
+import frc.robot.subsystems.shooter.hood.Hood
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 
@@ -47,7 +49,7 @@ object RobotContainer {
                 { -driverController.rightX * 1.2 }
             )
         //        Turret.defaultCommand = Turret.setAngle { Turret.aimingSetpoint() }
-        //        Hood.defaultCommand = Hood.setAngle { Hood.aimingSetpoint() }
+        Hood.defaultCommand = Hood.setAngle { Hood.aimingSetpoint() }
     }
 
     private fun configureButtonBindings() {
