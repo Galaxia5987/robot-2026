@@ -94,6 +94,5 @@ private val visionIOs =
 val vision =
     Vision(
         drive::addGlobalVisionMeasurement,
-        drive::addLocalVisionMeasurement,
         *visionIOs
     )

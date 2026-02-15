@@ -85,8 +85,3 @@ const val MAX_Z_ERROR = 0.3
 // (Adjusted automatically based on distance and # of tags)
 const val LINEAR_STD_DEV_BASELINE = 0.03 // Meters
 const val ANGULAR_STD_DEV_BASELINE = 0.08 // Radians[\]
-
-// Multipliers to apply for MegaTag 2 observations
-const val LINEAR_STD_DEV_MEGATAG2_FACTOR = 0.5 // More stable than full 3D solve
-const val ANGULAR_STD_DEV_MEGATAG2_FACTOR =
-    Double.POSITIVE_INFINITY // No rotation data available

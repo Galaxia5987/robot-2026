@@ -181,7 +181,6 @@ object Robot : LoggedRobot() {
         val stdDevs = VecBuilder.fill(0.01, 0.01, 0.01)
 
         drive.addGlobalVisionMeasurement(pose, timestamp, stdDevs)
-        drive.addLocalVisionMeasurement(pose, timestamp, stdDevs)
         arena.simulationPeriodic()
     }
     /** This function is called periodically during operator control. */
