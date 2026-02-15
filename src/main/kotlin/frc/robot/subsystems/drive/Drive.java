@@ -52,6 +52,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.ConstantsKt;
+import frc.robot.lib.AllianceHelperKt;
 import frc.robot.lib.LocalADStarAK;
 import frc.robot.lib.LoggedNetworkGains;
 import frc.robot.lib.Mode;
@@ -290,6 +291,14 @@ public class Drive extends SubsystemBase implements SysIdable {
     }
 
     public void followTrajectory(SwerveSample sample){
+        if(AllianceHelperKt.getIS_RED()){
+            followTrajectoryRedSide(sample);
+        }
+        else {
+            followTrajectoryBlueSide(sample);
+        }
+    }
+    public void followTrajectoryBlueSide(SwerveSample sample){
 
         Pose2d pose= getPose();
         Pose2d samplePose = new Pose2d(sample.x, sample.y, new Rotation2d(sample.heading));
@@ -297,11 +306,24 @@ public class Drive extends SubsystemBase implements SysIdable {
         ChassisSpeeds speeds = new ChassisSpeeds(
                 (-sample.vy),
                 (sample.vx),
-                sample.omega+ getThetaController().calculate(pose.getRotation().getRadians(), sample.heading)
+                (sample.omega)
         );
 ;
         runVelocity(speeds);
     }
+    public void followTrajectoryRedSide(SwerveSample sample){
+        Pose2d pose= getPose();
+        Pose2d samplePose = new Pose2d(sample.x, sample.y, new Rotation2d(sample.heading));
+        setGoal(samplePose);
+        ChassisSpeeds speeds = new ChassisSpeeds(
+                (sample.vy),
+                (-sample.vx),
+                (sample.omega)
+        );
+        ;
+        runVelocity(speeds);
+    }
+
     @Override
     public void periodic() {
         odometryLock.lock(); // Prevents odometry updates while reading data
