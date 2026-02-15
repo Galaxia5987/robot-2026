@@ -294,11 +294,12 @@ public class Drive extends SubsystemBase implements SysIdable {
         Pose2d pose= getPose();
         Pose2d samplePose = new Pose2d(sample.x, sample.y, new Rotation2d(sample.heading));
         setGoal(samplePose);
-        ChassisSpeeds speeds= new ChassisSpeeds(
-                sample.vx + getXController().calculate(pose.getX(),sample.x),
-                sample.vy + getYController().calculate(pose.getY(),sample.y),
-                sample.omega + getThetaController().calculate(pose.getRotation().getRadians(), sample.heading)
+        ChassisSpeeds speeds = new ChassisSpeeds(
+                (-sample.vy),
+                (sample.vx),
+                sample.omega+ getThetaController().calculate(pose.getRotation().getRadians(), sample.heading)
         );
+;
         runVelocity(speeds);
     }
     @Override
