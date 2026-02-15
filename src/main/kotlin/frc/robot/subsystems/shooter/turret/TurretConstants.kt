@@ -24,7 +24,7 @@ val FORWARD_LIMIT = 0.668457.rot
 val REVERSE_LIMIT = (-0.121582).rot
 
 val SOFTWARE_LIMIT_CONFIG =
-    SoftwareLimitSwitchConfigs().apply { // TODO: Configure
+    SoftwareLimitSwitchConfigs().apply {
         ForwardSoftLimitEnable = true
         ReverseSoftLimitEnable = true
         ForwardSoftLimitThreshold = FORWARD_LIMIT[rot]
@@ -46,9 +46,9 @@ val CONFIG =
                 NeutralMode = NeutralModeValue.Brake
                 Inverted = InvertedValue.Clockwise_Positive
             }
-        Slot0 = Slot0Configs().apply { Slot0 = REAL_GAINS.toSlotConfig() }
+        Slot0 = REAL_GAINS.toSlotConfig()
         ClosedLoopGeneral =
-            ClosedLoopGeneralConfigs().apply { ContinuousWrap = true }
+            ClosedLoopGeneralConfigs().apply { ContinuousWrap = false }
         SoftwareLimitSwitch = SOFTWARE_LIMIT_CONFIG
         Feedback =
             FeedbackConfigs().apply {

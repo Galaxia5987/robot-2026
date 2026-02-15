@@ -54,7 +54,7 @@ class Shooting(dontShootTrigger: Trigger) {
         ShootingState.PRIMING.trigger.or(ShootingState.SHOOTING.trigger)
 
     private val lockIfNeeded =
-        shootingStatePrimingOrShooting
+        shootingStatePrimingOrShooting.and(Turret.atSetpoint)
             .and(isShootingOnMove.negate())
             .whileTrue(drive.continousLock())
             .logTrigger("$LOGGING_PATH/lockIfNeeded")

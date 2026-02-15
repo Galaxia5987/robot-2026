@@ -14,6 +14,7 @@ import frc.robot.states.shooting.Shooting
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.intake.extender.Extender
 import frc.robot.subsystems.shooter.hood.Hood
+import frc.robot.subsystems.shooter.turret.Turret
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 
@@ -49,7 +50,8 @@ object RobotContainer {
                 { -driverController.leftX },
                 { -driverController.rightX * 1.2 }
             )
-        //        Turret.defaultCommand = Turret.setAngle { Turret.aimingSetpoint() }
+
+        Turret.defaultCommand = Turret.setAngle { Turret.aimingSetpoint() }
         Hood.defaultCommand = Hood.setAngle { Hood.aimingSetpoint() }
     }
 
