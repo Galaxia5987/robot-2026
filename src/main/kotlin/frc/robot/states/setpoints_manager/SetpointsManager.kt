@@ -85,18 +85,10 @@ object SetpointsManager {
 
 fun <T : SubsystemBase, M : Measure<out Unit>> T.aimingSetpoint(): M {
     val result =
-        if (
-            this == Hood &&
-                !TRENCH_AREAS.all { !it.contains(drive.pose.translation) }
-        ) {
-            { HoodPositions.DOWN.angle }
-        } else {
             when (shootingType) {
                 ShootingType.STATIC -> staticShootingMap[this]!!
                 ShootingType.INTERPOLATION -> interpolationShootingMap[this]!!
                 else -> shootOnMoveMap[this]!!
             }
-        }
-
     @Suppress("UNCHECKED_CAST") return result.invoke() as M
 }

@@ -62,7 +62,7 @@ object RobotContainer {
         intakeButton.onTrue(IntakingStates.INTAKING.set())
         intakeButton.negate().onTrue(IntakingStates.CLOSED.set())
 
-        Shooting(driverController.L2().or(isSetDown))
+        Shooting(driverController.L2())
     }
 
     fun getAutonomousCommand(): Command = autoChooser.get()
