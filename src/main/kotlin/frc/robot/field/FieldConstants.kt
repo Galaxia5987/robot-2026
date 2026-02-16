@@ -6,12 +6,11 @@ import edu.wpi.first.math.geometry.Rectangle2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.units.measure.Distance
-import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.drive
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.flipIfNeeded
 import frc.robot.lib.extensions.m
 import frc.robot.lib.extensions.mm
+import frc.robot.subsystems.shooter.hood.CROUCH_TOLERANCE
 
 val ALLIANCE_ZONE_WIDTH: Distance = 4.03.m
 
@@ -29,24 +28,54 @@ val OUTPOST_LOCATION: Translation2d
     get() = OFFSET_OF_FEED_TRANSLATION.flipIfNeeded()
 
 val DEPOT_TRANSLATION: Translation2d
-    get() = Translation2d(
-        OFFSET_OF_FEED_TRANSLATION.measureX,
-        FlippingUtil.fieldSizeY.m - OFFSET_OF_FEED_TRANSLATION.measureY
-    ).flipIfNeeded()
+    get() =
+        Translation2d(
+                OFFSET_OF_FEED_TRANSLATION.measureX,
+                FlippingUtil.fieldSizeY.m - OFFSET_OF_FEED_TRANSLATION.measureY
+            )
+            .flipIfNeeded()
 
+val TRENCH_AREAS: List<Rectangle2d>
+    get() =
+        listOf(
+            Rectangle2d(
+                    Translation2d(HUB_TRANSLATION.x.m - CROUCH_TOLERANCE, 0.m),
+                    Translation2d(
+                        HUB_TRANSLATION.x.m + CROUCH_TOLERANCE,
+                        1331.75.mm
+                    )
+                )
+                .flipIfNeeded(),
+            Rectangle2d(
+                    Translation2d(
+                        HUB_TRANSLATION.x.m - CROUCH_TOLERANCE,
+                        ALLIANCE_ZONE_HEIGHT
+                    ),
+                    Translation2d(
+                        HUB_TRANSLATION.x.m + CROUCH_TOLERANCE,
+                        ALLIANCE_ZONE_HEIGHT - 1331.75.mm
+                    )
+                )
+                .flipIfNeeded()
+        )
 val ALLIANCE_ZONE: Rectangle2d
-    get() = Rectangle2d(
-        Translation2d(0
-            .m, Int.MIN_VALUE.m),
-        Translation2d(ALLIANCE_ZONE_WIDTH, Int.MAX_VALUE.m)
-    ).flipIfNeeded()
+    get() =
+        Rectangle2d(
+                Translation2d(0.m, Int.MIN_VALUE.m),
+                Translation2d(ALLIANCE_ZONE_WIDTH, Int.MAX_VALUE.m)
+            )
+            .flipIfNeeded()
 
 val OUTPOST_CROSS_LINE_RECTANGLE: Rectangle2d
-    get() = Rectangle2d(
-        Translation2d(0.m, Int.MIN_VALUE.m),
-        Translation2d(FlippingUtil.fieldSizeX, FlippingUtil.fieldSizeY / 2)
-    ).flipIfNeeded()
-
+    get() =
+        Rectangle2d(
+                Translation2d(0.m, Int.MIN_VALUE.m),
+                Translation2d(
+                    FlippingUtil.fieldSizeX,
+                    FlippingUtil.fieldSizeY / 2
+                )
+            )
+            .flipIfNeeded()
 
 // For Debugging and tuning if necessary
 // var temp = TunablePose3d(key="/Tuning/TempPose")

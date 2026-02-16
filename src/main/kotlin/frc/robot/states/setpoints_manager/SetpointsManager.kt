@@ -6,11 +6,8 @@ import edu.wpi.first.units.Unit
 import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.field.DEPOT_TRANSLATION
-import frc.robot.field.HUB_TRANSLATION
-import frc.robot.field.OUTPOST_LOCATION
-import frc.robot.field.inAllianceZone
-import frc.robot.field.isCloserToDepotSide
+import frc.robot.drive
+import frc.robot.field.*
 import frc.robot.lib.extensions.not
 import frc.robot.lib.extensions.toPose
 import frc.robot.states.DriverOverrides
@@ -19,6 +16,8 @@ import frc.robot.states.setpoints_manager.SetpointsManager.shootingType
 import frc.robot.states.setpoints_manager.shooting_modes.interpolationShootingMap
 import frc.robot.states.setpoints_manager.shooting_modes.shootOnMoveMap
 import frc.robot.states.setpoints_manager.shooting_modes.staticShootingMap
+import frc.robot.subsystems.shooter.hood.Hood
+import frc.robot.subsystems.shooter.hood.HoodPositions
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
@@ -31,18 +30,27 @@ object SetpointsManager {
     var currentGoal: Pose2d = HUB_TRANSLATION.toPose()
 
     private val goalHubTrigger =
-        inAllianceZone.onTrue(runOnce({ currentGoal = HUB_TRANSLATION.toPose() }).ignoringDisable(true))
+        inAllianceZone.onTrue(
+            runOnce({ currentGoal = HUB_TRANSLATION.toPose() })
+                .ignoringDisable(true)
+        )
 
     private val goalDepotTrigger =
         isCloserToDepotSide
             .and(!inAllianceZone)
-            .onTrue(runOnce({ currentGoal = DEPOT_TRANSLATION.toPose() }).ignoringDisable(true))
+            .onTrue(
+                runOnce({ currentGoal = DEPOT_TRANSLATION.toPose() })
+                    .ignoringDisable(true)
+            )
 
     private val goalOutpostTrigger =
         isCloserToDepotSide
             .negate()
             .and(!inAllianceZone)
-            .onTrue(runOnce({ currentGoal = OUTPOST_LOCATION.toPose() }).ignoringDisable(true))
+            .onTrue(
+                runOnce({ currentGoal = OUTPOST_LOCATION.toPose() })
+                    .ignoringDisable(true)
+            )
 
     enum class ShootingType {
         STATIC,
@@ -77,10 +85,17 @@ object SetpointsManager {
 
 fun <T : SubsystemBase, M : Measure<out Unit>> T.aimingSetpoint(): M {
     val result =
-        when (shootingType) {
-            ShootingType.STATIC -> staticShootingMap[this]!!
-            ShootingType.INTERPOLATION -> interpolationShootingMap[this]!!
-            else -> shootOnMoveMap[this]!!
+        if (
+            this == Hood &&
+                !TRENCH_AREAS.all { !it.contains(drive.pose.translation) }
+        ) {
+            { HoodPositions.DOWN.angle }
+        } else {
+            when (shootingType) {
+                ShootingType.STATIC -> staticShootingMap[this]!!
+                ShootingType.INTERPOLATION -> interpolationShootingMap[this]!!
+                else -> shootOnMoveMap[this]!!
+            }
         }
 
     @Suppress("UNCHECKED_CAST") return result.invoke() as M
