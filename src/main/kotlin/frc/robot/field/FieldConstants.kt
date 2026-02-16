@@ -6,12 +6,7 @@ import edu.wpi.first.math.geometry.Rectangle2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.units.measure.Distance
-import frc.robot.lib.extensions.deg
-import frc.robot.lib.extensions.flip
-import frc.robot.lib.extensions.flipIfNeeded
-import frc.robot.lib.extensions.m
-import frc.robot.lib.extensions.mirror
-import frc.robot.lib.extensions.mm
+import frc.robot.lib.extensions.*
 import frc.robot.subsystems.shooter.hood.CROUCH_TOLERANCE
 
 val ALLIANCE_ZONE_WIDTH: Distance = 4.03.m
@@ -38,22 +33,15 @@ val DEPOT_TRANSLATION: Translation2d
             .flipIfNeeded()
 val TRENCH_WIDTH = 1331.75.mm
 
-private val TRENCH  = Rectangle2d(
-    Translation2d(HUB_TRANSLATION.x.m - CROUCH_TOLERANCE, 0.m),
-    Translation2d(
-        HUB_TRANSLATION.x.m + CROUCH_TOLERANCE,
-        TRENCH_WIDTH
+private val TRENCH =
+    Rectangle2d(
+        Translation2d(HUB_TRANSLATION.x.m - CROUCH_TOLERANCE, 0.m),
+        Translation2d(HUB_TRANSLATION.x.m + CROUCH_TOLERANCE, TRENCH_WIDTH)
     )
-)
 
 val TRENCH_AREAS: List<Rectangle2d>
     get() =
-        listOf(
-            TRENCH,
-            TRENCH.flip(),
-            TRENCH.mirror(),
-            TRENCH.flip().mirror()
-        )
+        listOf(TRENCH, TRENCH.flip(), TRENCH.mirror(), TRENCH.flip().mirror())
 val ALLIANCE_ZONE: Rectangle2d
     get() =
         Rectangle2d(

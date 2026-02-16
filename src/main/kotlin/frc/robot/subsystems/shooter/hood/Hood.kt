@@ -39,6 +39,7 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
     private val encoder = CANcoder(ENCODER_ID)
 
     private var setpoint = 0.radians
+
     @LoggedOutput(LogLevel.COMP)
     val needToCrouch = Trigger {
         TRENCH_AREAS.any { it.contains(drive.pose.translation) }
@@ -64,7 +65,12 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
 
     fun setControlAngle(angle: Angle) {
         setpoint = angle - HOOD_STARTING_ANGLE
-        motor.setControl(positionRequest.withPosition(setpoint))
+        motor.setControl(
+            positionRequest.withPosition(
+                if (needToCrouch.asBoolean) HoodPositions.DOWN.angle
+                else setpoint
+            )
+        )
     }
 
     fun setAngle(angle: Angle): Command = runOnce { setControlAngle(angle) }

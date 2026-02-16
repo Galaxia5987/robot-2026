@@ -6,7 +6,6 @@ import edu.wpi.first.units.Unit
 import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.drive
 import frc.robot.field.*
 import frc.robot.lib.extensions.not
 import frc.robot.lib.extensions.toPose
@@ -16,8 +15,6 @@ import frc.robot.states.setpoints_manager.SetpointsManager.shootingType
 import frc.robot.states.setpoints_manager.shooting_modes.interpolationShootingMap
 import frc.robot.states.setpoints_manager.shooting_modes.shootOnMoveMap
 import frc.robot.states.setpoints_manager.shooting_modes.staticShootingMap
-import frc.robot.subsystems.shooter.hood.Hood
-import frc.robot.subsystems.shooter.hood.HoodPositions
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
@@ -85,10 +82,10 @@ object SetpointsManager {
 
 fun <T : SubsystemBase, M : Measure<out Unit>> T.aimingSetpoint(): M {
     val result =
-            when (shootingType) {
-                ShootingType.STATIC -> staticShootingMap[this]!!
-                ShootingType.INTERPOLATION -> interpolationShootingMap[this]!!
-                else -> shootOnMoveMap[this]!!
-            }
+        when (shootingType) {
+            ShootingType.STATIC -> staticShootingMap[this]!!
+            ShootingType.INTERPOLATION -> interpolationShootingMap[this]!!
+            else -> shootOnMoveMap[this]!!
+        }
     @Suppress("UNCHECKED_CAST") return result.invoke() as M
 }
