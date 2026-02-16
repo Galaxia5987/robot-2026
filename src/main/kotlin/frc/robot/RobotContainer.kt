@@ -6,13 +6,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
-import frc.robot.lib.extensions.onFalse
-import frc.robot.lib.extensions.whileTrue
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.setpoints_manager.aimingSetpoint
 import frc.robot.states.shooting.Shooting
 import frc.robot.subsystems.drive.DriveCommands
-import frc.robot.subsystems.intake.extender.Extender
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.turret.Turret
 import org.ironmaple.simulation.SimulatedArena

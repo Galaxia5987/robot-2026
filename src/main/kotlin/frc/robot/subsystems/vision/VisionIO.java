@@ -23,9 +23,7 @@ public interface VisionIO {
         public String name = "";
         public PoseObservation[] poseObservations = new PoseObservation[0];
         public int[] tagIds = new int[0];
-        public PoseObservation estimatedPose =
-                new PoseObservation(
-                        0.0, new Pose3d(), 0.0, 0, 0.0);
+        public PoseObservation estimatedPose = new PoseObservation(0.0, new Pose3d(), 0.0, 0, 0.0);
     }
 
     /** Represents a robot pose sample used for pose estimation. */

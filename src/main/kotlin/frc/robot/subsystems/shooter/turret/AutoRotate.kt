@@ -35,7 +35,6 @@ val turretPose
             getRotation3d(pitch = (-90).deg)
         )
 
-
 @LoggedOutput(LogLevel.DEV, path = HUB_PATH)
 val angleFromRobotToHub: Rotation2d
     get() =

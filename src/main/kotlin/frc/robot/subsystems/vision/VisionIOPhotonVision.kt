@@ -16,8 +16,8 @@ package frc.robot.subsystems.vision
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Transform3d
 import frc.robot.subsystems.vision.VisionIO.*
-import org.photonvision.EstimatedRobotPose
 import java.util.*
+import org.photonvision.EstimatedRobotPose
 import org.photonvision.PhotonCamera
 import org.photonvision.PhotonPoseEstimator
 
@@ -45,11 +45,12 @@ open class VisionIOPhotonVision(
             if (result.hasTargets()) {
                 poseEstimator.robotToCameraTransform = robotToCamera()
 
-                val estimatedOptionalRobotPose: Optional<EstimatedRobotPose> = if (result.multitagResult.isPresent) {
-                    poseEstimator.estimateCoprocMultiTagPose(result)
-                } else {
-                    poseEstimator.estimatePnpDistanceTrigSolvePose(result)
-                }
+                val estimatedOptionalRobotPose: Optional<EstimatedRobotPose> =
+                    if (result.multitagResult.isPresent) {
+                        poseEstimator.estimateCoprocMultiTagPose(result)
+                    } else {
+                        poseEstimator.estimatePnpDistanceTrigSolvePose(result)
+                    }
 
                 if (estimatedOptionalRobotPose.isEmpty) {
                     return@forEach
@@ -62,24 +63,22 @@ open class VisionIOPhotonVision(
                     botRotation()
                 )
 
-                inputs.estimatedPose = PoseObservation(
-                    estimatedRobotPose.timestampSeconds,
-                    estimatedRobotPose.estimatedPose,
-                    estimatedRobotPose.targetsUsed
-                        .map { it.poseAmbiguity }
-                        .average(),
-                    estimatedRobotPose.targetsUsed.size,
-                    estimatedRobotPose.targetsUsed
-                        .map { it.bestCameraToTarget.translation.norm }
-                        .average()
-                )
+                inputs.estimatedPose =
+                    PoseObservation(
+                        estimatedRobotPose.timestampSeconds,
+                        estimatedRobotPose.estimatedPose,
+                        estimatedRobotPose.targetsUsed
+                            .map { it.poseAmbiguity }
+                            .average(),
+                        estimatedRobotPose.targetsUsed.size,
+                        estimatedRobotPose.targetsUsed
+                            .map { it.bestCameraToTarget.translation.norm }
+                            .average()
+                    )
             }
 
             // Update PhotonPoseEstimator based on gyro readings
-            poseEstimator.addHeadingData(
-                result.timestampSeconds,
-                botRotation()
-            )
+            poseEstimator.addHeadingData(result.timestampSeconds, botRotation())
         }
 
         // Save pose observations and tag IDs to inputs object

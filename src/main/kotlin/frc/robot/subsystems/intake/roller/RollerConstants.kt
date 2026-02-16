@@ -12,8 +12,7 @@ import org.team5987.annotation.command_enum.CommandEnum
 
 @CommandEnum
 enum class RollerPositions(val voltage: Voltage) {
-    INTAKE(7
-        .volts),
+    INTAKE(7.volts),
     OUTTAKE((-6.0).volts),
     STOP(0.volts)
 }

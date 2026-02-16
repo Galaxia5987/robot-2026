@@ -58,9 +58,9 @@ private fun getFlywheelSetpoint(): AngularVelocity {
 private fun getPreShooterSetpoint(): AngularVelocity {
     return PreShooterVelocity.SHOOTING.velocity
 
-// Makes the preshooter velocity match the flywheel velocity
-//    val preShooterKey = InterpolatingDouble(distanceFromGoal[m])
-//    return SHOOTER_VELOCITY_BY_DISTANCE.getInterpolated(preShooterKey).value.rps
+    // Makes the preshooter velocity match the flywheel velocity
+    //    val preShooterKey = InterpolatingDouble(distanceFromGoal[m])
+    //    return SHOOTER_VELOCITY_BY_DISTANCE.getInterpolated(preShooterKey).value.rps
 }
 
 val interpolationShootingMap: Map<SubsystemBase, () -> Measure<out Unit>> =
