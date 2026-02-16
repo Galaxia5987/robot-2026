@@ -46,34 +46,98 @@ data class CameraConfig(
 // Camera names, must match names configured on coprocessor
 const val TURRET_CAMERA_NAME = "turret"
 
-val TURRET_TRANSLATION = Translation3d((-117.5).mm, 207.5.mm, 360.888.mm)
+private val TURRET_TRANSLATION =
+    Translation3d((-117.5).mm, 207.5.mm, 360.888.mm)
 val CAMERA_TO_TURRET_TRANSLATION =
     Translation3d((-70.403).mm, 122.mm, 169.633.mm)
 
 val TURRET_CAMERA_ROBOT_TO_CAMERA: Transform3d
     get() =
         Pose3d(
-                (TURRET_TRANSLATION.plus(CAMERA_TO_TURRET_TRANSLATION)
-                    .rotateAround(
-                        TURRET_TRANSLATION,
-                        -Turret.wrappedPosition.toYaw()
-                    )),
-                getRotation3d(
-                    yaw = -Turret.wrappedPosition,
-                    pitch = ((-25).deg)
-                )
+            (TURRET_TRANSLATION.plus(CAMERA_TO_TURRET_TRANSLATION)
+                .rotateAround(
+                    TURRET_TRANSLATION,
+                    -Turret.wrappedPosition.toYaw()
+                )),
+            getRotation3d(
+                yaw = -Turret.wrappedPosition,
+                pitch = ((-25).deg)
             )
+        )
             .toTransform()
 
 val TURRET_CONFIG =
     CameraConfig(
         robotToCamera = { TURRET_CAMERA_ROBOT_TO_CAMERA },
         tagIdsToFilter = { listOf(9, 10, 26, 25) },
+        stddevFactor = 0.5
+    )
+
+val LEFT_CONFIG =
+    CameraConfig(
+        robotToCamera = {
+            Transform3d(
+                (-59.348).mm,
+                361.75150.mm,
+                195.738.mm,
+                Rotation3d(0.0.deg, (-20).deg, 60.deg)
+            )
+        },
+        tagIdsToFilter = { listOf() },
         stddevFactor = 1.0
     )
 
+val RIGHT_CONFIG =
+    CameraConfig(
+        robotToCamera = {
+            Transform3d(
+                (-146.39146).mm,
+                (-371.60854).mm,
+                372.62536.mm,
+                Rotation3d(0.0.deg, (-20).deg, (-45).deg)
+            )
+        },
+        tagIdsToFilter = { listOf() },
+        stddevFactor = 1.0
+    )
+
+val BACK_CONFIG =
+    CameraConfig(
+        robotToCamera = {
+            Transform3d(
+                (-296.15884).mm,
+                17.02.mm,
+                394.10380.mm,
+                Rotation3d(0.0.deg, (-27.5).deg, 180.deg)
+            )
+        },
+        tagIdsToFilter = { listOf() },
+        stddevFactor = 1.0
+    )
+
+val FRONT_CONFIG =
+    CameraConfig(
+        robotToCamera = {
+            Transform3d(
+                133.02761.mm,
+                338.949.mm,
+                528.36092.mm,
+                Rotation3d(0.0.deg, (-25).deg, 0.deg)
+            )
+        },
+        tagIdsToFilter = { listOf() },
+        stddevFactor = 1.0
+    )
+
+
 val OV_NAME_TO_CONFIG =
-    mapOf<String, CameraConfig>(TURRET_CAMERA_NAME to TURRET_CONFIG)
+    mapOf<String, CameraConfig>(
+        TURRET_CAMERA_NAME to TURRET_CONFIG,
+        "left" to LEFT_CONFIG,
+        "right" to RIGHT_CONFIG,
+        "back" to BACK_CONFIG,
+        "front" to FRONT_CONFIG
+    )
 
 var realsenseRobotToCamera = Transform3d(Translation3d(), Rotation3d())
 
