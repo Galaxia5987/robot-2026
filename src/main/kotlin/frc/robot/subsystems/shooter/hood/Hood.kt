@@ -8,6 +8,8 @@ import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.drive
+import frc.robot.field.TRENCH_AREAS
 import frc.robot.lib.createDisableTriggerForCoast
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
@@ -18,6 +20,8 @@ import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
+import org.team5987.annotation.LogLevel
+import org.team5987.annotation.LoggedOutput
 
 object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
     private var mechanism = LoggedMechanism2d(5.0, 5.0)
@@ -35,6 +39,10 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
     private val encoder = CANcoder(ENCODER_ID)
 
     private var setpoint = 0.radians
+    @LoggedOutput(LogLevel.COMP)
+    val needToCrouch = Trigger {
+        TRENCH_AREAS.any { it.contains(drive.pose.translation) }
+    }
     val isSetDown = Trigger { setpoint == HoodPositions.DOWN.angle }
     val atSetpoint = Trigger {
         motor.inputs.position.isNear(setpoint, TOLERANCE)
