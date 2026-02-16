@@ -34,7 +34,7 @@ val DEPOT_TRANSLATION: Translation2d
                 FlippingUtil.fieldSizeY.m - OFFSET_OF_FEED_TRANSLATION.measureY
             )
             .flipIfNeeded()
-
+val TRENCH_WIDTH = 1331.75.mm
 val TRENCH_AREAS: List<Rectangle2d>
     get() =
         listOf(
@@ -42,7 +42,7 @@ val TRENCH_AREAS: List<Rectangle2d>
                     Translation2d(HUB_TRANSLATION.x.m - CROUCH_TOLERANCE, 0.m),
                     Translation2d(
                         HUB_TRANSLATION.x.m + CROUCH_TOLERANCE,
-                        1331.75.mm
+                        TRENCH_WIDTH
                     )
                 )
                 .flipIfNeeded(),
@@ -53,7 +53,7 @@ val TRENCH_AREAS: List<Rectangle2d>
                     ),
                     Translation2d(
                         HUB_TRANSLATION.x.m + CROUCH_TOLERANCE,
-                        ALLIANCE_ZONE_HEIGHT - 1331.75.mm
+                        ALLIANCE_ZONE_HEIGHT - TRENCH_WIDTH
                     )
                 )
                 .flipIfNeeded()
