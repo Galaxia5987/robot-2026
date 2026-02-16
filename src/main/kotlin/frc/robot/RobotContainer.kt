@@ -11,6 +11,7 @@ import frc.robot.states.setpoints_manager.aimingSetpoint
 import frc.robot.states.shooting.Shooting
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.shooter.hood.Hood
+import frc.robot.subsystems.shooter.hood.Hood.isSetDown
 import frc.robot.subsystems.shooter.turret.Turret
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
@@ -61,7 +62,7 @@ object RobotContainer {
         intakeButton.onTrue(IntakingStates.INTAKING.set())
         intakeButton.negate().onTrue(IntakingStates.CLOSED.set())
 
-        Shooting(driverController.L2())
+        Shooting(driverController.L2().or(isSetDown))
     }
 
     fun getAutonomousCommand(): Command = autoChooser.get()

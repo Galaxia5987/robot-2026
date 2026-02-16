@@ -35,7 +35,8 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
     private val encoder = CANcoder(ENCODER_ID)
 
     private var setpoint = 0.radians
-    var atSetpoint = Trigger {
+    val isSetDown = Trigger { setpoint == HoodPositions.DOWN.angle }
+    val atSetpoint = Trigger {
         motor.inputs.position.isNear(setpoint, TOLERANCE)
     }
 
