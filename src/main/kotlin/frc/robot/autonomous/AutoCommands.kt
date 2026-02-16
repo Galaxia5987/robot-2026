@@ -14,6 +14,12 @@ fun StartToFuelDepotSide(): Command =
         autoFactory().trajectoryCmd("StartToFuelDepotSide"),
     )
 
+fun StartSomethingNew(): Command =
+    Commands.sequence(
+        autoFactory().resetOdometry("StartSomethingNew"),
+        autoFactory().trajectoryCmd("StartSomethingNew"),
+    )
+
 fun FuelDepotSideToDepot(): Command =
     Commands.sequence(
         autoFactory().trajectoryCmd("FuelDepotSideToDepot"),
