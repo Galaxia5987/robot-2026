@@ -2,46 +2,27 @@ package frc.robot
 
 import choreo.Choreo
 import choreo.auto.AutoFactory
-import choreo.trajectory.Trajectory
-import choreo.trajectory.TrajectorySample
 import com.pathplanner.lib.auto.AutoBuilder
-import com.pathplanner.lib.path.PathConstraints
-import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
-import frc.robot.autonomous.Test
-import frc.robot.autonomous.smt
-import frc.robot.field.HUB_LOCATION
+import frc.robot.autonomous.Outpost
 import frc.robot.lib.IS_RED
 import frc.robot.lib.Mode
-import frc.robot.lib.extensions.deg_ps
-import frc.robot.lib.extensions.deg_ps_ps
 import frc.robot.lib.extensions.enableAutoLogOutputFor
-import frc.robot.lib.extensions.mps
-import frc.robot.lib.extensions.mps_ps
-import frc.robot.lib.extensions.toPose
 import frc.robot.lib.getFileNameFromStack
-import frc.robot.lib.getPose2d
-import frc.robot.lib.unified_controller.PS5LinuxController
-import frc.robot.sim.MapleSimShooter
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.intaking.IntakingTriggers
 import frc.robot.states.intaking.IntakingTriggers.canCloseIntake
-import frc.robot.states.intaking.IntakingTriggers.cantCloseIntake
 import frc.robot.states.setpoints_manager.aimingSetpoint
 import frc.robot.states.shooting.Shooting
-import frc.robot.states.shooting.ShootingState
-import frc.robot.subsystems.drive.Drive
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.turret.Turret
+import java.util.Optional
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
-import java.util.Optional
 
 object RobotContainer {
     private val driverController = CommandXboxController(0)
@@ -49,14 +30,12 @@ object RobotContainer {
     fun autoFactory(): AutoFactory {
         return AutoFactory(
             drive::getPose,
-             drive::resetOdometry,
+            drive::resetOdometry,
             drive::followTrajectory,
             true,
             drive
         )
     }
-
-
 
     init {
         drive // Ensure Drive is initialized
@@ -91,29 +70,30 @@ object RobotContainer {
     }
 
     private fun configureButtonBindings() {
-//        driverController.b().onTrue(
-//                Commands.runOnce({ // Add the projectile to the simulated arena
-//                    SimulatedArena.getInstance()
-//                        .addGamePieceProjectile(
-//                            MapleSimShooter.createFuelOnFly()
-//                        )
-//                })
-//            )
+        //        driverController.b().onTrue(
+        //                Commands.runOnce({ // Add the projectile to the simulated arena
+        //                    SimulatedArena.getInstance()
+        //                        .addGamePieceProjectile(
+        //                            MapleSimShooter.createFuelOnFly()
+        //                        )
+        //                })
+        //            )
 
         // Intake Bindings
-//        val intakeButton = driverController.R2()
+        //        val intakeButton = driverController.R2()
         driverController.rightTrigger().onTrue(IntakingStates.INTAKING.set())
-        driverController.rightTrigger()
+        driverController
+            .rightTrigger()
             .negate()
             .and(canCloseIntake)
             .onTrue(IntakingStates.CLOSED.set())
-        driverController.rightTrigger()
+        driverController
+            .rightTrigger()
             .negate()
             .and(IntakingTriggers.cantCloseIntake)
             .onTrue(IntakingStates.OPEN.set())
 
         Shooting(driverController.leftTrigger())
-
     }
 
     fun getAutonomousCommand(): Command = autoChooser.get()
@@ -122,20 +102,20 @@ object RobotContainer {
     fun autonomousInit() {
         if (Choreo.loadTrajectory(getFileNameFromStack()).isPresent) {
             val initialPose: Optional<Pose2d> =
-                Choreo.loadTrajectory(getFileNameFromStack()).get().getInitialPose(IS_RED)
+                Choreo.loadTrajectory(getFileNameFromStack())
+                    .get()
+                    .getInitialPose(IS_RED)
             if (initialPose.isPresent) {
                 drive.resetOdometry(initialPose.get())
             }
         }
     }
     fun registerAutoCommands() {
-        autoChooser.addOption(
-            "smt", smt()
-        )
-//        autoChooser.addOption(
-//            "bumbIntoDepot",
-//            depotDoubleCycle()
-//        )
+        autoChooser.addOption("Outpost", Outpost())
+        //        autoChooser.addOption(
+        //            "bumbIntoDepot",
+        //            depotDoubleCycle()
+        //        )
         autoChooser.addOption(
             "Drive Wheel Radius Characterization",
             DriveCommands.wheelRadiusCharacterization()
@@ -167,4 +147,3 @@ object RobotContainer {
         )
     }
 }
-
