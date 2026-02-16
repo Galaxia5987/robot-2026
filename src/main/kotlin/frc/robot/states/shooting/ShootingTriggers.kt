@@ -66,17 +66,17 @@ class Shooting(dontShootTrigger: Trigger) {
             .onTrue(ShootingState.SHOOTING.set())
             .logTrigger("$LOGGING_PATH/setShootingIfPrimed")
 
-    private val setBackfeedingIfNotAtSetpoint =
-        ShootingState.SHOOTING.trigger
-            .and(shooterAtSetpoint.negate())
-            .onTrue(ShootingState.BACKFEEDING.set())
-            .logTrigger("$LOGGING_PATH/setBackfeedingIfNotAtSetpoint")
+//    private val setBackfeedingIfNotAtSetpoint =
+//        ShootingState.SHOOTING.trigger
+//            .and(shooterAtSetpoint.negate())
+//            .onTrue(ShootingState.BACKFEEDING.set())
+//            .logTrigger("$LOGGING_PATH/setBackfeedingIfNotAtSetpoint")
 
-    private val setPrimingIfHasFuel =
-        ShootingState.BACKFEEDING.trigger
-            .and(Sensors.hasFuel)
-            .onTrue(ShootingState.PRIMING.set())
-            .logTrigger("$LOGGING_PATH/setPrimingIfHasFuel")
+//    private val setPrimingIfHasFuel =
+//        ShootingState.BACKFEEDING.trigger
+//            .and(Sensors.hasFuel)
+//            .onTrue(ShootingState.PRIMING.set())
+//            .logTrigger("$LOGGING_PATH/setPrimingIfHasFuel")
 
     private val setIdleIfHasNoFuel =
         ShootingState.SHOOTING.trigger
