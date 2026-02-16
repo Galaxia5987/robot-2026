@@ -31,18 +31,27 @@ object SetpointsManager {
     var currentGoal: Pose2d = HUB_TRANSLATION.toPose()
 
     private val goalHubTrigger =
-        inAllianceZone.onTrue(runOnce({ currentGoal = HUB_TRANSLATION.toPose() }).ignoringDisable(true))
+        inAllianceZone.onTrue(
+            runOnce({ currentGoal = HUB_TRANSLATION.toPose() })
+                .ignoringDisable(true)
+        )
 
     private val goalDepotTrigger =
         isCloserToDepotSide
             .and(!inAllianceZone)
-            .onTrue(runOnce({ currentGoal = DEPOT_TRANSLATION.toPose() }).ignoringDisable(true))
+            .onTrue(
+                runOnce({ currentGoal = DEPOT_TRANSLATION.toPose() })
+                    .ignoringDisable(true)
+            )
 
     private val goalOutpostTrigger =
         isCloserToDepotSide
             .negate()
             .and(!inAllianceZone)
-            .onTrue(runOnce({ currentGoal = OUTPOST_LOCATION.toPose() }).ignoringDisable(true))
+            .onTrue(
+                runOnce({ currentGoal = OUTPOST_LOCATION.toPose() })
+                    .ignoringDisable(true)
+            )
 
     enum class ShootingType {
         STATIC,

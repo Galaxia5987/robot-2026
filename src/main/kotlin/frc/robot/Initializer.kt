@@ -91,8 +91,4 @@ private val visionIOs =
         Mode.REPLAY -> emptyList()
     }.toTypedArray()
 
-val vision =
-    Vision(
-        drive::addGlobalVisionMeasurement,
-        *visionIOs
-    )
+val vision = Vision(drive::addGlobalVisionMeasurement, *visionIOs)

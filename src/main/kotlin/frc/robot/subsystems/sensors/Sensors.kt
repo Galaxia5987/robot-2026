@@ -45,7 +45,12 @@ object Sensors : SubsystemBase() {
 
     val isFull: Trigger = Trigger { (averageFuelDistance() < FULL) }
 
-    val hasFuel: Trigger = Trigger { spindexerSensor.inputs.signalStrength > MIN_SIGNAL_STRENGTH_FOR_MEASUREMENT }.debounce(HAS_FUEL_DEBOUNCE[sec], Debouncer.DebounceType.kFalling)
+    val hasFuel: Trigger =
+        Trigger {
+                spindexerSensor.inputs.signalStrength >
+                    MIN_SIGNAL_STRENGTH_FOR_MEASUREMENT
+            }
+            .debounce(HAS_FUEL_DEBOUNCE[sec], Debouncer.DebounceType.kFalling)
     val isSpindexerLoaded: Trigger = Trigger { spindexerSensor.isInRange }
 
     override fun periodic() {
@@ -54,7 +59,10 @@ object Sensors : SubsystemBase() {
         auxTopSensor.periodic()
 
         Logger.recordOutput("Subsystems/$name/hasFuel", hasFuel)
-        Logger.recordOutput("Subsystems/$name/isSpindexerLoaded", isSpindexerLoaded)
+        Logger.recordOutput(
+            "Subsystems/$name/isSpindexerLoaded",
+            isSpindexerLoaded
+        )
         Logger.recordOutput("Subsystems/$name/cantCloseIntake", cantCloseIntake)
         Logger.recordOutput("Subsystems/$name/isFull", isFull)
     }

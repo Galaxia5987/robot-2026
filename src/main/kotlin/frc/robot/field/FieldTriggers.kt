@@ -7,10 +7,14 @@ import frc.robot.lib.extensions.logTrigger
 
 const val FIELD_LOGGING_PATH = "Field"
 
-val inAllianceZone = Trigger { ALLIANCE_ZONE.contains(drive.pose.translation) }.logTrigger("$FIELD_LOGGING_PATH/inAllianceZone")
+val inAllianceZone =
+    Trigger { ALLIANCE_ZONE.contains(drive.pose.translation) }
+        .logTrigger("$FIELD_LOGGING_PATH/inAllianceZone")
 
 val isCloserToDepotSide: Trigger =
     Trigger { OUTPOST_CROSS_LINE_RECTANGLE.contains(drive.pose.translation) }
-        .negate().logTrigger("$FIELD_LOGGING_PATH/isCloserToDepotSide")
+        .negate()
+        .logTrigger("$FIELD_LOGGING_PATH/isCloserToDepotSide")
 
-val isHubActive = Trigger { isOurHubActive }.logTrigger("$FIELD_LOGGING_PATH/isHubActive")
+val isHubActive =
+    Trigger { isOurHubActive }.logTrigger("$FIELD_LOGGING_PATH/isHubActive")

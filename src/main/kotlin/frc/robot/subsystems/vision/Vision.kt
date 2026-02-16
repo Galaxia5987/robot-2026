@@ -57,10 +57,14 @@ open class Vision(
     }
 
     override fun periodic() {
-        ios.zip(inputs).forEachIndexed { cameraIndex, (visionIO, cameraInputs) ->
+        ios.zip(inputs).forEachIndexed { cameraIndex, (visionIO, cameraInputs)
+            ->
             // Update IO + logging
             visionIO.updateInputs(cameraInputs)
-            Logger.processInputs("$LOG_PREFIX${cameraInputs.name}", cameraInputs)
+            Logger.processInputs(
+                "$LOG_PREFIX${cameraInputs.name}",
+                cameraInputs
+            )
 
             // Update disconnected alert
             disconnectedAlerts[cameraIndex].set(!cameraInputs.connected)
@@ -73,11 +77,7 @@ open class Vision(
             consumer.accept(
                 estimatedPose.pose.toPose2d(),
                 estimatedPose.timestamp,
-                VecBuilder.fill(
-                    linearStdDev,
-                    linearStdDev,
-                    angularStdDev
-                )
+                VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev)
             )
         }
     }
