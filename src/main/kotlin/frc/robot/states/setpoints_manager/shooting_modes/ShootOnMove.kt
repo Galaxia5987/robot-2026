@@ -44,8 +44,6 @@ private fun getFlywheelSetpoint(): AngularVelocity {
         .rps
 }
 
-private fun calculateAngularVelocity(calculateVelocity: Double) = 0.0
-
 private fun getPreShooterSetpoint(): AngularVelocity {
     return calculateAngularVelocity(
             calculateVelocity(
