@@ -67,7 +67,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
-import lombok.val;
 import org.ironmaple.simulation.drivesims.COTS;
 import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
 import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
@@ -320,22 +319,22 @@ public class Drive extends SubsystemBase implements SysIdable {
 
     public void followTrajectoryBlueSide(SwerveSample sample) {
         Pose2d pose = getPose();
-        var x=AutoXController.calculate(pose.getY(), sample.y);
-        var y=AutoXController.calculate(pose.getX(), sample.x);
-        Logger.recordOutput("Choreo/vx",sample.vx);
-        Logger.recordOutput("Choreo/vy",sample.vy);
-        Logger.recordOutput("Choreo/calculateX",x);
-        Logger.recordOutput("Choreo/calculateY",y);
+        var x = AutoXController.calculate(pose.getY(), sample.y);
+        var y = AutoXController.calculate(pose.getX(), sample.x);
+        Logger.recordOutput("Choreo/vx", sample.vx);
+        Logger.recordOutput("Choreo/vy", sample.vy);
+        Logger.recordOutput("Choreo/calculateX", x);
+        Logger.recordOutput("Choreo/calculateY", y);
 
         ChassisSpeeds speeds =
-                ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(
-                        sample.vx + x,
-                        sample.vy -y,
-                        sample.omega
-                                + AutoHeadingController.calculate(
-                                        pose.getRotation().getRadians(), sample.heading)),
-                        pose.getRotation()
-                );
+                ChassisSpeeds.fromFieldRelativeSpeeds(
+                        new ChassisSpeeds(
+                                sample.vx + x,
+                                sample.vy - y,
+                                sample.omega
+                                        + AutoHeadingController.calculate(
+                                                pose.getRotation().getRadians(), sample.heading)),
+                        pose.getRotation());
         runVelocity(speeds);
     }
 

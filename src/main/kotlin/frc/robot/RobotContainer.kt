@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import frc.robot.autonomous.Outpost
 import frc.robot.autonomous.StartSomethingNew
+import frc.robot.autonomous.runPath
 import frc.robot.lib.IS_RED
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
@@ -157,6 +158,10 @@ object RobotContainer {
         autoChooser.addOption(
             "swerveFFCharacterization",
             DriveCommands.feedforwardCharacterization()
+        )
+        autoChooser.addOption(
+            "Test1",
+            runPath("Test1")
         )
     }
 }
