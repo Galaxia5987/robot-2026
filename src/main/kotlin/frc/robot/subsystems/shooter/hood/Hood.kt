@@ -17,6 +17,7 @@ import frc.robot.lib.extensions.radians
 import frc.robot.lib.extensions.volts
 import frc.robot.lib.sysid.SysIdable
 import frc.robot.lib.universal_motor.UniversalTalonFX
+import frc.robot.states.shooting.ShootingState
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
@@ -41,9 +42,10 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
     private var setpoint = 0.radians
 
     @LoggedOutput(LogLevel.COMP)
-    val needToCrouch = Trigger {
+    val needToCrouch: Trigger = Trigger {
         TRENCH_AREAS.any { it.contains(drive.pose.translation) }
-    }
+    }.or(ShootingState.IDLE.trigger)
+
     val atSetpoint = Trigger {
         motor.inputs.position.isNear(setpoint, TOLERANCE)
     }
