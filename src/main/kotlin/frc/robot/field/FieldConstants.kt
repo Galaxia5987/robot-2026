@@ -6,12 +6,13 @@ import edu.wpi.first.math.geometry.Rectangle2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.units.measure.Distance
-import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.drive
 import frc.robot.lib.extensions.deg
+import frc.robot.lib.extensions.flip
 import frc.robot.lib.extensions.flipIfNeeded
 import frc.robot.lib.extensions.m
+import frc.robot.lib.extensions.mirror
 import frc.robot.lib.extensions.mm
+import frc.robot.subsystems.shooter.hood.CROUCH_TOLERANCE
 
 val ALLIANCE_ZONE_WIDTH: Distance = 4.03.m
 
