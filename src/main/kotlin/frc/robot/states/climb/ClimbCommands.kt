@@ -11,7 +11,7 @@ import frc.robot.states.spindexer.SpindexerStates
 import frc.robot.subsystems.climb.Climb
 import frc.robot.subsystems.drive.profiledAlignToPose
 
-val overrideStates: Command =
+val idleAll: Command =
     Commands.run({
         SpindexerStates.IDLE.set()
         IntakingStates.CLOSED.set()
@@ -20,9 +20,9 @@ val overrideStates: Command =
 
 fun climb(climbLocation: Pose2d = CLIMB_TRANSLATION): Command =
     Commands.sequence(
-            overrideStates,
-            profiledAlignToPose(climbLocation)
-                .unless(DriverOverrides.AlignmentOverride.trigger),
-            Climb.engaged()
-        )
-        .withName("climb")
+        idleAll,
+        Climb.open(),
+        profiledAlignToPose(climbLocation)
+            .unless(DriverOverrides.AlignmentOverride.trigger),
+        Climb.retracted()
+    )

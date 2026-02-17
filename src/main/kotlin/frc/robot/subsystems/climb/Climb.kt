@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
+import frc.robot.lib.extensions.toAngle
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
@@ -25,21 +26,25 @@ object Climb : SubsystemBase(), ClimbLevelsCommandFactory {
             MAIN_PORT,
             config = MOTOR_CONFIG,
             simGains = SIM_GAINS,
-            gearRatio = GEAR_RATION
+            gearRatio = GEAR_RATIO
         )
 
-    private val positionVoltage = PositionTorqueCurrentFOC(0.0)
+    private val positionTorque = PositionTorqueCurrentFOC(0.0)
 
     private var setpoint = ClimbLevels.RETRACTED
 
     @LoggedOutput(LogLevel.COMP)
     val atSetpoint = Trigger {
-        setpoint.angle.isNear(motor.inputs.position, TOLERANCE)
+        setpoint.height.isNear(motor.inputs.distance, TOLERANCE)
     }
 
     override fun setTarget(value: ClimbLevels): Command = runOnce {
         setpoint = value
-        motor.setControl(positionVoltage.withPosition(value.angle))
+        motor.setControl(
+            positionTorque.withPosition(
+                value.height.toAngle(SPROCKET_DIAMETER, GEAR_RATIO)
+            )
+        )
     }
 
     override fun periodic() {
