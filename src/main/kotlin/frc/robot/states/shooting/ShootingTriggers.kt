@@ -10,7 +10,6 @@ import frc.robot.states.setpoints_manager.SetpointsManager.isShootingOnMove
 import frc.robot.subsystems.sensors.Sensors
 import frc.robot.subsystems.shooter.flywheel.Flywheel
 import frc.robot.subsystems.shooter.hood.Hood
-import frc.robot.subsystems.shooter.hood.Hood.isSetDown
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 import frc.robot.subsystems.shooter.turret.Turret
 import org.team5987.annotation.LogLevel
@@ -39,7 +38,7 @@ class Shooting(dontShootTrigger: Trigger) {
             .and(inAllianceZone)
             .and(Sensors.hasFuel)
             .and(IntakingStates.INTAKING.trigger.negate())
-            .and(isSetDown)
+            .and(Hood.needToCrouch)
             .logTrigger("$LOGGING_PATH/canShoot")
 
     private val cantShoot = canShoot.negate().onTrue(ShootingState.IDLE.set())
