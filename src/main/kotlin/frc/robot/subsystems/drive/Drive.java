@@ -15,6 +15,7 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
 import static frc.robot.subsystems.drive.ProfiledPosePIDKt.*;
+import static frc.robot.subsystems.drive.TrySomethingUniqueKt.*;
 
 import choreo.trajectory.SwerveSample;
 import com.ctre.phoenix6.CANBus;
@@ -30,6 +31,7 @@ import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -65,6 +67,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
+import lombok.val;
 import org.ironmaple.simulation.drivesims.COTS;
 import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
 import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
@@ -294,6 +297,9 @@ public class Drive extends SubsystemBase implements SysIdable {
     }
 
     public void followTrajectory(SwerveSample sample) {
+        var samplePose = new Pose2d(sample.x, sample.y, Rotation2d.fromRotations(sample.heading));
+        Logger.recordOutput("Choreo/targetPose", samplePose);
+
         if (AllianceHelperKt.getIS_RED()) {
             followTrajectoryRedSide(sample);
         } else {
@@ -301,17 +307,35 @@ public class Drive extends SubsystemBase implements SysIdable {
         }
     }
 
-    public void followTrajectoryBlueSide(SwerveSample sample) {
+    public void followTrajectoryRedSide(SwerveSample sample) {
         Pose2d pose = getPose();
         Pose2d samplePose = new Pose2d(sample.x, sample.y, new Rotation2d(sample.heading));
         ChassisSpeeds speeds = new ChassisSpeeds((-sample.vy), (sample.vx), (sample.omega));
         runVelocity(speeds);
     }
 
-    public void followTrajectoryRedSide(SwerveSample sample) {
+    public static PIDController AutoXController = new PIDController(1.0, 0.0, 0.0);
+    public static PIDController AutoYController = new PIDController(1.0, 0.0, 0.0);
+    public static PIDController AutoHeadingController = new PIDController(7.5, 0.0, 0.0);
+
+    public void followTrajectoryBlueSide(SwerveSample sample) {
         Pose2d pose = getPose();
-        Pose2d samplePose = new Pose2d(sample.x, sample.y, new Rotation2d(sample.heading));
-        ChassisSpeeds speeds = new ChassisSpeeds((sample.vy), (-sample.vx), (sample.omega));
+        var x=AutoXController.calculate(pose.getY(), sample.y);
+        var y=AutoXController.calculate(pose.getX(), sample.x);
+        Logger.recordOutput("Choreo/vx",sample.vx);
+        Logger.recordOutput("Choreo/vy",sample.vy);
+        Logger.recordOutput("Choreo/calculateX",x);
+        Logger.recordOutput("Choreo/calculateY",y);
+
+        ChassisSpeeds speeds =
+                ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(
+                        sample.vx + x,
+                        sample.vy -y,
+                        sample.omega
+                                + AutoHeadingController.calculate(
+                                        pose.getRotation().getRadians(), sample.heading)),
+                        pose.getRotation()
+                );
         runVelocity(speeds);
     }
 
@@ -414,6 +438,7 @@ public class Drive extends SubsystemBase implements SysIdable {
 
         // Log unoptimized setpoints and setpoint speeds
         Logger.recordOutput("SwerveStates/Setpoints", setpointStates);
+
         Logger.recordOutput("SwerveChassisSpeeds/Setpoints", speeds);
 
         // Send setpoints to modules

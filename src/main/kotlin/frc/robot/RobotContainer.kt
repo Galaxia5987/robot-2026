@@ -2,12 +2,16 @@ package frc.robot
 
 import choreo.Choreo
 import choreo.auto.AutoFactory
+import choreo.trajectory.SwerveSample
+import choreo.trajectory.Trajectory
 import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import frc.robot.autonomous.Outpost
+import frc.robot.autonomous.StartSomethingNew
+import frc.robot.autonomous.runPath
 import frc.robot.lib.IS_RED
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
@@ -17,12 +21,19 @@ import frc.robot.states.intaking.IntakingTriggers
 import frc.robot.states.intaking.IntakingTriggers.canCloseIntake
 import frc.robot.states.setpoints_manager.aimingSetpoint
 import frc.robot.states.shooting.Shooting
+import frc.robot.subsystems.drive.AutoHeadingController
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.turret.Turret
 import java.util.Optional
 import org.ironmaple.simulation.SimulatedArena
+import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
+
+fun log_trajectory(sample: Trajectory<SwerveSample>, isPathStarted: Boolean) {
+    Logger.recordOutput("Choreo/Trajectory", *sample.poses)
+    Logger.recordOutput("Choreo/IsStarting", isPathStarted)
+}
 
 object RobotContainer {
     private val driverController = CommandXboxController(0)
@@ -33,7 +44,8 @@ object RobotContainer {
             drive::resetOdometry,
             drive::followTrajectory,
             true,
-            drive
+            drive,
+            ::log_trajectory
         )
     }
 
@@ -53,6 +65,7 @@ object RobotContainer {
             SimulatedArena.getInstance()
                 .addDriveTrainSimulation(driveSimulation)
             SimulatedArena.getInstance().resetFieldForAuto()
+            AutoHeadingController.enableContinuousInput(-Math.PI, Math.PI)
         }
 
         enableAutoLogOutputFor(this)
@@ -112,6 +125,7 @@ object RobotContainer {
     }
     fun registerAutoCommands() {
         autoChooser.addOption("Outpost", Outpost())
+        autoChooser.addOption("StartSomethingNew", StartSomethingNew())
         //        autoChooser.addOption(
         //            "bumbIntoDepot",
         //            depotDoubleCycle()
@@ -144,6 +158,10 @@ object RobotContainer {
         autoChooser.addOption(
             "swerveFFCharacterization",
             DriveCommands.feedforwardCharacterization()
+        )
+        autoChooser.addOption(
+            "Test1",
+            runPath("Test1")
         )
     }
 }
