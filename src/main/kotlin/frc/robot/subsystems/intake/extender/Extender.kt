@@ -35,7 +35,7 @@ object Extender : SubsystemBase() {
     private var setpoint = 0.meters
 
     val atSetpoint = Trigger {
-        setpoint.isNear(motor.inputs.distance, TOLERANCE)
+        setpoint.isNear(motor.inputs.distance, EXTENDER_SETPOINT_TOLERANCE)
     }
 
     var lastStallingDistance = 0.m
