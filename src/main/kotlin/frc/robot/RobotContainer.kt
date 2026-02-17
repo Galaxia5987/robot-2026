@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import frc.robot.autonomous.Outpost
-import frc.robot.autonomous.StartSomethingNew
 import frc.robot.autonomous.runPath
 import frc.robot.lib.IS_RED
 import frc.robot.lib.Mode
@@ -125,7 +124,7 @@ object RobotContainer {
     }
     fun registerAutoCommands() {
         autoChooser.addOption("Outpost", Outpost())
-        autoChooser.addOption("StartSomethingNew", StartSomethingNew())
+        // autoChooser.addOption("StartSomethingNew", StartSomethingNew())
         //        autoChooser.addOption(
         //            "bumbIntoDepot",
         //            depotDoubleCycle()
@@ -161,7 +160,7 @@ object RobotContainer {
         )
         autoChooser.addOption(
             "Test1",
-            runPath("Test1")
+            runPath("Path1")
         )
     }
 }
