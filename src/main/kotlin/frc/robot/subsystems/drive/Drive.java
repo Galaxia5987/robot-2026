@@ -329,8 +329,8 @@ public class Drive extends SubsystemBase implements SysIdable {
 
         ChassisSpeeds speeds =
                 ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(
-                        sample.vx + x,
-                        sample.vy -y,
+                        sample.vy + x,
+                        -sample.vx -y,
                         sample.omega
                                 + AutoHeadingController.calculate(
                                         pose.getRotation().getRadians(), sample.heading)),
