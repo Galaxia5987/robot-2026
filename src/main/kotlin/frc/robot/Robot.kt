@@ -22,6 +22,7 @@ import frc.robot.sim.MapleSimShooter
 import frc.robot.states.intaking.IntakingTriggers
 import frc.robot.states.setpoints_manager.SetpointsManager
 import frc.robot.states.spindexer.SpindexerTriggers
+import frc.robot.subsystems.sensors.Sensors
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.*
 import org.littletonrobotics.junction.networktables.NT4Publisher
@@ -93,8 +94,7 @@ object Robot : LoggedRobot() {
             }
         }
         Logger.start()
-
-        drive
+        Sensors
         RobotContainer // Initialize robot container.
 
         // Bind state Machines
@@ -178,7 +178,6 @@ object Robot : LoggedRobot() {
         val stdDevs = VecBuilder.fill(0.01, 0.01, 0.01)
 
         drive.addGlobalVisionMeasurement(pose, timestamp, stdDevs)
-        drive.addLocalVisionMeasurement(pose, timestamp, stdDevs)
         arena.simulationPeriodic()
     }
     /** This function is called periodically during operator control. */

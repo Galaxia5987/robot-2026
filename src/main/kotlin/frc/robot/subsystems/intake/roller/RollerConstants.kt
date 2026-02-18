@@ -1,4 +1,4 @@
-package frc.robot.subsystems.roller
+package frc.robot.subsystems.intake.roller
 
 import com.ctre.phoenix6.configs.FeedbackConfigs
 import com.ctre.phoenix6.configs.MotorOutputConfigs
@@ -12,13 +12,12 @@ import org.team5987.annotation.command_enum.CommandEnum
 
 @CommandEnum
 enum class RollerPositions(val voltage: Voltage) {
-    INTAKE(6.volts),
+    INTAKE(10.volts),
     OUTTAKE((-6.0).volts),
     STOP(0.volts)
 }
 
-const val MAIN_MOTOR_PORT = 0
-const val AUX_MOTOR_PORT = 0
+const val PORT = 10
 const val GEAR_RATIO = 2.5
 
 val MOTOR_CONFIG =

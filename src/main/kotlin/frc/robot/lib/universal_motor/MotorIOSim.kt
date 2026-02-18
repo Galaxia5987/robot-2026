@@ -81,6 +81,7 @@ class MotorIOSim(
 
     override fun updateInputs() {
         motor.update(Timer.getFPGATimestamp())
+        inputs.statorCurrent = motor.appliedCurrent * 2.0
         inputs.current = motor.appliedCurrent
         inputs.position = motor.position.rot
         inputs.voltage = motor.appliedVoltage

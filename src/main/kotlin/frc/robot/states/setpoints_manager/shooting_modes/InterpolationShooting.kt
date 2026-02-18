@@ -20,6 +20,7 @@ import frc.robot.states.setpoints_manager.SetpointsManager.currentGoal
 import frc.robot.subsystems.shooter.flywheel.Flywheel
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
+import frc.robot.subsystems.shooter.pre_shooter.PreShooterVelocity
 import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.shooter.turret.turretAngleToHub
 import org.team5987.annotation.LogLevel
@@ -55,8 +56,11 @@ private fun getFlywheelSetpoint(): AngularVelocity {
 }
 
 private fun getPreShooterSetpoint(): AngularVelocity {
-    val preShooterKey = InterpolatingDouble(distanceFromGoal[m])
-    return SHOOTER_VELOCITY_BY_DISTANCE.getInterpolated(preShooterKey).value.rps
+    return PreShooterVelocity.SHOOTING.velocity
+
+    // Makes the preshooter velocity match the flywheel velocity
+    //    val preShooterKey = InterpolatingDouble(distanceFromGoal[m])
+    //    return SHOOTER_VELOCITY_BY_DISTANCE.getInterpolated(preShooterKey).value.rps
 }
 
 val interpolationShootingMap: Map<SubsystemBase, () -> Measure<out Unit>> =

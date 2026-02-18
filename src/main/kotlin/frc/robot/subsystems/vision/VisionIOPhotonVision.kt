@@ -13,14 +13,13 @@
 
 package frc.robot.subsystems.vision
 
-import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Transform3d
 import frc.robot.subsystems.vision.VisionIO.*
 import java.util.*
+import org.photonvision.EstimatedRobotPose
 import org.photonvision.PhotonCamera
 import org.photonvision.PhotonPoseEstimator
-import org.photonvision.targeting.PhotonPipelineResult
 
 /** IO implementation for real PhotonVision hardware. */
 open class VisionIOPhotonVision(
@@ -30,7 +29,7 @@ open class VisionIOPhotonVision(
     private val tagIdsToFilter: () -> List<Int>
 ) : VisionIO {
     protected val camera = PhotonCamera(name)
-    private val localPoseEstimator =
+    private val poseEstimator =
         PhotonPoseEstimator(APRILTAG_LAYOUT, robotToCamera())
 
     override fun updateInputs(inputs: VisionIOInputs) {
@@ -44,124 +43,42 @@ open class VisionIOPhotonVision(
         camera.allUnreadResults.forEach { result ->
             // Update latest target observation
             if (result.hasTargets()) {
-                inputs.latestTargetObservation =
-                    TargetObservation(
-                        Rotation2d.fromDegrees(result.bestTarget.yaw),
-                        Rotation2d.fromDegrees(result.bestTarget.pitch)
-                    )
+                poseEstimator.robotToCameraTransform = robotToCamera()
 
-                // Local Pose Estimation
-                val filteredTargets =
-                    result.targets.filter { target ->
-                        target.fiducialId in tagIdsToFilter()
+                val estimatedOptionalRobotPose: Optional<EstimatedRobotPose> =
+                    if (result.multitagResult.isPresent) {
+                        poseEstimator.estimateCoprocMultiTagPose(result)
+                    } else {
+                        poseEstimator.estimatePnpDistanceTrigSolvePose(result)
                     }
 
-                val filteredResult =
-                    PhotonPipelineResult(
-                        result.metadata,
-                        filteredTargets,
-                        Optional.empty()
-                    )
+                if (estimatedOptionalRobotPose.isEmpty) {
+                    return@forEach
+                }
 
-                localPoseEstimator.robotToCameraTransform = robotToCamera()
-                val estimatedPose =
-                    localPoseEstimator.estimatePnpDistanceTrigSolvePose(
-                        filteredResult
-                    )
-                localPoseEstimator.addHeadingData(
+                val estimatedRobotPose = estimatedOptionalRobotPose.get()
+
+                poseEstimator.addHeadingData(
                     result.timestampSeconds,
                     botRotation()
                 )
 
-                estimatedPose.ifPresent { estimatedRobotPose ->
-                    inputs.localEstimatedPose =
-                        PoseObservation(
-                            estimatedRobotPose.timestampSeconds,
-                            estimatedRobotPose.estimatedPose,
-                            estimatedRobotPose.targetsUsed
-                                .map { it.poseAmbiguity }
-                                .average()
-                                .takeIf { !it.isNaN() }
-                                ?: 0.0,
-                            estimatedRobotPose.targetsUsed.size,
-                            estimatedRobotPose.targetsUsed
-                                .map { it.bestCameraToTarget.translation.norm }
-                                .average()
-                                .takeIf { !it.isNaN() }
-                                ?: 0.0,
-                            PoseObservationType.PHOTONVISION
-                        )
-                }
-            } else
-                inputs.latestTargetObservation =
-                    TargetObservation(Rotation2d(), Rotation2d())
+                inputs.estimatedPose =
+                    PoseObservation(
+                        estimatedRobotPose.timestampSeconds,
+                        estimatedRobotPose.estimatedPose,
+                        estimatedRobotPose.targetsUsed
+                            .map { it.poseAmbiguity }
+                            .average(),
+                        estimatedRobotPose.targetsUsed.size,
+                        estimatedRobotPose.targetsUsed
+                            .map { it.bestCameraToTarget.translation.norm }
+                            .average()
+                    )
+            }
 
             // Update PhotonPoseEstimator based on gyro readings
-            localPoseEstimator.addHeadingData(
-                result.timestampSeconds,
-                botRotation()
-            )
-
-            // Add pose observation
-            if (result.multitagResult.isPresent) { // Multitag result
-                val multitagResult = result.multitagResult.get()
-
-                // Calculate robot pose
-                val fieldToCamera = multitagResult.estimatedPose.best
-                val fieldToRobot = fieldToCamera + robotToCamera().inverse()
-                val robotPose =
-                    Pose3d(fieldToRobot.translation, fieldToRobot.rotation)
-
-                // Calculate the total tag distance
-                val totalTagDistance =
-                    result.targets.sumOf {
-                        it.bestCameraToTarget.translation.norm
-                    }
-
-                // Add tag IDs
-                tagIds.addAll(multitagResult.fiducialIDsUsed)
-
-                // Add observation
-                poseObservations.add(
-                    PoseObservation(
-                        result.timestampSeconds,
-                        robotPose,
-                        multitagResult.estimatedPose.ambiguity,
-                        multitagResult.fiducialIDsUsed.size,
-                        totalTagDistance / result.targets.size,
-                        PoseObservationType.PHOTONVISION
-                    )
-                )
-            } else if (result.targets.isNotEmpty()) { // Single tag result
-                val target = result.targets[0]
-
-                // Calculate robot pose
-                APRILTAG_LAYOUT.getTagPose(target.fiducialId).ifPresent {
-                    tagPose ->
-                    val fieldToTarget =
-                        Transform3d(tagPose.translation, tagPose.rotation)
-                    val cameraToTarget = target.bestCameraToTarget
-                    val fieldToCamera = fieldToTarget + cameraToTarget.inverse()
-                    val fieldToRobot = fieldToCamera + robotToCamera().inverse()
-                    val robotPose =
-                        Pose3d(fieldToRobot.translation, fieldToRobot.rotation)
-
-                    // Add tag ID
-                    tagIds.add(target.fiducialId.toShort())
-
-                    // Add observation
-                    poseObservations.add(
-                        PoseObservation(
-                            result.timestampSeconds,
-                            robotPose,
-                            target.poseAmbiguity,
-                            1,
-                            cameraToTarget.translation.norm,
-                            PoseObservationType.PHOTONVISION
-                        )
-                    )
-                }
-            }
+            poseEstimator.addHeadingData(result.timestampSeconds, botRotation())
         }
 
         // Save pose observations and tag IDs to inputs object

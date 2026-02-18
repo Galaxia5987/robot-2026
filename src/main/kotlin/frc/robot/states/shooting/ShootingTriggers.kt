@@ -4,15 +4,16 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.drive
 import frc.robot.field.inAllianceZone
 import frc.robot.field.isHubActive
-import frc.robot.lib.extensions.and
 import frc.robot.lib.extensions.logTrigger
-import frc.robot.lib.extensions.whileTrue
+import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.setpoints_manager.SetpointsManager.isShootingOnMove
 import frc.robot.subsystems.sensors.Sensors
 import frc.robot.subsystems.shooter.flywheel.Flywheel
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 import frc.robot.subsystems.shooter.turret.Turret
+import org.team5987.annotation.LogLevel
+import org.team5987.annotation.LoggedOutput
 
 private const val LOGGING_PATH = "StateMachines/Shooting"
 
@@ -22,7 +23,8 @@ private val isBackfeeding =
     ShootingState.BACKFEEDING.trigger.onTrue(backfeeding())
 private val isShooting = ShootingState.SHOOTING.trigger.onTrue(shooting())
 
-val shooterAtSetpoint: Trigger =
+@LoggedOutput(path = LOGGING_PATH, level = LogLevel.COMP)
+val shooterAtSetpoint: Trigger = // TODO: Find a better name
     Hood.atSetpoint
         .and(Turret.atSetpoint)
         .and(Flywheel.atSetpoint)
@@ -35,6 +37,7 @@ class Shooting(dontShootTrigger: Trigger) {
             .and(dontShootTrigger.negate())
             .and(inAllianceZone)
             .and(Sensors.hasFuel)
+            .and(IntakingStates.INTAKING.trigger.negate())
             .logTrigger("$LOGGING_PATH/canShoot")
 
     private val cantShoot = canShoot.negate().onTrue(ShootingState.IDLE.set())
@@ -50,6 +53,7 @@ class Shooting(dontShootTrigger: Trigger) {
 
     private val lockIfNeeded =
         shootingStatePrimingOrShooting
+            .and(Turret.atSetpoint)
             .and(isShootingOnMove.negate())
             .whileTrue(drive.continousLock())
             .logTrigger("$LOGGING_PATH/lockIfNeeded")
@@ -57,24 +61,28 @@ class Shooting(dontShootTrigger: Trigger) {
     private val setShootingIfPrimed =
         ShootingState.PRIMING.trigger
             .and(shooterAtSetpoint)
+            .and(canShoot)
             .onTrue(ShootingState.SHOOTING.set())
             .logTrigger("$LOGGING_PATH/setShootingIfPrimed")
 
-    private val setBackfeedingIfNotAtSetpoint =
-        ShootingState.SHOOTING.trigger
-            .and(shooterAtSetpoint.negate())
-            .onTrue(ShootingState.BACKFEEDING.set())
-            .logTrigger("$LOGGING_PATH/setBackfeedingIfNotAtSetpoint")
+    //    private val setBackfeedingIfNotAtSetpoint =
+    //        ShootingState.SHOOTING.trigger
+    //            .and(shooterAtSetpoint.negate())
+    //            .onTrue(ShootingState.BACKFEEDING.set())
+    //            .logTrigger("$LOGGING_PATH/setBackfeedingIfNotAtSetpoint")
 
-    private val setPrimingIfHasFuel =
-        ShootingState.BACKFEEDING.trigger
-            .and(Sensors.hasFuel)
-            .onTrue(ShootingState.PRIMING.set())
-            .logTrigger("$LOGGING_PATH/setPrimingIfHasFuel")
+    //    private val setPrimingIfHasFuel =
+    //        ShootingState.BACKFEEDING.trigger
+    //            .and(Sensors.hasFuel)
+    //            .onTrue(ShootingState.PRIMING.set())
+    //            .logTrigger("$LOGGING_PATH/setPrimingIfHasFuel")
 
-    private val setIdleIfHasNoFuel =
+    private val shouldShootingStop =
+        Sensors.hasFuel.negate().or(IntakingStates.INTAKING.trigger)
+
+    private val setIdleIfShouldStopShooting =
         ShootingState.SHOOTING.trigger
-            .and(Sensors.hasFuel.negate())
+            .and(shouldShootingStop)
             .onTrue(ShootingState.IDLE.set())
             .logTrigger("$LOGGING_PATH/setIdleIfHasNoFuel")
 }

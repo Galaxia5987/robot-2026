@@ -206,7 +206,7 @@ public class Drive extends SubsystemBase implements SysIdable {
     private final LoggedNetworkNumber rotationKD =
             new LoggedNetworkNumber("/Tuning/PathPlanner/rotation/kD", 0.0);
 
-    private final SwerveDrivePoseEstimator globalPoseEstimator =
+    private final SwerveDrivePoseEstimator poseEstimator =
             new SwerveDrivePoseEstimator(
                     kinematics,
                     rawGyroRotation,
@@ -214,9 +214,6 @@ public class Drive extends SubsystemBase implements SysIdable {
                     new Pose2d(),
                     VecBuilder.fill(0.5, 0.5, 0.5),
                     VecBuilder.fill(0, 0, 0)); // Vision stdDev updated later in code
-    private final SwerveDrivePoseEstimator localPoseEstimator =
-            new SwerveDrivePoseEstimator(
-                    kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
     private final Consumer<Pose2d> resetSimulationPoseCallBack;
 
     public Drive(
@@ -372,15 +369,12 @@ public class Drive extends SubsystemBase implements SysIdable {
         }
         odometryLock.unlock();
 
+        // Log empty setpoint states when disabled
         // Stop moving when disabled
         if (DriverStation.isDisabled()) {
             for (var module : modules) {
                 module.stop();
             }
-        }
-
-        // Log empty setpoint states when disabled
-        if (DriverStation.isDisabled()) {
             Logger.recordOutput("SwerveStates/Setpoints", new SwerveModuleState[] {});
             Logger.recordOutput("SwerveStates/SetpointsOptimized", new SwerveModuleState[] {});
         }
@@ -414,10 +408,7 @@ public class Drive extends SubsystemBase implements SysIdable {
             }
 
             // Apply update
-            globalPoseEstimator.updateWithTime(
-                    sampleTimestamps[i], rawGyroRotation, modulePositions);
-            localPoseEstimator.updateWithTime(
-                    sampleTimestamps[i], rawGyroRotation, modulePositions);
+            poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
         }
 
         // Update gyro alert
@@ -553,12 +544,7 @@ public class Drive extends SubsystemBase implements SysIdable {
     /** Returns the current odometry pose. */
     @AutoLogOutput(key = "Odometry/Robot")
     public Pose2d getPose() {
-        return globalPoseEstimator.getEstimatedPosition();
-    }
-
-    @AutoLogOutput(key = "Odometry/LocalPose")
-    public Pose2d getLocalPose() {
-        return localPoseEstimator.getEstimatedPosition();
+        return poseEstimator.getEstimatedPosition();
     }
 
     /** Returns the current odometry rotation. */
@@ -573,8 +559,7 @@ public class Drive extends SubsystemBase implements SysIdable {
     /** Resets the current odometry pose. */
     public void resetOdometry(Pose2d pose) {
         resetSimulationPoseCallBack.accept(pose);
-        globalPoseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
-        localPoseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
+        poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
     }
 
     /** Adds a new timestamped vision measurement. */
@@ -582,20 +567,8 @@ public class Drive extends SubsystemBase implements SysIdable {
             Pose2d visionRobotPoseMeters,
             double timestampSeconds,
             Matrix<N3, N1> visionMeasurementStdDevs) {
-        globalPoseEstimator.addVisionMeasurement(
+        poseEstimator.addVisionMeasurement(
                 visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
-    }
-
-    public void addLocalVisionMeasurement(
-            Pose2d visionRobotPoseMeters,
-            double timestampSeconds,
-            Matrix<N3, N1> visionMeasurementStdDevs) {
-        localPoseEstimator.addVisionMeasurement(
-                visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
-    }
-
-    public void resetLocalPoseEstimatorBasedOnGlobal() {
-        localPoseEstimator.resetPose(globalPoseEstimator.getEstimatedPosition());
     }
 
     /** Returns the maximum linear speed in meters per sec. */

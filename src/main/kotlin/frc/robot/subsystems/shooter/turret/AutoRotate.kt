@@ -22,10 +22,11 @@ val TURRET_TO_ROBOT = Translation2d((-117.5).mm, 207.5.mm)
 
 val turretTranslationFieldOriented: Translation2d
     get() =
-        drive.localPose.translation.plus(
-            TURRET_TO_ROBOT.rotateBy(drive.localPose.rotation)
+        drive.pose.translation.plus(
+            TURRET_TO_ROBOT.rotateBy(drive.pose.rotation)
         )
 
+// For debugging
 @LoggedOutput(LogLevel.DEV, path = HUB_PATH)
 val turretPose
     get() =
@@ -41,9 +42,9 @@ val angleFromRobotToHub: Rotation2d
 
 @LoggedOutput(LogLevel.DEV, path = HUB_PATH)
 val turretAngleToHub: Angle
-    get() = (-drive.localPose.rotation + angleFromRobotToHub).measure
+    get() = (drive.pose.rotation - angleFromRobotToHub).measure
 
 @LoggedOutput(LogLevel.COMP, path = HUB_PATH)
 val isTurretAligned = Trigger {
-    Turret.inputs.position.isNear(turretAngleToHub, TOLERANCE)
+    Turret.wrappedPosition.isNear(turretAngleToHub, SETPOINT_TOLERANCE)
 }

@@ -14,7 +14,7 @@ fun idle(): Command =
         Flywheel.zero(),
         PreShooter.stop(),
         SpindexerCommands.stopFeeding(),
-        IntakingStates.CLOSED.set()
+        IntakingStates.CLOSED.set().onlyIf(IntakingStates.INTAKING.trigger.negate())
     )
 
 fun priming(): Command =

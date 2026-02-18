@@ -45,7 +45,7 @@ object Flywheel : SubsystemBase(), FlywheelVelocitiesCommandFactory {
             40.0
         )
 
-    var atSetpoint = Trigger {
+    val atSetpoint = Trigger {
         motor.inputs.velocity.isNear(setpoint, FLYWHEEL_TOLERANCE)
     }
 
