@@ -2,39 +2,41 @@ package frc.robot.autonomous
 
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
-import frc.robot.RobotContainer.autoFactory
+import frc.robot.drive
 
 // TODO: After basic trajectory following is working open path planner and look at the paths then
 // implement here the trajectory chaining as one command with state machine integrated commands as
 // well
 
-fun StartToFuelDepotSide(): Command =
+fun startToFuelDepotSide(): Command =
     Commands.sequence(
-        autoFactory().resetOdometry("StartToFuelDepotSide"),
-        autoFactory().trajectoryCmd("StartToFuelDepotSide"),
+        drive.autoFactory.resetOdometry("StartToFuelDepotSide"),
+        drive.autoFactory.trajectoryCmd("StartToFuelDepotSide"),
     )
 
-fun StartSomethingNew(): Command =
+fun startSomethingNew(): Command = drive.defer {
+    drive.autoFactory.trajectoryCmd("StartSomethingNew")
+}
+//    Commands.sequence(
+//        drive.autoFactory.resetOdometry("StartSomethingNew"),
+//        drive.autoFactory.trajectoryCmd("StartSomethingNew"),
+//    )
+
+fun fuelDepotSideToDepot(): Command =
     Commands.sequence(
-        autoFactory().resetOdometry("StartSomethingNew"),
-        autoFactory().trajectoryCmd("StartSomethingNew"),
+        drive.autoFactory.trajectoryCmd("FuelDepotSideToDepot"),
     )
 
-fun FuelDepotSideToDepot(): Command =
+fun startToFuel2(): Command =
     Commands.sequence(
-        autoFactory().trajectoryCmd("FuelDepotSideToDepot"),
+        drive.autoFactory.trajectoryCmd("StartToFuel2"),
     )
 
-fun StartToFuel2(): Command =
+fun outpost(): Command =
     Commands.sequence(
-        autoFactory().trajectoryCmd("StartToFuel2"),
+        startToFuelDepotSide(),
+        fuelDepotSideToDepot(),
+        startToFuel2()
     )
 
-fun Outpost(): Command =
-    Commands.sequence(
-        StartToFuelDepotSide(),
-        FuelDepotSideToDepot(),
-        StartToFuel2()
-    )
-
-// fun depotDoubleCycle(): Command = depotDoubleCycle()
+fun depotDoubleCycle(): Command = depotDoubleCycle()

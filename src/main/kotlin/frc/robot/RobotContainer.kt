@@ -1,9 +1,13 @@
 package frc.robot
 
+import choreo.Choreo
+import choreo.util.ChoreoAllianceFlipUtil
 import com.pathplanner.lib.auto.AutoBuilder
+import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
+import frc.robot.autonomous.startSomethingNew
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.states.intaking.IntakingStates
@@ -96,6 +100,11 @@ object RobotContainer {
         autoChooser.addOption(
             "swerveFFCharacterization",
             DriveCommands.feedforwardCharacterization()
+        )
+
+        autoChooser.addOption(
+            "AutoTest",
+            startSomethingNew()
         )
     }
 }

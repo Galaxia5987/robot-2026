@@ -17,7 +17,9 @@ import static edu.wpi.first.units.Units.*;
 import static frc.robot.subsystems.drive.ProfiledPosePIDKt.*;
 import static frc.robot.subsystems.drive.TrySomethingUniqueKt.*;
 
+import choreo.auto.AutoFactory;
 import choreo.trajectory.SwerveSample;
+import choreo.trajectory.Trajectory;
 import com.ctre.phoenix6.CANBus;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.ModuleConfig;
@@ -215,6 +217,8 @@ public class Drive extends SubsystemBase implements SysIdable {
                     VecBuilder.fill(0.5, 0.5, 0.5),
                     VecBuilder.fill(0, 0, 0)); // Vision stdDev updated later in code
     private final Consumer<Pose2d> resetSimulationPoseCallBack;
+    public final AutoFactory autoFactory;
+
 
     public Drive(
             GyroIO gyroIO, ModuleIO[] moduleIOS, Consumer<Pose2d> resetSimulationPoseCallBack) {
@@ -248,6 +252,18 @@ public class Drive extends SubsystemBase implements SysIdable {
 
         // Start odometry thread
         PhoenixOdometryThread.getInstance().start();
+
+        autoFactory = new AutoFactory(
+                this::getPose,
+                this::resetOdometry,
+                this::followTrajectory,
+                true,
+                this,
+                (Trajectory<SwerveSample> trajectory, Boolean isPathStarted) -> {
+                    Logger.recordOutput("Choreo/Trajectory", trajectory.getPoses());
+                    Logger.recordOutput("Choreo/hasStarted", isPathStarted);
+                }
+            );
 
         // Configure AutoBuilder for PathPlanner
         configureAutoBuilder(
@@ -293,27 +309,31 @@ public class Drive extends SubsystemBase implements SysIdable {
                 this);
     }
 
+
+    public static PIDController AutoXController = new PIDController(6.0, 0.0, 0.0);
+    public static PIDController AutoYController = new PIDController(6.0, 0.0, 0.0);
+    public static PIDController AutoHeadingController = new PIDController(3.0, 0.0, 0.0);
+
     public void followTrajectory(SwerveSample sample) {
-        var samplePose = new Pose2d(sample.x, sample.y, Rotation2d.fromRotations(sample.heading));
-        Logger.recordOutput("Choreo/targetPose", samplePose);
+        // Get the current pose of the robot
+        Pose2d pose = getPose();
 
-        if (AllianceHelperKt.getIS_RED()) {
-            followTrajectoryRedSide(sample);
-        } else {
-            followTrajectoryBlueSide(sample);
-        }
+        // Generate the next speeds for the robot
+        ChassisSpeeds speeds = new ChassisSpeeds(
+                sample.vx + AutoXController.calculate(pose.getX(), sample.x),
+                sample.vy + AutoYController.calculate(pose.getY(), sample.y),
+                sample.omega + AutoHeadingController.calculate(pose.getRotation().getRadians(), sample.heading)
+        );
+
+        // Apply the generated speeds
+        runVelocity(speeds);
     }
-
     public void followTrajectoryRedSide(SwerveSample sample) {
         Pose2d pose = getPose();
         Pose2d samplePose = new Pose2d(sample.x, sample.y, new Rotation2d(sample.heading));
         ChassisSpeeds speeds = new ChassisSpeeds((-sample.vy), (sample.vx), (sample.omega));
         runVelocity(speeds);
     }
-
-    public static PIDController AutoXController = new PIDController(1.0, 0.0, 0.0);
-    public static PIDController AutoYController = new PIDController(1.0, 0.0, 0.0);
-    public static PIDController AutoHeadingController = new PIDController(7.5, 0.0, 0.0);
 
     public void followTrajectoryBlueSide(SwerveSample sample) {
         Pose2d pose = getPose();
