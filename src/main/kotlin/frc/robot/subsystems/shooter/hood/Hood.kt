@@ -11,13 +11,13 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.drive
 import frc.robot.field.TRENCH_AREAS
 import frc.robot.lib.createDisableTriggerForCoast
+import frc.robot.lib.estimateAt
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.radians
 import frc.robot.lib.extensions.volts
 import frc.robot.lib.sysid.SysIdable
 import frc.robot.lib.universal_motor.UniversalTalonFX
-import frc.robot.states.shooting.ShootingState
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
 import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
@@ -41,9 +41,11 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
 
     private var setpoint = 0.radians
 
-    @LoggedOutput(LogLevel.COMP)
-    val needToCrouch: Trigger = Trigger {
+    val shouldCrouch: Trigger = Trigger {
         TRENCH_AREAS.any { it.contains(drive.pose.translation) }
+//            .or(
+//            TRENCH_AREAS.any { it.contains(drive.pose.estimateAt()) }
+//        )
     }
 
     val atSetpoint = Trigger {
@@ -65,12 +67,8 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
     }
 
     fun setControlAngle(angle: Angle) {
-        setpoint = angle - HOOD_STARTING_ANGLE
-            if (!needToCrouch.asBoolean)
-                motor.setControl(positionRequest.withPosition(setpoint))
-            else
-                motor.setControl(positionRequest.withPosition(HoodPositions.DOWN.angle))
-
+        setpoint = if (shouldCrouch.asBoolean) HoodPositions.DOWN.angle else angle - HOOD_STARTING_ANGLE
+        motor.setControl(positionRequest.withPosition(setpoint))
     }
 
     fun setAngle(angle: Angle): Command = runOnce { setControlAngle(angle) }
@@ -85,6 +83,7 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
         motor.periodic()
         Logger.recordOutput("Subsystems/$name/mechanism", mechanism)
         Logger.recordOutput("Subsystems/$name/atSetpoint", atSetpoint)
+        Logger.recordOutput("Subsystems/$name/shouldCrouch", shouldCrouch)
         Logger.recordOutput(
             "Subsystems/$name/setpoint",
             setpoint[radians],

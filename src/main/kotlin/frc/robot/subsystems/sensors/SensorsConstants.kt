@@ -17,7 +17,7 @@ private val HAS_FUEL = 0.19.m
 // shooter
 val HAS_FUEL_DEBOUNCE = 0.3.sec
 
-const val MIN_SIGNAL_STRENGTH_FOR_MEASUREMENT = 15015.0
+const val MIN_SIGNAL_STRENGTH_FOR_MEASUREMENT = 30000.0
 
 val SPINDEXER_SENSOR_CONFIG =
     CANrangeConfiguration().apply {

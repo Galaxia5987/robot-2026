@@ -1,14 +1,22 @@
 package frc.robot.lib
 
+import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.math.geometry.Rotation3d
+import edu.wpi.first.math.geometry.Transform2d
+import edu.wpi.first.math.geometry.Transform3d
+import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.measure.Angle
+import edu.wpi.first.units.measure.Time
 import edu.wpi.first.wpilibj.GenericHID
 import edu.wpi.first.wpilibj.util.Color
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.lib.extensions.deg
+import frc.robot.lib.extensions.mps
 import kotlin.math.*
 import org.littletonrobotics.junction.LogTable
 
@@ -174,3 +182,10 @@ fun Angle.convertTo360(): Angle { // Convert angle from (-180,180) -> (0,360)
     val deg = (this + 180.0.deg)
     return deg
 }
+
+fun Pose2d.estimateAt(time: Time, fieldRelativeSpeeds: ChassisSpeeds) = this +
+        Transform2d(
+            fieldRelativeSpeeds.vxMetersPerSecond.mps * time,
+            fieldRelativeSpeeds.vyMetersPerSecond.mps * time,
+            this.rotation
+        )

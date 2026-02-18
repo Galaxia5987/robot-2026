@@ -38,7 +38,7 @@ class Shooting(dontShootTrigger: Trigger) {
             .and(inAllianceZone)
             .and(Sensors.hasFuel)
             .and(IntakingStates.INTAKING.trigger.negate())
-            .and(Hood.needToCrouch)
+//            .and(Hood.needToCrouch)
             .logTrigger("$LOGGING_PATH/canShoot")
 
     private val cantShoot = canShoot.negate().onTrue(ShootingState.IDLE.set())

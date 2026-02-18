@@ -331,15 +331,12 @@ public class Drive extends SubsystemBase implements SysIdable {
         }
         odometryLock.unlock();
 
+        // Log empty setpoint states when disabled
         // Stop moving when disabled
         if (DriverStation.isDisabled()) {
             for (var module : modules) {
                 module.stop();
             }
-        }
-
-        // Log empty setpoint states when disabled
-        if (DriverStation.isDisabled()) {
             Logger.recordOutput("SwerveStates/Setpoints", new SwerveModuleState[] {});
             Logger.recordOutput("SwerveStates/SetpointsOptimized", new SwerveModuleState[] {});
         }
