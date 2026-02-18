@@ -70,7 +70,7 @@ val TURRET_CONFIG =
     CameraConfig(
         robotToCamera = { TURRET_CAMERA_ROBOT_TO_CAMERA },
         tagIdsToFilter = { listOf(9, 10, 26, 25) },
-        stddevFactor = 0.5
+        stddevFactor = 1.0
     )
 
 val LEFT_CONFIG =
