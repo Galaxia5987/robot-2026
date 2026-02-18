@@ -17,7 +17,7 @@ private val HAS_FUEL = 0.19.m
 // shooter
 val HAS_FUEL_DEBOUNCE = 0.3.sec
 
-const val MIN_SIGNAL_STRENGTH_FOR_MEASUREMENT = 15015.0
+const val MIN_SIGNAL_STRENGTH_FOR_MEASUREMENT = 30000.0
 
 val SPINDEXER_SENSOR_CONFIG =
     CANrangeConfiguration().apply {
@@ -36,17 +36,18 @@ val SPINDEXER_SENSOR_CONFIG =
             }
     }
 val TOP_SENSOR_CONFIG = CANrangeConfiguration()
-val MIDDLE_SENSOR_CONFIG = CANrangeConfiguration().apply {
-    ProximityParams =
-        ProximityParamsConfigs().apply {
-            ProximityThreshold = 0.61
-            MinSignalStrengthForValidMeasurement = 2600.0
-        }
-    FovParams =
-        FovParamsConfigs().apply {
-            FOVCenterX = 0.0
-            FOVCenterY = 0.0
-            FOVRangeX = 27.0
-            FOVRangeY = 27.0
-        }
-}
+val MIDDLE_SENSOR_CONFIG =
+    CANrangeConfiguration().apply {
+        ProximityParams =
+            ProximityParamsConfigs().apply {
+                ProximityThreshold = 0.61
+                MinSignalStrengthForValidMeasurement = 2600.0
+            }
+        FovParams =
+            FovParamsConfigs().apply {
+                FOVCenterX = 0.0
+                FOVCenterY = 0.0
+                FOVRangeX = 27.0
+                FOVRangeY = 27.0
+            }
+    }

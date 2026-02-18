@@ -54,16 +54,16 @@ val CAMERA_TO_TURRET_TRANSLATION =
 val TURRET_CAMERA_ROBOT_TO_CAMERA: Transform3d
     get() =
         Pose3d(
-            (TURRET_TRANSLATION.plus(CAMERA_TO_TURRET_TRANSLATION)
-                .rotateAround(
-                    TURRET_TRANSLATION,
-                    -Turret.wrappedPosition.toYaw()
-                )),
-            getRotation3d(
-                yaw = -Turret.wrappedPosition,
-                pitch = ((-25).deg)
+                (TURRET_TRANSLATION.plus(CAMERA_TO_TURRET_TRANSLATION)
+                    .rotateAround(
+                        TURRET_TRANSLATION,
+                        -Turret.wrappedPosition.toYaw()
+                    )),
+                getRotation3d(
+                    yaw = -Turret.wrappedPosition,
+                    pitch = ((-25).deg)
+                )
             )
-        )
             .toTransform()
 
 val TURRET_CONFIG =
@@ -128,7 +128,6 @@ val FRONT_CONFIG =
         tagIdsToFilter = { listOf() },
         stddevFactor = 1.0
     )
-
 
 val OV_NAME_TO_CONFIG =
     mapOf<String, CameraConfig>(

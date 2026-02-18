@@ -28,6 +28,8 @@ val ABSOLUTE_ENCODER_OFFSET = (-0.0092).rot
 val FORWARD_LIMIT = 0.061.rot
 val REVERSE_LIMIT = 0.rot
 
+val CROUCH_TOLERANCE = 1.m
+
 val ENCODER_CONFIG =
     CANcoderConfiguration().apply {
         MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive

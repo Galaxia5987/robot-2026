@@ -10,16 +10,7 @@ import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.radians
 import frc.robot.lib.universal_motor.UniversalTalonFX
-import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
-import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
-import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
-
-@AutoLogOutput(key = "Turret/mechanism")
-private var mechanism = LoggedMechanism2d(5.0, 5.0)
-private var root = mechanism.getRoot("Turret", 2.5, 2.5)
-private val ligament =
-    root.append(LoggedMechanismLigament2d("TurretLigament", 1.0, 0.0))
 
 object Turret : SubsystemBase() {
     private val motor: UniversalTalonFX =
@@ -62,8 +53,6 @@ object Turret : SubsystemBase() {
 
     override fun periodic() {
         motor.periodic()
-        ligament.setAngle(motor.inputs.position)
-        Logger.recordOutput("Subsystems/$name/mechanism", mechanism)
         Logger.recordOutput(
             "Subsystems/$name/setpoint",
             setpoint[radians],

@@ -6,11 +6,7 @@ import edu.wpi.first.units.Unit
 import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.field.DEPOT_TRANSLATION
-import frc.robot.field.HUB_TRANSLATION
-import frc.robot.field.OUTPOST_LOCATION
-import frc.robot.field.inAllianceZone
-import frc.robot.field.isCloserToDepotSide
+import frc.robot.field.*
 import frc.robot.lib.extensions.not
 import frc.robot.lib.extensions.toPose
 import frc.robot.states.DriverOverrides
@@ -91,6 +87,5 @@ fun <T : SubsystemBase, M : Measure<out Unit>> T.aimingSetpoint(): M {
             ShootingType.INTERPOLATION -> interpolationShootingMap[this]!!
             else -> shootOnMoveMap[this]!!
         }
-
     @Suppress("UNCHECKED_CAST") return result.invoke() as M
 }
