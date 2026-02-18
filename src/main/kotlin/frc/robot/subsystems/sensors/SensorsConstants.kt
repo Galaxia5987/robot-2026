@@ -9,7 +9,7 @@ import frc.robot.lib.extensions.sec
 
 const val SPINDEXER_SENSOR_PORT = 0
 const val TOP_SENSOR_PORT = 1
-const val AUX_TOP_SENSOR = 2
+const val MIDDLE_SENSOR_PORT = 2
 
 private val HAS_FUEL = 0.19.m
 
@@ -36,4 +36,17 @@ val SPINDEXER_SENSOR_CONFIG =
             }
     }
 val TOP_SENSOR_CONFIG = CANrangeConfiguration()
-val AUX_TOP_SENSOR_CONFIG = CANrangeConfiguration()
+val MIDDLE_SENSOR_CONFIG = CANrangeConfiguration().apply {
+    ProximityParams =
+        ProximityParamsConfigs().apply {
+            ProximityThreshold = 0.61
+            MinSignalStrengthForValidMeasurement = 2600.0
+        }
+    FovParams =
+        FovParamsConfigs().apply {
+            FOVCenterX = 0.0
+            FOVCenterY = 0.0
+            FOVRangeX = 27.0
+            FOVRangeY = 27.0
+        }
+}

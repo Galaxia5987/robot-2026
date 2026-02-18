@@ -46,6 +46,7 @@ class Shooting(dontShootTrigger: Trigger) {
     private val idleAndCanShoot =
         ShootingState.IDLE.trigger
             .and(canShoot)
+            .and(Sensors.hasFuel)
             .onTrue(ShootingState.PRIMING.set())
             .logTrigger("$LOGGING_PATH/idleAndCanShoot")
 
@@ -62,24 +63,27 @@ class Shooting(dontShootTrigger: Trigger) {
     private val setShootingIfPrimed =
         ShootingState.PRIMING.trigger
             .and(shooterAtSetpoint)
+            .and(canShoot)
             .onTrue(ShootingState.SHOOTING.set())
             .logTrigger("$LOGGING_PATH/setShootingIfPrimed")
 
-    private val setBackfeedingIfNotAtSetpoint =
-        ShootingState.SHOOTING.trigger
-            .and(shooterAtSetpoint.negate())
-            .onTrue(ShootingState.BACKFEEDING.set())
-            .logTrigger("$LOGGING_PATH/setBackfeedingIfNotAtSetpoint")
+//    private val setBackfeedingIfNotAtSetpoint =
+//        ShootingState.SHOOTING.trigger
+//            .and(shooterAtSetpoint.negate())
+//            .onTrue(ShootingState.BACKFEEDING.set())
+//            .logTrigger("$LOGGING_PATH/setBackfeedingIfNotAtSetpoint")
 
-    private val setPrimingIfHasFuel =
-        ShootingState.BACKFEEDING.trigger
-            .and(Sensors.hasFuel)
-            .onTrue(ShootingState.PRIMING.set())
-            .logTrigger("$LOGGING_PATH/setPrimingIfHasFuel")
+//    private val setPrimingIfHasFuel =
+//        ShootingState.BACKFEEDING.trigger
+//            .and(Sensors.hasFuel)
+//            .onTrue(ShootingState.PRIMING.set())
+//            .logTrigger("$LOGGING_PATH/setPrimingIfHasFuel")
 
-    private val setIdleIfHasNoFuel =
+    private val shouldShootingStop = Sensors.hasFuel.negate().or(IntakingStates.INTAKING.trigger)
+
+    private val setIdleIfShouldStopShooting =
         ShootingState.SHOOTING.trigger
-            .and(Sensors.hasFuel.negate())
+            .and(shouldShootingStop)
             .onTrue(ShootingState.IDLE.set())
             .logTrigger("$LOGGING_PATH/setIdleIfHasNoFuel")
 }

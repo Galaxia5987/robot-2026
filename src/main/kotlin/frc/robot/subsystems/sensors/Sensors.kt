@@ -8,6 +8,8 @@ import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.m
 import frc.robot.lib.extensions.sec
 import frc.robot.lib.unified_canrange.UnifiedCANRange
+import frc.robot.subsystems.intake.extender.Extender
+import frc.robot.subsystems.intake.extender.EXTENDER_SETPOINT_TOLERANCE
 import org.littletonrobotics.junction.Logger
 
 object Sensors : SubsystemBase() {
@@ -28,16 +30,16 @@ object Sensors : SubsystemBase() {
             sensorName = "topSensor",
             simulationUsesNumber = true
         )
-    private val auxTopSensor =
+    private val middleTopSensor =
         UnifiedCANRange(
-            AUX_TOP_SENSOR,
-            configuration = AUX_TOP_SENSOR_CONFIG,
+            MIDDLE_SENSOR_PORT,
+            configuration = MIDDLE_SENSOR_CONFIG,
             sensorName = "auxTopSensor",
             simulationUsesNumber = true
         )
 
     fun averageFuelDistance(): Distance =
-        (topSensor.inputs.distance + auxTopSensor.inputs.distance) / 2.0
+        (topSensor.inputs.distance + middleTopSensor.inputs.distance) / 2.0
 
     val cantCloseIntake: Trigger = Trigger {
         (averageFuelDistance() < HALF_FULL)
@@ -49,14 +51,14 @@ object Sensors : SubsystemBase() {
         Trigger {
                 spindexerSensor.inputs.signalStrength >
                     MIN_SIGNAL_STRENGTH_FOR_MEASUREMENT
-            }
+            }.or { topSensor.isInRange }.or { middleTopSensor.isInRange }.or { Extender.inputs.distance > EXTENDER_SETPOINT_TOLERANCE }
             .debounce(HAS_FUEL_DEBOUNCE[sec], Debouncer.DebounceType.kFalling)
     val isSpindexerLoaded: Trigger = Trigger { spindexerSensor.isInRange }
 
     override fun periodic() {
         spindexerSensor.periodic()
         topSensor.periodic()
-        auxTopSensor.periodic()
+        middleTopSensor.periodic()
 
         Logger.recordOutput("Subsystems/$name/hasFuel", hasFuel)
         Logger.recordOutput(
