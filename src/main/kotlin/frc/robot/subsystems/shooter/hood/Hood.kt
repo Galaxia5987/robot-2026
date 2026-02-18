@@ -15,6 +15,7 @@ import frc.robot.lib.estimateAt
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.radians
+import frc.robot.lib.extensions.sec
 import frc.robot.lib.extensions.volts
 import frc.robot.lib.sysid.SysIdable
 import frc.robot.lib.universal_motor.UniversalTalonFX
@@ -25,11 +26,6 @@ import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
 object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
-    private var mechanism = LoggedMechanism2d(5.0, 5.0)
-    private var root = mechanism.getRoot("Hood", 2.5, 2.5)
-    private val ligament =
-        root.append(LoggedMechanismLigament2d("HoodLigament", 1.0, 0.0))
-
     private val motor =
         UniversalTalonFX(
             port = PORT,
@@ -43,9 +39,12 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
 
     val shouldCrouch: Trigger = Trigger {
         TRENCH_AREAS.any { it.contains(drive.pose.translation) }
-//            .or(
-//            TRENCH_AREAS.any { it.contains(drive.pose.estimateAt()) }
-//        )
+            .or(
+            TRENCH_AREAS.any {
+                val speeds = drive.chassisSpeeds
+                it.contains(drive.pose.estimateAt(0.2.sec, speeds))
+            }
+        )
     }
 
     val atSetpoint = Trigger {
@@ -79,9 +78,7 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
         setAngle(value.angle)
 
     override fun periodic() {
-        ligament.setAngle(setpoint)
         motor.periodic()
-        Logger.recordOutput("Subsystems/$name/mechanism", mechanism)
         Logger.recordOutput("Subsystems/$name/atSetpoint", atSetpoint)
         Logger.recordOutput("Subsystems/$name/shouldCrouch", shouldCrouch)
         Logger.recordOutput(

@@ -183,9 +183,10 @@ fun Angle.convertTo360(): Angle { // Convert angle from (-180,180) -> (0,360)
     return deg
 }
 
-fun Pose2d.estimateAt(time: Time, fieldRelativeSpeeds: ChassisSpeeds) = this +
-        Transform2d(
+
+// NO ROTATION ESTIMATION!!
+fun Pose2d.estimateAt(time: Time, fieldRelativeSpeeds: ChassisSpeeds) = this.translation +
+        Translation2d(
             fieldRelativeSpeeds.vxMetersPerSecond.mps * time,
             fieldRelativeSpeeds.vyMetersPerSecond.mps * time,
-            this.rotation
         )
