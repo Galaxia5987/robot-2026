@@ -10,10 +10,7 @@ import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.radians
 import frc.robot.lib.universal_motor.UniversalTalonFX
-import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
-import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
-import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
 
 object Turret : SubsystemBase() {
     private val motor: UniversalTalonFX =

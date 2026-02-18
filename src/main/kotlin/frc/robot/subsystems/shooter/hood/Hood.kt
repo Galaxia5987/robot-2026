@@ -20,10 +20,6 @@ import frc.robot.lib.extensions.volts
 import frc.robot.lib.sysid.SysIdable
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.Logger
-import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
-import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
-import org.team5987.annotation.LogLevel
-import org.team5987.annotation.LoggedOutput
 
 object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
     private val motor =
@@ -40,11 +36,11 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
     val shouldCrouch: Trigger = Trigger {
         TRENCH_AREAS.any { it.contains(drive.pose.translation) }
             .or(
-            TRENCH_AREAS.any {
-                val speeds = drive.chassisSpeeds
-                it.contains(drive.pose.estimateAt(0.2.sec, speeds))
-            }
-        )
+                TRENCH_AREAS.any {
+                    val speeds = drive.chassisSpeeds
+                    it.contains(drive.pose.estimateAt(0.2.sec, speeds))
+                }
+            )
     }
 
     val atSetpoint = Trigger {
@@ -66,7 +62,9 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
     }
 
     fun setControlAngle(angle: Angle) {
-        setpoint = if (shouldCrouch.asBoolean) HoodPositions.DOWN.angle else angle - HOOD_STARTING_ANGLE
+        setpoint =
+            if (shouldCrouch.asBoolean) HoodPositions.DOWN.angle
+            else angle - HOOD_STARTING_ANGLE
         motor.setControl(positionRequest.withPosition(setpoint))
     }
 

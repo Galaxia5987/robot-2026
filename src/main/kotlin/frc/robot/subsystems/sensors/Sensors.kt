@@ -8,8 +8,8 @@ import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.m
 import frc.robot.lib.extensions.sec
 import frc.robot.lib.unified_canrange.UnifiedCANRange
-import frc.robot.subsystems.intake.extender.Extender
 import frc.robot.subsystems.intake.extender.EXTENDER_SETPOINT_TOLERANCE
+import frc.robot.subsystems.intake.extender.Extender
 import org.littletonrobotics.junction.Logger
 
 object Sensors : SubsystemBase() {
@@ -51,7 +51,10 @@ object Sensors : SubsystemBase() {
         Trigger {
                 spindexerSensor.inputs.signalStrength >
                     MIN_SIGNAL_STRENGTH_FOR_MEASUREMENT
-            }.or { topSensor.isInRange }.or { middleTopSensor.isInRange }.or { Extender.inputs.distance > EXTENDER_SETPOINT_TOLERANCE }
+            }
+            .or { topSensor.isInRange }
+            .or { middleTopSensor.isInRange }
+            .or { Extender.inputs.distance > EXTENDER_SETPOINT_TOLERANCE }
             .debounce(HAS_FUEL_DEBOUNCE[sec], Debouncer.DebounceType.kFalling)
     val isSpindexerLoaded: Trigger = Trigger { spindexerSensor.isInRange }
 

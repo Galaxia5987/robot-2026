@@ -15,8 +15,6 @@ import frc.robot.lib.extensions.*
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import frc.robot.states.intaking.IntakingStates
 import org.littletonrobotics.junction.Logger
-import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
-import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
 
 object Extender : SubsystemBase() {
     private val motor =
