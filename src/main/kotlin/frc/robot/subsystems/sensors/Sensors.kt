@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.extensions.m
 import frc.robot.lib.unified_canrange.UnifiedCANRange
+import frc.robot.subsystems.intake.roller.Roller.isConnected
 import org.littletonrobotics.junction.Logger
 
 object Sensors : SubsystemBase() {
@@ -43,6 +44,19 @@ object Sensors : SubsystemBase() {
     val isFull: Trigger = Trigger { (averageFuelDistance() < FULL) }
 
     val hasFuel: Trigger = Trigger { spindexerSensor.isInRange }
+
+    // --- Alerts ---
+
+
+
+    val setStatus = Trigger { spindexerSensor.inputs.connected }
+        .onChange(isConnected(spindexerSensor.inputs.connected))
+
+    val setStatusTop = Trigger { topSensor.inputs.connected }
+        .onChange(isConnected(topSensor.inputs.connected))
+
+    val setStatusAuxTop = Trigger { auxTopSensor.inputs.connected }
+        .onChange(isConnected(auxTopSensor.inputs.connected))
 
     override fun periodic() {
         spindexerSensor.periodic()

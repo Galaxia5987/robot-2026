@@ -18,6 +18,7 @@ class CANRangeIOReal(
     }
 
     override fun updateInputs() {
+        inputs.connected = CANrange.isConnected
         inputs.distance = CANrange.distance.value
         inputs.isDetecting = CANrange.isDetected.value
         inputs.signalStrength = CANrange.signalStrength.value

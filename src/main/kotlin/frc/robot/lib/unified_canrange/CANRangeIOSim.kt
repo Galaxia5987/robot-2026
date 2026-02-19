@@ -58,6 +58,7 @@ class CANRangeIOSim(
 
         inputs.distance = distance.m
         inputs.isDetecting = detecting
+        inputs.connected = true
     }
 
     private fun getMapleSimIntakingNumberModeValues(): Pair<Double, Boolean> {

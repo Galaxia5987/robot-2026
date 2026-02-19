@@ -45,6 +45,7 @@ interface MotorIO {
      */
     @Logged
     open class MotorInputs {
+        var connected: Boolean = false
         /** Current position of the motor shaft. */
         var position: Angle = 0.deg
 

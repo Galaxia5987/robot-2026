@@ -11,6 +11,7 @@ interface CANRangeIO {
 
     @Logged
     open class SensorInputs {
+        var connected = false
         var distance: Distance = 0.cm
         var isDetecting: Boolean = false
         var signalStrength: Double = 0.0

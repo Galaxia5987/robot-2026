@@ -3,6 +3,8 @@ package frc.robot.subsystems.intake.extender
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC
 import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.CANcoder
+import edu.wpi.first.wpilibj.Alert
+import edu.wpi.first.wpilibj.Alert.AlertType
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
@@ -55,6 +57,27 @@ object Extender : SubsystemBase(), ExtenderPositionsCommandFactory {
             )
         )
     }
+
+    // --- Alerts ---
+    private val disconnectedAlert =
+        Alert("$name's motor is disconnected", AlertType.kWarning)
+
+    private val connectedAlert =
+        Alert("$name's motor is connected", AlertType.kInfo)
+
+    fun isConnected(condition: Boolean) : Command = runOnce {
+        if (condition) {
+            disconnectedAlert.set(false)
+            connectedAlert.set(true)
+        }
+        else {
+            disconnectedAlert.set(true)
+            connectedAlert.set(false)
+        }
+    }
+
+    val setStatus = Trigger { motor.inputs.connected }
+        .onChange(isConnected(motor.inputs.connected))
 
     override fun periodic() {
         motor.periodic()

@@ -33,7 +33,7 @@ data class CameraConfig(
 )
 
 // Camera names, must match names configured on coprocessor
-const val EXMAPLE = "example"
+const val EXAMPLE = "example"
 
 // Robot to camera transforms
 // (Not used by Limelight, configure in web UI instead)

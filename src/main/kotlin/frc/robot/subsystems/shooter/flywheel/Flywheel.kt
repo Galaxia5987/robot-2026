@@ -3,6 +3,8 @@ package frc.robot.subsystems.shooter.flywheel
 import com.ctre.phoenix6.controls.Follower
 import com.ctre.phoenix6.controls.VelocityVoltage
 import edu.wpi.first.units.measure.AngularVelocity
+import edu.wpi.first.wpilibj.Alert
+import edu.wpi.first.wpilibj.Alert.AlertType
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
@@ -11,6 +13,7 @@ import frc.robot.lib.extensions.rad_ps
 import frc.robot.lib.extensions.radiansPerSecond
 import frc.robot.lib.extensions.rps
 import frc.robot.lib.universal_motor.UniversalTalonFX
+import frc.robot.subsystems.intake.extender.Extender
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 
@@ -62,6 +65,27 @@ object Flywheel : SubsystemBase(), FlywheelVelocitiesCommandFactory {
         setpoint = value.velocity
         motor.setControl(velocityOut.withVelocity(setpoint))
     }
+
+    // --- Alerts ---
+    private val disconnectedAlert =
+        Alert("$name's motor is disconnected", AlertType.kWarning)
+
+    private val connectedAlert =
+        Alert("$name's motor is connected", AlertType.kInfo)
+
+    fun isConnected(condition: Boolean) : Command = runOnce {
+        if (condition) {
+            disconnectedAlert.set(false)
+            connectedAlert.set(true)
+        }
+        else {
+            disconnectedAlert.set(true)
+            connectedAlert.set(false)
+        }
+    }
+
+    val setStatus = Trigger { motor.inputs.connected }
+        .onChange(isConnected(motor.inputs.connected))
 
     override fun periodic() {
         motor.periodic()

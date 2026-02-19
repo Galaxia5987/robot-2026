@@ -3,11 +3,15 @@ package frc.robot.subsystems.shooter.turret
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC
 import com.ctre.phoenix6.hardware.CANcoder
 import edu.wpi.first.units.measure.Angle
+import edu.wpi.first.wpilibj.Alert
+import edu.wpi.first.wpilibj.Alert.AlertType
+import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.radians
 import frc.robot.lib.universal_motor.UniversalTalonFX
+import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
@@ -51,6 +55,27 @@ object Turret : SubsystemBase() {
         setpoint = angleSupplier()
         motor.setControl(positionTorqueCurrentFOC.withPosition(setpoint))
     }
+
+    // --- Alerts ---
+    private val disconnectedAlert =
+        Alert("$name's motor is disconnected", AlertType.kWarning)
+
+    private val connectedAlert =
+        Alert("$name's motor is connected", AlertType.kInfo)
+
+    fun isConnected(condition: Boolean) : Command = runOnce {
+        if (condition) {
+            disconnectedAlert.set(false)
+            connectedAlert.set(true)
+        }
+        else {
+            disconnectedAlert.set(true)
+            connectedAlert.set(false)
+        }
+    }
+
+    val setStatus = Trigger { inputs.connected }
+        .onChange(isConnected(inputs.connected))
 
     override fun periodic() {
         motor.periodic()
