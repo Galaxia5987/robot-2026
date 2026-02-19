@@ -50,7 +50,7 @@ object Flywheel : SubsystemBase(), FlywheelVelocitiesCommandFactory {
     }
 
     fun setVelocity(velocity: () -> AngularVelocity): Command = run {
-        setpoint = velocity()
+        setpoint = velocity.invoke()
         motor.setControl(velocityOut.withVelocity(setpoint))
     }
 

@@ -1,6 +1,7 @@
 package frc.robot
 
 import com.pathplanner.lib.auto.AutoBuilder
+import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
@@ -53,13 +54,13 @@ object RobotContainer {
                 { -driverController.rightX * 1.2 }
             )
 
-        Turret.defaultCommand = Turret.setAngle { Turret.aimingSetpoint() }
+        Turret.defaultCommand = Turret.setAngle(Turret.aimingSetpoint<Turret, () -> Angle>())
         Hood.defaultCommand = Hood.setAngle {
             (90.deg - calculatePitch(
                 distanceFromGoal[m],
                 drive.chassisSpeeds.vxMetersPerSecond,
                 drive.chassisSpeeds.vyMetersPerSecond
-            ).deg) + 8.deg
+            ).deg)
         }
     }
 

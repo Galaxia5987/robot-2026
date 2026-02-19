@@ -83,7 +83,7 @@ object SetpointsManager {
     val isUsingStaticSetpoints = Trigger { shootingType == ShootingType.STATIC }
 }
 
-fun <T : SubsystemBase, M : Measure<out Unit>> T.aimingSetpoint(): M {
+fun <T : SubsystemBase, M : () -> Measure<out Unit>> T.aimingSetpoint(): M {
     val result =
         when (shootingType) {
             ShootingType.STATIC -> staticShootingMap[this]!!
@@ -91,5 +91,5 @@ fun <T : SubsystemBase, M : Measure<out Unit>> T.aimingSetpoint(): M {
             ShootingType.CALIBRATION -> calibrationShootingMap[this]!!
             else -> shootOnMoveMap[this]!!
         }
-    @Suppress("UNCHECKED_CAST") return result.invoke() as M
+    @Suppress("UNCHECKED_CAST") return result as M
 }
