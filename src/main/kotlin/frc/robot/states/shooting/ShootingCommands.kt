@@ -14,11 +14,12 @@ fun idle(): Command =
         Flywheel.zero(),
         PreShooter.stop(),
         SpindexerCommands.stopFeeding(),
-        IntakingStates.CLOSED.set().onlyIf(IntakingStates.INTAKING.trigger.negate())
+        IntakingStates.CLOSED.set()
+            .onlyIf(IntakingStates.INTAKING.trigger.negate())
     )
 
 fun priming(): Command =
-    Flywheel.setVelocity(Flywheel::aimingSetpoint)
+    Flywheel.defer { Flywheel.setVelocity(Flywheel::aimingSetpoint) }
         .alongWith(PreShooter.setVelocity(PreShooter::aimingSetpoint))
 
 fun backfeeding(): Command = PreShooter.reverse()

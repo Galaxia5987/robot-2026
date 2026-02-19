@@ -5,9 +5,14 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import frc.robot.lib.Mode
+import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.enableAutoLogOutputFor
+import frc.robot.lib.extensions.get
+import frc.robot.lib.extensions.m
+import frc.robot.lib.extensions.mps
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.setpoints_manager.aimingSetpoint
+import frc.robot.states.setpoints_manager.shooting_modes.distanceFromGoal
 import frc.robot.states.shooting.Shooting
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.shooter.hood.Hood
@@ -49,7 +54,13 @@ object RobotContainer {
             )
 
         Turret.defaultCommand = Turret.setAngle { Turret.aimingSetpoint() }
-        Hood.defaultCommand = Hood.setAngle { Hood.aimingSetpoint() }
+        Hood.defaultCommand = Hood.setAngle {
+            (90.deg - calculatePitch(
+                distanceFromGoal[m],
+                drive.chassisSpeeds.vxMetersPerSecond,
+                drive.chassisSpeeds.vyMetersPerSecond
+            ).deg) + 8.deg
+        }
     }
 
     private fun configureButtonBindings() {

@@ -12,6 +12,7 @@ import frc.robot.lib.extensions.toPose
 import frc.robot.states.DriverOverrides
 import frc.robot.states.setpoints_manager.SetpointsManager.ShootingType
 import frc.robot.states.setpoints_manager.SetpointsManager.shootingType
+import frc.robot.states.setpoints_manager.shooting_modes.calibrationShootingMap
 import frc.robot.states.setpoints_manager.shooting_modes.interpolationShootingMap
 import frc.robot.states.setpoints_manager.shooting_modes.shootOnMoveMap
 import frc.robot.states.setpoints_manager.shooting_modes.staticShootingMap
@@ -52,7 +53,8 @@ object SetpointsManager {
     enum class ShootingType {
         STATIC,
         INTERPOLATION,
-        SHOOT_ON_MOVE
+        SHOOT_ON_MOVE,
+        CALIBRATION
     }
 
     @LoggedOutput(
@@ -64,6 +66,7 @@ object SetpointsManager {
             when {
                 DriverOverrides.StaticShootingOverride.trigger.asBoolean ->
                     ShootingType.STATIC
+                DriverOverrides.ShootingCalibrationOverride.trigger.asBoolean -> ShootingType.CALIBRATION
                 !DriverOverrides.ShootOnMoveOverride.trigger.asBoolean ->
                     ShootingType.INTERPOLATION
                 else -> ShootingType.SHOOT_ON_MOVE
@@ -85,6 +88,7 @@ fun <T : SubsystemBase, M : Measure<out Unit>> T.aimingSetpoint(): M {
         when (shootingType) {
             ShootingType.STATIC -> staticShootingMap[this]!!
             ShootingType.INTERPOLATION -> interpolationShootingMap[this]!!
+            ShootingType.CALIBRATION -> calibrationShootingMap[this]!!
             else -> shootOnMoveMap[this]!!
         }
     @Suppress("UNCHECKED_CAST") return result.invoke() as M

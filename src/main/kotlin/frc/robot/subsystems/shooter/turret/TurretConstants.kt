@@ -18,7 +18,7 @@ val REAL_GAINS = Gains(kP = 100.0, kS = 0.5)
 val SETPOINT_TOLERANCE = 3.deg // TODO: Calibrate
 
 const val ENCODER_ID = 5
-val ABSOLUTE_ENCODER_OFFSET = (0.497).rot
+val ABSOLUTE_ENCODER_OFFSET = (0.5).rot
 
 val FORWARD_LIMIT = 0.668457.rot
 val REVERSE_LIMIT = (-0.121582).rot

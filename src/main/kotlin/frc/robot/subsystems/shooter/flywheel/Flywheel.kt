@@ -39,7 +39,7 @@ object Flywheel : SubsystemBase(), FlywheelVelocitiesCommandFactory {
         }
     }
 
-    private val calibrationVelocity =
+    val calibrationVelocity =
         LoggedNetworkNumber(
             "/Tuning/Flywheel/calibrationFlywheelVelocity",
             40.0
@@ -47,10 +47,6 @@ object Flywheel : SubsystemBase(), FlywheelVelocitiesCommandFactory {
 
     val atSetpoint = Trigger {
         motor.inputs.velocity.isNear(setpoint, FLYWHEEL_TOLERANCE)
-    }
-
-    fun setCalibrationVelocity(): Command = setVelocity {
-        calibrationVelocity.get().rps
     }
 
     fun setVelocity(velocity: () -> AngularVelocity): Command = run {

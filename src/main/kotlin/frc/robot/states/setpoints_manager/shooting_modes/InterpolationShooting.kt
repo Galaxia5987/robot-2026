@@ -23,12 +23,13 @@ import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 import frc.robot.subsystems.shooter.pre_shooter.PreShooterVelocity
 import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.shooter.turret.turretAngleToHub
+import frc.robot.subsystems.shooter.turret.turretTranslationFieldOriented
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
 @LoggedOutput(LogLevel.COMP)
 val distanceFromGoal: Distance
-    get() = drive.pose.distanceFromPoint(currentGoal.translation)
+    get() = turretTranslationFieldOriented.getDistance(currentGoal.translation).m
 
 private val SHOOTER_VELOCITY_BY_DISTANCE: InterpolatingDoubleMap =
     ShootingTableReader.parse(
