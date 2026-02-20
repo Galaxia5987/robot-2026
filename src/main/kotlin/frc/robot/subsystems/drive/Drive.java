@@ -102,7 +102,7 @@ public class Drive extends SubsystemBase implements SysIdable {
                                     TunerConstants.BackRight.LocationY)));
 
     // PathPlanner config constants
-    private static final double ROBOT_MASS_KG = 74.088; // TODO: Update this
+    private static final double ROBOT_MASS_KG = 67.15;
     private static final double ROBOT_MOI = 8.132;
     private static final double WHEEL_COF = 1.0;
     private static final RobotConfig PP_CONFIG =
@@ -161,53 +161,6 @@ public class Drive extends SubsystemBase implements SysIdable {
 
     private final LoggedNetworkBoolean isTuningMode =
             new LoggedNetworkBoolean("/Tuning/Drive/tuningMode", false);
-
-    private final LoggedNetworkGains driveGains =
-            new LoggedNetworkGains(
-                    "Drive",
-                    TunerConstants.driveGains.kP,
-                    TunerConstants.driveGains.kI,
-                    TunerConstants.driveGains.kD,
-                    TunerConstants.driveGains.kS,
-                    TunerConstants.driveGains.kV,
-                    TunerConstants.driveGains.kA,
-                    TunerConstants.driveGains.kG,
-                    RotationsPerSecond.zero(),
-                    RotationsPerSecond.per(Second).zero(),
-                    0.0,
-                    "Drive");
-
-    private final LoggedNetworkGains turnGains =
-            new LoggedNetworkGains(
-                    "Turn",
-                    TunerConstants.turnGains.kP,
-                    TunerConstants.turnGains.kI,
-                    TunerConstants.turnGains.kD,
-                    TunerConstants.turnGains.kS,
-                    TunerConstants.turnGains.kV,
-                    TunerConstants.turnGains.kA,
-                    TunerConstants.turnGains.kG,
-                    RadiansPerSecond.of(
-                            TunerConstants.motionMagicSteerGains.MotionMagicCruiseVelocity),
-                    RadiansPerSecondPerSecond.of(
-                            TunerConstants.motionMagicSteerGains.MotionMagicAcceleration),
-                    TunerConstants.motionMagicSteerGains.MotionMagicJerk,
-                    "Drive");
-
-    private final LoggedNetworkNumber translationKP =
-            new LoggedNetworkNumber("/Tuning/PathPlanner/translation/kP", 2.7);
-    private final LoggedNetworkNumber translationKI =
-            new LoggedNetworkNumber("Tuning/PathPlanner/translation/kI", 0.0);
-    ;
-    private final LoggedNetworkNumber translationKD =
-            new LoggedNetworkNumber("/Tuning/PathPlanner/translation/kD", 0.0);
-    private final LoggedNetworkNumber rotationKP =
-            new LoggedNetworkNumber("/Tuning/PathPlanner/rotation/kP", 1.0);
-    private final LoggedNetworkNumber rotationKI =
-            new LoggedNetworkNumber("Tuning/PathPlanner/rotation/kI", 0.0);
-    ;
-    private final LoggedNetworkNumber rotationKD =
-            new LoggedNetworkNumber("/Tuning/PathPlanner/rotation/kD", 0.0);
 
     private final SwerveDrivePoseEstimator poseEstimator =
             new SwerveDrivePoseEstimator(
@@ -372,20 +325,7 @@ public class Drive extends SubsystemBase implements SysIdable {
         gyroIO.updateInputs(gyroInputs);
         Logger.processInputs("Drive/Gyro", gyroInputs);
 
-        // TODO: Make it so if tuning mode is true we update the AutoFactory of the pathplanner
-
-        boolean isTuningMode = this.isTuningMode.get();
-
-        if (isTuningMode) {
-            configureAutoBuilder(
-                    new PIDConstants(translationKP.get(), translationKI.get(), translationKD.get()),
-                    new PIDConstants(rotationKP.get(), rotationKI.get(), rotationKD.get()));
-        }
-
         for (var module : modules) {
-            if (isTuningMode) {
-                module.updateGains(turnGains, driveGains);
-            }
             module.periodic();
         }
         odometryLock.unlock();

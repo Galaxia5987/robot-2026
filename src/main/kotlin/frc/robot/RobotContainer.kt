@@ -1,21 +1,19 @@
 package frc.robot
 
-import choreo.Choreo
-import choreo.util.ChoreoAllianceFlipUtil
 import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.units.measure.Angle
-import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
-import frc.robot.autonomous.startSomethingNew
+import frc.robot.autonomous.startToFuelDepotSide
+import frc.robot.autonomous.test
+import frc.robot.autonomous.test2
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.setpoints_manager.aimingSetpoint
 import frc.robot.states.shooting.Shooting
 import frc.robot.subsystems.drive.DriveCommands
-import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.turret.Turret
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
@@ -53,9 +51,9 @@ object RobotContainer {
                 { -driverController.rightX * 1.2 }
             )
 
-        Turret.defaultCommand =
-            Turret.setAngle(Turret.aimingSetpoint<Turret, () -> Angle>())
-//        Hood.defaultCommand =
+//        Turret.defaultCommand =
+//            Turret.setAngle(Turret.aimingSetpoint<Turret, () -> Angle>())
+//        Hood.defaultCommand =]\[
 //            Hood.setAngle(Hood.aimingSetpoint<Hood, () -> Angle>())
     }
 
@@ -106,8 +104,14 @@ object RobotContainer {
         )
 
         autoChooser.addOption(
-            "AutoTest",
-            startSomethingNew()
+            "test",
+            test()
         )
+        autoChooser.addOption(
+            "test2",
+            test2()
+        )
+
+        autoChooser.addOption("StartToFuelDepotSide", startToFuelDepotSide())
     }
 }

@@ -1,5 +1,7 @@
 package frc.robot.autonomous
 
+import com.pathplanner.lib.auto.AutoBuilder
+import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import frc.robot.drive
@@ -8,15 +10,16 @@ import frc.robot.drive
 // implement here the trajectory chaining as one command with state machine integrated commands as
 // well
 
-fun startToFuelDepotSide(): Command =
-    Commands.sequence(
-        drive.autoFactory.resetOdometry("StartToFuelDepotSide"),
-        drive.autoFactory.trajectoryCmd("StartToFuelDepotSide"),
-    )
+private fun followPath(path: String) = AutoBuilder.followPath(PathPlannerPath.fromPathFile(path))
 
-fun startSomethingNew(): Command = drive.defer {
-    drive.autoFactory.trajectoryCmd("StartSomethingNew")
-}
+fun startToFuelDepotSide(): Command = followPath("StartToFuelDepotSide")
+
+fun fuelToDepotStart(): Command = followPath("FuelToDepotStart")
+
+fun test2(): Command = startToFuelDepotSide().andThen(fuelToDepotStart())
+
+fun test(): Command =
+    AutoBuilder.followPath(PathPlannerPath.fromPathFile("Test"))
 //    Commands.sequence(
 //        drive.autoFactory.resetOdometry("StartSomethingNew"),
 //        drive.autoFactory.trajectoryCmd("StartSomethingNew"),

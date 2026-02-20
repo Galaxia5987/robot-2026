@@ -19,7 +19,7 @@ import edu.wpi.first.units.measure.*;
 public class TunerConstants {
     // Both sets of gains need to be tuned to your individual robot.
     public static final PIDConstants autonomousTranslationPID = new PIDConstants(6.5, 0.0, 0.0);
-    public static final PIDConstants autonomousRotationPID = new PIDConstants(3.0, 0.0, 0.0);
+    public static final PIDConstants autonomousRotationPID = new PIDConstants(4.5, 0.0, 0.0);
 
     // The steer motor uses any SwerveModule.SteerRequestType control request with the
     // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
@@ -33,16 +33,6 @@ public class TunerConstants {
                     .withKA(0)
                     .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
 
-    public static final Slot0Configs turnAuto =
-            new Slot0Configs()
-                    .withKP(5)
-                    .withKI(0)
-                    .withKD(0.5)
-                    .withKA(0)
-                    .withKV(0)
-                    .withKS(0)
-                    .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
-
     public static final MotionMagicConfigs motionMagicSteerGains =
             new MotionMagicConfigs()
                     .withMotionMagicCruiseVelocity(80)
@@ -52,9 +42,6 @@ public class TunerConstants {
     // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
     public static final Slot0Configs driveGains =
             new Slot0Configs().withKP(1.4).withKI(0).withKD(0).withKS(0.57008).withKV(0.93184);
-
-    public static final Slot0Configs autoGains =
-            new Slot0Configs().withKP(2.7).withKD(0.0).withKI(0.3).withKS(0.0).withKV(0.0);
 
     // The closed-loop output type to use for the steer motors;
     // This affects the PID/FF gains for the steer motors
