@@ -23,12 +23,12 @@ const val GEAR_RATIO = 46.77199935913086
 // The actual angle, (relative to the ground) of the hood on the robot.
 val HOOD_STARTING_ANGLE = 15.deg
 
-val ABSOLUTE_ENCODER_OFFSET = (-0.0092).rot
+val ABSOLUTE_ENCODER_OFFSET = 0.rot
 
 val FORWARD_LIMIT = 0.061.rot
 val REVERSE_LIMIT = 0.rot
 
-val CROUCH_TOLERANCE = 1.m
+val CROUCH_TOLERANCE = 0.4.m
 
 val ENCODER_CONFIG =
     CANcoderConfiguration().apply {
@@ -60,8 +60,7 @@ val CONFIG =
                 )
         Feedback =
             FeedbackConfigs().apply {
-                RotorToSensorRatio =
-                    GEAR_RATIO // TODO: Change when absolute encoder works
+                RotorToSensorRatio = GEAR_RATIO
                 SensorToMechanismRatio = ENCODER_GEAR_RATIO
                 FeedbackRemoteSensorID = ENCODER_ID
                 FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder

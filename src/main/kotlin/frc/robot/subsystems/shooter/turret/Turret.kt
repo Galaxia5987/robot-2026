@@ -4,7 +4,6 @@ import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.hardware.CANcoder
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj2.command.SubsystemBase
-import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.createDisableTriggerForCoast
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
@@ -31,9 +30,6 @@ object Turret : SubsystemBase() {
             return if (raw > 180.0.deg) raw - 360.0.deg
             else if (raw < (-180.0).deg) raw + 360.0.deg else raw
         }
-    val atSetpoint = Trigger {
-        motor.inputs.position.isNear(setpoint, SETPOINT_TOLERANCE)
-    }
 
     init {
         absoluteEncoder.configurator.apply(ENCODER_CONFIG)
@@ -59,6 +55,15 @@ object Turret : SubsystemBase() {
             radians
         )
         Logger.recordOutput("Subsystems/$name/wrappedPosition", wrappedPosition)
-        Logger.recordOutput("Subsystems/$name/atSetpoint", atSetpoint)
+        Logger.recordOutput("Subsystems/$name/turretPose", turretPose)
+        Logger.recordOutput(
+            "Subsystems/$name/angleFromRobotToHub",
+            angleFromRobotToHub
+        )
+        Logger.recordOutput(
+            "Subsystems/$name/turretAngleToHub",
+            turretAngleToHub
+        )
+        Logger.recordOutput("Subsystems/$name/isTurretAligned", isTurretAligned)
     }
 }

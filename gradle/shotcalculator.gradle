@@ -27,6 +27,19 @@ tasks.register("fetchShotCalculator") {
                 ignoreExitValue = true
             }
 
+            // Get commit hash
+            def commitHash = "unknown"
+            try {
+                def stdout = new ByteArrayOutputStream()
+                exec {
+                    workingDir tempCloneDir
+                    commandLine "git", "rev-parse", "--short", "HEAD"
+                    standardOutput = stdout
+                }
+                commitHash = stdout.toString().trim()
+            } catch (Exception ignored) {
+            }
+
             // Remove .git to avoid IDE confusion
             def gitDir = new File(tempCloneDir, ".git")
             if (gitDir.exists()) {
@@ -39,13 +52,19 @@ tasks.register("fetchShotCalculator") {
                 return
             }
 
-            // Copy into project
-            copy {
-                from sourceFile
-                into targetDir
-            }
+            def targetFile = new File(targetDir, "ShotCalculator.kt")
 
-            logger.lifecycle("ShotCalculator.kt synced successfully")
+            // Read original content
+            def originalContent = sourceFile.getText("UTF-8")
+
+            // Prepend commit hash comment
+            def newContent = """// Commit: ${commitHash}
+
+${originalContent}"""
+
+            targetFile.write(newContent, "UTF-8")
+
+            logger.lifecycle("ShotCalculator.kt synced successfully (commit ${commitHash})")
 
         } catch (Exception e) {
             logger.lifecycle("Skipping ShotCalculator sync: ${e.message}")

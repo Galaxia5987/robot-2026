@@ -7,6 +7,7 @@ enum class DriverOverrides(buttonId: Int) {
     AlignmentOverride(0),
     StaticShootingOverride(1),
     ShootOnMoveOverride(2),
+    ShootingCalibrationOverride(8),
     AutoIntakeOverride(3);
 
     val trigger: Trigger = switchController.button(buttonId)

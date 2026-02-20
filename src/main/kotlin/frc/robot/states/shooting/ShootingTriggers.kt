@@ -4,18 +4,21 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.drive
 import frc.robot.field.inAllianceZone
 import frc.robot.field.isHubActive
+import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.logTrigger
+import frc.robot.lib.extensions.sec
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.setpoints_manager.SetpointsManager.isShootingOnMove
 import frc.robot.subsystems.sensors.Sensors
 import frc.robot.subsystems.shooter.flywheel.Flywheel
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
-import frc.robot.subsystems.shooter.turret.Turret
+import frc.robot.subsystems.shooter.turret.isTurretAligned
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
 private const val LOGGING_PATH = "StateMachines/Shooting"
+private val allSubsystemsAtSetpointDebounce = 0.2.sec
 
 private val isIdle = ShootingState.IDLE.trigger.onTrue(idle())
 private val isPriming = ShootingState.PRIMING.trigger.onTrue(priming())
@@ -24,11 +27,12 @@ private val isBackfeeding =
 private val isShooting = ShootingState.SHOOTING.trigger.onTrue(shooting())
 
 @LoggedOutput(path = LOGGING_PATH, level = LogLevel.COMP)
-val shooterAtSetpoint: Trigger = // TODO: Find a better name
+val allSubsystemsAtSetpoint: Trigger =
     Hood.atSetpoint
-        .and(Turret.atSetpoint)
+        .and(isTurretAligned)
         .and(Flywheel.atSetpoint)
         .and(PreShooter.atSetpoint)
+        .debounce(allSubsystemsAtSetpointDebounce[sec])
         .logTrigger("$LOGGING_PATH/allSubsystemsAtSetpoint")
 
 class Shooting(dontShootTrigger: Trigger) {
@@ -53,14 +57,14 @@ class Shooting(dontShootTrigger: Trigger) {
 
     private val lockIfNeeded =
         shootingStatePrimingOrShooting
-            .and(Turret.atSetpoint)
+            .and(isTurretAligned)
             .and(isShootingOnMove.negate())
             .whileTrue(drive.continousLock())
             .logTrigger("$LOGGING_PATH/lockIfNeeded")
 
     private val setShootingIfPrimed =
         ShootingState.PRIMING.trigger
-            .and(shooterAtSetpoint)
+            .and(allSubsystemsAtSetpoint)
             .and(canShoot)
             .onTrue(ShootingState.SHOOTING.set())
             .logTrigger("$LOGGING_PATH/setShootingIfPrimed")

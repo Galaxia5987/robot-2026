@@ -53,7 +53,7 @@ object Sensors : SubsystemBase() {
                     MIN_SIGNAL_STRENGTH_FOR_MEASUREMENT
             }
             .or { topSensor.isInRange }
-            .or { middleTopSensor.isInRange }
+            //            .or { middleTopSensor.isInRange }
             .or { Extender.inputs.distance > EXTENDER_SETPOINT_TOLERANCE }
             .debounce(HAS_FUEL_DEBOUNCE[sec], Debouncer.DebounceType.kFalling)
     val isSpindexerLoaded: Trigger = Trigger { spindexerSensor.isInRange }
