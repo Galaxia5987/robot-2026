@@ -17,7 +17,6 @@ import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.mps_ps
 import frc.robot.lib.extensions.radians
-import frc.robot.lib.extensions.sec
 import frc.robot.lib.extensions.toPose
 import frc.robot.lib.extensions.volts
 import frc.robot.lib.sysid.SysIdable
@@ -41,22 +40,30 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
         TRENCH_AREAS.any { it.contains(turretTranslationFieldOriented) }
             .or(
                 TRENCH_AREAS.any {
-                    val dt = 0.4
-                    val currentSpeeds = drive.chassisSpeeds
+                    val dt = 0.3
+                    val fieldOrientedSpeeds = drive.fieldOrientedSpeeds
 
-                    // Calculate v_avg = v_0 + 0.5 * a * t for X, Y
-                    val adjustedVx = currentSpeeds.vxMetersPerSecond + (0.5 * drive.accelerationX[mps_ps] * dt)
-                    val adjustedVy = currentSpeeds.vyMetersPerSecond + (0.5 * drive.accelerationY[mps_ps] * dt)
+                    val fieldOrientedAcceleration =
+                        ChassisSpeeds.fromRobotRelativeSpeeds(
+                            ChassisSpeeds(
+                                drive.accelerationX[mps_ps],
+                                drive.accelerationY[mps_ps],
+                                0.0
+                            ),
+                            drive.rotation
+                        )
 
-                    val adjustedSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(
-                        ChassisSpeeds(adjustedVx, adjustedVy, currentSpeeds.omegaRadiansPerSecond), drive.rotation)
+                    val lookAheadTranslation = turretTranslationFieldOriented
+                        .toPose()
+                        .estimateAt(
+                            dt,
+                            fieldOrientedSpeeds,
+                            fieldOrientedAcceleration
+                        )
 
-                    Logger.recordOutput("Subsystems/$name/adjustedFieldRelativeSpeeds", adjustedSpeeds)
-
+                    Logger.recordOutput("Odometry/LookAheadTranslation", lookAheadTranslation.toPose())
                     it.contains(
-                        turretTranslationFieldOriented
-                            .toPose()
-                            .estimateAt(dt.sec, adjustedSpeeds)
+                        lookAheadTranslation
                     )
                 }
             )

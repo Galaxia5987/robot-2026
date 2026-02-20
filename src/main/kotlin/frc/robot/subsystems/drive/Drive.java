@@ -485,11 +485,11 @@ public class Drive extends SubsystemBase implements SysIdable {
                 kinematics.toChassisSpeeds(getModuleStates()), getRotation());
     }
 
-    public LinearAcceleration getAccelerationX(){
+    public LinearAcceleration getAccelerationX() {
         return gyroInputs.accelerationX;
     }
 
-    public LinearAcceleration getAccelerationY(){
+    public LinearAcceleration getAccelerationY() {
         return gyroInputs.accelerationY;
     }
 

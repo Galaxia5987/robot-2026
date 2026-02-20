@@ -28,7 +28,7 @@ val ABSOLUTE_ENCODER_OFFSET = 0.rot
 val FORWARD_LIMIT = 0.061.rot
 val REVERSE_LIMIT = 0.rot
 
-val CROUCH_TOLERANCE = 0.35.m
+val CROUCH_TOLERANCE = 0.4.m
 
 val ENCODER_CONFIG =
     CANcoderConfiguration().apply {

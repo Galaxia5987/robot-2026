@@ -41,7 +41,8 @@ public class GyroIOPigeon2 implements GyroIO {
         pigeon.getConfigurator()
                 .apply(
                         new Pigeon2Configuration()
-                                .withMountPose(new MountPoseConfigs().withMountPoseYaw(90-48.403)));
+                                .withMountPose(
+                                        new MountPoseConfigs().withMountPoseYaw(90 - 48.403)));
         pigeon.getConfigurator().setYaw(0.0);
         yaw.setUpdateFrequency(Drive.ODOMETRY_FREQUENCY);
         yawVelocity.setUpdateFrequency(50.0);

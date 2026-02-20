@@ -5,14 +5,12 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.measure.Angle
-import edu.wpi.first.units.measure.Time
 import edu.wpi.first.wpilibj.GenericHID
 import edu.wpi.first.wpilibj.util.Color
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import frc.robot.lib.extensions.deg
-import frc.robot.lib.extensions.mps
 import kotlin.math.*
 import org.littletonrobotics.junction.LogTable
 
@@ -180,9 +178,21 @@ fun Angle.convertTo360(): Angle { // Convert angle from (-180,180) -> (0,360)
 }
 
 // NO ROTATION ESTIMATION!!
-fun Pose2d.estimateAt(time: Time, fieldRelativeSpeeds: ChassisSpeeds) =
+fun Pose2d.estimateAt(
+    seconds: Double,
+    fieldRelativeSpeeds: ChassisSpeeds,
+    fieldOrientedAcceleration: ChassisSpeeds
+): Translation2d =
     this.translation +
         Translation2d(
-            fieldRelativeSpeeds.vxMetersPerSecond.mps * time,
-            fieldRelativeSpeeds.vyMetersPerSecond.mps * time,
+            fieldRelativeSpeeds.vxMetersPerSecond * seconds +
+                0.5 *
+                    seconds *
+                    seconds *
+                    fieldOrientedAcceleration.vxMetersPerSecond,
+            fieldRelativeSpeeds.vyMetersPerSecond * seconds +
+                0.5 *
+                    seconds *
+                    seconds *
+                    fieldOrientedAcceleration.vxMetersPerSecond,
         )
