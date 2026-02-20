@@ -14,6 +14,7 @@ import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.setpoints_manager.aimingSetpoint
 import frc.robot.states.shooting.Shooting
 import frc.robot.subsystems.drive.DriveCommands
+import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.turret.Turret
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
@@ -51,10 +52,10 @@ object RobotContainer {
                 { -driverController.rightX * 1.2 }
             )
 
-//        Turret.defaultCommand =
-//            Turret.setAngle(Turret.aimingSetpoint<Turret, () -> Angle>())
-//        Hood.defaultCommand =]\[
-//            Hood.setAngle(Hood.aimingSetpoint<Hood, () -> Angle>())
+        Turret.defaultCommand =
+            Turret.setAngle(Turret.aimingSetpoint<Turret, () -> Angle>())
+        Hood.defaultCommand =
+            Hood.setAngle(Hood.aimingSetpoint<Hood, () -> Angle>())
     }
 
     private fun configureButtonBindings() {
