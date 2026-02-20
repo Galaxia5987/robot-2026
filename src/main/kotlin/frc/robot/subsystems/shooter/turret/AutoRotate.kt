@@ -13,8 +13,6 @@ import frc.robot.lib.extensions.toTranslation3d
 import frc.robot.lib.getPose3d
 import frc.robot.lib.getRotation3d
 import frc.robot.states.setpoints_manager.SetpointsManager.currentGoal
-import org.team5987.annotation.LogLevel
-import org.team5987.annotation.LoggedOutput
 
 const val HUB_PATH = "Subsystems/Hub"
 
@@ -27,7 +25,6 @@ val turretTranslationFieldOriented: Translation2d
         )
 
 // For debugging
-@LoggedOutput(LogLevel.DEV, path = HUB_PATH)
 val turretPose
     get() =
         getPose3d(
@@ -35,16 +32,13 @@ val turretPose
             getRotation3d(pitch = (-90).deg)
         )
 
-@LoggedOutput(LogLevel.DEV, path = HUB_PATH)
 val angleFromRobotToHub: Rotation2d
     get() =
         turretTranslationFieldOriented.rotationToPoint(currentGoal.translation)
 
-@LoggedOutput(LogLevel.DEV, path = HUB_PATH)
 val turretAngleToHub: Angle
     get() = (drive.pose.rotation - angleFromRobotToHub).measure
 
-@LoggedOutput(LogLevel.COMP, path = HUB_PATH)
 val isTurretAligned = Trigger {
     Turret.wrappedPosition.isNear(turretAngleToHub, SETPOINT_TOLERANCE)
 }

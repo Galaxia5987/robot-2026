@@ -28,7 +28,7 @@ val ABSOLUTE_ENCODER_OFFSET = 0.rot
 val FORWARD_LIMIT = 0.061.rot
 val REVERSE_LIMIT = 0.rot
 
-val CROUCH_TOLERANCE = 1.m
+val CROUCH_TOLERANCE = 0.35.m
 
 val ENCODER_CONFIG =
     CANcoderConfiguration().apply {
@@ -60,8 +60,7 @@ val CONFIG =
                 )
         Feedback =
             FeedbackConfigs().apply {
-                RotorToSensorRatio =
-                    GEAR_RATIO // TODO: Change when absolute encoder works
+                RotorToSensorRatio = GEAR_RATIO
                 SensorToMechanismRatio = ENCODER_GEAR_RATIO
                 FeedbackRemoteSensorID = ENCODER_ID
                 FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder

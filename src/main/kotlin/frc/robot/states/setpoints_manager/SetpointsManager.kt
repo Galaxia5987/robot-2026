@@ -66,7 +66,8 @@ object SetpointsManager {
             when {
                 DriverOverrides.StaticShootingOverride.trigger.asBoolean ->
                     ShootingType.STATIC
-                DriverOverrides.ShootingCalibrationOverride.trigger.asBoolean -> ShootingType.CALIBRATION
+                DriverOverrides.ShootingCalibrationOverride.trigger.asBoolean ->
+                    ShootingType.CALIBRATION
                 !DriverOverrides.ShootOnMoveOverride.trigger.asBoolean ->
                     ShootingType.INTERPOLATION
                 else -> ShootingType.SHOOT_ON_MOVE

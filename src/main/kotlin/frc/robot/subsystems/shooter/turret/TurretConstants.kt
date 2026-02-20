@@ -15,7 +15,7 @@ const val ENCODER_RATIO = 1.0
 val SIM_GAINS = Gains(kP = 0.5, kD = 0.075)
 val REAL_GAINS = Gains(kP = 100.0, kS = 0.5)
 
-val SETPOINT_TOLERANCE = 3.deg // TODO: Calibrate
+val SETPOINT_TOLERANCE = 1.5.deg
 
 const val ENCODER_ID = 5
 val ABSOLUTE_ENCODER_OFFSET = (0.5).rot

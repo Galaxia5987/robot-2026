@@ -14,12 +14,16 @@
 package frc.robot.subsystems.drive.gyroIOs;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.LinearAcceleration;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface GyroIO {
     @AutoLog
     public static class GyroIOInputs {
+        public LinearAcceleration accelerationX = Units.MetersPerSecondPerSecond.zero();
+        public LinearAcceleration accelerationY = Units.MetersPerSecondPerSecond.zero();
         public boolean connected = false;
         public Rotation2d yawPosition = new Rotation2d();
         public double yawVelocityRadPerSec = 0.0;

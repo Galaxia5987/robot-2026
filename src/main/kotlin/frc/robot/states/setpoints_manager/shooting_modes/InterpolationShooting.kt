@@ -29,7 +29,8 @@ import org.team5987.annotation.LoggedOutput
 
 @LoggedOutput(LogLevel.COMP)
 val turretDistanceFromGoal: Distance
-    get() = turretTranslationFieldOriented.getDistance(currentGoal.translation).m
+    get() =
+        turretTranslationFieldOriented.getDistance(currentGoal.translation).m
 
 private val SHOOTER_VELOCITY_BY_DISTANCE: InterpolatingDoubleMap =
     ShootingTableReader.parse(
@@ -41,12 +42,14 @@ private fun getTurretSetpoint(): Angle {
     return turretAngleToHub
 }
 
-private fun getHoodSetpoint(): Angle = (90.deg - calculatePitch(
-        turretDistanceFromGoal[m],
-        drive.chassisSpeeds.vxMetersPerSecond,
-        drive.chassisSpeeds.vyMetersPerSecond
-    ).deg)
-
+private fun getHoodSetpoint(): Angle =
+    (90.deg -
+        calculatePitch(
+                turretDistanceFromGoal[m],
+                drive.chassisSpeeds.vxMetersPerSecond,
+                drive.chassisSpeeds.vyMetersPerSecond
+            )
+            .deg)
 
 private fun getFlywheelSetpoint(): AngularVelocity {
     val flywheelKey = InterpolatingDouble(turretDistanceFromGoal[m])

@@ -22,13 +22,17 @@ import kotlin.collections.mapOf
 
 private fun getTurretSetpoint(): Angle = turretAngleToHub
 
-private fun getHoodSetpoint(): Angle = (90.deg - calculatePitch(
-    turretDistanceFromGoal[m],
-    drive.chassisSpeeds.vxMetersPerSecond,
-    drive.chassisSpeeds.vyMetersPerSecond
-).deg)
+private fun getHoodSetpoint(): Angle =
+    (90.deg -
+        calculatePitch(
+                turretDistanceFromGoal[m],
+                drive.chassisSpeeds.vxMetersPerSecond,
+                drive.chassisSpeeds.vyMetersPerSecond
+            )
+            .deg)
 
-private fun getFlywheelSetpoint(): AngularVelocity = calibrationVelocity.get().rps
+private fun getFlywheelSetpoint(): AngularVelocity =
+    calibrationVelocity.get().rps
 
 private fun getPreShooterSetpoint(): AngularVelocity {
     return PreShooterVelocity.SHOOTING.velocity

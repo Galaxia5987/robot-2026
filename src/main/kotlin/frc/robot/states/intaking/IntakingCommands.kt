@@ -14,14 +14,12 @@ fun closed(): Command =
     Commands.parallel(
         Roller.stop(),
         Extender.close(),
-        SpindexerCommands.stopIntaking()
     )
 
 fun intaking(): Command =
     Commands.parallel(
         Roller.intake(),
         Extender.open(),
-        SpindexerCommands.startIntaking()
     )
 
 fun pumping(): Command =

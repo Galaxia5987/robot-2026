@@ -41,6 +41,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.LinearAcceleration;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
@@ -482,6 +483,14 @@ public class Drive extends SubsystemBase implements SysIdable {
     public ChassisSpeeds getFieldOrientedSpeeds() {
         return ChassisSpeeds.fromRobotRelativeSpeeds(
                 kinematics.toChassisSpeeds(getModuleStates()), getRotation());
+    }
+
+    public LinearAcceleration getAccelerationX(){
+        return gyroInputs.accelerationX;
+    }
+
+    public LinearAcceleration getAccelerationY(){
+        return gyroInputs.accelerationY;
     }
 
     /** Returns the position of each module in radians. */

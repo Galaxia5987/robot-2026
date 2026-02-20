@@ -3,6 +3,7 @@ package frc.robot.subsystems.shooter.hood
 import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.CANcoder
+import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
@@ -14,6 +15,7 @@ import frc.robot.lib.createDisableTriggerForCoast
 import frc.robot.lib.estimateAt
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
+import frc.robot.lib.extensions.mps_ps
 import frc.robot.lib.extensions.radians
 import frc.robot.lib.extensions.sec
 import frc.robot.lib.extensions.toPose
@@ -39,8 +41,23 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
         TRENCH_AREAS.any { it.contains(turretTranslationFieldOriented) }
             .or(
                 TRENCH_AREAS.any {
-                    val speeds = drive.chassisSpeeds
-                    it.contains(turretTranslationFieldOriented.toPose().estimateAt(0.4.sec, speeds))
+                    val dt = 0.4
+                    val currentSpeeds = drive.chassisSpeeds
+
+                    // Calculate v_avg = v_0 + 0.5 * a * t for X, Y
+                    val adjustedVx = currentSpeeds.vxMetersPerSecond + (0.5 * drive.accelerationX[mps_ps] * dt)
+                    val adjustedVy = currentSpeeds.vyMetersPerSecond + (0.5 * drive.accelerationY[mps_ps] * dt)
+
+                    val adjustedSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(
+                        ChassisSpeeds(adjustedVx, adjustedVy, currentSpeeds.omegaRadiansPerSecond), drive.rotation)
+
+                    Logger.recordOutput("Subsystems/$name/adjustedFieldRelativeSpeeds", adjustedSpeeds)
+
+                    it.contains(
+                        turretTranslationFieldOriented
+                            .toPose()
+                            .estimateAt(dt.sec, adjustedSpeeds)
+                    )
                 }
             )
     }
