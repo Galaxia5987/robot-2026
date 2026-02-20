@@ -16,9 +16,11 @@ import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.radians
 import frc.robot.lib.extensions.sec
+import frc.robot.lib.extensions.toPose
 import frc.robot.lib.extensions.volts
 import frc.robot.lib.sysid.SysIdable
 import frc.robot.lib.universal_motor.UniversalTalonFX
+import frc.robot.subsystems.shooter.turret.turretTranslationFieldOriented
 import org.littletonrobotics.junction.Logger
 
 object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
@@ -34,11 +36,11 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
     private var setpoint = 0.radians
 
     val shouldCrouch: Trigger = Trigger {
-        TRENCH_AREAS.any { it.contains(drive.pose.translation) }
+        TRENCH_AREAS.any { it.contains(turretTranslationFieldOriented) }
             .or(
                 TRENCH_AREAS.any {
                     val speeds = drive.chassisSpeeds
-                    it.contains(drive.pose.estimateAt(0.2.sec, speeds))
+                    it.contains(turretTranslationFieldOriented.toPose().estimateAt(0.4.sec, speeds))
                 }
             )
     }

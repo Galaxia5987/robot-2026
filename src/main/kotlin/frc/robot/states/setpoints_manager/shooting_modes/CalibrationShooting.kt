@@ -6,12 +6,11 @@ import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.AngularVelocity
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.calculatePitch
+import frc.robot.drive
 import frc.robot.lib.extensions.deg
-import frc.robot.lib.extensions.degrees
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.m
 import frc.robot.lib.extensions.rps
-import frc.robot.lib.math.interpolation.InterpolatingDouble
 import frc.robot.subsystems.shooter.flywheel.Flywheel
 import frc.robot.subsystems.shooter.flywheel.Flywheel.calibrationVelocity
 import frc.robot.subsystems.shooter.hood.Hood
@@ -23,7 +22,11 @@ import kotlin.collections.mapOf
 
 private fun getTurretSetpoint(): Angle = turretAngleToHub
 
-private fun getHoodSetpoint(): Angle = calculatePitch(distanceFromGoal[m], 0.0, 0.0).deg
+private fun getHoodSetpoint(): Angle = (90.deg - calculatePitch(
+    turretDistanceFromGoal[m],
+    drive.chassisSpeeds.vxMetersPerSecond,
+    drive.chassisSpeeds.vyMetersPerSecond
+).deg)
 
 private fun getFlywheelSetpoint(): AngularVelocity = calibrationVelocity.get().rps
 

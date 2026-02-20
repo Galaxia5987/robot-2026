@@ -17,7 +17,7 @@ import frc.robot.subsystems.shooter.turret.Turret
 
 private fun getTurretSetpoint(): Angle {
     return calculateYaw(
-            distanceFromGoal[m],
+            turretDistanceFromGoal[m],
             drive.chassisSpeeds.vxMetersPerSecond,
             drive.chassisSpeeds.vyMetersPerSecond
         )
@@ -26,7 +26,7 @@ private fun getTurretSetpoint(): Angle {
 
 private fun getHoodSetpoint(): Angle {
     return calculatePitch(
-            distanceFromGoal[m],
+            turretDistanceFromGoal[m],
             drive.chassisSpeeds.vxMetersPerSecond,
             drive.chassisSpeeds.vyMetersPerSecond
         )
@@ -36,7 +36,7 @@ private fun getHoodSetpoint(): Angle {
 private fun getFlywheelSetpoint(): AngularVelocity {
     return calculateAngularVelocity(
             calculateVelocity(
-                distanceFromGoal[m],
+                turretDistanceFromGoal[m],
                 drive.chassisSpeeds.vxMetersPerSecond,
                 drive.chassisSpeeds.vyMetersPerSecond
             )
@@ -47,7 +47,7 @@ private fun getFlywheelSetpoint(): AngularVelocity {
 private fun getPreShooterSetpoint(): AngularVelocity {
     return calculateAngularVelocity(
             calculateVelocity(
-                distanceFromGoal[m],
+                turretDistanceFromGoal[m],
                 drive.chassisSpeeds.vxMetersPerSecond,
                 drive.chassisSpeeds.vyMetersPerSecond
             )
