@@ -68,7 +68,7 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
 
     // --- Alerts ---
     private val disconnectedAlert =
-        Alert("$name's motor is disconnected", AlertType.kWarning)
+        Alert("$name's motor is disconnected", AlertType.kError)
 
     private val connectedAlert =
         Alert("$name's motor is connected", AlertType.kInfo)

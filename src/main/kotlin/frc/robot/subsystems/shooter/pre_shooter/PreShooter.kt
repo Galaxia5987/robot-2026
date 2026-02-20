@@ -52,7 +52,7 @@ object PreShooter : SubsystemBase(), PreShooterVelocityCommandFactory {
 
     // --- Alerts ---
     private val disconnectedAlert =
-        Alert("$name's motor is disconnected", AlertType.kWarning)
+        Alert("$name's motor is disconnected", AlertType.kError)
 
     private val connectedAlert =
         Alert("$name's motor is connected", AlertType.kInfo)
