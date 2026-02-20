@@ -63,7 +63,7 @@ object Turret : SubsystemBase() {
     private val connectedAlert =
         Alert("$name's motor is connected", AlertType.kInfo)
 
-    fun isConnected(condition: Boolean) : Command = runOnce {
+    fun isConnected(condition: Boolean) : Command = run {
         if (condition) {
             disconnectedAlert.set(false)
             connectedAlert.set(true)

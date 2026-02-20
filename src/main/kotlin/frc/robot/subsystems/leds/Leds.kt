@@ -4,10 +4,8 @@ import com.ctre.phoenix6.signals.RGBWColor
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.not
 import frc.robot.lib.extensions.rps
-import frc.robot.lib.extensions.volts
 import frc.robot.subsystems.intake.roller.Roller
 import frc.robot.subsystems.sensors.Sensors
 import frc.robot.subsystems.shooter.flywheel.Flywheel
@@ -46,13 +44,14 @@ object LEDSubsystem : SubsystemBase() {
         setColor(RGBWColor.fromHSV(50.0, 100.0, 100.0))
     }
 
-    val isFull = Trigger(Sensors.isFull).onTrue(flickeringOrange())
-    val isEmpty = Trigger(Sensors.hasFuel).onFalse(staticWhite())
-    val isShooting = Trigger { Flywheel.inputs.velocity > 0.rps }.onTrue(staticRed())
-    val isLoading = Trigger {(Roller.inputs.velocity > 0.rps)
-        .and(isFull == !Sensors.isFull)}.onTrue(staticYellow())
-    val isNotFull = Trigger (!Sensors.cantCloseIntake
-        .and(!Sensors.isFull).onTrue(flickeringYellow()))
-}
+    val rollerOn = Trigger{ Roller.inputs.velocity > 0.rps }
+    val flywheelOn = Trigger{ Flywheel.inputs.velocity > 0.rps }
 
-//check
+    init {
+        val isFull = Sensors.isFull.onTrue(flickeringOrange())
+        val isEmpty = Sensors.hasFuel.onFalse(staticWhite())
+        val isShooting =  flywheelOn.onTrue(staticRed())
+        val isLoading = rollerOn.and(!Sensors.isFull).onTrue(staticYellow())
+        val isNotFull = !isLoading.and(!Sensors.isFull).and(!isEmpty).onTrue(flickeringYellow())
+    }
+}
