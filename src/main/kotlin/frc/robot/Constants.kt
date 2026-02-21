@@ -1,5 +1,6 @@
 package frc.robot
 
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.get
@@ -25,3 +26,5 @@ val CURRENT_MODE: Mode
         }
 
 val IS_SIM = Trigger { CURRENT_MODE == Mode.SIM }
+
+val isEnabled = Trigger { DriverStation.isEnabled() }

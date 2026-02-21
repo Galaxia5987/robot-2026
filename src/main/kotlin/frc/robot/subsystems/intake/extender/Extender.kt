@@ -73,9 +73,7 @@ object Extender : SubsystemBase() {
     fun close(): Command =
         Commands.sequence(
             setVoltage(CLOSE_VOLTAGE),
-            Commands.print("FINISHED SETTING VOLTAGE!!!"),
-            Commands.waitSeconds(1.0),
-            Commands.print("SHOULD STOP IS TRUE!!!"),
+            Commands.waitUntil(shouldStop),
             stop()
         )
 

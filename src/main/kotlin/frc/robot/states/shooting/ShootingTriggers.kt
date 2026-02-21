@@ -1,9 +1,11 @@
 package frc.robot.states.shooting
 
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.drive
 import frc.robot.field.inAllianceZone
 import frc.robot.field.isHubActive
+import frc.robot.isEnabled
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.logTrigger
 import frc.robot.lib.extensions.sec
@@ -41,6 +43,7 @@ class Shooting(dontShootTrigger: Trigger) {
             .and(dontShootTrigger.negate())
             .and(inAllianceZone)
             .and(Sensors.hasFuel)
+            .and(isEnabled)
             .and(IntakingStates.INTAKING.trigger.negate())
             .logTrigger("$LOGGING_PATH/canShoot")
 
