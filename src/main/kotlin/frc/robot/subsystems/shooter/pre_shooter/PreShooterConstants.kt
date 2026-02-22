@@ -9,6 +9,8 @@ import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.amps
 import frc.robot.lib.extensions.rps
+import frc.robot.lib.switchable
+import frc.robot.states.setpoints_manager.SetpointsManager.isShootingOnMove
 import org.team5987.annotation.command_enum.CommandEnum
 
 val REAL_GAINS = Gains(kP = 1.0, kV = 0.2, kS = 2.0)
@@ -19,7 +21,8 @@ const val MAIN_MOTOR_ID = 13
 
 const val GEAR_RATIO = 2.5
 
-val SETPOINT_TOLERANCE = 4.rps
+val SETPOINT_TOLERANCE
+    get() = isShootingOnMove.asBoolean.switchable(4.rps, 2.rps)
 
 val MOTOR_CONFIG =
     TalonFXConfiguration().apply {

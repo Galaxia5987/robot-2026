@@ -15,7 +15,6 @@ import frc.robot.subsystems.shooter.flywheel.Flywheel
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 import frc.robot.subsystems.shooter.turret.isTurretAligned
-import frc.robot.subsystems.shooter.turret.isTurretAlignedShootOnMove
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
@@ -31,7 +30,7 @@ private val isShooting = ShootingState.SHOOTING.trigger.onTrue(shooting())
 @LoggedOutput(path = LOGGING_PATH, level = LogLevel.COMP)
 val allSubsystemsAtSetpoint: Trigger =
     Hood.atSetpoint
-        .and(isTurretAligned.or(isShootingOnMove.and(isTurretAlignedShootOnMove)))
+        .and(isTurretAligned)
         .and(Flywheel.atSetpoint)
         .and(PreShooter.atSetpoint)
         .debounce(allSubsystemsAtSetpointDebounce[sec])

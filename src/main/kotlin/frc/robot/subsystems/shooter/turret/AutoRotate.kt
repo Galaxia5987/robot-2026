@@ -16,6 +16,7 @@ import frc.robot.lib.extensions.toTranslation3d
 import frc.robot.lib.getPose3d
 import frc.robot.lib.getRotation3d
 import frc.robot.states.setpoints_manager.SetpointsManager.currentGoal
+import frc.robot.states.setpoints_manager.SetpointsManager.isShootingOnMove
 import frc.robot.states.setpoints_manager.shooting_modes.turretDistanceFromGoal
 
 const val HUB_PATH = "Subsystems/Hub"
@@ -43,15 +44,15 @@ val angleFromRobotToHub: Rotation2d
 val turretAngleToHub: Angle
     get() = (drive.pose.rotation - angleFromRobotToHub).measure
 
-val isTurretAligned = Trigger {
-    Turret.wrappedPosition.isNear(turretAngleToHub, SETPOINT_TOLERANCE)
-}
-
-val isTurretAlignedShootOnMove = Trigger({
-    Turret.wrappedPosition.isNear((turretAngleToHub - calculateYaw(
+val turretAngleToHubShootOnMove: Angle
+    get() = turretAngleToHub - calculateYaw(
         turretDistanceFromGoal[m],
         drive.chassisSpeeds.vxMetersPerSecond,
-        drive.chassisSpeeds.vyMetersPerSecond
-    )
-        .deg), 5.deg)
-})
+        drive.chassisSpeeds.vyMetersPerSecond).deg
+
+val turretAimingSetpoint: Angle
+    get() = if (isShootingOnMove.asBoolean) turretAngleToHubShootOnMove else turretAngleToHub
+
+val isTurretAligned = Trigger {
+    Turret.wrappedPosition.isNear(turretAimingSetpoint, SETPOINT_TOLERANCE)
+}

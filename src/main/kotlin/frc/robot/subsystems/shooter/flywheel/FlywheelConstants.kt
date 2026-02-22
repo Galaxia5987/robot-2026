@@ -11,6 +11,8 @@ import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.amps
 import frc.robot.lib.extensions.rps
+import frc.robot.lib.switchable
+import frc.robot.states.setpoints_manager.SetpointsManager.isShootingOnMove
 import org.team5987.annotation.command_enum.CommandEnum
 
 const val GEAR_RATIO = 1.33
@@ -19,7 +21,8 @@ val SIM_GAINS = Gains(kP = 1.0, kV = 0.12)
 
 const val MAIN_MOTOR_PORT = 16
 
-val FLYWHEEL_TOLERANCE = 4.0.rps
+val FLYWHEEL_TOLERANCE
+    get() = isShootingOnMove.asBoolean.switchable(4.rps, 0.55.rps)
 
 val AUXILIARY_MOTORS_PORTS =
     mapOf<Int, MotorAlignmentValue>(

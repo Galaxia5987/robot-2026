@@ -8,6 +8,8 @@ import com.ctre.phoenix6.signals.SensorDirectionValue
 import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.*
+import frc.robot.lib.switchable
+import frc.robot.states.setpoints_manager.SetpointsManager.isShootingOnMove
 
 const val PORT = 14
 const val RATIO = 55.0
@@ -15,7 +17,8 @@ const val ENCODER_RATIO = 1.0
 val SIM_GAINS = Gains(kP = 0.5, kD = 0.075)
 val REAL_GAINS = Gains(kP = 100.0, kS = 0.5)
 
-val SETPOINT_TOLERANCE = 1.5.deg
+val SETPOINT_TOLERANCE
+    get() = isShootingOnMove.asBoolean.switchable(5.deg, 1.5.deg)
 
 const val ENCODER_ID = 5
 val ABSOLUTE_ENCODER_OFFSET = (0.5).rot

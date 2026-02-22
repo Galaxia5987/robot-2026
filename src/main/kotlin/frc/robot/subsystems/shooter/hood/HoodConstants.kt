@@ -6,6 +6,8 @@ import edu.wpi.first.units.measure.Angle
 import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.*
+import frc.robot.lib.switchable
+import frc.robot.states.setpoints_manager.SetpointsManager.isShootingOnMove
 import org.team5987.annotation.command_enum.CommandEnum
 
 const val PORT = 15
@@ -13,7 +15,8 @@ const val PORT = 15
 const val ENCODER_ID = 4
 const val ENCODER_GEAR_RATIO = 2.0
 
-val TOLERANCE = 4.deg
+val TOLERANCE
+    get() = isShootingOnMove.asBoolean.switchable(4.deg, 0.5.deg)
 
 val SIM_GAINS = Gains(kP = 1.7, kD = 0.3)
 val REAL_GAINS = Gains(kP = 270.0, kS = 0.1)
