@@ -13,7 +13,7 @@ const val PORT = 15
 const val ENCODER_ID = 4
 const val ENCODER_GEAR_RATIO = 2.0
 
-val TOLERANCE = 0.5.deg
+val TOLERANCE = 4.deg
 
 val SIM_GAINS = Gains(kP = 1.7, kD = 0.3)
 val REAL_GAINS = Gains(kP = 270.0, kS = 0.1)

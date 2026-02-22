@@ -24,18 +24,20 @@ val HUB_TRANSLATION: Translation2d
 val CLIMB_TRANSLATION: Pose2d
     get() = Pose2d(4090.6.mm, 5457.8.mm, Rotation2d(90.deg)).flipIfNeeded()
 
-private val OFFSET_OF_FEED_TRANSLATION = Translation2d(700.mm, 700.mm)
+private val OUTPOST_FEED_TRANSLATION = Translation2d(2.880.m, 1.407.m)
 
 val OUTPOST_LOCATION: Translation2d
-    get() = OFFSET_OF_FEED_TRANSLATION.flipIfNeeded()
+    get() = OUTPOST_FEED_TRANSLATION.flipIfNeeded()
 
 val DEPOT_TRANSLATION: Translation2d
     get() =
         Translation2d(
-                OFFSET_OF_FEED_TRANSLATION.measureX,
-                FlippingUtil.fieldSizeY.m - OFFSET_OF_FEED_TRANSLATION.measureY
+                OUTPOST_FEED_TRANSLATION.measureX,
+                FlippingUtil.fieldSizeY.m - OUTPOST_FEED_TRANSLATION.measureY
             )
             .flipIfNeeded()
+
+
 val TRENCH_WIDTH = 1331.75.mm
 
 private val TRENCH =

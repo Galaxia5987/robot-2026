@@ -19,7 +19,7 @@ val SIM_GAINS = Gains(kP = 1.0, kV = 0.12)
 
 const val MAIN_MOTOR_PORT = 16
 
-val FLYWHEEL_TOLERANCE = 0.55.rps
+val FLYWHEEL_TOLERANCE = 4.0.rps
 
 val AUXILIARY_MOTORS_PORTS =
     mapOf<Int, MotorAlignmentValue>(

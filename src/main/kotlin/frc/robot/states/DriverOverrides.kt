@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 enum class DriverOverrides(buttonId: Int) {
     AlignmentOverride(0),
     StaticShootingOverride(1),
-    ShootOnMoveOverride(2),
+    ShootOnMoveOverride(12),
     ShootingCalibrationOverride(8),
     AutoIntakeOverride(3);
 

@@ -65,5 +65,6 @@ object Turret : SubsystemBase() {
             turretAngleToHub
         )
         Logger.recordOutput("Subsystems/$name/isTurretAligned", isTurretAligned)
+        Logger.recordOutput("Subsystems/$name/isTurretAlignedShootOnMove", isTurretAlignedShootOnMove)
     }
 }

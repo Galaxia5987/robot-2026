@@ -3,11 +3,22 @@ package frc.robot.states.shooting
 import edu.wpi.first.units.measure.AngularVelocity
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
+import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.field.inAllianceZone
+import frc.robot.lib.extensions.logTrigger
 import frc.robot.states.intaking.IntakingStates
+import frc.robot.states.setpoints_manager.SetpointsManager.isShootingOnMove
 import frc.robot.states.setpoints_manager.aimingSetpoint
+import frc.robot.states.spindexer.LOGGING_PATH
 import frc.robot.states.spindexer.SpindexerCommands
 import frc.robot.subsystems.shooter.flywheel.Flywheel
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
+import org.team5987.annotation.LogLevel
+import org.team5987.annotation.LoggedOutput
+
+val shouldPump: Trigger =
+    inAllianceZone.and(isShootingOnMove.negate())
+        .logTrigger("$LOGGING_PATH/shouldPump")
 
 // State Commands
 fun idle(): Command =
@@ -35,5 +46,6 @@ fun shooting(): Command =
     Commands.sequence(
             SpindexerCommands.startFeeding(),
             IntakingStates.PUMPING.set()
+                .onlyIf(shouldPump)
         )
         .alongWith(priming())
