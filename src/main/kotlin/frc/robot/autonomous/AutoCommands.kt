@@ -10,7 +10,8 @@ import frc.robot.drive
 // implement here the trajectory chaining as one command with state machine integrated commands as
 // well
 
-private fun followPath(path: String) = AutoBuilder.followPath(PathPlannerPath.fromPathFile(path))
+private fun followPath(path: String) =
+    AutoBuilder.followPath(PathPlannerPath.fromPathFile(path))
 
 fun startToFuelDepotSide(): Command = followPath("StartToFuelDepotSide")
 

@@ -104,14 +104,8 @@ object RobotContainer {
             DriveCommands.feedforwardCharacterization()
         )
 
-        autoChooser.addOption(
-            "test",
-            test()
-        )
-        autoChooser.addOption(
-            "test2",
-            test2()
-        )
+        autoChooser.addOption("test", test())
+        autoChooser.addOption("test2", test2())
 
         autoChooser.addOption("StartToFuelDepotSide", startToFuelDepotSide())
     }

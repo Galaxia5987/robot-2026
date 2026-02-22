@@ -35,12 +35,13 @@ val SPINDEXER_SENSOR_CONFIG =
                 FOVRangeY = 7.0
             }
     }
-val TOP_SENSOR_CONFIG = CANrangeConfiguration().apply {
-    FovParams =
-        FovParamsConfigs().apply {
-            FOVCenterX = 0.0
-            FOVCenterY = 0.0
-            FOVRangeX = 7.0
-            FOVRangeY = 24.0
-        }
-}
+val TOP_SENSOR_CONFIG =
+    CANrangeConfiguration().apply {
+        FovParams =
+            FovParamsConfigs().apply {
+                FOVCenterX = 0.0
+                FOVCenterY = 0.0
+                FOVRangeX = 7.0
+                FOVRangeY = 24.0
+            }
+    }

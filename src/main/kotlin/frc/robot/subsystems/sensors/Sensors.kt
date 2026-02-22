@@ -34,13 +34,16 @@ object Sensors : SubsystemBase() {
     val isFull: Trigger = Trigger { topSensor.isInRange }
 
     private val isIntakeOpen =
-        Trigger { Extender.inputs.distance > EXTENDER_SETPOINT_TOLERANCE }.and(IntakingStates.CLOSED.trigger.debounce(0.4))
+        Trigger { Extender.inputs.distance > EXTENDER_SETPOINT_TOLERANCE }
+            .and(IntakingStates.CLOSED.trigger.debounce(0.4))
 
-    private val preShooterHasBalls: Trigger = Trigger { spindexerSensor.isInRange }
+    private val preShooterHasBalls: Trigger = Trigger {
+        spindexerSensor.isInRange
+    }
 
     private val isSpindexerLoaded = Trigger {
         spindexerSensor.inputs.signalStrength >
-                MIN_SIGNAL_STRENGTH_FOR_MEASUREMENT
+            MIN_SIGNAL_STRENGTH_FOR_MEASUREMENT
     }
 
     val hasFuel: Trigger =
@@ -58,10 +61,7 @@ object Sensors : SubsystemBase() {
             "Subsystems/$name/preShooterHasBalls",
             preShooterHasBalls
         )
-        Logger.recordOutput(
-            "Subsystems/$name/isSpindexerLoaded",
-            isIntakeOpen
-        )
+        Logger.recordOutput("Subsystems/$name/isSpindexerLoaded", isIntakeOpen)
         Logger.recordOutput("Subsystems/$name/isFull", isFull)
     }
 }

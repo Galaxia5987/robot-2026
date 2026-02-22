@@ -37,7 +37,6 @@ val DEPOT_TRANSLATION: Translation2d
             )
             .flipIfNeeded()
 
-
 val TRENCH_WIDTH = 1331.75.mm
 
 private val TRENCH =

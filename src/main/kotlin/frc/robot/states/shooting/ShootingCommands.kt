@@ -13,11 +13,10 @@ import frc.robot.states.spindexer.LOGGING_PATH
 import frc.robot.states.spindexer.SpindexerCommands
 import frc.robot.subsystems.shooter.flywheel.Flywheel
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
-import org.team5987.annotation.LogLevel
-import org.team5987.annotation.LoggedOutput
 
 val shouldPump: Trigger =
-    inAllianceZone.and(isShootingOnMove.negate())
+    inAllianceZone
+        .and(isShootingOnMove.negate())
         .logTrigger("$LOGGING_PATH/shouldPump")
 
 // State Commands
@@ -45,7 +44,6 @@ fun backfeeding(): Command = PreShooter.reverse()
 fun shooting(): Command =
     Commands.sequence(
             SpindexerCommands.startFeeding(),
-            IntakingStates.PUMPING.set()
-                .onlyIf(shouldPump)
+            IntakingStates.PUMPING.set().onlyIf(shouldPump)
         )
         .alongWith(priming())

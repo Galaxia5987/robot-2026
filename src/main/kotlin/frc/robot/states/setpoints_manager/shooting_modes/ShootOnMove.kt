@@ -1,6 +1,5 @@
 package frc.robot.states.setpoints_manager.shooting_modes
 
-import edu.wpi.first.math.geometry.Transform2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.Measure
@@ -23,46 +22,52 @@ import frc.robot.subsystems.shooter.turret.turretAngleToHub
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
-fun ChassisSpeeds.to2dVector(): Translation2d = Translation2d(this.vxMetersPerSecond, this.vyMetersPerSecond)
+fun ChassisSpeeds.to2dVector(): Translation2d =
+    Translation2d(this.vxMetersPerSecond, this.vyMetersPerSecond)
 
 @LoggedOutput(path = "Odometry", level = LogLevel.COMP)
 val turretOrientedChassisSpeeds: Translation2d
-    get() = drive.chassisSpeeds.to2dVector().rotateBy(Turret.wrappedPosition.toRotation2d())
+    get() =
+        drive.chassisSpeeds
+            .to2dVector()
+            .rotateBy(Turret.wrappedPosition.toRotation2d())
 
 private fun getTurretSetpoint(): Angle {
     val turretOrientedChassisSpeeds = turretOrientedChassisSpeeds
-    return turretAngleToHub - calculateYaw( // TODO: Might not work in blue
-        turretDistanceFromGoal[m],
-        turretOrientedChassisSpeeds.x,
-        turretOrientedChassisSpeeds.y
-    )
-        .deg
+    return turretAngleToHub -
+        calculateYaw( // TODO: Might not work in blue
+                turretDistanceFromGoal[m],
+                turretOrientedChassisSpeeds.x,
+                turretOrientedChassisSpeeds.y
+            )
+            .deg
 }
 
 private fun getHoodSetpoint(): Angle {
     val turretOrientedChassisSpeeds = turretOrientedChassisSpeeds
     return (90.deg -
-            calculatePitch(
+        calculatePitch(
                 turretDistanceFromGoal[m],
                 turretOrientedChassisSpeeds.x,
                 turretOrientedChassisSpeeds.y
             )
-                .deg)
+            .deg)
 }
 
 private fun getFlywheelSetpoint(): AngularVelocity {
     val turretOrientedChassisSpeeds = turretOrientedChassisSpeeds
     return calculateAngularVelocity(
-        calculateVelocity(
-            turretDistanceFromGoal[m],
-            turretOrientedChassisSpeeds.x,
-            turretOrientedChassisSpeeds.y
+            calculateVelocity(
+                turretDistanceFromGoal[m],
+                turretOrientedChassisSpeeds.x,
+                turretOrientedChassisSpeeds.y
             )
-    )
+        )
         .rps
 }
 
-private fun getPreShooterSetpoint(): AngularVelocity = PreShooterVelocity.SHOOTING.velocity
+private fun getPreShooterSetpoint(): AngularVelocity =
+    PreShooterVelocity.SHOOTING.velocity
 
 val shootOnMoveMap: Map<SubsystemBase, () -> Measure<out Unit>> =
     mapOf(

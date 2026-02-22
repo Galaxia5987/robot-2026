@@ -10,11 +10,15 @@ import org.littletonrobotics.junction.Logger
 
 object Roller : SubsystemBase(), RollerPositionsCommandFactory {
     private val motor =
-        UniversalTalonFX(port = PORT, config = MOTOR_CONFIG, simGains = SIM_GAINS, subsystem = name)
+        UniversalTalonFX(
+            port = PORT,
+            config = MOTOR_CONFIG,
+            simGains = SIM_GAINS,
+            subsystem = name
+        )
 
     private val velocityTorqueCurrentFOC = VelocityTorqueCurrentFOC(0.0)
     private var setpoint: AngularVelocity = 0.rps
-
 
     val inputs
         get() = motor.inputs

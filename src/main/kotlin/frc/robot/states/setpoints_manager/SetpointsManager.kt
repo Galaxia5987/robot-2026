@@ -70,8 +70,7 @@ object SetpointsManager {
                     ShootingType.CALIBRATION
                 DriverOverrides.ShootOnMoveOverride.trigger.asBoolean ->
                     ShootingType.SHOOT_ON_MOVE
-                else ->
-                    ShootingType.INTERPOLATION
+                else -> ShootingType.INTERPOLATION
             }
 
     val isShootingOnMove = Trigger {

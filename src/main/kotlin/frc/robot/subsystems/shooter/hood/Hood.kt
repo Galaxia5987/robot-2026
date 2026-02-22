@@ -53,18 +53,20 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
                             drive.rotation
                         )
 
-                    val lookAheadTranslation = turretTranslationFieldOriented
-                        .toPose()
-                        .estimateAt(
-                            dt,
-                            fieldOrientedSpeeds,
-                            fieldOrientedAcceleration
-                        )
+                    val lookAheadTranslation =
+                        turretTranslationFieldOriented
+                            .toPose()
+                            .estimateAt(
+                                dt,
+                                fieldOrientedSpeeds,
+                                fieldOrientedAcceleration
+                            )
 
-                    Logger.recordOutput("Odometry/LookAheadTranslation", lookAheadTranslation.toPose())
-                    it.contains(
-                        lookAheadTranslation
+                    Logger.recordOutput(
+                        "Odometry/LookAheadTranslation",
+                        lookAheadTranslation.toPose()
                     )
+                    it.contains(lookAheadTranslation)
                 }
             )
     }

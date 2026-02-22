@@ -45,13 +45,19 @@ val turretAngleToHub: Angle
     get() = (drive.pose.rotation - angleFromRobotToHub).measure
 
 val turretAngleToHubShootOnMove: Angle
-    get() = turretAngleToHub - calculateYaw(
-        turretDistanceFromGoal[m],
-        drive.chassisSpeeds.vxMetersPerSecond,
-        drive.chassisSpeeds.vyMetersPerSecond).deg
+    get() =
+        turretAngleToHub -
+            calculateYaw(
+                    turretDistanceFromGoal[m],
+                    drive.chassisSpeeds.vxMetersPerSecond,
+                    drive.chassisSpeeds.vyMetersPerSecond
+                )
+                .deg
 
 val turretAimingSetpoint: Angle
-    get() = if (isShootingOnMove.asBoolean) turretAngleToHubShootOnMove else turretAngleToHub
+    get() =
+        if (isShootingOnMove.asBoolean) turretAngleToHubShootOnMove
+        else turretAngleToHub
 
 val isTurretAligned = Trigger {
     Turret.wrappedPosition.isNear(turretAimingSetpoint, SETPOINT_TOLERANCE)

@@ -46,6 +46,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.LinearAcceleration;
 import edu.wpi.first.units.measure.Voltage;
@@ -56,9 +57,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.ConstantsKt;
-import frc.robot.lib.AllianceHelperKt;
 import frc.robot.lib.LocalADStarAK;
-import frc.robot.lib.LoggedNetworkGains;
 import frc.robot.lib.Mode;
 import frc.robot.lib.sysid.SysIdable;
 import frc.robot.subsystems.drive.ModuleIOs.Module;
@@ -70,7 +69,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
-import lombok.val;
 import org.ironmaple.simulation.drivesims.COTS;
 import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
 import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
@@ -78,7 +76,6 @@ import org.jetbrains.annotations.NotNull;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean;
-import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 
 public class Drive extends SubsystemBase implements SysIdable {
     // TunerConstants doesn't include these constants, so they are declared locally
@@ -173,7 +170,6 @@ public class Drive extends SubsystemBase implements SysIdable {
     private final Consumer<Pose2d> resetSimulationPoseCallBack;
     public final AutoFactory autoFactory;
 
-
     public Drive(
             GyroIO gyroIO, ModuleIO[] moduleIOS, Consumer<Pose2d> resetSimulationPoseCallBack) {
         this(
@@ -207,17 +203,17 @@ public class Drive extends SubsystemBase implements SysIdable {
         // Start odometry thread
         PhoenixOdometryThread.getInstance().start();
 
-        autoFactory = new AutoFactory(
-                this::getPose,
-                this::resetOdometry,
-                this::followTrajectory,
-                true,
-                this,
-                (Trajectory<SwerveSample> trajectory, Boolean isPathStarted) -> {
-                    Logger.recordOutput("Choreo/Trajectory", trajectory.getPoses());
-                    Logger.recordOutput("Choreo/hasStarted", isPathStarted);
-                }
-            );
+        autoFactory =
+                new AutoFactory(
+                        this::getPose,
+                        this::resetOdometry,
+                        this::followTrajectory,
+                        true,
+                        this,
+                        (Trajectory<SwerveSample> trajectory, Boolean isPathStarted) -> {
+                            Logger.recordOutput("Choreo/Trajectory", trajectory.getPoses());
+                            Logger.recordOutput("Choreo/hasStarted", isPathStarted);
+                        });
 
         // Configure AutoBuilder for PathPlanner
         configureAutoBuilder(
@@ -263,7 +259,6 @@ public class Drive extends SubsystemBase implements SysIdable {
                 this);
     }
 
-
     public static PIDController AutoXController = new PIDController(6.0, 0.0, 0.0);
     public static PIDController AutoYController = new PIDController(6.0, 0.0, 0.0);
     public static PIDController AutoHeadingController = new PIDController(3.0, 0.0, 0.0);
@@ -273,15 +268,18 @@ public class Drive extends SubsystemBase implements SysIdable {
         Pose2d pose = getPose();
 
         // Generate the next speeds for the robot
-        ChassisSpeeds speeds = new ChassisSpeeds(
-                sample.vx + AutoXController.calculate(pose.getX(), sample.x),
-                sample.vy + AutoYController.calculate(pose.getY(), sample.y),
-                sample.omega + AutoHeadingController.calculate(pose.getRotation().getRadians(), sample.heading)
-        );
+        ChassisSpeeds speeds =
+                new ChassisSpeeds(
+                        sample.vx + AutoXController.calculate(pose.getX(), sample.x),
+                        sample.vy + AutoYController.calculate(pose.getY(), sample.y),
+                        sample.omega
+                                + AutoHeadingController.calculate(
+                                        pose.getRotation().getRadians(), sample.heading));
 
         // Apply the generated speeds
         runVelocity(speeds);
     }
+
     public void followTrajectoryRedSide(SwerveSample sample) {
         Pose2d pose = getPose();
         Pose2d samplePose = new Pose2d(sample.x, sample.y, new Rotation2d(sample.heading));
@@ -291,22 +289,22 @@ public class Drive extends SubsystemBase implements SysIdable {
 
     public void followTrajectoryBlueSide(SwerveSample sample) {
         Pose2d pose = getPose();
-        var x=AutoXController.calculate(pose.getY(), sample.y);
-        var y=AutoXController.calculate(pose.getX(), sample.x);
-        Logger.recordOutput("Choreo/vx",sample.vx);
-        Logger.recordOutput("Choreo/vy",sample.vy);
-        Logger.recordOutput("Choreo/calculateX",x);
-        Logger.recordOutput("Choreo/calculateY",y);
+        var x = AutoXController.calculate(pose.getY(), sample.y);
+        var y = AutoXController.calculate(pose.getX(), sample.x);
+        Logger.recordOutput("Choreo/vx", sample.vx);
+        Logger.recordOutput("Choreo/vy", sample.vy);
+        Logger.recordOutput("Choreo/calculateX", x);
+        Logger.recordOutput("Choreo/calculateY", y);
 
         ChassisSpeeds speeds =
-                ChassisSpeeds.fromFieldRelativeSpeeds(new ChassisSpeeds(
-                        sample.vy + x,
-                        -sample.vx -y,
-                        sample.omega
-                                + AutoHeadingController.calculate(
-                                        pose.getRotation().getRadians(), sample.heading)),
-                        pose.getRotation()
-                );
+                ChassisSpeeds.fromFieldRelativeSpeeds(
+                        new ChassisSpeeds(
+                                sample.vy + x,
+                                -sample.vx - y,
+                                sample.omega
+                                        + AutoHeadingController.calculate(
+                                                pose.getRotation().getRadians(), sample.heading)),
+                        pose.getRotation());
         runVelocity(speeds);
     }
 
@@ -475,7 +473,15 @@ public class Drive extends SubsystemBase implements SysIdable {
     /** Returns the measured chassis speeds of the robot. */
     @AutoLogOutput(key = "SwerveChassisSpeeds/Measured")
     public ChassisSpeeds getChassisSpeeds() {
-        return kinematics.toChassisSpeeds(getModuleStates());
+        return kinematics
+                .toChassisSpeeds(getModuleStates())
+                .plus(
+                        new ChassisSpeeds(
+                                gyroInputs.accelerationX.in(Units.MetersPerSecondPerSecond)
+                                        * ConstantsKt.LOOP_TIME,
+                                gyroInputs.accelerationY.in(Units.MetersPerSecondPerSecond)
+                                        * ConstantsKt.LOOP_TIME,
+                                0.0));
     }
 
     @AutoLogOutput(key = "SwerveChassisSpeeds/MeasuredFieldOriented")

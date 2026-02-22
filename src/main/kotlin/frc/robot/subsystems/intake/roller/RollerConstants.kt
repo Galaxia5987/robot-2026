@@ -2,16 +2,13 @@ package frc.robot.subsystems.intake.roller
 
 import com.ctre.phoenix6.configs.FeedbackConfigs
 import com.ctre.phoenix6.configs.MotorOutputConfigs
-import com.ctre.phoenix6.configs.Slot0Configs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.signals.InvertedValue
 import edu.wpi.first.units.measure.AngularVelocity
-import edu.wpi.first.units.measure.Voltage
 import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.amps
 import frc.robot.lib.extensions.rps
-import frc.robot.lib.extensions.volts
 import org.team5987.annotation.command_enum.CommandEnum
 
 @CommandEnum
