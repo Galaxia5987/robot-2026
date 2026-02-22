@@ -478,9 +478,9 @@ public class Drive extends SubsystemBase implements SysIdable {
                 .plus(
                         new ChassisSpeeds(
                                 gyroInputs.accelerationX.in(Units.MetersPerSecondPerSecond)
-                                        * ConstantsKt.LOOP_TIME,
+                                        * 0.2,
                                 gyroInputs.accelerationY.in(Units.MetersPerSecondPerSecond)
-                                        * ConstantsKt.LOOP_TIME,
+                                        * 0.2,
                                 0.0));
     }
 
