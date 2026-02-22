@@ -1,9 +1,11 @@
 import com.ctre.phoenix6.controls.SolidColor
+import com.ctre.phoenix6.controls.TwinkleAnimation
 import com.ctre.phoenix6.hardware.CANdle
 import com.ctre.phoenix6.signals.RGBWColor
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.lib.extensions.and
 import frc.robot.lib.extensions.not
 import frc.robot.lib.extensions.rps
 import frc.robot.subsystems.intake.roller.Roller
@@ -26,40 +28,38 @@ object LEDSubsystem : SubsystemBase() {
         candle.setControl(solidColorRequest.withColor(color))
     }
 
+    //         setColor(RGBWColor.fromHex("#192324").get())
+
     private fun flickeringOrange () : Command = run {
-        setColor(RGBWColor.fromHSV(15.0, 100.0, 100.0))
-            .withTimeout(0.75)
-        setColor(RGBWColor.fromHSV(0.0, 0.0, 0.0))
-            .withTimeout(0.75)
+        setColor(RGBWColor.fromHex("#FF4000").get())
+        candle.setControl(TwinkleAnimation(solidColorRequest.LEDStartIndex, solidColorRequest.LEDEndIndex))
     }
 
     private fun flickeringYellow() : Command = runOnce {
-        setColor(RGBWColor.fromHSV(50.0, 100.0, 100.0))
-            .withTimeout(0.75)
-        setColor(RGBWColor.fromHSV(0.0, 0.0, 0.0))
-            .withTimeout(0.75)
+        setColor(RGBWColor.fromHex("#FFD500").get())
+        candle.setControl(TwinkleAnimation(solidColorRequest.LEDStartIndex, solidColorRequest.LEDEndIndex))
     }
 
     private fun staticWhite() : Command = runOnce {
-        setColor(RGBWColor.fromHSV(0.0, 0.0, 100.0))
+        setColor(RGBWColor.fromHex("#FFFFFF").get())
     }
 
     private fun staticRed() : Command = runOnce {
-        setColor(RGBWColor.fromHSV(0.0, 100.0, 100.0))
+        setColor(RGBWColor.fromHex("#FF0000").get())
     }
 
     private fun staticYellow() : Command = runOnce {
-        setColor(RGBWColor.fromHSV(50.0, 100.0, 100.0))
+        setColor(RGBWColor.fromHex("#FFD500").get())
     }
 
     val rollerOn = Trigger{ Roller.inputs.velocity > 0.rps }
     val flywheelOn = Trigger{ Flywheel.inputs.velocity > 0.rps }
 
     init {
-        val isFull = Sensors.isFull.onTrue(flickeringOrange())
-        val isEmpty = Sensors.hasFuel.onFalse(staticWhite())
+        val isFull = Sensors.isFull.and(!flywheelOn).onTrue(flickeringOrange())
+        val isEmpty = Sensors.hasFuel.and(!rollerOn).onFalse(staticWhite())
         val isShooting =  flywheelOn.onTrue(staticRed())
         val isLoading = rollerOn.and(!Sensors.isFull).onTrue(staticYellow())
-        val isNotFull = !isLoading.and(!Sensors.isFull).and(!isEmpty).onTrue(flickeringYellow())
+        val isNotFull = !isLoading.and(!Sensors.isFull.and(!isEmpty).and(!rollerOn).and(!flywheelOn)).onTrue(flickeringYellow())
     }
 }
