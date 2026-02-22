@@ -9,50 +9,30 @@ class AlertSensors {
     private val disconnectedAlertSpindexer =
         Alert("Spindexer's Sensor's motor is disconnected", AlertType.kWarning)
 
-    private val connectedAlertSpindexer =
-        Alert("Spindexer's Sensor's motor is connected", AlertType.kInfo)
-
     private val disconnectedAlertTop =
         Alert("Top Sensor's motor is disconnected", AlertType.kWarning)
-
-    private val connectedAlertTop =
-        Alert("Top Sensor's motor is connected", AlertType.kInfo)
 
     private val disconnectedAlertAuxTop =
         Alert("AuxTop's Sensor's motor is disconnected", AlertType.kWarning)
 
-    private val connectedAlertAuxTop =
-        Alert("AuxTop's Sensor's motor is connected", AlertType.kInfo)
-
     fun isConnected(condition: Boolean) : Command = runOnce {
-        if (condition) {
+        if (condition)
             disconnectedAlertSpindexer.set(false)
-            connectedAlertSpindexer.set(true)
-        }
-        else {
+        else
             disconnectedAlertSpindexer.set(true)
-            connectedAlertSpindexer.set(false)
-        }
     }
 
     fun isConnectedTop(condition: Boolean) : Command = runOnce {
-        if (condition) {
+        if (condition)
             disconnectedAlertTop.set(false)
-            connectedAlertTop.set(true)
-        }
-        else {
+        else
             disconnectedAlertTop.set(true)
-            connectedAlertTop.set(false)
-        }
     }
     fun isConnectedAuxTop(condition: Boolean) : Command = runOnce {
-        if (condition) {
+        if (condition)
             disconnectedAlertAuxTop.set(false)
-            connectedAlertAuxTop.set(true)
-        }
-        else {
+
+        else
             disconnectedAlertAuxTop.set(true)
-            connectedAlertAuxTop.set(false)
-        }
     }
 }

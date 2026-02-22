@@ -10,6 +10,14 @@ import frc.robot.subsystems.intake.roller.Roller
 import frc.robot.subsystems.sensors.Sensors
 import frc.robot.subsystems.shooter.flywheel.Flywheel
 
+/*
+    Robot is full - Flickering Orange
+    Robot is not full - Flickering Yellow
+    Robot is empty - Static White
+    Robot is shooting - Static Red
+    Robot is loading - Static Yellow
+ */
+
 object LEDSubsystem : SubsystemBase() {
     private val candle = CANdle(0)
     private val solidColorRequest = SolidColor(8, 399)

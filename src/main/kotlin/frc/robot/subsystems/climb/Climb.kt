@@ -48,18 +48,11 @@ object Climb : SubsystemBase(), ClimbLevelsCommandFactory {
     private val disconnectedAlert =
         Alert("$name's motor is disconnected", AlertType.kWarning)
 
-    private val connectedAlert =
-        Alert("$name's motor is connected", AlertType.kInfo)
-
     fun isConnected(condition: Boolean) : Command = runOnce {
-        if (condition) {
+        if (condition)
             disconnectedAlert.set(false)
-            connectedAlert.set(true)
-        }
-        else {
+        else
             disconnectedAlert.set(true)
-            connectedAlert.set(false)
-        }
     }
 
     val setStatus = Trigger { motor.inputs.connected }
