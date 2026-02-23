@@ -206,7 +206,7 @@ public class Drive extends SubsystemBase implements SysIdable {
         // Configure AutoBuilder for PathPlanner
         configureAutoBuilder();
 
-        Pathfinding.setPathfinder(new LocalADStarAK());
+//        Pathfinding.setPathfinder(new LocalADStarAK());
         PathPlannerLogging.setLogActivePathCallback(
                 (activePath) -> {
                     Logger.recordOutput(
