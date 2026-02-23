@@ -3,11 +3,13 @@ package frc.robot.subsystems.shooter.turret
 import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.hardware.CANcoder
 import edu.wpi.first.units.measure.Angle
+import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.lib.createDisableTriggerForCoast
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.radians
+import frc.robot.lib.extensions.rotations
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.Logger
 
@@ -23,6 +25,9 @@ object Turret : SubsystemBase() {
 
     private val positionVoltage: PositionVoltage = PositionVoltage(0.0)
     private var setpoint = 0.radians
+    private var lastSetpoint = 0.radians
+    private var lastTime = Timer.getFPGATimestamp()
+    private var setpointVelocityRps = 0.0
 
     val wrappedPosition: Angle
         get() {
@@ -43,8 +48,25 @@ object Turret : SubsystemBase() {
     }
 
     fun setAngle(angleSupplier: () -> Angle) = run {
-        setpoint = angleSupplier()
-        motor.setControl(positionVoltage.withPosition(setpoint))
+        val newSetpoint = angleSupplier()
+        val currentTime = Timer.getFPGATimestamp()
+        val dt = currentTime - lastTime
+
+        // Calculate discrete derivative to find setpoint velocity
+        if (dt > 0.0) {
+            val deltaRotations = newSetpoint[rotations] - lastSetpoint[rotations]
+            setpointVelocityRps = deltaRotations / dt
+        }
+
+        setpoint = newSetpoint
+        lastSetpoint = newSetpoint
+        lastTime = currentTime
+
+        motor.setControl(
+            positionVoltage
+                .withPosition(setpoint)
+                .withVelocity(setpointVelocityRps)
+        )
     }
 
     override fun periodic() {
