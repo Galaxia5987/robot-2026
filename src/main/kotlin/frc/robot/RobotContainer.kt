@@ -8,9 +8,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import frc.robot.autonomous.shootOnMoveTestPath
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
-import frc.robot.states.intaking.IntakingStates
-import frc.robot.states.setpoints_manager.aimingSetpoint
-import frc.robot.states.shooting.Shooting
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.turret.Turret
@@ -49,11 +46,6 @@ object RobotContainer {
                 { -driverController.leftX },
                 { -driverController.rightX * 1.2 }
             )
-
-        Turret.defaultCommand =
-            Turret.setAngle(Turret.aimingSetpoint<Turret, () -> Angle>())
-        Hood.defaultCommand =
-            Hood.setAngle(Hood.aimingSetpoint<Hood, () -> Angle>())
     }
 
     private fun configureButtonBindings() {
@@ -62,10 +54,6 @@ object RobotContainer {
         // Intake Bindings
         val intakeButton = driverController.R2()
 
-        intakeButton.onTrue(IntakingStates.INTAKING.set())
-        intakeButton.negate().onTrue(IntakingStates.CLOSED.set())
-
-        Shooting(driverController.L2())
     }
 
     fun getAutonomousCommand(): Command = autoChooser.get()

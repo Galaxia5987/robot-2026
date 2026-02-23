@@ -4,15 +4,11 @@ import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.toAngle
+import frc.robot.lib.universal_motor.MotorLogConfig
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.Logger
-import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
-import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
-import org.team5987.annotation.LogLevel
-import org.team5987.annotation.LoggedOutput
 
 object Climb : SubsystemBase(), ClimbLevelsCommandFactory {
     private val motor =
@@ -20,7 +16,16 @@ object Climb : SubsystemBase(), ClimbLevelsCommandFactory {
             MAIN_PORT,
             config = MOTOR_CONFIG,
             simGains = SIM_GAINS,
-            gearRatio = GEAR_RATIO
+            gearRatio = GEAR_RATIO,
+            logConfig =
+                MotorLogConfig(
+                    position = true,
+                    statorCurrent = false,
+                    current = false,
+                    velocity = false,
+                    absoluteEncoder = false,
+                    voltage = true
+                )
         )
 
     private val positionTorque = PositionTorqueCurrentFOC(0.0)
@@ -42,7 +47,7 @@ object Climb : SubsystemBase(), ClimbLevelsCommandFactory {
 
     override fun periodic() {
         motor.periodic()
-        Logger.recordOutput("Subsystems/$name/setpoint", setpoint)
-        Logger.recordOutput("Subsystems/$name/atSetpoint", setpoint)
+        Logger.recordOutput("Subsystems/Climb/setpoint", setpoint)
+        Logger.recordOutput("Subsystems/Climb/atSetpoint", setpoint)
     }
 }

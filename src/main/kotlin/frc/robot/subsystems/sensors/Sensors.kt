@@ -31,7 +31,8 @@ object Sensors : SubsystemBase() {
             configuration = TOP_SENSOR_CONFIG,
             sensorName = "topSensor",
             simulationUsesNumber = true,
-            loggingConfig = UnifiedCANRangeLogging(distance = false, signalStrength = false)
+            loggingConfig =
+                UnifiedCANRangeLogging(distance = false, signalStrength = false)
         )
 
     val isFull: Trigger = Trigger { topSensor.isInRange }
@@ -59,12 +60,15 @@ object Sensors : SubsystemBase() {
         spindexerSensor.periodic()
         topSensor.periodic()
 
-        Logger.recordOutput("Subsystems/$name/hasFuel", hasFuel)
+        Logger.recordOutput("Subsystems/Sensors/hasFuel", hasFuel)
         Logger.recordOutput(
-            "Subsystems/$name/preShooterHasBalls",
+            "Subsystems/Sensors/preShooterHasBalls",
             preShooterHasBalls
         )
-        Logger.recordOutput("Subsystems/$name/isSpindexerLoaded", isIntakeOpen)
-        Logger.recordOutput("Subsystems/$name/isFull", isFull)
+        Logger.recordOutput(
+            "Subsystems/Sensors/isSpindexerLoaded",
+            isIntakeOpen
+        )
+        Logger.recordOutput("Subsystems/Sensors/isFull", isFull)
     }
 }

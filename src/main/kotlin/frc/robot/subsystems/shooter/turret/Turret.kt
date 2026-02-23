@@ -6,10 +6,10 @@ import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.lib.createDisableTriggerForCoast
-import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.radians
 import frc.robot.lib.extensions.rotations
+import frc.robot.lib.universal_motor.MotorLogConfig
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.Logger
 
@@ -19,7 +19,12 @@ object Turret : SubsystemBase() {
             port = PORT,
             config = CONFIG,
             gearRatio = RATIO,
-            simGains = SIM_GAINS
+            simGains = SIM_GAINS,
+            logConfig =
+                MotorLogConfig(
+                    statorCurrent = false,
+                    current = false,
+                )
         )
     private val absoluteEncoder = CANcoder(ENCODER_ID)
 
@@ -50,7 +55,8 @@ object Turret : SubsystemBase() {
 
         // Calculate discrete derivative to find setpoint velocity
         if (dt > 0.0) {
-            val deltaRotations = newSetpoint[rotations] - lastSetpoint[rotations]
+            val deltaRotations =
+                newSetpoint[rotations] - lastSetpoint[rotations]
             setpointVelocityRps = deltaRotations / dt
         }
 
@@ -60,29 +66,35 @@ object Turret : SubsystemBase() {
 
         motor.setControl(
             positionVoltage
-                .withPosition(setpoint).withVelocity(setpointVelocityRps)
-//                .withFeedForward(7 * setpointVelocityRps)
-        )
+                .withPosition(setpoint)
+                .withVelocity(setpointVelocityRps)
+            //                .withFeedForward(7 * setpointVelocityRps)
+            )
     }
-
 
     override fun periodic() {
         motor.periodic()
         Logger.recordOutput(
-            "Subsystems/$name/setpoint",
+            "Subsystems/Turret/setpoint",
             setpoint[radians],
             radians
         )
-        Logger.recordOutput("Subsystems/$name/wrappedPosition", wrappedPosition)
-        Logger.recordOutput("Subsystems/$name/turretPose", turretPose)
         Logger.recordOutput(
-            "Subsystems/$name/angleFromRobotToHub",
+            "Subsystems/Turret/wrappedPosition",
+            wrappedPosition
+        )
+        Logger.recordOutput("Subsystems/Turret/turretPose", turretPose)
+        Logger.recordOutput(
+            "Subsystems/Turret/angleFromRobotToHub",
             angleFromRobotToHub
         )
         Logger.recordOutput(
-            "Subsystems/$name/turretAngleToHub",
+            "Subsystems/Turret/turretAngleToHub",
             turretAngleToHub
         )
-        Logger.recordOutput("Subsystems/$name/isTurretAligned", isTurretAligned)
+        Logger.recordOutput(
+            "Subsystems/Turret/isTurretAligned",
+            isTurretAligned
+        )
     }
 }

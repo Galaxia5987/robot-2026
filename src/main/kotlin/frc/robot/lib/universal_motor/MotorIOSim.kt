@@ -62,15 +62,12 @@ class MotorIOSim(
             is VelocityVoltage ->
                 controlRequest.FeedForward =
                     controlRequest.Velocity * simGains.kV
-
             is VelocityTorqueCurrentFOC ->
                 controlRequest.FeedForward =
                     controlRequest.Velocity * simGains.kV
-
             is PositionVoltage ->
                 controlRequest.FeedForward =
                     controlRequest.Position * simGains.kV
-
             is PositionTorqueCurrentFOC ->
                 controlRequest.FeedForward =
                     controlRequest.Position * simGains.kV
@@ -82,7 +79,8 @@ class MotorIOSim(
     override fun updateInputs() {
         motor.update(Timer.getFPGATimestamp())
         if (logConfig.current) inputs.current = motor.appliedCurrent
-        if (logConfig.statorCurrent) inputs.statorCurrent = motor.appliedCurrent * 2.0
+        if (logConfig.statorCurrent)
+            inputs.statorCurrent = motor.appliedCurrent * 2.0
 
         if (logConfig.voltage) inputs.voltage = motor.appliedVoltage
         if (logConfig.velocity) inputs.velocity = motor.velocity

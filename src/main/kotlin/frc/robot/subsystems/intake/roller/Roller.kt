@@ -5,6 +5,7 @@ import edu.wpi.first.units.measure.AngularVelocity
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.lib.extensions.rps
+import frc.robot.lib.universal_motor.MotorLogConfig
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.Logger
 
@@ -14,7 +15,16 @@ object Roller : SubsystemBase(), RollerPositionsCommandFactory {
             port = PORT,
             config = MOTOR_CONFIG,
             simGains = SIM_GAINS,
-            subsystem = name
+            subsystem = name,
+            logConfig =
+                MotorLogConfig(
+                    position = false,
+                    statorCurrent = false,
+                    current = false,
+                    velocity = false,
+                    absoluteEncoder = false,
+                    voltage = true
+                )
         )
 
     private val velocityTorqueCurrentFOC = VelocityTorqueCurrentFOC(0.0)
@@ -30,6 +40,6 @@ object Roller : SubsystemBase(), RollerPositionsCommandFactory {
 
     override fun periodic() {
         motor.periodic()
-        Logger.recordOutput("$name/setpoint", setpoint)
+        Logger.recordOutput("Roller/setpoint", setpoint)
     }
 }

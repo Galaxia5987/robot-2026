@@ -20,6 +20,7 @@ import frc.robot.lib.extensions.radians
 import frc.robot.lib.extensions.toPose
 import frc.robot.lib.extensions.volts
 import frc.robot.lib.sysid.SysIdable
+import frc.robot.lib.universal_motor.MotorLogConfig
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import frc.robot.subsystems.shooter.turret.turretTranslationFieldOriented
 import org.littletonrobotics.junction.Logger
@@ -30,7 +31,13 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
             port = PORT,
             config = CONFIG,
             absoluteEncoderOffset = ABSOLUTE_ENCODER_OFFSET,
-            simGains = SIM_GAINS
+            simGains = SIM_GAINS,
+            logConfig =
+                MotorLogConfig(
+                    statorCurrent = false,
+                    current = false,
+                    velocity = false
+                )
         )
     private val encoder = CANcoder(ENCODER_ID)
 
@@ -105,10 +112,10 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
 
     override fun periodic() {
         motor.periodic()
-        Logger.recordOutput("Subsystems/$name/atSetpoint", atSetpoint)
-        Logger.recordOutput("Subsystems/$name/shouldCrouch", shouldCrouch)
+        Logger.recordOutput("Subsystems/Hood/atSetpoint", atSetpoint)
+        Logger.recordOutput("Subsystems/Hood/shouldCrouch", shouldCrouch)
         Logger.recordOutput(
-            "Subsystems/$name/setpoint",
+            "Subsystems/Hood/setpoint",
             setpoint[radians],
             radians
         )

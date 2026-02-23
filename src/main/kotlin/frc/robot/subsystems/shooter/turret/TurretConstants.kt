@@ -50,7 +50,11 @@ val CONFIG =
                 NeutralMode = NeutralModeValue.Brake
                 Inverted = InvertedValue.Clockwise_Positive
             }
-        Slot0 = REAL_GAINS.toSlotConfig().withStaticFeedforwardSign(StaticFeedforwardSignValue.UseVelocitySign)
+        Slot0 =
+            REAL_GAINS.toSlotConfig()
+                .withStaticFeedforwardSign(
+                    StaticFeedforwardSignValue.UseVelocitySign
+                )
         ClosedLoopGeneral =
             ClosedLoopGeneralConfigs().apply { ContinuousWrap = false }
         SoftwareLimitSwitch = SOFTWARE_LIMIT_CONFIG

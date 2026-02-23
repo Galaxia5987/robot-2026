@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.createDisableTriggerForCoast
 import frc.robot.lib.extensions.*
+import frc.robot.lib.universal_motor.MotorLogConfig
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import frc.robot.states.intaking.IntakingStates
 import org.littletonrobotics.junction.Logger
@@ -23,7 +24,13 @@ object Extender : SubsystemBase() {
             config = CONFIG,
             simGains = SIM_GAINS,
             gearRatio = GEAR_RATIO,
-            linearSystemWheelDiameter = DIAMETER
+            linearSystemWheelDiameter = DIAMETER,
+            logConfig =
+                MotorLogConfig(
+                    current = false,
+                    velocity = false,
+                    absoluteEncoder = false,
+                )
         )
 
     private val positionRequest = PositionVoltage(0.0)
@@ -100,14 +107,14 @@ object Extender : SubsystemBase() {
         }
 
         Logger.recordOutput(
-            "Subsystems/$name/setpoint",
+            "Subsystems/Extender/setpoint",
             setpoint[meters],
             meters
         )
-        Logger.recordOutput("Subsystems/$name/isStalling", isStalling)
-        Logger.recordOutput("Subsystems/$name/shouldStop", shouldStop)
+        Logger.recordOutput("Subsystems/Extender/isStalling", isStalling)
+        Logger.recordOutput("Subsystems/Extender/shouldStop", shouldStop)
         Logger.recordOutput(
-            "Subsystems/$name/lastStallDistance",
+            "Subsystems/Extender/lastStallDistance",
             lastStallingDistance
         )
     }

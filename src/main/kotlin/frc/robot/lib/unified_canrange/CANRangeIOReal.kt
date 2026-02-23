@@ -19,11 +19,10 @@ class CANRangeIOReal(
     }
 
     override fun updateInputs() {
-        if (loggingConfig.distance)
-            inputs.distance = CANrange.distance.value
-        if(loggingConfig.isDetecting)
+        if (loggingConfig.distance) inputs.distance = CANrange.distance.value
+        if (loggingConfig.isDetecting)
             inputs.isDetecting = CANrange.isDetected.value
-        if(loggingConfig.signalStrength)
+        if (loggingConfig.signalStrength)
             inputs.signalStrength = CANrange.signalStrength.value
     }
 }

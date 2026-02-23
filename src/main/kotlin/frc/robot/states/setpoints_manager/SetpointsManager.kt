@@ -66,13 +66,10 @@ object SetpointsManager {
             when {
                 DriverOverrides.StaticShootingOverride.trigger.asBoolean ->
                     ShootingType.STATIC
-
                 DriverOverrides.ShootingCalibrationOverride.trigger.asBoolean ->
                     ShootingType.CALIBRATION
-
                 DriverOverrides.ShootOnMoveOverride.trigger.asBoolean ->
                     ShootingType.SHOOT_ON_MOVE
-
                 else -> ShootingType.INTERPOLATION
             }
 
@@ -88,7 +85,8 @@ object SetpointsManager {
 }
 
 fun <T : SubsystemBase, M : () -> Measure<out Unit>> T.aimingSetpoint(): M {
-    @Suppress("UNCHECKED_CAST") return {
+    @Suppress("UNCHECKED_CAST")
+    return {
         val result =
             when (shootingType) {
                 ShootingType.STATIC -> staticShootingMap[this]!!
@@ -97,5 +95,6 @@ fun <T : SubsystemBase, M : () -> Measure<out Unit>> T.aimingSetpoint(): M {
                 else -> shootOnMoveMap[this]!!
             }
         result.invoke()
-    } as M
+    }
+        as M
 }

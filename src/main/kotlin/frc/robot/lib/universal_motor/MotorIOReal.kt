@@ -48,7 +48,8 @@ class MotorIOReal(
 
     override fun updateInputs() {
         if (logConfig.current) inputs.current = motor.supplyCurrent.value
-        if (logConfig.statorCurrent) inputs.statorCurrent = motor.statorCurrent.value
+        if (logConfig.statorCurrent)
+            inputs.statorCurrent = motor.statorCurrent.value
         if (logConfig.voltage) inputs.voltage = motor.motorVoltage.value
         if (logConfig.velocity) inputs.velocity = motor.velocity.value
         if (logConfig.absoluteEncoder)
