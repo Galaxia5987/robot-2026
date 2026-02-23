@@ -25,6 +25,7 @@ class MotorIOReal(
     private val gearRatio: Double,
     private val diameter: Distance,
     private val absoluteEncoderOffset: Angle,
+    private val logConfig: MotorLogConfig
 ) : MotorIO {
     override val inputs = LoggedMotorInputs()
     private val motor = TalonFX(port, canBus)
@@ -46,13 +47,16 @@ class MotorIOReal(
     }
 
     override fun updateInputs() {
-        inputs.current = motor.supplyCurrent.value
-        inputs.statorCurrent = motor.statorCurrent.value
-        inputs.position = motor.position.value
-        inputs.voltage = motor.motorVoltage.value
-        inputs.velocity = motor.velocity.value
-        inputs.distance = motor.position.value.toDistance(diameter, gearRatio)
-        inputs.absoluteEncoderPositionNoOffset =
-            motor.position.value - absoluteEncoderOffset
+        if (logConfig.current) inputs.current = motor.supplyCurrent.value
+        if (logConfig.statorCurrent) inputs.statorCurrent = motor.statorCurrent.value
+        if (logConfig.voltage) inputs.voltage = motor.motorVoltage.value
+        if (logConfig.velocity) inputs.velocity = motor.velocity.value
+        if (logConfig.absoluteEncoder)
+            inputs.absoluteEncoderPositionNoOffset =
+                motor.position.value - absoluteEncoderOffset
+        if (logConfig.position) {
+            inputs.position = motor.position.value
+            inputs.distance = inputs.position.toDistance(diameter, gearRatio)
+        }
     }
 }

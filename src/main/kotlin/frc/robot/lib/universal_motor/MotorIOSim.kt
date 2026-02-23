@@ -1,11 +1,7 @@
 package frc.robot.lib.universal_motor
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration
-import com.ctre.phoenix6.controls.ControlRequest
-import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC
-import com.ctre.phoenix6.controls.PositionVoltage
-import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC
-import com.ctre.phoenix6.controls.VelocityVoltage
+import com.ctre.phoenix6.controls.*
 import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.controller.ProfiledPIDController
 import edu.wpi.first.math.trajectory.TrapezoidProfile
@@ -34,6 +30,7 @@ class MotorIOSim(
     private val simGains: Gains,
     private val gearRatio: Double,
     private val diameter: Distance,
+    private val logConfig: MotorLogConfig
 ) : MotorIO {
     override val inputs = LoggedMotorInputs()
     private val profiledPIDController =
@@ -65,12 +62,15 @@ class MotorIOSim(
             is VelocityVoltage ->
                 controlRequest.FeedForward =
                     controlRequest.Velocity * simGains.kV
+
             is VelocityTorqueCurrentFOC ->
                 controlRequest.FeedForward =
                     controlRequest.Velocity * simGains.kV
+
             is PositionVoltage ->
                 controlRequest.FeedForward =
                     controlRequest.Position * simGains.kV
+
             is PositionTorqueCurrentFOC ->
                 controlRequest.FeedForward =
                     controlRequest.Position * simGains.kV
@@ -81,11 +81,14 @@ class MotorIOSim(
 
     override fun updateInputs() {
         motor.update(Timer.getFPGATimestamp())
-        inputs.statorCurrent = motor.appliedCurrent * 2.0
-        inputs.current = motor.appliedCurrent
-        inputs.position = motor.position.rot
-        inputs.voltage = motor.appliedVoltage
-        inputs.velocity = motor.velocity
-        inputs.distance = motor.position.rot.toDistance(diameter, gearRatio)
+        if (logConfig.current) inputs.current = motor.appliedCurrent
+        if (logConfig.statorCurrent) inputs.statorCurrent = motor.appliedCurrent * 2.0
+
+        if (logConfig.voltage) inputs.voltage = motor.appliedVoltage
+        if (logConfig.velocity) inputs.velocity = motor.velocity
+        if (logConfig.position) {
+            inputs.position = motor.position.rot
+            inputs.distance = inputs.position.toDistance(diameter, gearRatio)
+        }
     }
 }
