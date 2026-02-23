@@ -15,12 +15,6 @@ import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
 object Climb : SubsystemBase(), ClimbLevelsCommandFactory {
-
-    private var mechanism = LoggedMechanism2d(5.0, 5.0)
-    private var root = mechanism.getRoot(name, 2.5, 2.5)
-    private val ligament =
-        root.append(LoggedMechanismLigament2d("ClimbLigament", 1.0, 0.0))
-
     private val motor =
         UniversalTalonFX(
             MAIN_PORT,
@@ -33,7 +27,6 @@ object Climb : SubsystemBase(), ClimbLevelsCommandFactory {
 
     private var setpoint = ClimbLevels.RETRACTED
 
-    @LoggedOutput(LogLevel.COMP)
     val atSetpoint = Trigger {
         setpoint.height.isNear(motor.inputs.distance, TOLERANCE)
     }
@@ -48,9 +41,8 @@ object Climb : SubsystemBase(), ClimbLevelsCommandFactory {
     }
 
     override fun periodic() {
-        ligament.angle = motor.inputs.position[deg]
         motor.periodic()
         Logger.recordOutput("Subsystems/$name/setpoint", setpoint)
-        Logger.recordOutput("Subsystems/$name/mechanism", mechanism)
+        Logger.recordOutput("Subsystems/$name/atSetpoint", setpoint)
     }
 }

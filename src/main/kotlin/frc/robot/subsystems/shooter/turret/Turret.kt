@@ -30,11 +30,7 @@ object Turret : SubsystemBase() {
     private var setpointVelocityRps = 0.0
 
     val wrappedPosition: Angle
-        get() {
-            val raw = motor.inputs.position
-            return if (raw > 180.0.deg) raw - 360.0.deg
-            else if (raw < (-180.0).deg) raw + 360.0.deg else raw
-        }
+        get() = motor.inputs.position
 
     init {
         absoluteEncoder.configurator.apply(ENCODER_CONFIG)
@@ -64,10 +60,11 @@ object Turret : SubsystemBase() {
 
         motor.setControl(
             positionVoltage
-                .withPosition(setpoint)
-                .withVelocity(setpointVelocityRps)
+                .withPosition(setpoint).withVelocity(setpointVelocityRps)
+//                .withFeedForward(7 * setpointVelocityRps)
         )
     }
+
 
     override fun periodic() {
         motor.periodic()
