@@ -62,15 +62,12 @@ class MotorIOSim(
             is VelocityVoltage ->
                 controlRequest.FeedForward =
                     controlRequest.Velocity * simGains.kV
-
             is VelocityTorqueCurrentFOC ->
                 controlRequest.FeedForward =
                     controlRequest.Velocity * simGains.kV
-
             is PositionVoltage ->
                 controlRequest.FeedForward =
                     controlRequest.Position * simGains.kV
-
             is PositionTorqueCurrentFOC ->
                 controlRequest.FeedForward =
                     controlRequest.Position * simGains.kV

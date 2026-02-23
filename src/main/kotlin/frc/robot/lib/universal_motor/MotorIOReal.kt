@@ -51,10 +51,8 @@ class MotorIOReal(
             inputs.current = motor.supplyCurrent.value
             inputs.statorCurrent = motor.statorCurrent.value
         }
-        if (logConfig.voltage)
-            inputs.voltage = motor.motorVoltage.value
-        if (logConfig.velocity)
-            inputs.velocity = motor.velocity.value
+        if (logConfig.voltage) inputs.voltage = motor.motorVoltage.value
+        if (logConfig.velocity) inputs.velocity = motor.velocity.value
         if (logConfig.absoluteEncoder)
             inputs.absoluteEncoderPositionNoOffset =
                 motor.position.value - absoluteEncoderOffset
