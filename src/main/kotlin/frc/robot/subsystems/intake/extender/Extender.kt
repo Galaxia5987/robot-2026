@@ -15,8 +15,6 @@ import frc.robot.lib.extensions.*
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import frc.robot.states.intaking.IntakingStates
 import org.littletonrobotics.junction.Logger
-import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
-import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
 
 object Extender : SubsystemBase() {
     private val motor =
@@ -35,7 +33,7 @@ object Extender : SubsystemBase() {
     private var setpoint = 0.meters
 
     val atSetpoint = Trigger {
-        setpoint.isNear(motor.inputs.distance, TOLERANCE)
+        setpoint.isNear(motor.inputs.distance, EXTENDER_SETPOINT_TOLERANCE)
     }
 
     var lastStallingDistance = 0.m
@@ -43,12 +41,6 @@ object Extender : SubsystemBase() {
     private val isStalling =
         Trigger { motor.inputs.statorCurrent > STATOR_STALL_CURRENT }
             .debounce(STALL_DEBOUNCE[sec])
-
-    private var mechanism = LoggedMechanism2d(5.0, 5.0)
-
-    private var root = mechanism.getRoot(name, 2.5, 2.5)
-    private val ligament =
-        root.append(LoggedMechanismLigament2d("ExtenderLigament", 1.0, 0.0))
 
     val shouldStop: Trigger =
         isStalling.and(IntakingStates.INTAKING.trigger.negate())
@@ -81,9 +73,7 @@ object Extender : SubsystemBase() {
     fun close(): Command =
         Commands.sequence(
             setVoltage(CLOSE_VOLTAGE),
-            Commands.print("FINISHED SETTING VOLTAGE!!!"),
-            Commands.waitSeconds(1.0),
-            Commands.print("SHOULD STOP IS TRUE!!!"),
+            Commands.waitUntil(shouldStop),
             stop()
         )
 
@@ -114,7 +104,6 @@ object Extender : SubsystemBase() {
             setpoint[meters],
             meters
         )
-        Logger.recordOutput("Subsystems/$name/mechanism", mechanism)
         Logger.recordOutput("Subsystems/$name/isStalling", isStalling)
         Logger.recordOutput("Subsystems/$name/shouldStop", shouldStop)
         Logger.recordOutput(

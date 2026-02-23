@@ -8,6 +8,7 @@ import com.ctre.phoenix6.hardware.*;
 import com.ctre.phoenix6.signals.*;
 import com.ctre.phoenix6.swerve.*;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.*;
+import com.pathplanner.lib.config.PIDConstants;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -17,6 +18,8 @@ import edu.wpi.first.units.measure.*;
 // https://v6.docs.ctr-electronics.com/en/stable/docs/tuner/tuner-swerve/index.html
 public class TunerConstants {
     // Both sets of gains need to be tuned to your individual robot.
+    public static final PIDConstants autonomousTranslationPID = new PIDConstants(6.5, 0.0, 0.0);
+    public static final PIDConstants autonomousRotationPID = new PIDConstants(4.5, 0.0, 0.0);
 
     // The steer motor uses any SwerveModule.SteerRequestType control request with the
     // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
@@ -30,16 +33,6 @@ public class TunerConstants {
                     .withKA(0)
                     .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
 
-    public static final Slot0Configs turnAuto =
-            new Slot0Configs()
-                    .withKP(5)
-                    .withKI(0)
-                    .withKD(0.5)
-                    .withKA(0)
-                    .withKV(0)
-                    .withKS(0)
-                    .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
-
     public static final MotionMagicConfigs motionMagicSteerGains =
             new MotionMagicConfigs()
                     .withMotionMagicCruiseVelocity(80)
@@ -48,10 +41,7 @@ public class TunerConstants {
     // When using closed-loop control, the drive motor uses the control
     // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
     public static final Slot0Configs driveGains =
-            new Slot0Configs().withKP(1.4).withKI(0).withKD(0).withKS(0.21265).withKV(0.89309);
-
-    public static final Slot0Configs autoGains =
-            new Slot0Configs().withKP(2.7).withKD(0.0).withKI(0.3).withKS(0.0).withKV(0.0);
+            new Slot0Configs().withKP(1.4).withKI(0).withKD(0).withKS(0.57008).withKV(0.93184);
 
     // The closed-loop output type to use for the steer motors;
     // This affects the PID/FF gains for the steer motors
@@ -112,14 +102,14 @@ public class TunerConstants {
 
     // Theoretical free speed (m/s) at 12 V applied output;
     // This needs to be tuned to your individual robot
-    public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(4.35);
+    public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(4.00);
 
     // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
     // This may need to be tuned to your individual robot
-    private static final double kCoupleRatio = 3.8181818181818183;
-    private static final double kDriveGearRatio = 7.67;
+    private static final double kCoupleRatio = 5.4;
+    private static final double kDriveGearRatio = 7.673684210526316;
     private static final double kSteerGearRatio = 12.1;
-    private static final Distance kWheelRadius = Inches.of(4.0);
+    private static final Distance kWheelRadius = Inches.of(2.0);
 
     private static final boolean kInvertLeftSide = false;
     private static final boolean kInvertRightSide = false;

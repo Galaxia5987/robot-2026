@@ -1,0 +1,37 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "StartToFuelOutpostSide"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FuelOutpostSideToShooting"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "OutposeStartToScatteredFuel"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ScatteredFuelOutpostSideToShooting"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

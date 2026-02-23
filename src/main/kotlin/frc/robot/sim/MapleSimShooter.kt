@@ -15,7 +15,7 @@ import frc.robot.lib.extensions.mm
 import frc.robot.lib.extensions.mps
 import frc.robot.lib.extensions.toRotation2d
 import frc.robot.lib.extensions.toTranslation3d
-import frc.robot.states.setpoints_manager.shooting_modes.distanceFromGoal
+import frc.robot.states.setpoints_manager.shooting_modes.turretDistanceFromGoal
 import frc.robot.states.shooting.ShootingState
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.turret.Turret
@@ -36,10 +36,10 @@ class MapleSimShooter(private val mapleSimIntake: MapleSimIntake) {
                 robotSpeeds,
                 Turret.wrappedPosition.toRotation2d() + drive.pose.rotation,
                 0.47865.m,
-                if (distanceFromGoal > 10.m) 13.mps
+                if (turretDistanceFromGoal > 10.m) 13.mps
                 else
                     calculateVelocity(
-                            distanceFromGoal[m],
+                            turretDistanceFromGoal[m],
                             robotSpeeds.vxMetersPerSecond,
                             robotSpeeds.vyMetersPerSecond
                         )

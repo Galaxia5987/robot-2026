@@ -1,6 +1,8 @@
 package frc.robot.lib
 
+import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj.GenericHID
@@ -174,3 +176,23 @@ fun Angle.convertTo360(): Angle { // Convert angle from (-180,180) -> (0,360)
     val deg = (this + 180.0.deg)
     return deg
 }
+
+// NO ROTATION ESTIMATION!!
+fun Pose2d.estimateAt(
+    seconds: Double,
+    fieldRelativeSpeeds: ChassisSpeeds,
+    fieldOrientedAcceleration: ChassisSpeeds
+): Translation2d =
+    this.translation +
+        Translation2d(
+            fieldRelativeSpeeds.vxMetersPerSecond * seconds +
+                0.5 *
+                    seconds *
+                    seconds *
+                    fieldOrientedAcceleration.vxMetersPerSecond,
+            fieldRelativeSpeeds.vyMetersPerSecond * seconds +
+                0.5 *
+                    seconds *
+                    seconds *
+                    fieldOrientedAcceleration.vxMetersPerSecond,
+        )

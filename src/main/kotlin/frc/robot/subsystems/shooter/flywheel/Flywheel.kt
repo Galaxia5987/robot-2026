@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.rad_ps
 import frc.robot.lib.extensions.radiansPerSecond
-import frc.robot.lib.extensions.rps
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
@@ -39,7 +38,7 @@ object Flywheel : SubsystemBase(), FlywheelVelocitiesCommandFactory {
         }
     }
 
-    private val calibrationVelocity =
+    val calibrationVelocity =
         LoggedNetworkNumber(
             "/Tuning/Flywheel/calibrationFlywheelVelocity",
             40.0
@@ -49,12 +48,8 @@ object Flywheel : SubsystemBase(), FlywheelVelocitiesCommandFactory {
         motor.inputs.velocity.isNear(setpoint, FLYWHEEL_TOLERANCE)
     }
 
-    fun setCalibrationVelocity(): Command = setVelocity {
-        calibrationVelocity.get().rps
-    }
-
     fun setVelocity(velocity: () -> AngularVelocity): Command = run {
-        setpoint = velocity()
+        setpoint = velocity.invoke()
         motor.setControl(velocityOut.withVelocity(setpoint))
     }
 

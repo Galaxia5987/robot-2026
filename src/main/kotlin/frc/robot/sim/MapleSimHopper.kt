@@ -90,16 +90,16 @@ class MapleSimHopper {
     val emptyTrigger: Trigger =
         Sensors.hasFuel
             .negate()
-            .and(Sensors.cantCloseIntake.negate())
+            .and(Sensors.isFull.negate())
             .onTrue(Commands.runOnce({ fuelInRobotPoses = { empty } }))
 
     val thirdFullTrigger: Trigger =
         Sensors.hasFuel
-            .and(Sensors.cantCloseIntake.negate())
+            .and(Sensors.isFull.negate())
             .onTrue(Commands.runOnce({ fuelInRobotPoses = { thirdFull } }))
 
     val halfFullTrigger: Trigger =
-        Sensors.cantCloseIntake
+        Sensors.isFull
             .and(Sensors.isFull.negate())
             .onTrue(
                 Commands.runOnce({ fuelInRobotPoses = { cantCloseIntake } })

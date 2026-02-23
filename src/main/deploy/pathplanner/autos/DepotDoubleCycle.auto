@@ -1,0 +1,44 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "StartToFuelDepotSide"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "FuelToDepotStart"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "DepotStartToScatteredFuel"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "ScatteredFuelDepotSideToShooting"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

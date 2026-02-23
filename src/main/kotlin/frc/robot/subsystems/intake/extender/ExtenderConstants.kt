@@ -11,7 +11,7 @@ import org.team5987.annotation.command_enum.CommandEnum
 
 val DIAMETER = 25.4.mm
 
-val TOLERANCE = 4.cm
+val EXTENDER_SETPOINT_TOLERANCE = 4.cm
 
 const val PORT = 11
 

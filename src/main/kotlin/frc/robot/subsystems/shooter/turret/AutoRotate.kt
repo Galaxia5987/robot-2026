@@ -4,17 +4,20 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.calculateYaw
 import frc.robot.drive
 import frc.robot.lib.extensions.cm
 import frc.robot.lib.extensions.deg
+import frc.robot.lib.extensions.get
+import frc.robot.lib.extensions.m
 import frc.robot.lib.extensions.mm
 import frc.robot.lib.extensions.rotationToPoint
 import frc.robot.lib.extensions.toTranslation3d
 import frc.robot.lib.getPose3d
 import frc.robot.lib.getRotation3d
 import frc.robot.states.setpoints_manager.SetpointsManager.currentGoal
-import org.team5987.annotation.LogLevel
-import org.team5987.annotation.LoggedOutput
+import frc.robot.states.setpoints_manager.SetpointsManager.isShootingOnMove
+import frc.robot.states.setpoints_manager.shooting_modes.turretDistanceFromGoal
 
 const val HUB_PATH = "Subsystems/Hub"
 
@@ -27,7 +30,6 @@ val turretTranslationFieldOriented: Translation2d
         )
 
 // For debugging
-@LoggedOutput(LogLevel.DEV, path = HUB_PATH)
 val turretPose
     get() =
         getPose3d(
@@ -35,16 +37,28 @@ val turretPose
             getRotation3d(pitch = (-90).deg)
         )
 
-@LoggedOutput(LogLevel.DEV, path = HUB_PATH)
 val angleFromRobotToHub: Rotation2d
     get() =
         turretTranslationFieldOriented.rotationToPoint(currentGoal.translation)
 
-@LoggedOutput(LogLevel.DEV, path = HUB_PATH)
 val turretAngleToHub: Angle
     get() = (drive.pose.rotation - angleFromRobotToHub).measure
 
-@LoggedOutput(LogLevel.COMP, path = HUB_PATH)
+val turretAngleToHubShootOnMove: Angle
+    get() =
+        turretAngleToHub -
+            calculateYaw(
+                    turretDistanceFromGoal[m],
+                    drive.chassisSpeeds.vxMetersPerSecond,
+                    drive.chassisSpeeds.vyMetersPerSecond
+                )
+                .deg
+
+val turretAimingSetpoint: Angle
+    get() =
+        if (isShootingOnMove.asBoolean) turretAngleToHubShootOnMove
+        else turretAngleToHub
+
 val isTurretAligned = Trigger {
-    Turret.wrappedPosition.isNear(turretAngleToHub, SETPOINT_TOLERANCE)
+    Turret.wrappedPosition.isNear(turretAimingSetpoint, SETPOINT_TOLERANCE)
 }

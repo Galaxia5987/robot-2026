@@ -20,6 +20,7 @@ import java.util.*
 import org.photonvision.EstimatedRobotPose
 import org.photonvision.PhotonCamera
 import org.photonvision.PhotonPoseEstimator
+import org.photonvision.targeting.PhotonPipelineResult
 
 /** IO implementation for real PhotonVision hardware. */
 open class VisionIOPhotonVision(
@@ -82,7 +83,6 @@ open class VisionIOPhotonVision(
         }
 
         // Save pose observations and tag IDs to inputs object
-        inputs.poseObservations = poseObservations.toTypedArray()
         inputs.tagIds = tagIds.map { it.toInt() }.toIntArray()
     }
 }

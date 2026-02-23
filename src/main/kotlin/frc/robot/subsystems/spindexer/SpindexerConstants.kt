@@ -36,7 +36,7 @@ val MOTOR_CONFIG =
 @CommandEnum
 enum class SpindexerVelocity(val velocity: AngularVelocity) {
     STOP(0.rps),
-    START(10.rps),
+    START(8.rps),
     SLOW(4.rps),
     REVERSE((-10).rps),
     REVERSE_SLOW(-SLOW.velocity)

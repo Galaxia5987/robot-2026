@@ -1,0 +1,156 @@
+{
+  "hubs": [
+    {
+      "x": -8,
+      "y": -8,
+      "width": 1936,
+      "height": 1048,
+      "state": {
+        "sidebar": {
+          "width": 340,
+          "expanded": [
+            "/AdvantageKit/RealOutputs/TurretCameraPose",
+            "/AdvantageKit/RealOutputs/OUTPOST_CROSS_LINE_RECTANGLE/0",
+            "/AdvantageKit/Subsystems/PreShooter/motorId 13",
+            "/AdvantageKit/Subsystems/Flywheel/motorId 16",
+            "/AdvantageKit/Subsystems/Turret/motorId 14",
+            "/CameraPublisher/photonvision_Port_1181_Input_MJPEG_Server",
+            "/AdvantageKit/RealOutputs/Subsystems/Vision",
+            "/AdvantageKit/RealOutputs/Subsystems/Vision/turret",
+            "/AdvantageKit/Subsystems/Vision/turret/PoseObservations",
+            "/AdvantageKit/Subsystems/Vision/turret/PoseObservations/0",
+            "/AdvantageKit/Subsystems/Vision/turret/PoseObservations/0/pose",
+            "/AdvantageKit/Subsystems/Vision/turret/PoseObservations/0/pose/translation",
+            "/AdvantageKit/RealOutputs/Odometry/Robot/translation",
+            "/AdvantageKit/RealOutputs/StateMachines/Intaking",
+            "/AdvantageKit/Subsystems/Spindexer/motorId 12",
+            "/AdvantageKit/RealOutputs",
+            "/AdvantageKit/Subsystems",
+            "/AdvantageKit/Subsystems/Vision/turret/EstimatedPose",
+            "/AdvantageKit/Subsystems/Vision/front/EstimatedPose",
+            "/AdvantageKit/RealOutputs/StateMachines/Shooting",
+            "/AdvantageKit/RealOutputs/Field",
+            "/AdvantageKit/RealOutputs/Choreo",
+            "/AdvantageKit/RealOutputs/distanceFromGoal",
+            "/AdvantageKit/RealOutputs/distanceFromGoal/distanceFromGoal",
+            "/Tuning/Flywheel",
+            "/AdvantageKit/RealOutputs/Subsystems/Hood/adjustedFieldRelativeSpeeds",
+            "/AdvantageKit/RealOutputs/Subsystems/Hood/adjustedFieldRelativeSpeeds/0",
+            "/AdvantageKit",
+            "/AdvantageKit/RealOutputs/SwerveChassisSpeeds",
+            "/AdvantageKit/RealOutputs/SwerveStates/Measured/0",
+            "/AdvantageKit/RealOutputs/SwerveStates/SetpointsOptimized",
+            "/AdvantageKit/RealOutputs/SwerveStates/SetpointsOptimized/0",
+            "/AdvantageKit/RealOutputs/SwerveChassisSpeeds/Measured",
+            "/photonvision/coprocessors/C0-74-2B-FA-B4-75/cameraNames",
+            "/photonvision/coprocessors/F0-74-E4-7F-54-04/cameraNames",
+            "/AdvantageKit/RealOutputs/Subsystems",
+            "/AdvantageKit/Subsystems/Vision",
+            "/RealOutputs/Subsystems",
+            "/Subsystems",
+            "/Subsystems/Vision",
+            "/RealOutputs",
+            "/RealOutputs/Odometry",
+            "/Subsystems/Vision/left/EstimatedPose",
+            "/Subsystems/Vision/right",
+            "/Subsystems/Vision/turret",
+            "/Subsystems/Vision/turret/EstimatedPose"
+          ]
+        },
+        "tabs": {
+          "selected": 1,
+          "tabs": [
+            {
+              "type": 0,
+              "title": "",
+              "controller": null,
+              "controllerUUID": "swrochrp1g9y57nw9dwqklejtuc2xm2k",
+              "renderer": "",
+              "controlsHeight": 0
+            },
+            {
+              "type": 2,
+              "title": "2D Field",
+              "controller": {
+                "sources": [
+                  {
+                    "type": "robot",
+                    "logKey": "/RealOutputs/Odometry/Robot",
+                    "logType": "Pose2d",
+                    "visible": true,
+                    "options": {
+                      "bumpers": ""
+                    }
+                  },
+                  {
+                    "type": "ghost",
+                    "logKey": "/RealOutputs/Odometry/TrajectorySetpoint",
+                    "logType": "Pose2d",
+                    "visible": false,
+                    "options": {
+                      "color": "#00ff00"
+                    }
+                  },
+                  {
+                    "type": "trajectory",
+                    "logKey": "/RealOutputs/Odometry/Trajectory",
+                    "logType": "Pose2d[]",
+                    "visible": false,
+                    "options": {
+                      "color": "#00ff00",
+                      "size": "normal"
+                    }
+                  },
+                  {
+                    "type": "ghost",
+                    "logKey": "/Subsystems/Vision/back/EstimatedPose/pose",
+                    "logType": "Pose3d",
+                    "visible": false,
+                    "options": {
+                      "color": "#ff0000"
+                    }
+                  },
+                  {
+                    "type": "ghost",
+                    "logKey": "/Subsystems/Vision/left/EstimatedPose/pose",
+                    "logType": "Pose3d",
+                    "visible": false,
+                    "options": {
+                      "color": "#0000ff"
+                    }
+                  },
+                  {
+                    "type": "ghost",
+                    "logKey": "/Subsystems/Vision/right/EstimatedPose/pose",
+                    "logType": "Pose3d",
+                    "visible": false,
+                    "options": {
+                      "color": "#ff8c00"
+                    }
+                  },
+                  {
+                    "type": "ghost",
+                    "logKey": "/Subsystems/Vision/turret/EstimatedPose/pose",
+                    "logType": "Pose3d",
+                    "visible": false,
+                    "options": {
+                      "color": "#00ffff"
+                    }
+                  }
+                ],
+                "field": "FRC:2026 Field",
+                "orientation": 0,
+                "size": "large"
+              },
+              "controllerUUID": "rwvsgv9xzy9vkncewqphme5ekbozyozs",
+              "renderer": null,
+              "controlsHeight": 200
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "satellites": [],
+  "version": "26.0.0"
+}
