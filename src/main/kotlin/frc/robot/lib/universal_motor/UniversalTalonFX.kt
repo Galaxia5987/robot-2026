@@ -41,7 +41,8 @@ class UniversalTalonFX(
     private val momentOfInertia: MomentOfInertia = 0.003.kg2m,
     private val gearRatio: Double = 1.0,
     private val linearSystemWheelDiameter: Distance = 0.m,
-    private val absoluteEncoderOffset: Angle = 0.deg
+    private val absoluteEncoderOffset: Angle = 0.deg,
+    private val logConfig: MotorLogConfig = MotorLogConfig()
 ) {
     private val motorIO: MotorIO =
         if (CURRENT_MODE == Mode.REAL)
@@ -51,7 +52,8 @@ class UniversalTalonFX(
                 config,
                 gearRatio,
                 linearSystemWheelDiameter,
-                absoluteEncoderOffset
+                absoluteEncoderOffset,
+                logConfig
             )
         else {
             MotorIOSim(
@@ -59,7 +61,8 @@ class UniversalTalonFX(
                 config,
                 simGains,
                 gearRatio,
-                linearSystemWheelDiameter
+                linearSystemWheelDiameter,
+                logConfig
             )
         }
     val inputs: LoggedMotorInputs = motorIO.inputs

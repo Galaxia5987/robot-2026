@@ -55,6 +55,8 @@ private fun getPreShooterSetpoint(): AngularVelocity {
         .rps
 }
 
+private fun calculateAngularVelocity(calculateVelocity: Double) = 0.0
+
 val shootOnMoveMap: Map<SubsystemBase, () -> Measure<out Unit>> =
     mapOf(
         Turret to ::getTurretSetpoint,
