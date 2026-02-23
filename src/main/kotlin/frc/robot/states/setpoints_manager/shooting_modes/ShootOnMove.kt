@@ -28,7 +28,7 @@ fun ChassisSpeeds.to2dVector(): Translation2d =
 @LoggedOutput(path = "Odometry", level = LogLevel.COMP)
 val turretOrientedChassisSpeeds: Translation2d
     get() =
-        drive.chassisSpeeds
+        drive.chassisSpeedsSetpoint
             .to2dVector()
             .rotateBy(Turret.wrappedPosition.toRotation2d())
 

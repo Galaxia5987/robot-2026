@@ -5,9 +5,6 @@ import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
-import frc.robot.autonomous.startToFuelDepotSide
-import frc.robot.autonomous.test
-import frc.robot.autonomous.test2
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.states.intaking.IntakingStates
@@ -103,10 +100,5 @@ object RobotContainer {
             "swerveFFCharacterization",
             DriveCommands.feedforwardCharacterization()
         )
-
-        autoChooser.addOption("test", test())
-        autoChooser.addOption("test2", test2())
-
-        autoChooser.addOption("StartToFuelDepotSide", startToFuelDepotSide())
     }
 }

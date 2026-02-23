@@ -4,6 +4,7 @@ import com.ctre.phoenix6.configs.FeedbackConfigs
 import com.ctre.phoenix6.configs.MotorOutputConfigs
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.signals.InvertedValue
+import com.ctre.phoenix6.signals.NeutralModeValue
 import edu.wpi.first.units.measure.AngularVelocity
 import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
@@ -30,6 +31,7 @@ val MOTOR_CONFIG =
         MotorOutput =
             MotorOutputConfigs().apply {
                 Inverted = InvertedValue.Clockwise_Positive
+                NeutralMode = NeutralModeValue.Brake
             }
         CurrentLimits = createCurrentLimits(20.amps, 10.amps)
         Feedback =

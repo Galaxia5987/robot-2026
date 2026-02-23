@@ -5,6 +5,7 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue
 import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import com.ctre.phoenix6.signals.SensorDirectionValue
+import com.ctre.phoenix6.signals.StaticFeedforwardSignValue
 import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.*
@@ -15,7 +16,7 @@ const val PORT = 14
 const val RATIO = 55.0
 const val ENCODER_RATIO = 1.0
 val SIM_GAINS = Gains(kP = 0.5, kD = 0.075)
-val REAL_GAINS = Gains(kP = 100.0, kS = 0.5)
+val REAL_GAINS = Gains(kP = 75.0, kD = 0.7, kS = 0.2)
 
 val SETPOINT_TOLERANCE
     get() = isShootingOnMove.asBoolean.switchable(5.deg, 1.5.deg)
@@ -48,8 +49,9 @@ val CONFIG =
             MotorOutputConfigs().apply {
                 NeutralMode = NeutralModeValue.Brake
                 Inverted = InvertedValue.Clockwise_Positive
+                ControlTimesyncFreqHz = 200.0
             }
-        Slot0 = REAL_GAINS.toSlotConfig()
+        Slot0 = REAL_GAINS.toSlotConfig().withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign)
         ClosedLoopGeneral =
             ClosedLoopGeneralConfigs().apply { ContinuousWrap = false }
         SoftwareLimitSwitch = SOFTWARE_LIMIT_CONFIG
@@ -58,7 +60,7 @@ val CONFIG =
                 RotorToSensorRatio = RATIO
                 SensorToMechanismRatio = ENCODER_RATIO
                 FeedbackRemoteSensorID = ENCODER_ID
-                FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder
+                FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder
             }
         CurrentLimits = createCurrentLimits(20.amps, 5.amps)
     }
