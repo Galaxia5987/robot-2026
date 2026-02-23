@@ -7,6 +7,7 @@ import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.m
 import frc.robot.lib.extensions.sec
 import frc.robot.lib.unified_canrange.UnifiedCANRange
+import frc.robot.lib.unified_canrange.UnifiedCANRangeLogging
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.subsystems.intake.extender.EXTENDER_SETPOINT_TOLERANCE
 import frc.robot.subsystems.intake.extender.Extender
@@ -21,14 +22,16 @@ object Sensors : SubsystemBase() {
         UnifiedCANRange(
             SPINDEXER_SENSOR_PORT,
             configuration = SPINDEXER_SENSOR_CONFIG,
-            sensorName = "spindexerSensor"
+            sensorName = "spindexerSensor",
+            loggingConfig = UnifiedCANRangeLogging(distance = false)
         )
     private val topSensor =
         UnifiedCANRange(
             TOP_SENSOR_PORT,
             configuration = TOP_SENSOR_CONFIG,
             sensorName = "topSensor",
-            simulationUsesNumber = true
+            simulationUsesNumber = true,
+            loggingConfig = UnifiedCANRangeLogging(distance = false, signalStrength = false)
         )
 
     val isFull: Trigger = Trigger { topSensor.isInRange }

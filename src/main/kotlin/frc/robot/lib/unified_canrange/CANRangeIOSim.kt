@@ -15,7 +15,8 @@ import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
 class CANRangeIOSim(
     subsystemName: String,
     sensorName: String,
-    private val usesNumber: Boolean = false
+    private val usesNumber: Boolean = false,
+    private val loggingConfig: UnifiedCANRangeLogging
 ) : CANRangeIO {
 
     override val inputs = LoggedSensorInputs()
@@ -55,9 +56,10 @@ class CANRangeIOSim(
                 usesNumber -> getNumberModeValues()
                 else -> getBooleanModeValues()
             }
-
-        inputs.distance = distance.m
-        inputs.isDetecting = detecting
+        if(loggingConfig.distance)
+            inputs.distance = distance.m
+        if (loggingConfig.isDetecting)
+            inputs.isDetecting = detecting
     }
 
     private fun getMapleSimIntakingNumberModeValues(): Pair<Double, Boolean> {
