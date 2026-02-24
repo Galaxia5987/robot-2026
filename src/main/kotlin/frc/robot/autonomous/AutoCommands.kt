@@ -9,17 +9,18 @@ import edu.wpi.first.wpilibj2.command.Commands
 import frc.robot.drive
 import frc.robot.lib.getPose2d
 import frc.robot.states.intaking.IntakingStates
+import frc.robot.states.shooting.ShootingState
 
 // TODO: After basic trajectory following is working open path planner and look at the paths then
 // implement here the trajectory chaining as one command with state machine integrated commands as
 // well
 val setIntaking= EventTrigger("setIntaking").onTrue(IntakingStates.INTAKING.set())
 val setStopIntaking= EventTrigger("setStopIntaking").onTrue(IntakingStates.CLOSED.set())
-
+val setShooting = EventTrigger("setShooting").onTrue(ShootingState.SHOOTING.set())
+val setStopShooting= EventTrigger("setStopShooting").onTrue(ShootingState.IDLE.set())
 
 fun DepotMain(): Command= PathPlannerAuto("DepotMain")
 fun AutoTest(): Command= PathPlannerAuto("AutoTest")
-fun Test(): Command=
-    AutoBuilder.resetOdom(PathPlannerPath.fromPathFile("Test").pathPoses[0]).andThen(AutoBuilder.followPath(PathPlannerPath.fromPathFile("Test")))
+fun Test(): Command= AutoBuilder.resetOdom(PathPlannerPath.fromPathFile("Test").pathPoses[0]).andThen(AutoBuilder.followPath(PathPlannerPath.fromPathFile("Test")))
 fun AutoTestCommands(): Command= PathPlannerAuto("AutoTestCommands")
 fun TwoPathTestAuto(): Command= PathPlannerAuto("TwoPathTestAuto")
