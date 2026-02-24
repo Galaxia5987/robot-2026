@@ -52,7 +52,14 @@
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "setShooting",
+      "waypointRelativePos": 1.2535991140642215,
+      "endWaypointRelativePos": 1.7275747508305592,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 4.01,
     "maxAcceleration": 5.0,
