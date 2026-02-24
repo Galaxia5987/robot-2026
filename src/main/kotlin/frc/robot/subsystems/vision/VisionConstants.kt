@@ -27,6 +27,8 @@ import frc.robot.lib.extensions.toTransform
 import frc.robot.lib.extensions.toYaw
 import frc.robot.lib.getRotation3d
 import frc.robot.subsystems.shooter.turret.Turret
+import org.team5987.annotation.LogLevel
+import org.team5987.annotation.LoggedOutput
 
 const val LOG_PREFIX = "Subsystems/Vision/"
 
@@ -49,7 +51,7 @@ const val TURRET_CAMERA_NAME = "turret"
 private val TURRET_TRANSLATION =
     Translation3d((-117.5).mm, 207.5.mm, 360.888.mm)
 val CAMERA_TO_TURRET_TRANSLATION =
-    Translation3d((-70.403).mm, 122.mm, 169.633.mm)
+    Translation3d((-75.97130).mm, 122.mm, 167.03609.mm)
 
 val TURRET_CAMERA_ROBOT_TO_CAMERA: Transform3d
     get() =
@@ -119,10 +121,10 @@ val FRONT_CONFIG =
     CameraConfig(
         robotToCamera = {
             Transform3d(
-                133.02761.mm,
-                338.949.mm,
-                528.36092.mm,
-                Rotation3d(0.0.deg, (-25).deg, 0.deg)
+                105.241.mm,
+                347.50000.mm,
+                525.46448.mm,
+                Rotation3d(0.0.deg, (-20).deg, 0.deg)
             )
         },
         tagIdsToFilter = { listOf() },

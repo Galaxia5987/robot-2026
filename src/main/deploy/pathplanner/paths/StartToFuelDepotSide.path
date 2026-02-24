@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.288752624608908,
-        "y": 7.505017316493837
+        "x": 4.888786105194284,
+        "y": 7.435090532380351
       },
       "isLocked": false,
       "linkedName": "startDepotSide"
     },
     {
       "anchor": {
-        "x": 7.807577875222371,
-        "y": 6.7257273803861
+        "x": 7.610363636363637,
+        "y": 6.704465909090909
       },
       "prevControl": {
-        "x": 7.750692937494447,
-        "y": 7.725580847814423
+        "x": 7.176294534681813,
+        "y": 7.450411461770334
       },
       "nextControl": {
-        "x": 7.827764243047503,
-        "y": 6.370916235803725
+        "x": 7.736100971231298,
+        "y": 6.488386935980665
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +36,8 @@
         "y": 4.730019071847314
       },
       "prevControl": {
-        "x": 7.8129605947817975,
-        "y": 6.438643256425005
+        "x": 7.921531573321899,
+        "y": 5.163886784373464
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,19 +45,33 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Ball Pickup constraint zone",
+      "minWaypointRelativePos": 1.0499999999999998,
+      "maxWaypointRelativePos": 1.9500000000000002,
+      "constraints": {
+        "maxVelocity": 2.0,
+        "maxAcceleration": 4.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 1800.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
       "name": "setIntaking",
-      "waypointRelativePos": 0.8726467331118475,
-      "endWaypointRelativePos": 2.0,
+      "waypointRelativePos": 0.25,
+      "endWaypointRelativePos": null,
       "command": null
     }
   ],
   "globalConstraints": {
     "maxVelocity": 4.01,
-    "maxAcceleration": 5.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 1800.0,
     "nominalVoltage": 12.0,

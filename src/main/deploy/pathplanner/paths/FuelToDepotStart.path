@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 4.5,
-        "y": 7.512274134888589
+        "x": 4.499471428571429,
+        "y": 7.61117142857143
       },
       "prevControl": {
-        "x": 7.377602862254025,
-        "y": 7.661377459749552
+        "x": 7.377074290825454,
+        "y": 7.760274753432393
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "startDepotSide"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -45,10 +45,17 @@
     }
   ],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "setStopIntaking",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 4.01,
-    "maxAcceleration": 5.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 1800.0,
     "nominalVoltage": 12.0,
