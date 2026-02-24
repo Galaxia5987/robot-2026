@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.086563527295544,
-        "y": 7.603558792065662
+        "x": 6.079570661896244,
+        "y": 7.645152057245081
       },
       "isLocked": false,
       "linkedName": "startDepotSide"
@@ -20,8 +20,8 @@
         "y": 4.824948394192251
       },
       "prevControl": {
-        "x": 7.1832609781641885,
-        "y": 6.119016143410069
+        "x": 7.604758497316638,
+        "y": 6.606726296958855
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.01,
-    "maxAcceleration": 8.6,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 1800.0,
     "nominalVoltage": 12.0,
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }

@@ -205,7 +205,7 @@ private object Climb {
 
 private val subsystemPoseArray = Array(14) { Pose3d() }
 
-@LoggedOutput(key = "Visualization/mechanismPoses", level = LogLevel.COMP)
+@LoggedOutput(key = "Visualization/mechanismPoses", level = LogLevel.DISABLED)
 fun mechanismPoses(): Array<Pose3d> {
     //    val swerveModulesPoses = getAllSwerveModulePoseDrive()
     //

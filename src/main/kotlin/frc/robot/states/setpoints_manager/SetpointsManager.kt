@@ -12,6 +12,7 @@ import frc.robot.lib.extensions.toPose
 import frc.robot.states.DriverOverrides
 import frc.robot.states.setpoints_manager.SetpointsManager.ShootingType
 import frc.robot.states.setpoints_manager.SetpointsManager.shootingType
+import frc.robot.states.setpoints_manager.shooting_modes.calibrationShootingMap
 import frc.robot.states.setpoints_manager.shooting_modes.interpolationShootingMap
 import frc.robot.states.setpoints_manager.shooting_modes.shootOnMoveMap
 import frc.robot.states.setpoints_manager.shooting_modes.staticShootingMap
@@ -52,7 +53,8 @@ object SetpointsManager {
     enum class ShootingType {
         STATIC,
         INTERPOLATION,
-        SHOOT_ON_MOVE
+        SHOOT_ON_MOVE,
+        CALIBRATION
     }
 
     @LoggedOutput(
@@ -64,9 +66,11 @@ object SetpointsManager {
             when {
                 DriverOverrides.StaticShootingOverride.trigger.asBoolean ->
                     ShootingType.STATIC
-                !DriverOverrides.ShootOnMoveOverride.trigger.asBoolean ->
-                    ShootingType.INTERPOLATION
-                else -> ShootingType.SHOOT_ON_MOVE
+                DriverOverrides.ShootingCalibrationOverride.trigger.asBoolean ->
+                    ShootingType.CALIBRATION
+                DriverOverrides.ShootOnMoveOverride.trigger.asBoolean ->
+                    ShootingType.SHOOT_ON_MOVE
+                else -> ShootingType.INTERPOLATION
             }
 
     val isShootingOnMove = Trigger {
@@ -80,12 +84,17 @@ object SetpointsManager {
     val isUsingStaticSetpoints = Trigger { shootingType == ShootingType.STATIC }
 }
 
-fun <T : SubsystemBase, M : Measure<out Unit>> T.aimingSetpoint(): M {
-    val result =
-        when (shootingType) {
-            ShootingType.STATIC -> staticShootingMap[this]!!
-            ShootingType.INTERPOLATION -> interpolationShootingMap[this]!!
-            else -> shootOnMoveMap[this]!!
-        }
-    @Suppress("UNCHECKED_CAST") return result.invoke() as M
+fun <T : SubsystemBase, M : () -> Measure<out Unit>> T.aimingSetpoint(): M {
+    @Suppress("UNCHECKED_CAST")
+    return {
+        val result =
+            when (shootingType) {
+                ShootingType.STATIC -> staticShootingMap[this]!!
+                ShootingType.INTERPOLATION -> interpolationShootingMap[this]!!
+                ShootingType.CALIBRATION -> calibrationShootingMap[this]!!
+                else -> shootOnMoveMap[this]!!
+            }
+        result.invoke()
+    }
+        as M
 }

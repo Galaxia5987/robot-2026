@@ -35,19 +35,13 @@ val SPINDEXER_SENSOR_CONFIG =
                 FOVRangeY = 7.0
             }
     }
-val TOP_SENSOR_CONFIG = CANrangeConfiguration()
-val MIDDLE_SENSOR_CONFIG =
+val TOP_SENSOR_CONFIG =
     CANrangeConfiguration().apply {
-        ProximityParams =
-            ProximityParamsConfigs().apply {
-                ProximityThreshold = 0.61
-                MinSignalStrengthForValidMeasurement = 2600.0
-            }
         FovParams =
             FovParamsConfigs().apply {
                 FOVCenterX = 0.0
                 FOVCenterY = 0.0
-                FOVRangeX = 27.0
-                FOVRangeY = 27.0
+                FOVRangeX = 7.0
+                FOVRangeY = 24.0
             }
     }

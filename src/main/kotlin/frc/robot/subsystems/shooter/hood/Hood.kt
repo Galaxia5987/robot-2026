@@ -3,6 +3,7 @@ package frc.robot.subsystems.shooter.hood
 import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.CANcoder
+import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
@@ -14,11 +15,14 @@ import frc.robot.lib.createDisableTriggerForCoast
 import frc.robot.lib.estimateAt
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
+import frc.robot.lib.extensions.mps_ps
 import frc.robot.lib.extensions.radians
-import frc.robot.lib.extensions.sec
+import frc.robot.lib.extensions.toPose
 import frc.robot.lib.extensions.volts
 import frc.robot.lib.sysid.SysIdable
+import frc.robot.lib.universal_motor.MotorLogConfig
 import frc.robot.lib.universal_motor.UniversalTalonFX
+import frc.robot.subsystems.shooter.turret.turretTranslationFieldOriented
 import org.littletonrobotics.junction.Logger
 
 object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
@@ -27,18 +31,49 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
             port = PORT,
             config = CONFIG,
             absoluteEncoderOffset = ABSOLUTE_ENCODER_OFFSET,
-            simGains = SIM_GAINS
+            simGains = SIM_GAINS,
+            logConfig =
+                MotorLogConfig(
+                    statorCurrent = false,
+                    current = false,
+                    velocity = false
+                )
         )
     private val encoder = CANcoder(ENCODER_ID)
 
     private var setpoint = 0.radians
 
     val shouldCrouch: Trigger = Trigger {
-        TRENCH_AREAS.any { it.contains(drive.pose.translation) }
+        TRENCH_AREAS.any { it.contains(turretTranslationFieldOriented) }
             .or(
                 TRENCH_AREAS.any {
-                    val speeds = drive.chassisSpeeds
-                    it.contains(drive.pose.estimateAt(0.2.sec, speeds))
+                    val dt = 0.3
+                    val fieldOrientedSpeeds = drive.fieldOrientedSpeeds
+
+                    val fieldOrientedAcceleration =
+                        ChassisSpeeds.fromRobotRelativeSpeeds(
+                            ChassisSpeeds(
+                                drive.accelerationX[mps_ps],
+                                drive.accelerationY[mps_ps],
+                                0.0
+                            ),
+                            drive.rotation
+                        )
+
+                    val lookAheadTranslation =
+                        turretTranslationFieldOriented
+                            .toPose()
+                            .estimateAt(
+                                dt,
+                                fieldOrientedSpeeds,
+                                fieldOrientedAcceleration
+                            )
+
+                    Logger.recordOutput(
+                        "Odometry/LookAheadTranslation",
+                        lookAheadTranslation.toPose()
+                    )
+                    it.contains(lookAheadTranslation)
                 }
             )
     }
@@ -77,10 +112,10 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
 
     override fun periodic() {
         motor.periodic()
-        Logger.recordOutput("Subsystems/$name/atSetpoint", atSetpoint)
-        Logger.recordOutput("Subsystems/$name/shouldCrouch", shouldCrouch)
+        Logger.recordOutput("Subsystems/Hood/atSetpoint", atSetpoint)
+        Logger.recordOutput("Subsystems/Hood/shouldCrouch", shouldCrouch)
         Logger.recordOutput(
-            "Subsystems/$name/setpoint",
+            "Subsystems/Hood/setpoint",
             setpoint[radians],
             radians
         )

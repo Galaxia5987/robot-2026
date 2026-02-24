@@ -22,6 +22,6 @@ fun createCurrentLimits(
             statorCurrentLimit?.get(amps) ?: (supplyCurrentLimit[amps] * 2)
 
         SupplyCurrentLowerLimit =
-            (supplyCurrentLimit + supplyCurrentPeakDifference)[amps]
+            (supplyCurrentLimit - supplyCurrentPeakDifference)[amps]
         SupplyCurrentLowerTime = supplyCurrentLowerTime[sec]
     }

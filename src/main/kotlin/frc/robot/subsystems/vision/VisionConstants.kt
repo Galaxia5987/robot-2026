@@ -134,8 +134,8 @@ val OV_NAME_TO_CONFIG =
         TURRET_CAMERA_NAME to TURRET_CONFIG,
         "left" to LEFT_CONFIG,
         "right" to RIGHT_CONFIG,
+        "front" to FRONT_CONFIG,
         "back" to BACK_CONFIG,
-        "front" to FRONT_CONFIG
     )
 
 var realsenseRobotToCamera = Transform3d(Translation3d(), Rotation3d())

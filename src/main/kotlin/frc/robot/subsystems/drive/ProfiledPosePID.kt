@@ -13,7 +13,7 @@ import org.team5987.annotation.LoggedOutput
 private const val LOGGING_PREFIX = "AutoAlignment"
 private const val TUNING_PATH = "/Tuning/ProfiledPosePID"
 
-@LoggedOutput(LogLevel.DEV) var alignmentGoal: Pose2d = Pose2d()
+@LoggedOutput(LogLevel.DISABLED) var alignmentGoal: Pose2d = Pose2d()
 
 private val xGains = LoggedNetworkGains("X Gains", kP = 5.0, kD = 0.1)
 
@@ -40,7 +40,7 @@ private val rotationalLimits
             rotationalMaxAcceleration.get()
         )
 
-@LoggedOutput(LogLevel.DEV, "X controller", LOGGING_PREFIX)
+@LoggedOutput(LogLevel.DISABLED, "X controller", LOGGING_PREFIX)
 var xController =
     ProfiledPIDController(
         xGains.kP.get(),
@@ -49,7 +49,7 @@ var xController =
         linearLimits
     )
 
-@LoggedOutput(LogLevel.DEV, "Y controller", LOGGING_PREFIX)
+@LoggedOutput(LogLevel.DISABLED, "Y controller", LOGGING_PREFIX)
 var yController =
     ProfiledPIDController(
         yGains.kP.get(),
@@ -58,7 +58,7 @@ var yController =
         linearLimits
     )
 
-@LoggedOutput(LogLevel.DEV, "Theta controller", LOGGING_PREFIX)
+@LoggedOutput(LogLevel.DISABLED, "Theta controller", LOGGING_PREFIX)
 var thetaController =
     ProfiledPIDController(
             thetaGains.kP.get(),
@@ -68,7 +68,7 @@ var thetaController =
         )
         .apply { enableContinuousInput(-Math.PI, Math.PI) }
 
-@LoggedOutput(LogLevel.DEV, path = LOGGING_PREFIX)
+@LoggedOutput(LogLevel.DISABLED, path = LOGGING_PREFIX)
 var atGoal: Trigger =
     Trigger(xController::atGoal)
         .and(yController::atGoal)

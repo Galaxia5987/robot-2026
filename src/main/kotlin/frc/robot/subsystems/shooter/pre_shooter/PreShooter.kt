@@ -9,6 +9,7 @@ import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.kg2m
 import frc.robot.lib.extensions.rad_ps
 import frc.robot.lib.extensions.radiansPerSecond
+import frc.robot.lib.universal_motor.MotorLogConfig
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.Logger
 
@@ -20,7 +21,16 @@ object PreShooter : SubsystemBase(), PreShooterVelocityCommandFactory {
             config = MOTOR_CONFIG,
             gearRatio = GEAR_RATIO,
             simGains = SIM_GAINS,
-            momentOfInertia = 0.03.kg2m
+            momentOfInertia = 0.03.kg2m,
+            logConfig =
+                MotorLogConfig(
+                    position = false,
+                    statorCurrent = false,
+                    current = false,
+                    velocity = true,
+                    absoluteEncoder = false,
+                    voltage = true
+                )
         )
     private val velocityVoltage = VelocityVoltage(0.0)
 
@@ -51,10 +61,10 @@ object PreShooter : SubsystemBase(), PreShooterVelocityCommandFactory {
     override fun periodic() {
         mainMotor.periodic()
         Logger.recordOutput(
-            "Subsystems/$name/setpoint",
+            "Subsystems/PreShooter/setpoint",
             setpoint[rad_ps],
             rad_ps
         )
-        Logger.recordOutput("Subsystems/$name/atSetpoint", atSetpoint)
+        Logger.recordOutput("Subsystems/PreShooter/atSetpoint", atSetpoint)
     }
 }

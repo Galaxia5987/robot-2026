@@ -1,18 +1,13 @@
 package frc.robot
 
-import choreo.Choreo
-import choreo.util.ChoreoAllianceFlipUtil
 import com.pathplanner.lib.auto.AutoBuilder
-import com.pathplanner.lib.path.PathPlannerPath
+import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
-import frc.robot.autonomous.Test
+import frc.robot.autonomous.shootOnMoveTestPath
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
-import frc.robot.states.intaking.IntakingStates
-import frc.robot.states.setpoints_manager.aimingSetpoint
-import frc.robot.states.shooting.Shooting
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.turret.Turret
@@ -51,9 +46,6 @@ object RobotContainer {
                 { -driverController.leftX },
                 { -driverController.rightX * 1.2 }
             )
-
-        Turret.defaultCommand = Turret.setAngle { Turret.aimingSetpoint() }
-        Hood.defaultCommand = Hood.setAngle { Hood.aimingSetpoint() }
     }
 
     private fun configureButtonBindings() {
@@ -62,10 +54,6 @@ object RobotContainer {
         // Intake Bindings
         val intakeButton = driverController.R2()
 
-        intakeButton.onTrue(IntakingStates.INTAKING.set())
-        intakeButton.negate().onTrue(IntakingStates.CLOSED.set())
-
-        Shooting(driverController.L2())
     }
 
     fun getAutonomousCommand(): Command = autoChooser.get()
@@ -101,10 +89,7 @@ object RobotContainer {
             "swerveFFCharacterization",
             DriveCommands.feedforwardCharacterization()
         )
-        autoChooser.addOption(
-            "Test", Test()
-        )
 
-//        autoChooser.addOption("Test", Test())
+        autoChooser.addOption("ShootOnMoveTestPath", shootOnMoveTestPath())
     }
 }

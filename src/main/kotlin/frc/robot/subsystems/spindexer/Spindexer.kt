@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.rad_ps
+import frc.robot.lib.universal_motor.MotorLogConfig
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.Logger
 
@@ -15,7 +16,16 @@ object Spindexer : SubsystemBase(), SpindexerVelocityCommandFactory {
             MAIN_MOTOR_ID,
             config = MOTOR_CONFIG,
             gearRatio = GEAR_RATIO,
-            simGains = SIM_GAINS
+            simGains = SIM_GAINS,
+            logConfig =
+                MotorLogConfig(
+                    position = false,
+                    statorCurrent = false,
+                    current = false,
+                    velocity = true,
+                    absoluteEncoder = false,
+                    voltage = true
+                )
         )
 
     val inputs
@@ -36,10 +46,10 @@ object Spindexer : SubsystemBase(), SpindexerVelocityCommandFactory {
     override fun periodic() {
         mainMotor.periodic()
         Logger.recordOutput(
-            "Subsystems/$name/setpoint",
+            "Subsystems/Spindexer/setpoint",
             setpoint.velocity[rad_ps],
             rad_ps
         )
-        Logger.recordOutput("Subsystems/$name/atSetpoint", isAtSetpoint)
+        Logger.recordOutput("Subsystems/Spindexer/atSetpoint", isAtSetpoint)
     }
 }

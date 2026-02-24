@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.rad_ps
 import frc.robot.lib.extensions.radiansPerSecond
-import frc.robot.lib.extensions.rps
+import frc.robot.lib.universal_motor.MotorLogConfig
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber
@@ -20,7 +20,13 @@ object Flywheel : SubsystemBase(), FlywheelVelocitiesCommandFactory {
             port = MAIN_MOTOR_PORT,
             config = MOTOR_CONFIG,
             subsystem = name,
-            simGains = SIM_GAINS
+            simGains = SIM_GAINS,
+            logConfig =
+                MotorLogConfig(
+                    position = false,
+                    statorCurrent = false,
+                    absoluteEncoder = false
+                )
         )
 
     private val velocityOut = VelocityVoltage(0.0)
@@ -33,13 +39,22 @@ object Flywheel : SubsystemBase(), FlywheelVelocitiesCommandFactory {
             UniversalTalonFX(
                     port = it.key,
                     config = MOTOR_CONFIG,
-                    subsystem = name
+                    subsystem = name,
+                    logConfig =
+                        MotorLogConfig(
+                            position = false,
+                            statorCurrent = false,
+                            current = false,
+                            velocity = false,
+                            absoluteEncoder = false,
+                            voltage = true
+                        )
                 )
                 .setControl(Follower(MAIN_MOTOR_PORT, it.value))
         }
     }
 
-    private val calibrationVelocity =
+    val calibrationVelocity =
         LoggedNetworkNumber(
             "/Tuning/Flywheel/calibrationFlywheelVelocity",
             40.0
@@ -49,12 +64,8 @@ object Flywheel : SubsystemBase(), FlywheelVelocitiesCommandFactory {
         motor.inputs.velocity.isNear(setpoint, FLYWHEEL_TOLERANCE)
     }
 
-    fun setCalibrationVelocity(): Command = setVelocity {
-        calibrationVelocity.get().rps
-    }
-
     fun setVelocity(velocity: () -> AngularVelocity): Command = run {
-        setpoint = velocity()
+        setpoint = velocity.invoke()
         motor.setControl(velocityOut.withVelocity(setpoint))
     }
 
@@ -65,9 +76,9 @@ object Flywheel : SubsystemBase(), FlywheelVelocitiesCommandFactory {
 
     override fun periodic() {
         motor.periodic()
-        Logger.recordOutput("Subsystems/$name/atSetpoint", atSetpoint)
+        Logger.recordOutput("Subsystems/Flywheel/atSetpoint", atSetpoint)
         Logger.recordOutput(
-            "Subsystems/$name/setpoint",
+            "Subsystems/Flywheel/setpoint",
             setpoint[rad_ps],
             rad_ps
         )

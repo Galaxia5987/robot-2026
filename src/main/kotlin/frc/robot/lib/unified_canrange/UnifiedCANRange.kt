@@ -7,19 +7,32 @@ import frc.robot.lib.Mode
 import frc.robot.lib.getFileNameFromStack
 import org.littletonrobotics.junction.Logger
 
+data class UnifiedCANRangeLogging(
+    val distance: Boolean = true,
+    val isDetecting: Boolean = true,
+    val signalStrength: Boolean = true
+)
+
 class UnifiedCANRange(
     private val port: Int,
     private val canbus: CANBus = CANBus("rio"),
     private val subsystemName: String = getFileNameFromStack(),
     private val sensorName: String = "CANRangeId $port",
     configuration: CANrangeConfiguration,
+    private val loggingConfig: UnifiedCANRangeLogging =
+        UnifiedCANRangeLogging(),
     private val simulationUsesNumber: Boolean = false
 ) {
     private val sensorIO: CANRangeIO =
         if (CURRENT_MODE == Mode.REAL) {
-            CANRangeIOReal(port, canbus, configuration)
+            CANRangeIOReal(port, canbus, configuration, loggingConfig)
         } else {
-            CANRangeIOSim(subsystemName, sensorName, simulationUsesNumber)
+            CANRangeIOSim(
+                subsystemName,
+                sensorName,
+                simulationUsesNumber,
+                loggingConfig
+            )
         }
     val isInRange: Boolean
         get() = sensorIO.inputs.isDetecting

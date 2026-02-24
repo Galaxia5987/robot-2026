@@ -82,7 +82,6 @@ open class VisionIOPhotonVision(
         }
 
         // Save pose observations and tag IDs to inputs object
-        inputs.poseObservations = poseObservations.toTypedArray()
         inputs.tagIds = tagIds.map { it.toInt() }.toIntArray()
     }
 }

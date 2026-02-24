@@ -131,7 +131,7 @@ T : SubsystemBase {
      *
      * @param routineConfig A configuration for the routine.
      */
-    private fun createRoutine(routineConfig: LoggedSysIdRoutineConfig) = {
+    private fun createRoutine(routineConfig: LoggedSysIdRoutineConfig) = { ->
         SysIdRoutine(
             SysIdRoutine.Config(
                 routineConfig.loggedRampRate.get().volts / sec,

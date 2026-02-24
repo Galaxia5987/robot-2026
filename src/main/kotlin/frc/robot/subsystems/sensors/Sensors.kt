@@ -1,13 +1,14 @@
 package frc.robot.subsystems.sensors
 
 import edu.wpi.first.math.filter.Debouncer
-import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.m
 import frc.robot.lib.extensions.sec
 import frc.robot.lib.unified_canrange.UnifiedCANRange
+import frc.robot.lib.unified_canrange.UnifiedCANRangeLogging
+import frc.robot.states.intaking.IntakingStates
 import frc.robot.subsystems.intake.extender.EXTENDER_SETPOINT_TOLERANCE
 import frc.robot.subsystems.intake.extender.Extender
 import org.littletonrobotics.junction.Logger
@@ -21,54 +22,53 @@ object Sensors : SubsystemBase() {
         UnifiedCANRange(
             SPINDEXER_SENSOR_PORT,
             configuration = SPINDEXER_SENSOR_CONFIG,
-            sensorName = "spindexerSensor"
+            sensorName = "spindexerSensor",
+            loggingConfig = UnifiedCANRangeLogging(distance = false)
         )
     private val topSensor =
         UnifiedCANRange(
             TOP_SENSOR_PORT,
             configuration = TOP_SENSOR_CONFIG,
             sensorName = "topSensor",
-            simulationUsesNumber = true
-        )
-    private val middleTopSensor =
-        UnifiedCANRange(
-            MIDDLE_SENSOR_PORT,
-            configuration = MIDDLE_SENSOR_CONFIG,
-            sensorName = "auxTopSensor",
-            simulationUsesNumber = true
+            simulationUsesNumber = true,
+            loggingConfig =
+                UnifiedCANRangeLogging(distance = false, signalStrength = false)
         )
 
-    fun averageFuelDistance(): Distance =
-        (topSensor.inputs.distance + middleTopSensor.inputs.distance) / 2.0
+    val isFull: Trigger = Trigger { topSensor.isInRange }
 
-    val cantCloseIntake: Trigger = Trigger {
-        (averageFuelDistance() < HALF_FULL)
+    private val isIntakeOpen =
+        Trigger { Extender.inputs.distance > EXTENDER_SETPOINT_TOLERANCE }
+            .and(IntakingStates.CLOSED.trigger.debounce(0.4))
+
+    private val preShooterHasBalls: Trigger = Trigger {
+        spindexerSensor.isInRange
     }
 
-    val isFull: Trigger = Trigger { (averageFuelDistance() < FULL) }
+    private val isSpindexerLoaded = Trigger {
+        spindexerSensor.inputs.signalStrength >
+            MIN_SIGNAL_STRENGTH_FOR_MEASUREMENT
+    }
 
     val hasFuel: Trigger =
-        Trigger {
-                spindexerSensor.inputs.signalStrength >
-                    MIN_SIGNAL_STRENGTH_FOR_MEASUREMENT
-            }
-            .or { topSensor.isInRange }
-            .or { middleTopSensor.isInRange }
-            .or { Extender.inputs.distance > EXTENDER_SETPOINT_TOLERANCE }
+        isSpindexerLoaded
+            .or(isFull)
+            .or(isIntakeOpen)
             .debounce(HAS_FUEL_DEBOUNCE[sec], Debouncer.DebounceType.kFalling)
-    val isSpindexerLoaded: Trigger = Trigger { spindexerSensor.isInRange }
 
     override fun periodic() {
         spindexerSensor.periodic()
         topSensor.periodic()
-        middleTopSensor.periodic()
 
-        Logger.recordOutput("Subsystems/$name/hasFuel", hasFuel)
+        Logger.recordOutput("Subsystems/Sensors/hasFuel", hasFuel)
         Logger.recordOutput(
-            "Subsystems/$name/isSpindexerLoaded",
-            isSpindexerLoaded
+            "Subsystems/Sensors/preShooterHasBalls",
+            preShooterHasBalls
         )
-        Logger.recordOutput("Subsystems/$name/cantCloseIntake", cantCloseIntake)
-        Logger.recordOutput("Subsystems/$name/isFull", isFull)
+        Logger.recordOutput(
+            "Subsystems/Sensors/isSpindexerLoaded",
+            isIntakeOpen
+        )
+        Logger.recordOutput("Subsystems/Sensors/isFull", isFull)
     }
 }
