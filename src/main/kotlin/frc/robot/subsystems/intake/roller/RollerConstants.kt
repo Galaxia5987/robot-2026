@@ -13,13 +13,16 @@ import org.team5987.annotation.command_enum.CommandEnum
 
 @CommandEnum
 enum class RollerPositions(val velocity: AngularVelocity) {
-    INTAKE(25.rps),
     OUTTAKE((-10).rps),
     STOP(0.rps)
 }
 
 val REAL_GAINS = Gains(kP = 10.0, kV = 0.12)
 val SIM_GAINS = Gains(kP = 1.0)
+
+val INTAKE_BASE_SPEED = 25.rps
+
+const val ROBOT_VELOCITY_MULTIPLIER = 10.0
 
 const val PORT = 10
 const val GEAR_RATIO = 2.5
