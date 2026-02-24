@@ -174,3 +174,4 @@ networktables.json
 /src/main/kotlin/frc/robot/ShotCalculator.kt
 /BalisticSimulator/.idea/BalisticSimulator.iml
 /BalisticSimulator/.idea/modules.xml
+/src/main/kotlin/ShotCalculator.kt
