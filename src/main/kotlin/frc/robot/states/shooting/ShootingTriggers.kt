@@ -36,10 +36,10 @@ val allSubsystemsAtSetpoint: Trigger =
         .debounce(allSubsystemsAtSetpointDebounce[sec])
         .logTrigger("$LOGGING_PATH/allSubsystemsAtSetpoint")
 
-class Shooting(dontShootOrCanFeedTrigger: Trigger) {
+class Shooting(dontShootTrigger: Trigger, canFeedTrigger: Trigger) {
     private val canShootToHub =
         isHubActive
-            .and(dontShootOrCanFeedTrigger.negate())
+            .and(dontShootTrigger.negate())
             .and(inAllianceZone)
             .and(Sensors.hasFuel)
             .and(isEnabled)
@@ -50,7 +50,7 @@ class Shooting(dontShootOrCanFeedTrigger: Trigger) {
         canShootToHub.negate().onTrue(ShootingState.IDLE.set())
 
     private val canFeed =
-        dontShootOrCanFeedTrigger.and(inAllianceZone.negate()).and(isEnabled)
+        canFeedTrigger.and(inAllianceZone.negate()).and(isEnabled)
 
     private val idleAndCanShootToHub =
         ShootingState.IDLE.trigger
@@ -71,7 +71,7 @@ class Shooting(dontShootOrCanFeedTrigger: Trigger) {
 
     private val setShootingIfCanFeed =
         ShootingState.IDLE.trigger
-            .and(canFeed)
+            .and(canFeedTrigger)
             .onTrue(ShootingState.SHOOTING.set())
             .logTrigger("$LOGGING_PATH/setShootingIfCanFeed")
 
@@ -101,7 +101,7 @@ class Shooting(dontShootOrCanFeedTrigger: Trigger) {
             .and(inAllianceZone)
 
     private val shouldStopFeeding =
-        dontShootOrCanFeedTrigger.negate().and(inAllianceZone.negate())
+        canFeedTrigger.negate().and(inAllianceZone.negate())
 
     private val setIdleIfShouldStopShooting =
         ShootingState.SHOOTING.trigger
