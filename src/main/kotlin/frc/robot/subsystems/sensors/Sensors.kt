@@ -39,7 +39,7 @@ object Sensors : SubsystemBase() {
 
     private val isIntakeOpen =
         Trigger { Extender.inputs.distance > EXTENDER_SETPOINT_TOLERANCE }
-            .and(IntakingStates.CLOSED.trigger.debounce(0.4))
+            .and(IntakingStates.CLOSED.trigger.debounce(0.7))
 
     private val preShooterHasBalls: Trigger = Trigger {
         spindexerSensor.isInRange

@@ -155,7 +155,7 @@ public class Drive extends SubsystemBase implements SysIdable {
                     rawGyroRotation,
                     lastModulePositions,
                     new Pose2d(),
-                    VecBuilder.fill(0.5, 0.5, 0.5),
+                    VecBuilder.fill(0.8, 0.8, 0.5),
                     VecBuilder.fill(0, 0, 0)); // Vision stdDev updated later in code
     private final Consumer<Pose2d> resetSimulationPoseCallBack;
     public ChassisSpeeds chassisSpeedsSetpoint = new ChassisSpeeds();

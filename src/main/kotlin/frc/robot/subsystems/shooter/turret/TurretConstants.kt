@@ -16,16 +16,18 @@ const val PORT = 14
 const val RATIO = 55.0
 const val ENCODER_RATIO = 1.0
 val SIM_GAINS = Gains(kP = 0.5, kD = 0.075)
-val REAL_GAINS = Gains(kP = 58.0, kV = 5.0, kS = 0.5)
+val REAL_GAINS = Gains(kP = 75.0, kD = 0.7, kS = 0.2)
 
+// TODO: Calibrate turret for small movements
 val SETPOINT_TOLERANCE
-    get() = isShootingOnMove.asBoolean.switchable(5.deg, 1.5.deg)
+    get() = isShootingOnMove.asBoolean.switchable(5.deg, 3.deg)
 
 const val ENCODER_ID = 5
 val ABSOLUTE_ENCODER_OFFSET = (0.5).rot
 
 val FORWARD_LIMIT = 0.668457.rot
-val REVERSE_LIMIT = (-0.121582).rot
+val REVERSE_LIMIT = (-0.1
+        ).rot
 
 val SOFTWARE_LIMIT_CONFIG =
     SoftwareLimitSwitchConfigs().apply {
@@ -56,7 +58,7 @@ val CONFIG =
                     StaticFeedforwardSignValue.UseVelocitySign
                 )
         ClosedLoopGeneral =
-            ClosedLoopGeneralConfigs().apply { ContinuousWrap = false }
+            ClosedLoopGeneralConfigs().apply { ContinuousWrap = true }
         SoftwareLimitSwitch = SOFTWARE_LIMIT_CONFIG
         Feedback =
             FeedbackConfigs().apply {

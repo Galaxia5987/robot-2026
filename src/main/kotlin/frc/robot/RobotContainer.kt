@@ -59,18 +59,13 @@ object RobotContainer {
     private fun configureButtonBindings() {
         driverController.create().onTrue(DriveCommands.resetGyro())
 
-        driverController
-            .L2()
-            .onTrue(IntakingStates.PUMPING.set())
-            .onFalse(IntakingStates.CLOSED.set())
-
         // Intake Bindings
-        val intakeButton = driverController.R2()
+        val intakeButton = driverController.R1()
 
         intakeButton.onTrue(IntakingStates.INTAKING.set())
         intakeButton.negate().onTrue(IntakingStates.CLOSED.set())
 
-        Shooting(driverController.L2(), driverController.R1())
+        Shooting(driverController.L2(), driverController.L1())
     }
 
     fun getAutonomousCommand(): Command = autoChooser.get()

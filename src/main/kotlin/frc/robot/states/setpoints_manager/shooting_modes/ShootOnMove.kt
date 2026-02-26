@@ -69,8 +69,6 @@ private fun getFlywheelSetpoint(): AngularVelocity {
 private fun getPreShooterSetpoint(): AngularVelocity =
     PreShooterVelocity.SHOOTING.velocity
 
-private fun calculateAngularVelocity(calculateVelocity: Double) = 0.0
-
 val shootOnMoveMap: Map<SubsystemBase, () -> Measure<out Unit>> =
     mapOf(
         Turret to ::getTurretSetpoint,

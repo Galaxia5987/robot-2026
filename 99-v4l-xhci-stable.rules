@@ -1,0 +1,5 @@
+SUBSYSTEM=="video4linux", KERNEL=="video*", \
+  ENV{ID_VENDOR_ID}=="0c45", ENV{ID_MODEL_ID}=="636d", \
+  ENV{DEVPATH}=="*platform*xhci-hcd*", \
+  ATTR{index}=="0", \
+  SYMLINK+="camera_xhci"

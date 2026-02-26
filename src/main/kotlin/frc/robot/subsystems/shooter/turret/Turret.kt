@@ -6,12 +6,15 @@ import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.lib.createDisableTriggerForCoast
+import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
+import frc.robot.lib.extensions.rad
 import frc.robot.lib.extensions.radians
 import frc.robot.lib.extensions.rotations
 import frc.robot.lib.universal_motor.MotorLogConfig
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.Logger
+import kotlin.math.abs
 
 object Turret : SubsystemBase() {
     private val motor: UniversalTalonFX =
@@ -35,7 +38,11 @@ object Turret : SubsystemBase() {
     private var setpointVelocityRps = 0.0
 
     val wrappedPosition: Angle
-        get() = motor.inputs.position
+        get() {
+            val raw = motor.inputs.position[deg]
+            val wrapped = (raw + 180.0) % 360.0 - 180.0
+            return wrapped.deg[rad].rad
+        }
 
     init {
         absoluteEncoder.configurator.apply(ENCODER_CONFIG)
@@ -49,14 +56,18 @@ object Turret : SubsystemBase() {
     }
 
     fun setAngle(angleSupplier: () -> Angle) = run {
-        val newSetpoint = angleSupplier()
+        var newSetpoint = angleSupplier()
         val currentTime = Timer.getFPGATimestamp()
         val dt = currentTime - lastTime
+
+        if (newSetpoint < 0.deg && newSetpoint < REVERSE_LIMIT) {
+            newSetpoint += 360.deg
+        }
 
         // Calculate discrete derivative to find setpoint velocity
         if (dt > 0.0) {
             val deltaRotations =
-                newSetpoint[rotations] - lastSetpoint[rotations]
+                newSetpoint[rotations]  - lastSetpoint[rotations]
             setpointVelocityRps = deltaRotations / dt
         }
 
@@ -67,9 +78,8 @@ object Turret : SubsystemBase() {
         motor.setControl(
             positionVoltage
                 .withPosition(setpoint)
-                .withVelocity(setpointVelocityRps)
-            //                .withFeedForward(7 * setpointVelocityRps)
-            )
+                .withFeedForward(2 * setpointVelocityRps)
+        )
     }
 
     override fun periodic() {
