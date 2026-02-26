@@ -13,4 +13,4 @@ enum class DriverOverrides(buttonId: Int) {
     val trigger: Trigger = switchController.button(buttonId)
 }
 
-val switchController = CommandGenericHID(1)
+private val switchController = CommandGenericHID(1)

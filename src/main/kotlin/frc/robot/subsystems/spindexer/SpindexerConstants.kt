@@ -15,7 +15,7 @@ val GAINS = Gains(kP = 0.4, kV = 1.1)
 
 val SIM_GAINS = Gains(1.0)
 
-const val MAIN_MOTOR_ID = 12
+const val MAIN_MOTOR_ID = 14
 
 const val GEAR_RATIO = 9.0
 

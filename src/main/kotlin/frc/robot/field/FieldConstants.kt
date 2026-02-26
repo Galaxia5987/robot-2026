@@ -12,7 +12,6 @@ import frc.robot.lib.extensions.flipIfNeeded
 import frc.robot.lib.extensions.m
 import frc.robot.lib.extensions.mirror
 import frc.robot.lib.extensions.mm
-import frc.robot.subsystems.shooter.hood.CROUCH_TOLERANCE
 
 val ALLIANCE_ZONE_WIDTH: Distance = 4.03.m
 
@@ -39,9 +38,11 @@ val DEPOT_TRANSLATION: Translation2d
 
 val TRENCH_WIDTH = 1331.75.mm
 
+val CROUCH_TOLERANCE = 0.4.m
+
 private val TRENCH =
     Rectangle2d(
-        Translation2d(HUB_TRANSLATION.x.m - CROUCH_TOLERANCE, 0.m),
+        Translation2d(HUB_TRANSLATION.x.m - 0.3.m, 0.m),
         Translation2d(HUB_TRANSLATION.x.m + CROUCH_TOLERANCE, TRENCH_WIDTH)
     )
 

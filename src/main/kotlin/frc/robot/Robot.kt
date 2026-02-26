@@ -16,10 +16,6 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.lib.logged_output.LoggedOutputManager
-import frc.robot.sim.MapleSimHopper
-import frc.robot.sim.MapleSimIntake
-import frc.robot.sim.MapleSimShooter
-import frc.robot.states.intaking.IntakingTriggers
 import frc.robot.states.setpoints_manager.SetpointsManager
 import frc.robot.states.spindexer.SpindexerTriggers
 import frc.robot.subsystems.sensors.Sensors
@@ -38,9 +34,6 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter
  */
 object Robot : LoggedRobot() {
     private lateinit var autonomousCommand: Command
-    var mapleSimHopper: MapleSimHopper? = null
-    var mapleSimIntake: MapleSimIntake? = null
-    var mapleSimShooter: MapleSimShooter? = null
 
     /**
      * This function is run when the robot is first started up and should be
@@ -99,7 +92,6 @@ object Robot : LoggedRobot() {
 
         // Bind state Machines
         SetpointsManager
-        IntakingTriggers
         SpindexerTriggers
 
         enableAutoLogOutputFor(this)
@@ -157,9 +149,6 @@ object Robot : LoggedRobot() {
 
     override fun simulationInit() {
         resetSimulationField()
-        mapleSimHopper = MapleSimHopper()
-        mapleSimIntake = MapleSimIntake()
-        mapleSimShooter = MapleSimShooter(mapleSimIntake!!)
     }
 
     override fun simulationPeriodic() {
@@ -167,10 +156,6 @@ object Robot : LoggedRobot() {
         Logger.recordOutput(
             "Visualization/Fuels",
             *arena.getGamePiecesArrayByType("Fuel")
-        )
-        Logger.recordOutput(
-            "Visualization/FuelsInRobot",
-            *mapleSimHopper!!.fuelInRobotPoses.invoke()
         )
 
         val pose = getMapleSimPose()

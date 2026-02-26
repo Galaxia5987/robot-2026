@@ -1,8 +1,6 @@
 package frc.robot
 
 import com.pathplanner.lib.auto.AutoBuilder
-import edu.wpi.first.units.measure.Angle
-import edu.wpi.first.units.measure.AngularVelocity
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
@@ -10,13 +8,8 @@ import frc.robot.autonomous.depotMain
 import frc.robot.autonomous.shootOnMoveTestPath
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
-import frc.robot.states.intaking.IntakingStates
-import frc.robot.states.setpoints_manager.aimingSetpoint
 import frc.robot.states.shooting.Shooting
 import frc.robot.subsystems.drive.DriveCommands
-import frc.robot.subsystems.shooter.flywheel.Flywheel
-import frc.robot.subsystems.shooter.hood.Hood
-import frc.robot.subsystems.shooter.turret.Turret
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 
@@ -52,24 +45,15 @@ object RobotContainer {
                 { -driverController.leftX },
                 { -driverController.rightX * 1.2 }
             )
-        Turret.defaultCommand = Turret.setAngle(Turret.aimingSetpoint<Turret, () -> Angle>())
-        Hood.defaultCommand = Hood.setAngle (Hood.aimingSetpoint<Hood, () -> Angle>())
     }
 
     private fun configureButtonBindings() {
         driverController.create().onTrue(DriveCommands.resetGyro())
 
-        driverController
-            .L2()
-            .onTrue(IntakingStates.PUMPING.set())
-            .onFalse(IntakingStates.CLOSED.set())
+        driverController.L2()
 
         // Intake Bindings
         val intakeButton = driverController.R2()
-
-        intakeButton.onTrue(IntakingStates.INTAKING.set())
-        intakeButton.negate().onTrue(IntakingStates.CLOSED.set())
-
         Shooting(driverController.L2(), driverController.R1())
     }
 

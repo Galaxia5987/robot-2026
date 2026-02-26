@@ -8,9 +8,6 @@ import frc.robot.lib.extensions.m
 import frc.robot.lib.extensions.sec
 import frc.robot.lib.unified_canrange.UnifiedCANRange
 import frc.robot.lib.unified_canrange.UnifiedCANRangeLogging
-import frc.robot.states.intaking.IntakingStates
-import frc.robot.subsystems.intake.extender.EXTENDER_SETPOINT_TOLERANCE
-import frc.robot.subsystems.intake.extender.Extender
 import org.littletonrobotics.junction.Logger
 
 object Sensors : SubsystemBase() {
@@ -37,10 +34,6 @@ object Sensors : SubsystemBase() {
 
     val isFull: Trigger = Trigger { topSensor.isInRange }
 
-    private val isIntakeOpen =
-        Trigger { Extender.inputs.distance > EXTENDER_SETPOINT_TOLERANCE }
-            .and(IntakingStates.CLOSED.trigger.debounce(0.4))
-
     private val preShooterHasBalls: Trigger = Trigger {
         spindexerSensor.isInRange
     }
@@ -53,7 +46,6 @@ object Sensors : SubsystemBase() {
     val hasFuel: Trigger =
         isSpindexerLoaded
             .or(isFull)
-            .or(isIntakeOpen)
             .debounce(HAS_FUEL_DEBOUNCE[sec], Debouncer.DebounceType.kFalling)
 
     override fun periodic() {
@@ -64,10 +56,6 @@ object Sensors : SubsystemBase() {
         Logger.recordOutput(
             "Subsystems/Sensors/preShooterHasBalls",
             preShooterHasBalls
-        )
-        Logger.recordOutput(
-            "Subsystems/Sensors/isSpindexerLoaded",
-            isIntakeOpen
         )
         Logger.recordOutput("Subsystems/Sensors/isFull", isFull)
     }

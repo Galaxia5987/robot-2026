@@ -122,44 +122,43 @@ object LoggedOutputManager : SubsystemBase() {
                 type == LoggedMechanism2d::class.java ->
                     addRunnable(key) {
                         value().ifNotNull {
-                            recordOutput(key, value() as LoggedMechanism2d?)
+                            recordOutput(key, it as LoggedMechanism2d?)
                         }
                     }
                 type == Color::class.java ->
                     addRunnable(key) {
                         value().ifNotNull {
-                            recordOutput(key, (value() as Color).toHexString())
+                            recordOutput(key, (it as Color).toHexString())
                         }
                     }
                 type.isEnum -> {
+                    // Computed once at registration, not every loop cycle
                     val constants =
-                        type.declaredFields.filter {
-                            !java.lang.reflect.Modifier.isStatic(
-                                it.modifiers
-                            ) && !it.isSynthetic
-                        }
-                    constants.forEach { it.trySetAccessible() }
+                        type.declaredFields
+                            .filter {
+                                !java.lang.reflect.Modifier.isStatic(
+                                    it.modifiers
+                                ) && !it.isSynthetic
+                            }
+                            .also { fields ->
+                                fields.forEach { it.trySetAccessible() }
+                            }
+                    // Pre-build subKeys once to avoid string concat every loop
+                    val subKeys = constants.map { "$key/${it.name}" }
                     addRunnable(key) {
                         value().ifNotNull {
                             val enum = (it as Enum<*>)
                             recordOutput(key, enum.name)
-                            constants.forEach { constant ->
+                            constants.forEachIndexed { i, constant ->
                                 try {
-                                    val value = constant.get(it)
-                                    val subKey = "$key/${constant.name}"
-                                    when (value) {
+                                    val v = constant.get(it)
+                                    val subKey = subKeys[i]
+                                    when (v) {
                                         is Number ->
-                                            recordOutput(
-                                                subKey,
-                                                value.toDouble()
-                                            )
-                                        is Measure<*> ->
-                                            recordOutput(subKey, value)
+                                            recordOutput(subKey, v.toDouble())
+                                        is Measure<*> -> recordOutput(subKey, v)
                                         else ->
-                                            recordOutput(
-                                                subKey,
-                                                value.toString()
-                                            )
+                                            recordOutput(subKey, v.toString())
                                     }
                                 } catch (_: Exception) {}
                             }

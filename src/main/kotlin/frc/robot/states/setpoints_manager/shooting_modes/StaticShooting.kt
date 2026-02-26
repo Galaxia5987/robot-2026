@@ -8,9 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.rps
 import frc.robot.subsystems.shooter.flywheel.Flywheel
-import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
-import frc.robot.subsystems.shooter.turret.Turret
 
 enum class PresetSetpoints(
     val flywheel: AngularVelocity,
@@ -31,8 +29,6 @@ var selectedPresetSetpoint: PresetSetpoints = PresetSetpoints.HUB
 
 val staticShootingMap: Map<SubsystemBase, () -> Measure<out Unit>> =
     mapOf(
-        Turret to { selectedPresetSetpoint.turret },
-        Hood to { selectedPresetSetpoint.hood },
         Flywheel to { selectedPresetSetpoint.flywheel },
         PreShooter to { selectedPresetSetpoint.flywheel }
     )

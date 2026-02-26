@@ -19,15 +19,14 @@ const val GEAR_RATIO = 1.33
 val REAL_GAINS = Gains(kP = 0.3, kS = 0.3, kV = 0.12)
 val SIM_GAINS = Gains(kP = 1.0, kV = 0.12)
 
-const val MAIN_MOTOR_PORT = 16
+const val MAIN_MOTOR_PORT = 10
 
 val FLYWHEEL_TOLERANCE
     get() = isShootingOnMove.asBoolean.switchable(4.rps, 0.55.rps)
 
 val AUXILIARY_MOTORS_PORTS =
-    mapOf<Int, MotorAlignmentValue>(
-        17 to MotorAlignmentValue.Opposed,
-        18 to MotorAlignmentValue.Aligned
+    mapOf(
+        11 to MotorAlignmentValue.Opposed,
     )
 
 @CommandEnum

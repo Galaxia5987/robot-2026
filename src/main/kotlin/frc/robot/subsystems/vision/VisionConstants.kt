@@ -15,20 +15,12 @@ package frc.robot.subsystems.vision
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout
 import edu.wpi.first.apriltag.AprilTagFields
-import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Rotation3d
 import edu.wpi.first.math.geometry.Transform3d
 import edu.wpi.first.math.geometry.Translation3d
 import frc.robot.drive
-import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.mm
-import frc.robot.lib.extensions.toTransform
-import frc.robot.lib.extensions.toYaw
-import frc.robot.lib.getRotation3d
-import frc.robot.subsystems.shooter.turret.Turret
-import org.team5987.annotation.LogLevel
-import org.team5987.annotation.LoggedOutput
 
 const val LOG_PREFIX = "Subsystems/Vision/"
 
@@ -53,92 +45,29 @@ private val TURRET_TRANSLATION =
 val CAMERA_TO_TURRET_TRANSLATION =
     Translation3d((-75.97130).mm, 122.mm, 167.03609.mm)
 
-val TURRET_CAMERA_ROBOT_TO_CAMERA: Transform3d
-    get() =
-        Pose3d(
-                (TURRET_TRANSLATION.plus(CAMERA_TO_TURRET_TRANSLATION)
-                    .rotateAround(
-                        TURRET_TRANSLATION,
-                        -Turret.wrappedPosition.toYaw()
-                    )),
-                getRotation3d(
-                    yaw = -Turret.wrappedPosition,
-                    pitch = ((-25).deg)
-                )
-            )
-            .toTransform()
+// val ROBOT_TO_CAMERA: Transform3d
+//    get() =
+//        Pose3d(
+//                (TURRET_TRANSLATION.plus(CAMERA_TO_TURRET_TRANSLATION)
+//                    .rotateAround(
+//                        TURRET_TRANSLATION,
+//                        -Turret.wrappedPosition.toYaw()
+//                    )),
+//                getRotation3d(
+//                    yaw = -Turret.wrappedPosition,
+//                    pitch = ((-25).deg)
+//                )
+//            )
+//            .toTransform()
 
-val TURRET_CONFIG =
-    CameraConfig(
-        robotToCamera = { TURRET_CAMERA_ROBOT_TO_CAMERA },
-        tagIdsToFilter = { listOf(9, 10, 26, 25) },
-        stddevFactor = 1.0
-    )
+// val LIMELIGHT_CAMERA_CONFIG =
+//    CameraConfig(
+//        robotToCamera = { TURRET_CAMERA_ROBOT_TO_CAMERA },
+//        tagIdsToFilter = { listOf(9, 10, 26, 25) },
+//        stddevFactor = 1.0
+//    )
 
-val LEFT_CONFIG =
-    CameraConfig(
-        robotToCamera = {
-            Transform3d(
-                (-59.348).mm,
-                361.75150.mm,
-                195.738.mm,
-                Rotation3d(0.0.deg, (-20).deg, 60.deg)
-            )
-        },
-        tagIdsToFilter = { listOf() },
-        stddevFactor = 1.0
-    )
-
-val RIGHT_CONFIG =
-    CameraConfig(
-        robotToCamera = {
-            Transform3d(
-                (-146.39146).mm,
-                (-371.60854).mm,
-                372.62536.mm,
-                Rotation3d(0.0.deg, (-20).deg, (-45).deg)
-            )
-        },
-        tagIdsToFilter = { listOf() },
-        stddevFactor = 1.0
-    )
-
-val BACK_CONFIG =
-    CameraConfig(
-        robotToCamera = {
-            Transform3d(
-                (-296.15884).mm,
-                17.02.mm,
-                394.10380.mm,
-                Rotation3d(0.0.deg, (-27.5).deg, 180.deg)
-            )
-        },
-        tagIdsToFilter = { listOf() },
-        stddevFactor = 1.0
-    )
-
-val FRONT_CONFIG =
-    CameraConfig(
-        robotToCamera = {
-            Transform3d(
-                105.241.mm,
-                347.50000.mm,
-                525.46448.mm,
-                Rotation3d(0.0.deg, (-20).deg, 0.deg)
-            )
-        },
-        tagIdsToFilter = { listOf() },
-        stddevFactor = 1.0
-    )
-
-val OV_NAME_TO_CONFIG =
-    mapOf<String, CameraConfig>(
-        TURRET_CAMERA_NAME to TURRET_CONFIG,
-        "left" to LEFT_CONFIG,
-        "right" to RIGHT_CONFIG,
-        "front" to FRONT_CONFIG,
-        "back" to BACK_CONFIG,
-    )
+val OV_NAME_TO_CONFIG = mapOf<String, CameraConfig>()
 
 var realsenseRobotToCamera = Transform3d(Translation3d(), Rotation3d())
 

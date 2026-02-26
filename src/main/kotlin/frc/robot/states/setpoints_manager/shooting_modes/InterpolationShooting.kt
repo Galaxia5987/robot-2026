@@ -7,9 +7,7 @@ import edu.wpi.first.units.measure.AngularVelocity
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj.Filesystem
 import edu.wpi.first.wpilibj2.command.SubsystemBase
-import frc.robot.calculatePitch
 import frc.robot.drive
-import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.m
 import frc.robot.lib.extensions.rps
@@ -18,19 +16,14 @@ import frc.robot.lib.math.interpolation.InterpolatingDoubleMap
 import frc.robot.lib.shooting.ShootingTableReader
 import frc.robot.states.setpoints_manager.SetpointsManager.currentGoal
 import frc.robot.subsystems.shooter.flywheel.Flywheel
-import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 import frc.robot.subsystems.shooter.pre_shooter.PreShooterVelocity
-import frc.robot.subsystems.shooter.turret.Turret
-import frc.robot.subsystems.shooter.turret.turretAngleToHub
-import frc.robot.subsystems.shooter.turret.turretTranslationFieldOriented
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
 @LoggedOutput(LogLevel.COMP)
 val turretDistanceFromGoal: Distance
-    get() =
-        turretTranslationFieldOriented.getDistance(currentGoal.translation).m
+    get() = drive.pose.translation.getDistance(currentGoal.translation).m
 
 private val SHOOTER_VELOCITY_BY_DISTANCE: InterpolatingDoubleMap =
     ShootingTableReader.parse(
@@ -38,18 +31,6 @@ private val SHOOTER_VELOCITY_BY_DISTANCE: InterpolatingDoubleMap =
             "/shootData/distanceToVelocity.csv"
     )
 
-private fun getTurretSetpoint(): Angle {
-    return turretAngleToHub
-}
-
-private fun getHoodSetpoint(): Angle =
-    (90.deg -
-        calculatePitch(
-                turretDistanceFromGoal[m],
-                drive.chassisSpeeds.vxMetersPerSecond,
-                drive.chassisSpeeds.vyMetersPerSecond
-            )
-            .deg)
 
 private fun getFlywheelSetpoint(): AngularVelocity {
     val flywheelKey = InterpolatingDouble(turretDistanceFromGoal[m])
@@ -66,8 +47,6 @@ private fun getPreShooterSetpoint(): AngularVelocity {
 
 val interpolationShootingMap: Map<SubsystemBase, () -> Measure<out Unit>> =
     mapOf(
-        Turret to ::getTurretSetpoint,
-        Hood to ::getHoodSetpoint,
         Flywheel to ::getFlywheelSetpoint,
         PreShooter to ::getPreShooterSetpoint,
     )

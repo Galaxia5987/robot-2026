@@ -14,7 +14,6 @@ import frc.robot.states.setpoints_manager.SetpointsManager.ShootingType
 import frc.robot.states.setpoints_manager.SetpointsManager.shootingType
 import frc.robot.states.setpoints_manager.shooting_modes.calibrationShootingMap
 import frc.robot.states.setpoints_manager.shooting_modes.interpolationShootingMap
-import frc.robot.states.setpoints_manager.shooting_modes.shootOnMoveMap
 import frc.robot.states.setpoints_manager.shooting_modes.staticShootingMap
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
@@ -92,7 +91,7 @@ fun <T : SubsystemBase, M : () -> Measure<out Unit>> T.aimingSetpoint(): M {
                 ShootingType.STATIC -> staticShootingMap[this]!!
                 ShootingType.INTERPOLATION -> interpolationShootingMap[this]!!
                 ShootingType.CALIBRATION -> calibrationShootingMap[this]!!
-                else -> shootOnMoveMap[this]!!
+                else -> interpolationShootingMap[this]!!
             }
         result.invoke()
     }
