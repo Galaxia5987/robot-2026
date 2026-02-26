@@ -11,7 +11,10 @@ import frc.robot.subsystems.drive.TunerConstants
 import frc.robot.subsystems.drive.gyroIOs.GyroIO
 import frc.robot.subsystems.drive.gyroIOs.GyroIOPigeon2
 import frc.robot.subsystems.drive.gyroIOs.GyroIOSim
-import frc.robot.subsystems.vision.*
+import frc.robot.subsystems.vision.LimeLightVisionIO
+import frc.robot.subsystems.vision.OV_NAME_TO_CONFIG
+import frc.robot.subsystems.vision.Vision
+import frc.robot.subsystems.vision.VisionIOPhotonVisionSim
 import org.ironmaple.simulation.SimulatedArena
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation
 
@@ -69,7 +72,7 @@ private val visionIOs =
         Mode.REAL ->
             OV_NAME_TO_CONFIG.map {
                 val config = it.value
-                VisionIOPhotonVision(
+                LimeLightVisionIO(
                     it.key,
                     config.robotToCamera,
                     config.botRotation,

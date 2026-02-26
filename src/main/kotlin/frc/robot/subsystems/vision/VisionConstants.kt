@@ -20,7 +20,9 @@ import edu.wpi.first.math.geometry.Rotation3d
 import edu.wpi.first.math.geometry.Transform3d
 import edu.wpi.first.math.geometry.Translation3d
 import frc.robot.drive
+import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.mm
+import frc.robot.lib.getRotation3d
 
 const val LOG_PREFIX = "Subsystems/Vision/"
 
@@ -60,14 +62,23 @@ val CAMERA_TO_TURRET_TRANSLATION =
 //            )
 //            .toTransform()
 
-// val LIMELIGHT_CAMERA_CONFIG =
-//    CameraConfig(
-//        robotToCamera = { TURRET_CAMERA_ROBOT_TO_CAMERA },
-//        tagIdsToFilter = { listOf(9, 10, 26, 25) },
-//        stddevFactor = 1.0
-//    )
 
-val OV_NAME_TO_CONFIG = mapOf<String, CameraConfig>()
+val CAMERA_CONFIG: CameraConfig = CameraConfig(
+    {
+        Transform3d(
+            100.mm,
+            100.mm,
+            100.mm,
+            getRotation3d(0.deg)
+        )
+    },
+    tagIdsToFilter = { listOf(9, 10, 26, 25) },
+    stddevFactor = 1.0
+)
+
+val OV_NAME_TO_CONFIG = mapOf(
+    "limeLight" to CAMERA_CONFIG
+)
 
 var realsenseRobotToCamera = Transform3d(Translation3d(), Rotation3d())
 
