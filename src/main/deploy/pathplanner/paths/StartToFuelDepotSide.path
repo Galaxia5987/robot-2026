@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.888786105194284,
-        "y": 7.435090532380351
+        "x": 4.8088585426239385,
+        "y": 7.4492841585797605
       },
       "isLocked": false,
       "linkedName": "startDepotSide"
     },
     {
       "anchor": {
-        "x": 7.610363636363637,
-        "y": 6.704465909090909
+        "x": 7.532496433666189,
+        "y": 6.862097004279601
       },
       "prevControl": {
-        "x": 7.176294534681813,
-        "y": 7.450411461770334
+        "x": 6.985906811320002,
+        "y": 7.436520326934245
       },
       "nextControl": {
-        "x": 7.736100971231298,
-        "y": 6.488386935980665
+        "x": 7.8802962917635515,
+        "y": 6.496586314103041
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +36,8 @@
         "y": 4.730019071847314
       },
       "prevControl": {
-        "x": 7.921531573321899,
-        "y": 5.163886784373464
+        "x": 7.772054812483812,
+        "y": 4.977482426737836
       },
       "nextControl": null,
       "isLocked": false,
@@ -51,7 +51,7 @@
       "minWaypointRelativePos": 1.0499999999999998,
       "maxWaypointRelativePos": 1.9500000000000002,
       "constraints": {
-        "maxVelocity": 2.0,
+        "maxVelocity": 1.1,
         "maxAcceleration": 4.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 1800.0,

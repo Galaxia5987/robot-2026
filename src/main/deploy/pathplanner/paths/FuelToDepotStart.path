@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 4.499471428571429,
-        "y": 7.61117142857143
+        "x": 3.8579172610556345,
+        "y": 7.638416547788873
       },
       "prevControl": {
-        "x": 7.377074290825454,
-        "y": 7.760274753432393
+        "x": 6.7355201233096595,
+        "y": 7.7875198726498365
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "TrenchDepotShoot"
     }
   ],
   "rotationTargets": [],
