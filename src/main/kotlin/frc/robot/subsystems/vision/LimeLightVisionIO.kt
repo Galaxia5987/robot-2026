@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Transform3d
 import frc.robot.LimelightHelpers
 import frc.robot.lib.extensions.toPose3d
+import kotlin.properties.Delegates
 
 open class LimeLightVisionIO(
     name: String,
@@ -11,7 +12,9 @@ open class LimeLightVisionIO(
     private val botRotation: () -> Rotation2d,
     private val tagIdsToFilter: () -> List<Int>
 ) : VisionIO {
+    var lastHeartBeat = 0.0;
     val useMegaTag2 = true //set to false to use MegaTag1
+    var currentHeartBeat = 0.0
     lateinit var mt1: LimelightHelpers.PoseEstimate
     lateinit var mt2: LimelightHelpers.PoseEstimate
 
@@ -29,9 +32,6 @@ open class LimeLightVisionIO(
                     mt1.avgTagDist
                 )
             }
-
-            inputs.connected = mt1.latency > 100
-
         } else {
 
             mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight")
@@ -59,5 +59,8 @@ open class LimeLightVisionIO(
                 inputs.tagIds = mt2.rawFiducials.map { it.id }.toIntArray()
             }
         }
+        currentHeartBeat = LimelightHelpers.getHeartbeat("limelight")
+        inputs.connected = lastHeartBeat < currentHeartBeat
+        lastHeartBeat = currentHeartBeat
     }
 }
