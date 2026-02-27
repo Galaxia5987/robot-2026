@@ -14,7 +14,9 @@ import edu.wpi.first.wpilibj.PowerDistribution
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
+import frc.robot.lib.BetterPoseEstimator
 import frc.robot.lib.extensions.enableAutoLogOutputFor
+import frc.robot.lib.extensions.toPose3d
 import frc.robot.lib.logged_output.LoggedOutputManager
 import frc.robot.sim.MapleSimHopper
 import frc.robot.sim.MapleSimIntake
@@ -173,11 +175,12 @@ object Robot : LoggedRobot() {
             *mapleSimHopper!!.fuelInRobotPoses.invoke()
         )
 
-        val pose = getMapleSimPose()
+        val pose = getMapleSimPose()!!.toPose3d()
         val timestamp = Timer.getTimestamp()
         val stdDevs = VecBuilder.fill(0.01, 0.01, 0.01)
+        val observation = BetterPoseEstimator.VisionObservation(pose, timestamp, stdDevs)
 
-        drive.addGlobalVisionMeasurement(pose, timestamp, stdDevs)
+        BetterPoseEstimator.getInstance().addVisionObservation(observation)
         arena.simulationPeriodic()
     }
     /** This function is called periodically during operator control. */

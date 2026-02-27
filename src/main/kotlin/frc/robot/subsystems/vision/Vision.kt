@@ -16,18 +16,21 @@ package frc.robot.subsystems.vision
 import edu.wpi.first.math.Matrix
 import edu.wpi.first.math.VecBuilder
 import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.math.numbers.N1
 import edu.wpi.first.math.numbers.N3
 import edu.wpi.first.wpilibj.Alert
 import edu.wpi.first.wpilibj.Alert.AlertType
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import frc.robot.lib.BetterPoseEstimator
 import frc.robot.subsystems.vision.VisionIO.PoseObservation
 import kotlin.math.absoluteValue
 import kotlin.math.pow
 import org.littletonrobotics.junction.Logger
+import kotlin.math.sqrt
 
 open class Vision(
-    private val consumer: VisionConsumer,
+    private val consumer: (BetterPoseEstimator.VisionObservation) -> Unit,
     private vararg val ios: VisionIO
 ) : SubsystemBase() {
 
@@ -39,24 +42,27 @@ open class Vision(
 
     private fun PoseObservation.isInvalid(): Boolean =
         tagCount == 0 || // Must have at least one tag
-        (tagCount == 1 &&
-                ambiguity > MAX_AMBIGUITY) || // Cannot be high ambiguity
-            pose.z.absoluteValue >
+                (tagCount == 1 &&
+                        ambiguity > MAX_AMBIGUITY) || // Cannot be high ambiguity
+                pose.z.absoluteValue >
                 MAX_Z_ERROR || // Must have realistic Z coordinate
-            // Must be within the field boundaries
-            !(pose.x in 0.0..APRILTAG_LAYOUT.fieldLength &&
-                pose.y in 0.0..APRILTAG_LAYOUT.fieldWidth)
+                // Must be within the field boundaries
+                !(pose.x in 0.0..APRILTAG_LAYOUT.fieldLength &&
+                        pose.y in 0.0..APRILTAG_LAYOUT.fieldWidth)
 
     private fun PoseObservation.isValid(): Boolean = !this.isInvalid()
 
     private fun PoseObservation.calculateStddev(): Pair<Double, Double> {
         val stdFactor = averageTagDistance.pow(2.0) / tagCount
-        val linearStddev = LINEAR_STD_DEV_BASELINE * stdFactor
-        val angularStddev = ANGULAR_STD_DEV_BASELINE * stdFactor
+        val tagCountSqrt = sqrt(tagCount.toDouble())
+
+        val linearStddev = (LINEAR_STD_DEV_BASELINE * stdFactor) / tagCountSqrt
+        val angularStddev = (ANGULAR_STD_DEV_BASELINE * stdFactor) / tagCountSqrt
         return linearStddev to angularStddev
     }
 
     override fun periodic() {
+        val invalidPoses = mutableListOf<Pose3d>()
         ios.zip(inputs).forEachIndexed { cameraIndex, (visionIO, cameraInputs)
             ->
             // Update IO + logging
@@ -70,23 +76,24 @@ open class Vision(
             disconnectedAlerts[cameraIndex].set(!cameraInputs.connected)
 
             val estimatedPose = cameraInputs.estimatedPose
-            if (estimatedPose.isInvalid()) return@forEachIndexed
+            if (estimatedPose.isInvalid()) {
+                invalidPoses.add(estimatedPose.pose)
+                return@forEachIndexed
+            }
 
             val (linearStdDev, angularStdDev) = estimatedPose.calculateStddev()
 
-            consumer.accept(
-                estimatedPose.pose.toPose2d(),
+            val observation = BetterPoseEstimator.VisionObservation(
+                estimatedPose.pose,
                 estimatedPose.timestamp,
                 VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev)
+//                VecBuilder.fill(0.99, 0.99, 0.99)
+            )
+
+            consumer.invoke(
+                observation
             )
         }
-    }
-
-    fun interface VisionConsumer {
-        fun accept(
-            visionRobotPoseMeters: Pose2d,
-            timestampSeconds: Double,
-            visionMeasurementStdDevs: Matrix<N3, N1>
-        )
+        Logger.recordOutput("InvalidVisionMeasurements", *invalidPoses.toTypedArray())
     }
 }

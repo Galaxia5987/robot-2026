@@ -72,6 +72,8 @@ object RobotContainer {
 
     private fun registerAutoCommands() {
         // SysIds
+        autoChooser.addOption("depotMain", depotMain())
+
         autoChooser.addOption(
             "Drive Wheel Radius Characterization",
             DriveCommands.wheelRadiusCharacterization()

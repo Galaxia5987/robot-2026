@@ -114,6 +114,10 @@ public class Module {
         return inputs.driveVelocityRadPerSec * constants.WheelRadius;
     }
 
+    public double getDriveMotorStatorCurrent() {
+        return inputs.driveCurrentAmps;
+    }
+
     /** Returns the module position (turn angle and drive position). */
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(getPositionMeters(), getAngle());

@@ -2,6 +2,7 @@ package frc.robot
 
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
+import frc.robot.lib.BetterPoseEstimator
 import frc.robot.lib.Mode
 import frc.robot.subsystems.drive.Drive
 import frc.robot.subsystems.drive.ModuleIOs.ModuleIO
@@ -91,4 +92,4 @@ private val visionIOs =
         Mode.REPLAY -> emptyList()
     }.toTypedArray()
 
-val vision = Vision(drive::addGlobalVisionMeasurement, *visionIOs)
+val vision = Vision(BetterPoseEstimator.getInstance()::addVisionObservation, *visionIOs)

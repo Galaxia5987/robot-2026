@@ -109,12 +109,17 @@ public class TunerConstants {
     private static final double kCoupleRatio = 5.4;
     private static final double kDriveGearRatio = 7.673684210526316;
     private static final double kSteerGearRatio = 12.1;
-    private static final Distance kWheelRadius = Inches.of(2.0);
+    private static final Distance kWheelRadius = Inches.of(2.009);
 
     private static final boolean kInvertLeftSide = false;
     private static final boolean kInvertRightSide = false;
 
     private static final int kPigeonId = 1;
+
+    // Skid detection
+    public static final float modulesMinSpeedRatioForSkid = 1.5f;
+    public static final float swerveMinTotalDriveCurrentForSkid = 70;
+    public static final float modulesLinearSpeedEpsilonForSkid = 0.05f; // mps
 
     // These are only used for simulation
     private static final MomentOfInertia kSteerInertia = KilogramSquareMeters.of(0.01);
@@ -159,7 +164,8 @@ public class TunerConstants {
 
     /** Bevel gear to the right of the robot!!!!!!!!!!!!!!!! */
     private static final double[] absoluteEncoderOffsets =
-            new double[] {2.770369, -2.331651, 0.900447, -2.170583};
+            new double[] {2.782641, -2.343923, 0.948, -2.213534};
+//            new double[] {2.770369, -2.331651, 0.900447, -2.170583};
 
     // Front Left
     private static final int kFrontLeftDriveMotorId = 2;
