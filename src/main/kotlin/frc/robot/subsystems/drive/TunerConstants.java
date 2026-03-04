@@ -165,7 +165,7 @@ public class TunerConstants {
     /** Bevel gear to the right of the robot!!!!!!!!!!!!!!!! */
     private static final double[] absoluteEncoderOffsets =
             new double[] {2.782641, -2.343923, 0.948, -2.213534};
-//            new double[] {2.770369, -2.331651, 0.900447, -2.170583};
+    //            new double[] {2.770369, -2.331651, 0.900447, -2.170583};
 
     // Front Left
     private static final int kFrontLeftDriveMotorId = 2;

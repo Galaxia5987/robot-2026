@@ -27,8 +27,6 @@ import frc.robot.lib.extensions.toTransform
 import frc.robot.lib.extensions.toYaw
 import frc.robot.lib.getRotation3d
 import frc.robot.subsystems.shooter.turret.Turret
-import org.team5987.annotation.LogLevel
-import org.team5987.annotation.LoggedOutput
 
 const val LOG_PREFIX = "Subsystems/Vision/"
 

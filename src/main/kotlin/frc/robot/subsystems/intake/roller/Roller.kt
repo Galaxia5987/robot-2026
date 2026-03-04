@@ -40,17 +40,18 @@ object Roller : SubsystemBase(), RollerPositionsCommandFactory {
     }
 
     private fun setControl(velocity: AngularVelocity) {
-        val feedforward = drive.chassisSpeeds.vxMetersPerSecond * ROBOT_VELOCITY_MULTIPLIER
+        val feedforward =
+            drive.chassisSpeeds.vxMetersPerSecond * ROBOT_VELOCITY_MULTIPLIER
         print("Feedforward: $feedforward")
         setpoint = velocity
         motor.setControl(
-            velocityTorqueCurrentFOC.withVelocity(velocity)
-                .withFeedForward(feedforward))
+            velocityTorqueCurrentFOC
+                .withVelocity(velocity)
+                .withFeedForward(feedforward)
+        )
     }
 
-    fun intake(): Command = defer {
-        run { setControl(INTAKE_BASE_SPEED) }
-    }
+    fun intake(): Command = defer { run { setControl(INTAKE_BASE_SPEED) } }
 
     override fun periodic() {
         motor.periodic()

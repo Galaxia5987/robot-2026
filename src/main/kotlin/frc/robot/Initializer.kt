@@ -92,4 +92,5 @@ private val visionIOs =
         Mode.REPLAY -> emptyList()
     }.toTypedArray()
 
-val vision = Vision(BetterPoseEstimator.getInstance()::addVisionObservation, *visionIOs)
+val vision =
+    Vision(BetterPoseEstimator.getInstance()::addVisionObservation, *visionIOs)

@@ -7,6 +7,8 @@
 
 package frc.robot.lib;
 
+import static frc.robot.subsystems.drive.Drive.getModuleTranslations;
+
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
@@ -17,17 +19,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.wpilibj.Timer;
 import java.util.*;
-
-import frc.robot.lib.shooting.GeomUtil;
-import frc.robot.subsystems.drive.TunerConstants;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.ExtensionMethod;
-import org.littletonrobotics.junction.AutoLogOutput;
-
-import static frc.robot.subsystems.drive.Drive.getModuleTranslations;
 
 // Taken from 6238 Mechanical Advantage
 public class BetterPoseEstimator {
@@ -52,10 +44,10 @@ public class BetterPoseEstimator {
     private final SwerveDriveKinematics kinematics;
     private SwerveModulePosition[] lastWheelPositions =
             new SwerveModulePosition[] {
-                    new SwerveModulePosition(),
-                    new SwerveModulePosition(),
-                    new SwerveModulePosition(),
-                    new SwerveModulePosition()
+                new SwerveModulePosition(),
+                new SwerveModulePosition(),
+                new SwerveModulePosition(),
+                new SwerveModulePosition()
             };
     private Rotation2d gyroOffset = Rotation2d.kZero;
 
@@ -95,7 +87,6 @@ public class BetterPoseEstimator {
 
     private ChassisSpeeds robotSetpointVelocity = new ChassisSpeeds();
 
-
     private static BetterPoseEstimator instance;
 
     public static BetterPoseEstimator getInstance() {
@@ -114,7 +105,8 @@ public class BetterPoseEstimator {
 
     /** Reset the pose estimate and odometry pose to the given pose. */
     public void resetPose(Pose2d pose) {
-        // Gyro offset is the rotation that maps the old gyro rotation (estimated - offset) to the new
+        // Gyro offset is the rotation that maps the old gyro rotation (estimated - offset) to the
+        // new
         // frame of rotation
         gyroOffset = pose.getRotation().minus(odometryPose.getRotation().minus(gyroOffset));
         estimatedPose = pose;
@@ -155,12 +147,14 @@ public class BetterPoseEstimator {
         poseBuffer.addSample(observation.timestamp(), odometryPose);
 
         // Add rotation to buffer at timestamp
-        observation.roll.ifPresent(rotation2d -> rotationBuffer.addSample(
-                observation.timestamp(),
-                new Rotation3d(
-                        rotation2d.getRadians(),
-                        observation.pitch.get().getRadians(),
-                        observation.yaw.get().getRadians())));
+        observation.roll.ifPresent(
+                rotation2d ->
+                        rotationBuffer.addSample(
+                                observation.timestamp(),
+                                new Rotation3d(
+                                        rotation2d.getRadians(),
+                                        observation.pitch.get().getRadians(),
+                                        observation.yaw.get().getRadians())));
         // Apply odometry delta to vision pose estimate
         Twist2d finalTwist = lastOdometryPose.log(odometryPose);
         estimatedPose = estimatedPose.exp(finalTwist);
@@ -168,10 +162,12 @@ public class BetterPoseEstimator {
 
     /** Adds a new vision pose observation from the vision subsystem. */
     public void addVisionObservation(VisionObservation observation) {
-        System.out.println("ADDED VISION OBSERVATION WITH STDDEV: " + observation.stdDevs.toString());
+        System.out.println(
+                "ADDED VISION OBSERVATION WITH STDDEV: " + observation.stdDevs.toString());
         // If measurement is old enough to be outside the pose buffer's timespan, skip.
         try {
-            if (poseBuffer.getInternalBuffer().lastKey() - poseBufferSizeSec > observation.timestamp()) {
+            if (poseBuffer.getInternalBuffer().lastKey() - poseBufferSizeSec
+                    > observation.timestamp()) {
                 return;
             }
         } catch (NoSuchElementException ex) {
@@ -211,13 +207,16 @@ public class BetterPoseEstimator {
         }
 
         // Calculate the transform from the shifted estimate to the observation pose
-        Transform2d transform = new Transform2d(estimateAtTime, observation.visionPose().toPose2d());
+        Transform2d transform =
+                new Transform2d(estimateAtTime, observation.visionPose().toPose2d());
 
         // Scale the transform by the Kalman gain
         var kTimesTransform =
                 visionK.times(
                         VecBuilder.fill(
-                                transform.getX(), transform.getY(), transform.getRotation().getRadians()));
+                                transform.getX(),
+                                transform.getY(),
+                                transform.getRotation().getRadians()));
         Transform2d scaledTransform =
                 new Transform2d(
                         kTimesTransform.get(0, 0),
@@ -231,11 +230,14 @@ public class BetterPoseEstimator {
 
     public Optional<Pose2d> getEstimatedPoseAtTimestamp(double timestamp) {
         var oldOdometryPose = poseBuffer.getSample(timestamp);
-        return oldOdometryPose.map(pose2d -> BetterPoseEstimator.getInstance()
-                .getEstimatedPose()
-                .transformBy(
-                        new Transform2d(
-                                BetterPoseEstimator.getInstance().getOdometryPose(), pose2d)));
+        return oldOdometryPose.map(
+                pose2d ->
+                        BetterPoseEstimator.getInstance()
+                                .getEstimatedPose()
+                                .transformBy(
+                                        new Transform2d(
+                                                BetterPoseEstimator.getInstance().getOdometryPose(),
+                                                pose2d)));
     }
 
     public Optional<Rotation3d> getEstimatedRotation3dAtTimestamp(double timestamp) {

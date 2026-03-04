@@ -14,7 +14,6 @@ import frc.robot.lib.extensions.rotations
 import frc.robot.lib.universal_motor.MotorLogConfig
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.Logger
-import kotlin.math.abs
 
 object Turret : SubsystemBase() {
     private val motor: UniversalTalonFX =
@@ -67,7 +66,7 @@ object Turret : SubsystemBase() {
         // Calculate discrete derivative to find setpoint velocity
         if (dt > 0.0) {
             val deltaRotations =
-                newSetpoint[rotations]  - lastSetpoint[rotations]
+                newSetpoint[rotations] - lastSetpoint[rotations]
             setpointVelocityRps = deltaRotations / dt
         }
 

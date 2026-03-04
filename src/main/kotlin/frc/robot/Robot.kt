@@ -178,7 +178,8 @@ object Robot : LoggedRobot() {
         val pose = getMapleSimPose()!!.toPose3d()
         val timestamp = Timer.getTimestamp()
         val stdDevs = VecBuilder.fill(0.01, 0.01, 0.01)
-        val observation = BetterPoseEstimator.VisionObservation(pose, timestamp, stdDevs)
+        val observation =
+            BetterPoseEstimator.VisionObservation(pose, timestamp, stdDevs)
 
         BetterPoseEstimator.getInstance().addVisionObservation(observation)
         arena.simulationPeriodic()
