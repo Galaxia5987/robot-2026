@@ -2,7 +2,7 @@ package frc.robot.sim
 
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.IS_SIM
+import frc.robot.isSim
 import frc.robot.driveSimulation
 import frc.robot.lib.extensions.cm
 import frc.robot.states.intaking.IntakingStates
@@ -28,7 +28,7 @@ class MapleSimIntake {
 
     private val intakeMapleSim: Trigger =
         IntakingStates.INTAKING.trigger
-            .and(IS_SIM)
+            .and(isSim)
             .onTrue(Commands.runOnce({ intakeSimulation.startIntake() }))
             .onFalse(Commands.runOnce({ intakeSimulation.stopIntake() }))
 

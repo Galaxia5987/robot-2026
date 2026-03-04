@@ -1,9 +1,12 @@
 package frc.robot.states.shooting
 
+import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.drive
 import frc.robot.field.inAllianceZone
 import frc.robot.field.isHubActive
+import frc.robot.isAuto
 import frc.robot.isEnabled
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.logTrigger
@@ -36,7 +39,20 @@ val allSubsystemsAtSetpoint: Trigger =
         .debounce(allSubsystemsAtSetpointDebounce[sec])
         .logTrigger("$LOGGING_PATH/allSubsystemsAtSetpoint")
 
+var commandShootOnAuto = false
+
+fun setShootInAuto(): Command = runOnce({
+    commandShootOnAuto = true
+})
+
+fun stopShootInAuto(): Command = runOnce({
+    commandShootOnAuto = false
+})
+
 class Shooting(dontShootTrigger: Trigger, canFeedTrigger: Trigger) {
+
+    val isAutoCurrentlyShooting: Trigger = Trigger { commandShootOnAuto }.or(isAuto.negate())
+
     private val canShootToHub =
         isHubActive
             .and(dontShootTrigger.negate())
@@ -44,6 +60,7 @@ class Shooting(dontShootTrigger: Trigger, canFeedTrigger: Trigger) {
             .and(Sensors.hasFuel)
             .and(isEnabled)
             .and(IntakingStates.INTAKING.trigger.negate())
+            .and(isAutoCurrentlyShooting)
             .logTrigger("$LOGGING_PATH/canShootToHub")
 
     private val cantShootToHub =
@@ -66,6 +83,7 @@ class Shooting(dontShootTrigger: Trigger, canFeedTrigger: Trigger) {
             .and(isTurretAligned)
             .and(isShootingOnMove.negate())
             .and(inAllianceZone)
+            .and(isAuto.negate())
             .whileTrue(drive.continousLock())
             .logTrigger("$LOGGING_PATH/lockIfNeeded")
 
