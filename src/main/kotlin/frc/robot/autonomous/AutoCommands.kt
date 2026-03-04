@@ -6,6 +6,7 @@ import com.pathplanner.lib.path.PathPlannerPath
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import frc.robot.lib.BetterPoseEstimator
+import frc.robot.lib.extensions.flipIfNeeded
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.shooting.ShootingState
 
@@ -16,7 +17,7 @@ private fun runPathAndReset(path: String): Command {
     val path = PathPlannerPath.fromPathFile(path)
     val startPose = path.startingHolonomicPose.get()
     return Commands.runOnce({
-            BetterPoseEstimator.getInstance().resetPose(startPose)
+            BetterPoseEstimator.getInstance().resetPose(startPose.flipIfNeeded())
         })
         .andThen(AutoBuilder.followPath(path))
 }

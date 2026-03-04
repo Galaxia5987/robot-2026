@@ -50,11 +50,10 @@ open class Vision(
 
     private fun PoseObservation.calculateStddev(): Pair<Double, Double> {
         val stdFactor = averageTagDistance.pow(2.0) / tagCount
-        val tagCountSqrt = sqrt(tagCount.toDouble())
 
-        val linearStddev = (LINEAR_STD_DEV_BASELINE * stdFactor) / tagCountSqrt
+        val linearStddev = (LINEAR_STD_DEV_BASELINE * stdFactor) / tagCount.toDouble()
         val angularStddev =
-            (ANGULAR_STD_DEV_BASELINE * stdFactor) / tagCountSqrt
+            (ANGULAR_STD_DEV_BASELINE * stdFactor) / tagCount.toDouble()
         return linearStddev to angularStddev
     }
 

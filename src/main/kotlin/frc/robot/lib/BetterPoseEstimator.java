@@ -162,8 +162,6 @@ public class BetterPoseEstimator {
 
     /** Adds a new vision pose observation from the vision subsystem. */
     public void addVisionObservation(VisionObservation observation) {
-        System.out.println(
-                "ADDED VISION OBSERVATION WITH STDDEV: " + observation.stdDevs.toString());
         // If measurement is old enough to be outside the pose buffer's timespan, skip.
         try {
             if (poseBuffer.getInternalBuffer().lastKey() - poseBufferSizeSec
