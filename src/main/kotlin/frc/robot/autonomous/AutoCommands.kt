@@ -54,4 +54,10 @@ fun depotMain(): Command =
     Commands.sequence(
         runPathAndReset("StartToFuelDepotSide"),
         runPath("FuelDepotSideToDepot"),
+        setShootInAuto(),
+        Commands.waitTime(10.sec),
+        IntakingStates.INTAKING.set(),
+        Commands.waitTime(0.5.sec),
+        runPath("PickupDepot"),
+        runPath("ExitDepot")
     )

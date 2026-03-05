@@ -8,69 +8,59 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.2671236827177355,
-        "y": 4.742046559939763
+        "x": 7.812689075630253,
+        "y": 6.756
       },
       "isLocked": false,
       "linkedName": "fuelEndDepotSide"
     },
     {
       "anchor": {
-        "x": 4.657000054523444,
-        "y": 5.582860477228833
+        "x": 4.634378151260505,
+        "y": 7.617268907563025
       },
       "prevControl": {
-        "x": 6.291832881788105,
-        "y": 5.023366843986747
+        "x": 6.254151920070787,
+        "y": 7.506968659234078
       },
       "nextControl": {
-        "x": 3.334220171888718,
-        "y": 6.035559316016604
+        "x": 2.9973949305851684,
+        "y": 7.728741052147407
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.0,
-        "y": 5.87
+        "x": 1.2,
+        "y": 6.031789461371491
       },
       "prevControl": {
-        "x": 1.2717876718606156,
-        "y": 5.859456908839524
+        "x": 1.0355052553212194,
+        "y": 5.843530387292543
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "depot"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.7429854096520773,
-      "rotationDegrees": 45.0
-    }
-  ],
-  "constraintZones": [
+      "waypointRelativePos": 0.8363636363636391,
+      "rotationDegrees": -90.0
+    },
     {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.8566502463054219,
-      "maxWaypointRelativePos": 1.1798029556650294,
-      "constraints": {
-        "maxVelocity": 2.0,
-        "maxAcceleration": 4.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 1800.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
+      "waypointRelativePos": 1.1362514029180677,
+      "rotationDegrees": -90.0
     }
   ],
+  "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "setShooting",
-      "waypointRelativePos": 1.2535991140642215,
-      "endWaypointRelativePos": 1.7275747508305592,
+      "name": "setStopIntaking",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
       "command": null
     }
   ],

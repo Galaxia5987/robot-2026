@@ -18,7 +18,7 @@ import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 import frc.robot.subsystems.shooter.pre_shooter.PreShooterVelocity
 import frc.robot.subsystems.shooter.turret.Turret
-import frc.robot.subsystems.shooter.turret.turretAngleToHub
+import frc.robot.subsystems.shooter.turret.turretAimingSetpoint
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
@@ -34,7 +34,7 @@ val turretOrientedChassisSpeeds: Translation2d
 
 private fun getTurretSetpoint(): Angle {
     val turretOrientedChassisSpeeds = turretOrientedChassisSpeeds
-    return turretAngleToHub -
+    return turretAimingSetpoint -
         calculateYaw( // TODO: Might not work in blue
                 turretDistanceFromGoal[m],
                 turretOrientedChassisSpeeds.x,

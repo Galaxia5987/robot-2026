@@ -17,10 +17,10 @@ import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 import frc.robot.subsystems.shooter.pre_shooter.PreShooterVelocity
 import frc.robot.subsystems.shooter.turret.Turret
-import frc.robot.subsystems.shooter.turret.turretAngleToHub
+import frc.robot.subsystems.shooter.turret.turretAimingSetpoint
 import kotlin.collections.mapOf
 
-private fun getTurretSetpoint(): Angle = turretAngleToHub
+private fun getTurretSetpoint(): Angle = turretAimingSetpoint
 
 private fun getHoodSetpoint(): Angle =
     (90.deg -

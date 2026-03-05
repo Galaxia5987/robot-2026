@@ -22,7 +22,7 @@ import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 import frc.robot.subsystems.shooter.pre_shooter.PreShooterVelocity
 import frc.robot.subsystems.shooter.turret.Turret
-import frc.robot.subsystems.shooter.turret.turretAngleToHub
+import frc.robot.subsystems.shooter.turret.turretAimingSetpoint
 import frc.robot.subsystems.shooter.turret.turretTranslationFieldOriented
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
@@ -39,7 +39,7 @@ private val SHOOTER_VELOCITY_BY_DISTANCE: InterpolatingDoubleMap =
     )
 
 private fun getTurretSetpoint(): Angle {
-    return turretAngleToHub
+    return turretAimingSetpoint
 }
 
 private fun getHoodSetpoint(): Angle =

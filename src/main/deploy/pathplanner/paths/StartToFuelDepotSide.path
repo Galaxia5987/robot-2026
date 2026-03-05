@@ -48,7 +48,7 @@
   "constraintZones": [
     {
       "name": "Ball Pickup constraint zone",
-      "minWaypointRelativePos": 1.0499999999999998,
+      "minWaypointRelativePos": 0.8645320197044413,
       "maxWaypointRelativePos": 1.9500000000000002,
       "constraints": {
         "maxVelocity": 1.1,
