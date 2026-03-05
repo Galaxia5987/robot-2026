@@ -34,7 +34,7 @@ class MapleSimShooter(private val mapleSimIntake: MapleSimIntake) {
                 Translation2d((-116).mm, 220.5.mm)
                     .rotateBy(drive.pose.rotation),
                 robotSpeeds,
-                Turret.wrappedPosition.toRotation2d() + drive.pose.rotation,
+                Turret.position.toRotation2d() + drive.pose.rotation,
                 0.47865.m,
                 if (turretDistanceFromGoal > 10.m) 13.mps
                 else

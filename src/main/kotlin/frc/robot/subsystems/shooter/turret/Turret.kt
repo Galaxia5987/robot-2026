@@ -5,10 +5,9 @@ import com.ctre.phoenix6.hardware.CANcoder
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.createDisableTriggerForCoast
-import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
-import frc.robot.lib.extensions.rad
 import frc.robot.lib.extensions.radians
 import frc.robot.lib.extensions.rotations
 import frc.robot.lib.universal_motor.MotorLogConfig
@@ -36,12 +35,12 @@ object Turret : SubsystemBase() {
     private var lastTime = Timer.getFPGATimestamp()
     private var setpointVelocityRps = 0.0
 
-    val wrappedPosition: Angle
-        get() {
-            val raw = motor.inputs.position[deg]
-            val wrapped = (raw + 180.0) % 360.0 - 180.0
-            return wrapped.deg[rad].rad
-        }
+    val position
+        get() = motor.inputs.position
+
+    val atSetpoint = Trigger {
+        motor.inputs.position.isNear(setpoint, SETPOINT_TOLERANCE)
+    }
 
     init {
         absoluteEncoder.configurator.apply(ENCODER_CONFIG)
@@ -94,14 +93,10 @@ object Turret : SubsystemBase() {
             turretAngleToHub[radians],
             radians
         )
-        Logger.recordOutput(
-            "Subsystems/Turret/wrappedPosition",
-            wrappedPosition
-        )
         Logger.recordOutput("Subsystems/Turret/turretPose", turretPose)
         Logger.recordOutput(
             "Subsystems/Turret/isTurretAligned",
-            isTurretAligned
+            atSetpoint
         )
     }
 }

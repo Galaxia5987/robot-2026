@@ -1,6 +1,7 @@
 package frc.robot.subsystems.intake.roller
 
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC
+import com.ctre.phoenix6.controls.VelocityVoltage
 import edu.wpi.first.units.measure.AngularVelocity
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -28,7 +29,7 @@ object Roller : SubsystemBase(), RollerPositionsCommandFactory {
                 )
         )
 
-    private val velocityTorqueCurrentFOC = VelocityTorqueCurrentFOC(0.0)
+    private val velocityVoltage = VelocityVoltage(0.0)
     private var setpoint: AngularVelocity = 0.rps
 
     val inputs
@@ -36,18 +37,14 @@ object Roller : SubsystemBase(), RollerPositionsCommandFactory {
 
     override fun setTarget(value: RollerPositions): Command = runOnce {
         setpoint = value.velocity
-        motor.setControl(velocityTorqueCurrentFOC.withVelocity(value.velocity))
+        motor.setControl(velocityVoltage.withVelocity(value.velocity).withEnableFOC(false))
     }
 
     private fun setControl(velocity: AngularVelocity) {
-        val feedforward =
-            drive.chassisSpeeds.vxMetersPerSecond * ROBOT_VELOCITY_MULTIPLIER
-        print("Feedforward: $feedforward")
         setpoint = velocity
         motor.setControl(
-            velocityTorqueCurrentFOC
+            velocityVoltage
                 .withVelocity(velocity)
-                .withFeedForward(feedforward)
         )
     }
 

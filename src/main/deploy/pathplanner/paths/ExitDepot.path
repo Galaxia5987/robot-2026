@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 0.6,
-        "y": 5.889453380677549
+        "y": 6.032
       },
       "prevControl": null,
       "nextControl": {
         "x": 1.3868432550681957,
-        "y": 5.8684560855281225
+        "y": 6.011002704850574
       },
       "isLocked": false,
       "linkedName": "endDepotPickup"
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 1.2,
-        "y": 6.031789461371491
+        "y": 6.032
       },
       "prevControl": {
         "x": 0.27015900953920746,
-        "y": 6.040116336923879
+        "y": 6.040326875552388
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,14 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "setStopIntaking",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 4.01,
     "maxAcceleration": 4.0,

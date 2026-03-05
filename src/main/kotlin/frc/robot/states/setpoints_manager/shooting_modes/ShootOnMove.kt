@@ -30,7 +30,7 @@ val turretOrientedChassisSpeeds: Translation2d
     get() =
         drive.chassisSpeedsSetpoint
             .to2dVector()
-            .rotateBy(Turret.wrappedPosition.toRotation2d())
+            .rotateBy(Turret.position.toRotation2d())
 
 private fun getTurretSetpoint(): Angle {
     val turretOrientedChassisSpeeds = turretOrientedChassisSpeeds

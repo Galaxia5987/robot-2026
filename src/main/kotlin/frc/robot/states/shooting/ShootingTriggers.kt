@@ -17,7 +17,7 @@ import frc.robot.subsystems.sensors.Sensors
 import frc.robot.subsystems.shooter.flywheel.Flywheel
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
-import frc.robot.subsystems.shooter.turret.isTurretAligned
+import frc.robot.subsystems.shooter.turret.Turret
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
@@ -33,7 +33,7 @@ private val isShooting = ShootingState.SHOOTING.trigger.onTrue(shooting())
 @LoggedOutput(path = LOGGING_PATH, level = LogLevel.COMP)
 val allSubsystemsAtSetpoint: Trigger =
     Hood.atSetpoint
-        .and(isTurretAligned)
+        .and(Turret.atSetpoint)
         .and(Flywheel.atSetpoint)
         .and(PreShooter.atSetpoint)
         .debounce(allSubsystemsAtSetpointDebounce[sec])
@@ -80,7 +80,7 @@ class Shooting(dontShootTrigger: Trigger, canFeedTrigger: Trigger) {
 
     private val lockIfNeeded =
         shootingStatePrimingOrShooting
-            .and(isTurretAligned)
+            .and(Turret.atSetpoint)
             .and(isShootingOnMove.negate())
             .and(inAllianceZone)
             .and(isAuto.negate())
@@ -101,7 +101,9 @@ class Shooting(dontShootTrigger: Trigger, canFeedTrigger: Trigger) {
             .logTrigger("$LOGGING_PATH/setShootingIfPrimed")
 
     //    private val setBackfeedingIfNotAtSetpoint =
-    //        ShootingState.SHOOTING.trigger
+    //        ShootingState.SHOOTING.trigger]\[
+
+
     //            .and(shooterAtSetpoint.negate())
     //            .onTrue(ShootingState.BACKFEEDING.set())
     //            .logTrigger("$LOGGING_PATH/setBackfeedingIfNotAtSetpoint")

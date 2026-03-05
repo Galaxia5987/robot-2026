@@ -470,15 +470,6 @@ public class Drive extends SubsystemBase implements SysIdable {
     @AutoLogOutput(key = "SwerveChassisSpeeds/Measured")
     public ChassisSpeeds getChassisSpeeds() {
         return kinematics.toChassisSpeeds(getModuleStates());
-        //                .plus(
-        //                        new ChassisSpeeds(
-        //
-        // MathUtil.applyDeadband(gyroInputs.accelerationX.in(Units.MetersPerSecondPerSecond), 0.2)
-        //                                        * 0.05,
-        //
-        // MathUtil.applyDeadband(gyroInputs.accelerationY.in(Units.MetersPerSecondPerSecond), 0.2)
-        //                                        * 0.05,
-        //                                0.0));
     }
 
     @AutoLogOutput(key = "SwerveChassisSpeeds/MeasuredFieldOriented")

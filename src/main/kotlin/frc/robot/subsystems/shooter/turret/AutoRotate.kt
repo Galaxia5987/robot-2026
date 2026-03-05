@@ -20,6 +20,7 @@ import frc.robot.lib.getRotation3d
 import frc.robot.states.setpoints_manager.SetpointsManager.currentGoal
 import frc.robot.states.setpoints_manager.SetpointsManager.isShootingOnMove
 import frc.robot.states.setpoints_manager.shooting_modes.turretDistanceFromGoal
+import frc.robot.states.setpoints_manager.shooting_modes.turretOrientedChassisSpeeds
 import kotlin.math.abs
 
 const val HUB_PATH = "Subsystems/Hub"
@@ -52,8 +53,8 @@ private val turretAngleToHubShootOnMove: Angle
         turretAngleToHub -
             calculateYaw(
                     turretDistanceFromGoal[m],
-                    drive.chassisSpeeds.vxMetersPerSecond,
-                    drive.chassisSpeeds.vyMetersPerSecond
+                turretOrientedChassisSpeeds.x,
+                    turretOrientedChassisSpeeds.y
                 )
                 .deg
 
@@ -66,7 +67,3 @@ val turretAimingSetpoint: Angle
         }
         return angle
     }
-
-val isTurretAligned = Trigger {
-    Turret.wrappedPosition.isNear(turretAimingSetpoint, SETPOINT_TOLERANCE)
-}

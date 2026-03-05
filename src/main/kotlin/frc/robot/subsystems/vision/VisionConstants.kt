@@ -57,10 +57,10 @@ val TURRET_CAMERA_ROBOT_TO_CAMERA: Transform3d
                 (TURRET_TRANSLATION.plus(CAMERA_TO_TURRET_TRANSLATION)
                     .rotateAround(
                         TURRET_TRANSLATION,
-                        -Turret.wrappedPosition.toYaw()
+                        -Turret.position.toYaw()
                     )),
                 getRotation3d(
-                    yaw = -Turret.wrappedPosition,
+                    yaw = -Turret.position,
                     pitch = ((-25).deg)
                 )
             )

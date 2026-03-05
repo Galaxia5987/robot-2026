@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 1.2,
-        "y": 6.031789461371491
+        "y": 6.032
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6199513794518645,
-        "y": 6.038179993155008
+        "x": 0.8141785842019513,
+        "y": 6.029575067734829
       },
       "isLocked": false,
       "linkedName": "depot"
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 0.6,
-        "y": 5.889453380677549
+        "y": 6.032
       },
       "prevControl": {
-        "x": 0.27147005584800993,
-        "y": 5.884073583918124
+        "x": 0.35052266386254216,
+        "y": 6.048157312702237
       },
       "nextControl": null,
       "isLocked": false,
@@ -35,7 +35,7 @@
       "minWaypointRelativePos": 0,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 0.5,
+        "maxVelocity": 0.3,
         "maxAcceleration": 4.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 1800.0,
