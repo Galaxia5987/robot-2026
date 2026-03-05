@@ -26,7 +26,8 @@ val STATOR_STALL_CURRENT = 50.amps
 
 val STALL_DEBOUNCE = 0.1.sec
 
-val FORWARD_LIMIT = 11.63.rot
+val FORWARD_LIMIT = 12.15
+    .rot
 
 val CLOSE_VOLTAGE = (-6).volts
 
@@ -54,6 +55,6 @@ val CONFIG =
 
 @CommandEnum
 enum class ExtenderPositions(val distance: Distance) {
-    OPEN(0.303224.meters),
+    OPEN(0.304.meters),
     CLOSE(0.0.meters)
 }

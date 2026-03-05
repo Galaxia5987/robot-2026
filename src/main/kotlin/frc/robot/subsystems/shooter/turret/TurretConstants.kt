@@ -57,7 +57,7 @@ val CONFIG =
                     StaticFeedforwardSignValue.UseVelocitySign
                 )
         ClosedLoopGeneral =
-            ClosedLoopGeneralConfigs().apply { ContinuousWrap = true }
+            ClosedLoopGeneralConfigs().apply { ContinuousWrap = false }
         SoftwareLimitSwitch = SOFTWARE_LIMIT_CONFIG
         Feedback =
             FeedbackConfigs().apply {

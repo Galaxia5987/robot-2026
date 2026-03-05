@@ -59,10 +59,6 @@ object Turret : SubsystemBase() {
         val currentTime = Timer.getFPGATimestamp()
         val dt = currentTime - lastTime
 
-        if (newSetpoint < 0.deg && newSetpoint < REVERSE_LIMIT) {
-            newSetpoint += 360.deg
-        }
-
         // Calculate discrete derivative to find setpoint velocity
         if (dt > 0.0) {
             val deltaRotations =
@@ -89,18 +85,20 @@ object Turret : SubsystemBase() {
             radians
         )
         Logger.recordOutput(
+            "Subsystems/Turret/turretAimingSetpoint",
+            turretAimingSetpoint[radians],
+            radians
+        )
+        Logger.recordOutput(
+            "Subsystems/Turret/turretAngleToHub",
+            turretAngleToHub[radians],
+            radians
+        )
+        Logger.recordOutput(
             "Subsystems/Turret/wrappedPosition",
             wrappedPosition
         )
         Logger.recordOutput("Subsystems/Turret/turretPose", turretPose)
-        Logger.recordOutput(
-            "Subsystems/Turret/angleFromRobotToHub",
-            angleFromRobotToHub
-        )
-        Logger.recordOutput(
-            "Subsystems/Turret/turretAngleToHub",
-            turretAngleToHub
-        )
         Logger.recordOutput(
             "Subsystems/Turret/isTurretAligned",
             isTurretAligned

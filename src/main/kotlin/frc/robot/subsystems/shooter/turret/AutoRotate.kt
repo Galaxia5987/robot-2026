@@ -1,5 +1,6 @@
 package frc.robot.subsystems.shooter.turret
 
+import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.units.measure.Angle
@@ -11,6 +12,7 @@ import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.m
 import frc.robot.lib.extensions.mm
+import frc.robot.lib.extensions.rot
 import frc.robot.lib.extensions.rotationToPoint
 import frc.robot.lib.extensions.toTranslation3d
 import frc.robot.lib.getPose3d
@@ -18,6 +20,7 @@ import frc.robot.lib.getRotation3d
 import frc.robot.states.setpoints_manager.SetpointsManager.currentGoal
 import frc.robot.states.setpoints_manager.SetpointsManager.isShootingOnMove
 import frc.robot.states.setpoints_manager.shooting_modes.turretDistanceFromGoal
+import kotlin.math.abs
 
 const val HUB_PATH = "Subsystems/Hub"
 
@@ -44,7 +47,7 @@ val angleFromRobotToHub: Rotation2d
 val turretAngleToHub: Angle
     get() = (drive.pose.rotation - angleFromRobotToHub).measure
 
-val turretAngleToHubShootOnMove: Angle
+private val turretAngleToHubShootOnMove: Angle
     get() =
         turretAngleToHub -
             calculateYaw(
@@ -55,9 +58,14 @@ val turretAngleToHubShootOnMove: Angle
                 .deg
 
 val turretAimingSetpoint: Angle
-    get() =
-        if (isShootingOnMove.asBoolean) turretAngleToHubShootOnMove
+    get() {
+        var angle = if (isShootingOnMove.asBoolean) turretAngleToHubShootOnMove
         else turretAngleToHub
+        if (angle < REVERSE_LIMIT) {
+            angle = 1.rot + angle
+        }
+        return angle
+    }
 
 val isTurretAligned = Trigger {
     Turret.wrappedPosition.isNear(turretAimingSetpoint, SETPOINT_TOLERANCE)
