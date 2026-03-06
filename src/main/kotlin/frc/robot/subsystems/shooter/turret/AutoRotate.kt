@@ -48,22 +48,13 @@ val angleFromRobotToHub: Rotation2d
 val turretAngleToHub: Angle
     get() = (drive.pose.rotation - angleFromRobotToHub).measure
 
-private val turretAngleToHubShootOnMove: Angle
-    get() =
-        turretAngleToHub -
-            calculateYaw(
-                    turretDistanceFromGoal[m],
-                turretOrientedChassisSpeeds.x,
-                    turretOrientedChassisSpeeds.y
-                )
-                .deg
-
 val turretAimingSetpoint: Angle
-    get() {
-        var angle = if (isShootingOnMove.asBoolean) turretAngleToHubShootOnMove
-        else turretAngleToHub
-        if (angle < REVERSE_LIMIT) {
-            angle = 1.rot + angle
-        }
-        return angle
+    get() = constraintTurretLimits(turretAngleToHub)
+
+fun constraintTurretLimits(angle: Angle): Angle {
+    var newAngle = angle
+    if (newAngle < REVERSE_LIMIT) {
+        newAngle = 1.rot + newAngle
     }
+    return newAngle
+}
