@@ -6,7 +6,8 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import frc.robot.autonomous.depotDoubleCycle
-import frc.robot.autonomous.depotMain
+import frc.robot.autonomous.depotMainNoShootOnMove
+import frc.robot.autonomous.depotMainShootOnMove
 import frc.robot.autonomous.shootOnMoveTestPath
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
@@ -73,8 +74,6 @@ object RobotContainer {
 
     private fun registerAutoCommands() {
         // SysIds
-        autoChooser.addOption("depotMain", depotDoubleCycle())
-
         autoChooser.addOption(
             "Drive Wheel Radius Characterization",
             DriveCommands.wheelRadiusCharacterization()
@@ -106,7 +105,7 @@ object RobotContainer {
         )
 
         autoChooser.addOption("ShootOnMoveTestPath", shootOnMoveTestPath())
-        autoChooser.addOption("depotDoubleCycle", depotDoubleCycle())
-        autoChooser.addOption("depotMain", depotMain())
+        autoChooser.addOption("depotMainNoShootOnMove", depotMainNoShootOnMove())
+        autoChooser.addOption("depotMainShootOnMove", depotMainShootOnMove())
     }
 }

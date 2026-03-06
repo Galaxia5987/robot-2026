@@ -34,14 +34,12 @@ val setIntaking =
 val setStopIntaking =
     EventTrigger("setStopIntaking").onTrue(IntakingStates.CLOSED.set())
 val setShooting =
-    EventTrigger("setShooting").onTrue(ShootingState.SHOOTING.set())
+    EventTrigger("setShooting").onTrue(setShootInAuto())
 val setStopShooting =
-    EventTrigger("setStopShooting").onTrue(ShootingState.IDLE.set())
+    EventTrigger("setStopShooting").onTrue(stopShootInAuto())
 
 fun shootOnMoveTestPath(): Command =
     AutoBuilder.followPath(PathPlannerPath.fromPathFile("Test"))
-
-fun test() {}
 
 fun depotDoubleCycle(): Command =
     Commands.sequence(
@@ -51,7 +49,7 @@ fun depotDoubleCycle(): Command =
         stopShootInAuto(),
     )
 
-fun depotMain(): Command =
+fun depotMainNoShootOnMove(): Command =
     Commands.sequence(
         runPathAndReset("StartToFuelDepotSide"),
         runPath("FuelDepotSideToDepot"),
@@ -61,4 +59,16 @@ fun depotMain(): Command =
         Commands.waitTime(0.5.sec),
         runPath("PickupDepot"),
         runPath("ExitDepot")
+    )
+
+fun depotMainShootOnMove(): Command =
+    Commands.sequence(
+        runPathAndReset("StartToFuelDepotSide"),
+        runPath("FuelDepotSideToDepotShootOnMove"),
+        Commands.waitTime(5.sec),
+        IntakingStates.INTAKING.set(),
+        Commands.waitTime(0.5.sec),
+        runPath("PickupDepot"),
+        runPath("ExitDepot"),
+        runPath("DepotToFuelShootOnMove")
     )
