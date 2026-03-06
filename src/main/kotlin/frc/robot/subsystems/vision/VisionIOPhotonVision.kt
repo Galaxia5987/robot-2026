@@ -49,6 +49,11 @@ open class VisionIOPhotonVision(
                     if (result.multitagResult.isPresent) {
                         val result =
                             poseEstimator.estimateCoprocMultiTagPose(result)
+
+                        if (result.isEmpty) {
+                            return@forEach
+                        }
+
                         val pose = result.get()
                         poseEstimator.resetHeadingData(
                             pose.timestampSeconds,

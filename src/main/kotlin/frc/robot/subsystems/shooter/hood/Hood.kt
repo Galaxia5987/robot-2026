@@ -97,10 +97,17 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
     }
 
     fun setControlAngle(angle: Angle) {
-        setpoint =
+
+        var newAngle =
             if (shouldCrouch.asBoolean) HoodPositions.DOWN.angle
             else angle - HOOD_STARTING_ANGLE
-        motor.setControl(positionRequest.withPosition(setpoint))
+
+        if (newAngle < 0.deg) {
+            newAngle = 0.deg
+        }
+
+        setpoint = newAngle
+        motor.setControl(positionRequest.withPosition(newAngle))
     }
 
     fun setAngle(angle: Angle): Command = runOnce { setControlAngle(angle) }

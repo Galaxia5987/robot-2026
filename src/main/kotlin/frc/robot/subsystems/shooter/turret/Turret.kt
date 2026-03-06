@@ -84,6 +84,7 @@ object Turret : SubsystemBase() {
             setpoint[radians],
             radians
         )
+        Logger.recordOutput("Subsystems/Turret/atSetpoint", atSetpoint)
         Logger.recordOutput(
             "Subsystems/Turret/turretAimingSetpoint",
             turretAimingSetpoint[radians],
