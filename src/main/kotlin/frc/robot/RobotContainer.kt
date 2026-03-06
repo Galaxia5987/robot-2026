@@ -23,6 +23,8 @@ object RobotContainer {
     private val driverController = CommandPS5Controller(0)
     private val autoChooser: LoggedDashboardChooser<Command>
 
+    var shooting: Shooting? = null
+
     init {
         drive // Ensure Drive is initialized
         autoChooser =
@@ -66,7 +68,7 @@ object RobotContainer {
         intakeButton.onTrue(IntakingStates.INTAKING.set())
         intakeButton.negate().onTrue(IntakingStates.CLOSED.set())
 
-        Shooting(driverController.L2(), driverController.L1())
+        shooting = Shooting(driverController.L2(), driverController.L1())
     }
 
     fun getAutonomousCommand(): Command = autoChooser.get()
