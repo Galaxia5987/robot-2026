@@ -1,72 +1,56 @@
 package frc.robot
 
+import edu.wpi.first.units.measure.Time
 import edu.wpi.first.wpilibj.DriverStation
-import edu.wpi.first.wpilibj.util.Color
 import frc.robot.lib.IS_RED
 import frc.robot.lib.extensions.min
 import frc.robot.lib.extensions.sec
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
-private var isShiftOneActiveRedBackingField: Boolean? = null
-
-private fun isShiftOneActiveRed(): Boolean? {
-    if (isShiftOneActiveRedBackingField != null) {
-        return isShiftOneActiveRedBackingField
-    }
-    val message = DriverStation.getGameSpecificMessage()
-    if (message.isEmpty()) return null
-
-    isShiftOneActiveRedBackingField =
-        when (message.firstOrNull()) {
-            'R' -> false
-            'B' -> true
-            else -> null
-        }
-    return isShiftOneActiveRedBackingField
+enum class ShiftType {
+    WON_AUTO,
+    LOST_AUTO,
+    ALL
 }
 
-private val matchTime
-    get() = DriverStation.getMatchTime().sec
+data class GameShift(
+    val startTime: Time,
+    val endTime: Time,
+    val shiftType: ShiftType
+)
 
-private val SHIFT_CHANGES =
-    listOf(2.min + 10.sec, 1.min + 45.sec, 1.min + 20.sec, 55.sec, 30.sec)
+fun didWeWinAuto(): Boolean{
+    val msg = DriverStation.getGameSpecificMessage()
+    if(msg.isNullOrEmpty()) return true
 
-@LoggedOutput(LogLevel.DEV)
+    return when(msg.firstOrNull()?.uppercaseChar()){
+        'R' -> IS_RED
+        'B' -> !IS_RED
+        else -> true
+    }
+}
+
+private val SHIFTS = listOf(
+    GameShift(2.min + 40.sec, 2.min + 10.sec, ShiftType.ALL), // auto + first shift
+    GameShift(2.min + 10.sec, 1.min + 45.sec, ShiftType.LOST_AUTO),
+    GameShift(1.min + 45.sec, 1.min + 20.sec, ShiftType.WON_AUTO),
+    GameShift(1.min + 20.sec, 55.sec, ShiftType.LOST_AUTO),
+    GameShift(55.sec, 30.sec, ShiftType.WON_AUTO),
+    GameShift(30.sec, 0.sec, ShiftType.ALL) // endgame
+)
+
+val matchTime: Time // getMatchTime returns time left in the current period, so add 2min 20sec when in auto
+    get() = DriverStation.getMatchTime().sec + if (DriverStation.isAutonomous()) (2.min + 20.sec) else 0.sec
+
+val currentShift: GameShift?
+    get() = SHIFTS.find { matchTime in it.endTime..it.startTime }
+
+@LoggedOutput(LogLevel.COMP)
 val isOurHubActive: Boolean
-    get() {
-        // Both Hubs are active in the beginning and end of the match.
-        val bothHubsActive =
-            matchTime !in SHIFT_CHANGES.last()..SHIFT_CHANGES.first()
-
-        val wasShiftOneOurs = IS_RED == isShiftOneActiveRed()
-
-        val currentIndex = SHIFT_CHANGES.indexOfFirst { matchTime > it }
-        val isCurrentShiftOdd = currentIndex % 2 == 1
-
-        return bothHubsActive || (wasShiftOneOurs == isCurrentShiftOdd)
-    }
-
-@LoggedOutput(LogLevel.COMP)
-val activeColor: Color
-    get() {
-        return (if (
-            isShiftOneActiveRed() == null || matchTime < SHIFT_CHANGES.last()
-        )
-            Color.kPurple
-        else {
-            if (isOurHubActive)
-                if (IS_RED) Color.kOrangeRed else Color.kFirstBlue
-            else if (IS_RED) Color.kFirstBlue else Color.kOrangeRed
-        })
-    }
-
-@LoggedOutput(LogLevel.COMP)
-val timeUntilNextShift: Double
-    get() {
-        SHIFT_CHANGES.find { matchTime > it }
-            ?.let {
-                return (matchTime - it).`in`(sec)
-            }
-        return 0.0
+    get() = when((currentShift?.shiftType)) {
+        ShiftType.ALL -> true
+        ShiftType.WON_AUTO -> didWeWinAuto()
+        ShiftType.LOST_AUTO -> !didWeWinAuto()
+        else -> true
     }
