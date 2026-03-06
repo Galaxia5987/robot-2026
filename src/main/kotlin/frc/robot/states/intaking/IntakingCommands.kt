@@ -23,7 +23,7 @@ fun intaking(): Command =
 
 fun pumping(): Command =
     Commands.repeatingSequence(
-        Extender.close(),
+        Extender.closeSlow(),
         Extender.defer {
             Extender.setPosition(Extender.lastStallingDistance + 10.cm)
         },

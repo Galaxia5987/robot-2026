@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.812689075630253,
-        "y": 6.756
+        "x": 7.987991596638656,
+        "y": 7.495319327731092
       },
       "isLocked": false,
       "linkedName": "fuelEndDepotSide"
@@ -47,11 +47,11 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.8363636363636391,
-      "rotationDegrees": -90.0
+      "rotationDegrees": 180.0
     },
     {
       "waypointRelativePos": 1.1362514029180677,
-      "rotationDegrees": -90.0
+      "rotationDegrees": 180.0
     }
   ],
   "constraintZones": [

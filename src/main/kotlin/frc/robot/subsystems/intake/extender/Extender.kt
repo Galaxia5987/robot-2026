@@ -84,6 +84,14 @@ object Extender : SubsystemBase() {
             stop()
         )
 
+    fun closeSlow(): Command =
+        Commands.sequence(
+            setVoltage(PUMPING_VOLTAGE),
+            Commands.waitUntil(shouldStop),
+            stop()
+        )
+
+
     fun openAndReset(): Command =
         StartEndCommand(
             {

@@ -35,7 +35,7 @@ val allSubsystemsAtSetpoint: Trigger =
     Hood.atSetpoint
         .and(Turret.atSetpoint)
         .and(Flywheel.atSetpoint)
-        .and(PreShooter.atSetpoint)
+//        .and(PreShooter.atSetpoint)
         .debounce(allSubsystemsAtSetpointDebounce[sec])
         .logTrigger("$LOGGING_PATH/allSubsystemsAtSetpoint")
 

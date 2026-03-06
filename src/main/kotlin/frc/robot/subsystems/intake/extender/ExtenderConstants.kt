@@ -30,6 +30,8 @@ val FORWARD_LIMIT = 12.15.rot
 
 val CLOSE_VOLTAGE = (-6).volts
 
+val PUMPING_VOLTAGE = (-3).volts
+
 val RESET_VOLTAGE = 6.0.volts
 
 val CONFIG =
