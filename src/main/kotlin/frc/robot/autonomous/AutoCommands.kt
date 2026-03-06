@@ -20,7 +20,8 @@ private fun runPathAndReset(path: String): Command {
     val path = PathPlannerPath.fromPathFile(path)
     val startPose = path.startingHolonomicPose.get()
     return Commands.runOnce({
-            BetterPoseEstimator.getInstance().resetPose(startPose.flipIfNeeded())
+            BetterPoseEstimator.getInstance()
+                .resetPose(startPose.flipIfNeeded())
         })
         .andThen(AutoBuilder.followPath(path))
 }

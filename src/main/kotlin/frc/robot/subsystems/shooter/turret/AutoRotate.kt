@@ -1,16 +1,12 @@
 package frc.robot.subsystems.shooter.turret
 
-import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.units.measure.Angle
-import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.calculateYaw
 import frc.robot.drive
 import frc.robot.lib.extensions.cm
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
-import frc.robot.lib.extensions.m
 import frc.robot.lib.extensions.mm
 import frc.robot.lib.extensions.rot
 import frc.robot.lib.extensions.rotationToPoint
@@ -18,10 +14,6 @@ import frc.robot.lib.extensions.toTranslation3d
 import frc.robot.lib.getPose3d
 import frc.robot.lib.getRotation3d
 import frc.robot.states.setpoints_manager.SetpointsManager.currentGoal
-import frc.robot.states.setpoints_manager.SetpointsManager.isShootingOnMove
-import frc.robot.states.setpoints_manager.shooting_modes.turretDistanceFromGoal
-import frc.robot.states.setpoints_manager.shooting_modes.turretOrientedChassisSpeeds
-import kotlin.math.abs
 
 const val HUB_PATH = "Subsystems/Hub"
 

@@ -94,9 +94,6 @@ object Turret : SubsystemBase() {
             radians
         )
         Logger.recordOutput("Subsystems/Turret/turretPose", turretPose)
-        Logger.recordOutput(
-            "Subsystems/Turret/isTurretAligned",
-            atSetpoint
-        )
+        Logger.recordOutput("Subsystems/Turret/isTurretAligned", atSetpoint)
     }
 }

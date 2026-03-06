@@ -26,8 +26,7 @@ val STATOR_STALL_CURRENT = 50.amps
 
 val STALL_DEBOUNCE = 0.1.sec
 
-val FORWARD_LIMIT = 12.15
-    .rot
+val FORWARD_LIMIT = 12.15.rot
 
 val CLOSE_VOLTAGE = (-6).volts
 

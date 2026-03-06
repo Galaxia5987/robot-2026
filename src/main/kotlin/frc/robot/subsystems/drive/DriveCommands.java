@@ -33,6 +33,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.InitializerKt;
 import frc.robot.lib.AllianceHelperKt;
+import frc.robot.states.setpoints_manager.SetpointsManager;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
@@ -52,6 +53,13 @@ public class DriveCommands {
     private static final double FF_RAMP_RATE = 3; // Volts/Sec
     private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
     private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
+
+    private static final double accelerationLimitShootOnMove = 2.2; // m/s^2
+
+    private static final SlewRateLimiter slewRateLimiterX =
+            new SlewRateLimiter(accelerationLimitShootOnMove);
+    private static final SlewRateLimiter slewRateLimiterY =
+            new SlewRateLimiter(accelerationLimitShootOnMove);
 
     private DriveCommands() {}
 
@@ -112,12 +120,22 @@ public class DriveCommands {
                                     linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
                                     omega * drive.getMaxAngularSpeedRadPerSec());
                     boolean isFlipped = AllianceHelperKt.getIS_RED();
-                    drive.runVelocity(
+
+                    ChassisSpeeds robotRelativeSpeeds =
                             ChassisSpeeds.fromFieldRelativeSpeeds(
                                     speeds,
                                     isFlipped
                                             ? drive.getRotation().plus(Rotation2d.fromDegrees(180))
-                                            : drive.getRotation()));
+                                            : drive.getRotation());
+
+                    if (SetpointsManager.INSTANCE.isShootingOnMove().getAsBoolean()) {
+                        robotRelativeSpeeds.vxMetersPerSecond =
+                                slewRateLimiterX.calculate(robotRelativeSpeeds.vxMetersPerSecond);
+                        robotRelativeSpeeds.vyMetersPerSecond =
+                                slewRateLimiterY.calculate(robotRelativeSpeeds.vyMetersPerSecond);
+                    }
+
+                    drive.runVelocity(robotRelativeSpeeds);
                 });
     }
 

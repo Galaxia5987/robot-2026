@@ -2,8 +2,8 @@ package frc.robot.sim
 
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import frc.robot.isSim
 import frc.robot.driveSimulation
+import frc.robot.isSim
 import frc.robot.lib.extensions.cm
 import frc.robot.states.intaking.IntakingStates
 import org.ironmaple.simulation.IntakeSimulation

@@ -41,17 +41,14 @@ val allSubsystemsAtSetpoint: Trigger =
 
 var commandShootOnAuto = false
 
-fun setShootInAuto(): Command = runOnce({
-    commandShootOnAuto = true
-})
+fun setShootInAuto(): Command = runOnce({ commandShootOnAuto = true })
 
-fun stopShootInAuto(): Command = runOnce({
-    commandShootOnAuto = false
-})
+fun stopShootInAuto(): Command = runOnce({ commandShootOnAuto = false })
 
 class Shooting(dontShootTrigger: Trigger, canFeedTrigger: Trigger) {
 
-    val isAutoCurrentlyShooting: Trigger = Trigger { commandShootOnAuto }.or(isAuto.negate())
+    val isAutoCurrentlyShooting: Trigger =
+        Trigger { commandShootOnAuto }.or(isAuto.negate())
 
     private val canShootToHub =
         isHubActive
@@ -59,7 +56,7 @@ class Shooting(dontShootTrigger: Trigger, canFeedTrigger: Trigger) {
             .and(inAllianceZone)
             .and(Sensors.hasFuel)
             .and(isEnabled)
-            .and(IntakingStates.INTAKING.trigger.negate())
+            .and(IntakingStates.INTAKING.trigger.negate().or(isShootingOnMove))
             .and(isAutoCurrentlyShooting)
             .logTrigger("$LOGGING_PATH/canShootToHub")
 
@@ -103,7 +100,6 @@ class Shooting(dontShootTrigger: Trigger, canFeedTrigger: Trigger) {
     //    private val setBackfeedingIfNotAtSetpoint =
     //        ShootingState.SHOOTING.trigger]\[
 
-
     //            .and(shooterAtSetpoint.negate())
     //            .onTrue(ShootingState.BACKFEEDING.set())
     //            .logTrigger("$LOGGING_PATH/setBackfeedingIfNotAtSetpoint")
@@ -117,7 +113,7 @@ class Shooting(dontShootTrigger: Trigger, canFeedTrigger: Trigger) {
     private val shouldShootingToHubStop =
         Sensors.hasFuel
             .negate()
-            .or(IntakingStates.INTAKING.trigger)
+            .or(IntakingStates.INTAKING.trigger.and(isShootingOnMove.negate()))
             .and(inAllianceZone)
 
     private val shouldStopFeeding =

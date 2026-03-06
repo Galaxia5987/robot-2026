@@ -47,9 +47,13 @@ open class VisionIOPhotonVision(
 
                 val estimatedOptionalRobotPose: Optional<EstimatedRobotPose> =
                     if (result.multitagResult.isPresent) {
-                        val result = poseEstimator.estimateCoprocMultiTagPose(result)
+                        val result =
+                            poseEstimator.estimateCoprocMultiTagPose(result)
                         val pose = result.get()
-                        poseEstimator.resetHeadingData(pose.timestampSeconds, pose.estimatedPose.rotation)
+                        poseEstimator.resetHeadingData(
+                            pose.timestampSeconds,
+                            pose.estimatedPose.rotation
+                        )
                         result
                     } else {
                         poseEstimator.estimatePnpDistanceTrigSolvePose(result)

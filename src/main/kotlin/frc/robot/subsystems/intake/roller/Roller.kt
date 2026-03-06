@@ -1,11 +1,9 @@
 package frc.robot.subsystems.intake.roller
 
-import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC
 import com.ctre.phoenix6.controls.VelocityVoltage
 import edu.wpi.first.units.measure.AngularVelocity
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
-import frc.robot.drive
 import frc.robot.lib.extensions.rps
 import frc.robot.lib.universal_motor.MotorLogConfig
 import frc.robot.lib.universal_motor.UniversalTalonFX
@@ -37,15 +35,14 @@ object Roller : SubsystemBase(), RollerPositionsCommandFactory {
 
     override fun setTarget(value: RollerPositions): Command = runOnce {
         setpoint = value.velocity
-        motor.setControl(velocityVoltage.withVelocity(value.velocity).withEnableFOC(false))
+        motor.setControl(
+            velocityVoltage.withVelocity(value.velocity).withEnableFOC(false)
+        )
     }
 
     private fun setControl(velocity: AngularVelocity) {
         setpoint = velocity
-        motor.setControl(
-            velocityVoltage
-                .withVelocity(velocity)
-        )
+        motor.setControl(velocityVoltage.withVelocity(velocity))
     }
 
     fun intake(): Command = defer { run { setControl(INTAKE_BASE_SPEED) } }
