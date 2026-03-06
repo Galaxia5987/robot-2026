@@ -111,9 +111,10 @@ class Shooting(dontShootTrigger: Trigger, canFeedTrigger: Trigger) {
     //            .logTrigger("$LOGGING_PATH/setPrimingIfHasFuel")
 
     private val shouldShootingToHubStop =
-        Sensors.hasFuel
+        (Sensors.hasFuel
             .negate()
             .or(IntakingStates.INTAKING.trigger.and(isShootingOnMove.negate()))
+            .or(Turret.atSetpoint.negate()))
             .and(inAllianceZone)
 
     private val shouldStopFeeding =

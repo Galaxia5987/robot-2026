@@ -9,6 +9,7 @@ import frc.robot.lib.extensions.sec
 import frc.robot.lib.unified_canrange.UnifiedCANRange
 import frc.robot.lib.unified_canrange.UnifiedCANRangeLogging
 import frc.robot.states.intaking.IntakingStates
+import frc.robot.states.setpoints_manager.SetpointsManager.isShootingOnMove
 import frc.robot.subsystems.intake.extender.EXTENDER_SETPOINT_TOLERANCE
 import frc.robot.subsystems.intake.extender.Extender
 import org.littletonrobotics.junction.Logger
@@ -54,6 +55,7 @@ object Sensors : SubsystemBase() {
         isSpindexerLoaded
             .or(isFull)
             .or(isIntakeOpen)
+            .or(isShootingOnMove)
             .debounce(HAS_FUEL_DEBOUNCE[sec], Debouncer.DebounceType.kFalling)
 
     override fun periodic() {
