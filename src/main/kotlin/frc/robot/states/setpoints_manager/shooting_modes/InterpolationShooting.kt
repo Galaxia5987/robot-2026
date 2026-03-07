@@ -7,7 +7,9 @@ import edu.wpi.first.units.measure.AngularVelocity
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj.Filesystem
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import frc.robot.calculateAngularVelocity
 import frc.robot.calculatePitch
+import frc.robot.calculateVelocity
 import frc.robot.drive
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
@@ -52,8 +54,17 @@ private fun getHoodSetpoint(): Angle =
             .deg)
 
 private fun getFlywheelSetpoint(): AngularVelocity {
-    val flywheelKey = InterpolatingDouble(turretDistanceFromGoal[m])
-    return SHOOTER_VELOCITY_BY_DISTANCE.getInterpolated(flywheelKey).value.rps
+    val turretOrientedChassisSpeeds = turretOrientedChassisSpeeds
+    return (1 * calculateAngularVelocity(
+        calculateVelocity(
+            turretDistanceFromGoal[m],
+            turretOrientedChassisSpeeds.x,
+            turretOrientedChassisSpeeds.y
+        )
+    ))
+        .rps
+//    val flywheelKey = InterpolatingDouble(turretDistanceFromGoal[m])
+//    return SHOOTER_VELOCITY_BY_DISTANCE.getInterpolated(flywheelKey).value.rps
 }
 
 private fun getPreShooterSetpoint(): AngularVelocity {

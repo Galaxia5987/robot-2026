@@ -28,7 +28,7 @@ object LEDSubsystem : SubsystemBase() {
         EMPTY,
     }
 
-    private val candle = CANdle(0)
+    private val candle = CANdle(39)
     private val solidColorRequest = SolidColor(startIndex, endIndex)
     private var currentMode: LedMode? = null
 
@@ -67,7 +67,7 @@ object LEDSubsystem : SubsystemBase() {
             Sensors.hasFuel.asBoolean || Roller.isActive.asBoolean ->
                 LedMode.HAS_FUEL
 
-            else -> LedMode.EMPTY
+            else -> LedMode.SHOOTING_ON_MOVE
         }
 
     private fun setMode(mode: LedMode) {
