@@ -51,7 +51,8 @@ val FRONT_SENSOR_CONFIG =
         ProximityParams =
             ProximityParamsConfigs().apply {
                 ProximityThreshold = 0.1
-                MinSignalStrengthForValidMeasurement = MIN_SIGNAL_STRENGTH_HOPPER_FRONT
+                MinSignalStrengthForValidMeasurement =
+                    MIN_SIGNAL_STRENGTH_HOPPER_FRONT
             }
         FovParams =
             FovParamsConfigs().apply {

@@ -9,8 +9,6 @@ import frc.robot.lib.BetterPoseEstimator
 import frc.robot.lib.extensions.flipIfNeeded
 import frc.robot.lib.extensions.sec
 import frc.robot.states.intaking.IntakingStates
-import frc.robot.states.intaking.pumping
-import frc.robot.states.shooting.ShootingState
 import frc.robot.states.shooting.setShootInAuto
 import frc.robot.states.shooting.stopShootInAuto
 
@@ -34,10 +32,8 @@ val setIntaking =
     EventTrigger("setIntaking").onTrue(IntakingStates.INTAKING.set())
 val setStopIntaking =
     EventTrigger("setStopIntaking").onTrue(IntakingStates.CLOSED.set())
-val setShooting =
-    EventTrigger("setShooting").onTrue(setShootInAuto())
-val setStopShooting =
-    EventTrigger("setStopShooting").onTrue(stopShootInAuto())
+val setShooting = EventTrigger("setShooting").onTrue(setShootInAuto())
+val setStopShooting = EventTrigger("setStopShooting").onTrue(stopShootInAuto())
 
 fun shootOnMoveTestPath(): Command =
     AutoBuilder.followPath(PathPlannerPath.fromPathFile("Test"))

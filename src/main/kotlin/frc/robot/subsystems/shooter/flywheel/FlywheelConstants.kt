@@ -24,7 +24,6 @@ const val MAIN_MOTOR_PORT = 16
 val FLYWHEEL_TOLERANCE
     get() = isShootingOnMove.asBoolean.switchable(4.rps, 0.55.rps)
 
-
 val AUXILIARY_MOTORS_PORTS =
     mapOf<Int, MotorAlignmentValue>(
         17 to MotorAlignmentValue.Opposed,

@@ -47,8 +47,9 @@ object Sensors : SubsystemBase() {
 
     val isFull: Trigger = Trigger { topSensor.isInRange }
 
-    val hopperFrontHasBalls: Trigger =
-        Trigger { frontSensor.inputs.signalStrength > MIN_SIGNAL_STRENGTH_HOPPER_FRONT }
+    val hopperFrontHasBalls: Trigger = Trigger {
+        frontSensor.inputs.signalStrength > MIN_SIGNAL_STRENGTH_HOPPER_FRONT
+    }
 
     private val isIntakeOpen =
         Trigger { Extender.inputs.distance > EXTENDER_SETPOINT_TOLERANCE }
@@ -59,15 +60,14 @@ object Sensors : SubsystemBase() {
     }
 
     private val isSpindexerLoaded = Trigger {
-        spindexerSensor.inputs.signalStrength >
-                MIN_SIGNAL_STRENGTH_SPINDEXER
+        spindexerSensor.inputs.signalStrength > MIN_SIGNAL_STRENGTH_SPINDEXER
     }
 
     val hasFuel: Trigger =
         isSpindexerLoaded
             .or(hopperFrontHasBalls)
             .or(isFull)
-//            .or(isIntakeOpen)
+            //            .or(isIntakeOpen)
             .or(isShootingOnMove)
             .debounce(HAS_FUEL_DEBOUNCE[sec], Debouncer.DebounceType.kFalling)
 
@@ -89,6 +89,9 @@ object Sensors : SubsystemBase() {
             "Subsystems/Sensors/isSpindexerLoaded",
             isIntakeOpen
         )
-        Logger.recordOutput("Subsystems/Sensors/hopperFrontHasBalls", hopperFrontHasBalls)
+        Logger.recordOutput(
+            "Subsystems/Sensors/hopperFrontHasBalls",
+            hopperFrontHasBalls
+        )
     }
 }

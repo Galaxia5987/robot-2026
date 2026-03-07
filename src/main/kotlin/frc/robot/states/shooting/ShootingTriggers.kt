@@ -16,7 +16,6 @@ import frc.robot.states.setpoints_manager.SetpointsManager.isShootingOnMove
 import frc.robot.subsystems.sensors.Sensors
 import frc.robot.subsystems.shooter.flywheel.Flywheel
 import frc.robot.subsystems.shooter.hood.Hood
-import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 import frc.robot.subsystems.shooter.turret.Turret
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
@@ -35,7 +34,7 @@ val allSubsystemsAtSetpoint: Trigger =
     Hood.atSetpoint
         .and(Turret.atSetpoint)
         .and(Flywheel.atSetpoint)
-//        .and(PreShooter.atSetpoint)
+        //        .and(PreShooter.atSetpoint)
         .debounce(allSubsystemsAtSetpointDebounce[sec])
         .logTrigger("$LOGGING_PATH/allSubsystemsAtSetpoint")
 
@@ -112,9 +111,13 @@ class Shooting(dontShootTrigger: Trigger, canFeedTrigger: Trigger) {
 
     private val shouldShootingToHubStop =
         (Sensors.hasFuel
-            .negate()
-            .or(IntakingStates.INTAKING.trigger.and(isShootingOnMove.negate()))
-            .or(Turret.atSetpoint.negate()))
+                .negate()
+                .or(
+                    IntakingStates.INTAKING.trigger.and(
+                        isShootingOnMove.negate()
+                    )
+                )
+                .or(Turret.atSetpoint.negate()))
             .and(inAllianceZone)
 
     private val shouldStopFeeding =

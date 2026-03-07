@@ -46,7 +46,7 @@ object Extender : SubsystemBase() {
     var lastStallingDistance = 0.m
 
     private val isStalling =
-        Trigger { motor.inputs.statorCurrent > STATOR_STALL_CURRENT }
+        Trigger { motor.inputs.statorCurrent.abs(amps) > STATOR_STALL_CURRENT[amps] }
             .debounce(STALL_DEBOUNCE[sec])
 
     val shouldStop: Trigger =
@@ -90,7 +90,6 @@ object Extender : SubsystemBase() {
             Commands.waitUntil(shouldStop),
             stop()
         )
-
 
     fun openAndReset(): Command =
         StartEndCommand(

@@ -65,7 +65,6 @@ object Turret : SubsystemBase() {
             setpointVelocityRps = deltaRotations / dt
         }
 
-
         setpoint = newSetpoint
         lastSetpoint = newSetpoint
         lastTime = currentTime

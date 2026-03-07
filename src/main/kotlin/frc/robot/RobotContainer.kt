@@ -5,7 +5,6 @@ import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
-import frc.robot.autonomous.depotDoubleCycle
 import frc.robot.autonomous.depotMainNoShootOnMove
 import frc.robot.autonomous.depotMainShootOnMove
 import frc.robot.autonomous.shootOnMoveTestPath
@@ -105,7 +104,10 @@ object RobotContainer {
         )
 
         autoChooser.addOption("ShootOnMoveTestPath", shootOnMoveTestPath())
-        autoChooser.addOption("depotMainNoShootOnMove", depotMainNoShootOnMove())
+        autoChooser.addOption(
+            "depotMainNoShootOnMove",
+            depotMainNoShootOnMove()
+        )
         autoChooser.addOption("depotMainShootOnMove", depotMainShootOnMove())
     }
 }
