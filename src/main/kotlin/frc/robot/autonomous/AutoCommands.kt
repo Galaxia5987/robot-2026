@@ -9,6 +9,7 @@ import frc.robot.lib.BetterPoseEstimator
 import frc.robot.lib.extensions.flipIfNeeded
 import frc.robot.lib.extensions.sec
 import frc.robot.states.intaking.IntakingStates
+import frc.robot.states.intaking.pumping
 import frc.robot.states.shooting.ShootingState
 import frc.robot.states.shooting.setShootInAuto
 import frc.robot.states.shooting.stopShootInAuto
@@ -65,7 +66,7 @@ fun depotMainShootOnMove(): Command =
     Commands.sequence(
         runPathAndReset("StartToFuelDepotSide"),
         runPath("FuelDepotSideToDepotShootOnMove"),
-        Commands.waitTime(5.sec),
+        Commands.waitTime(5.sec).alongWith(IntakingStates.PUMPING.set()),
         IntakingStates.INTAKING.set(),
         Commands.waitTime(0.5.sec),
         runPath("PickupDepot"),

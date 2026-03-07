@@ -35,8 +35,20 @@ object Sensors : SubsystemBase() {
             loggingConfig =
                 UnifiedCANRangeLogging(distance = false, signalStrength = false)
         )
+    private val frontSensor =
+        UnifiedCANRange(
+            FRONT_SENSOR_PORT,
+            configuration = FRONT_SENSOR_CONFIG,
+            sensorName = "frontSensor",
+            simulationUsesNumber = false,
+            loggingConfig =
+                UnifiedCANRangeLogging(distance = false, signalStrength = true)
+        )
 
     val isFull: Trigger = Trigger { topSensor.isInRange }
+
+    val hopperFrontHasBalls: Trigger =
+        Trigger { frontSensor.inputs.signalStrength > MIN_SIGNAL_STRENGTH_HOPPER_FRONT }
 
     private val isIntakeOpen =
         Trigger { Extender.inputs.distance > EXTENDER_SETPOINT_TOLERANCE }
@@ -48,18 +60,20 @@ object Sensors : SubsystemBase() {
 
     private val isSpindexerLoaded = Trigger {
         spindexerSensor.inputs.signalStrength >
-            MIN_SIGNAL_STRENGTH_FOR_MEASUREMENT
+                MIN_SIGNAL_STRENGTH_SPINDEXER
     }
 
     val hasFuel: Trigger =
         isSpindexerLoaded
+            .or(hopperFrontHasBalls)
             .or(isFull)
-            .or(isIntakeOpen)
+//            .or(isIntakeOpen)
             .or(isShootingOnMove)
             .debounce(HAS_FUEL_DEBOUNCE[sec], Debouncer.DebounceType.kFalling)
 
     override fun periodic() {
         spindexerSensor.periodic()
+        frontSensor.periodic()
         topSensor.periodic()
 
         Logger.recordOutput("Subsystems/Sensors/hasFuel", hasFuel)
@@ -71,6 +85,10 @@ object Sensors : SubsystemBase() {
             "Subsystems/Sensors/isSpindexerLoaded",
             isIntakeOpen
         )
-        Logger.recordOutput("Subsystems/Sensors/isFull", isFull)
+        Logger.recordOutput(
+            "Subsystems/Sensors/isSpindexerLoaded",
+            isIntakeOpen
+        )
+        Logger.recordOutput("Subsystems/Sensors/hopperFrontHasBalls", hopperFrontHasBalls)
     }
 }
