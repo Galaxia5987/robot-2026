@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.field.*
+import frc.robot.isAuto
 import frc.robot.lib.extensions.not
 import frc.robot.lib.extensions.toPose
 import frc.robot.states.DriverOverrides
@@ -28,7 +29,7 @@ object SetpointsManager {
     var currentGoal: Pose2d = HUB_TRANSLATION.toPose()
 
     private val goalHubTrigger =
-        inAllianceZone.onTrue(
+        inAllianceZone.or(isAuto).onTrue(
             runOnce({ currentGoal = HUB_TRANSLATION.toPose() })
                 .ignoringDisable(true)
         )
@@ -36,6 +37,7 @@ object SetpointsManager {
     private val goalDepotTrigger =
         isCloserToDepotSide
             .and(!inAllianceZone)
+            .and(isAuto.negate())
             .onTrue(
                 runOnce({ currentGoal = DEPOT_TRANSLATION.toPose() })
                     .ignoringDisable(true)
@@ -45,6 +47,7 @@ object SetpointsManager {
         isCloserToDepotSide
             .negate()
             .and(!inAllianceZone)
+            .and(isAuto.negate())
             .onTrue(
                 runOnce({ currentGoal = OUTPOST_LOCATION.toPose() })
                     .ignoringDisable(true)

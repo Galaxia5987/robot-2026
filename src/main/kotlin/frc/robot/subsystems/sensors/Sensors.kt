@@ -65,9 +65,9 @@ object Sensors : SubsystemBase() {
 
     val hasFuel: Trigger =
         isSpindexerLoaded
-            .or(hopperFrontHasBalls)
+//            .or(hopperFrontHasBalls) // TODO: Uncomment
             .or(isFull)
-            //            .or(isIntakeOpen)
+            .or(isIntakeOpen)
             .or(isShootingOnMove)
             .debounce(HAS_FUEL_DEBOUNCE[sec], Debouncer.DebounceType.kFalling)
 

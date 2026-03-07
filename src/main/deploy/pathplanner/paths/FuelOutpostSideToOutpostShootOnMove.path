@@ -3,61 +3,57 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.807577875222371,
-        "y": 4.730019071847314
+        "x": 7.8055144993546985,
+        "y": 3.33
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.010857142857143,
-        "y": 7.693487394957984
+        "x": 7.904598532968141,
+        "y": 0.25839495798319767
       },
       "isLocked": false,
-      "linkedName": "fuelEndDepotSide"
+      "linkedName": "fuelEndOutpostSide"
     },
     {
       "anchor": {
-        "x": 4.58864705882353,
-        "y": 7.28190756302521
+        "x": 4.984983193277315,
+        "y": 0.6661428571428565
       },
       "prevControl": {
-        "x": 4.992605042016806,
-        "y": 7.28190756302521
+        "x": 7.060026029671706,
+        "y": 0.6881397776700088
       },
       "nextControl": {
-        "x": 2.9478728196940747,
-        "y": 7.28190756302521
+        "x": 2.828000000000003,
+        "y": 0.6432773109243656
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.2,
-        "y": 6.032
+        "x": 0.6405294117647065,
+        "y": 0.6661428571428565
       },
       "prevControl": {
-        "x": 2.149655462184875,
-        "y": 7.304773109243697
+        "x": 1.6999663865546217,
+        "y": 0.6432773109243681
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "depot"
+      "linkedName": "outpost"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.8262843488650004,
-      "rotationDegrees": 90.0
-    },
-    {
-      "waypointRelativePos": 1.2410991636798059,
-      "rotationDegrees": 90.0
+      "waypointRelativePos": 0.8,
+      "rotationDegrees": 180.0
     }
   ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.8073891625615761,
+      "minWaypointRelativePos": 1.0864705882352979,
       "maxWaypointRelativePos": 2.0,
       "constraints": {
         "maxVelocity": 1.3,
@@ -72,14 +68,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "setStopIntaking",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
       "name": "setShooting",
-      "waypointRelativePos": 0.0,
+      "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -99,8 +89,8 @@
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": -90.0
+    "velocity": 0.0,
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }

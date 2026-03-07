@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import frc.robot.autonomous.depotMainNoShootOnMove
 import frc.robot.autonomous.depotMainShootOnMove
+import frc.robot.autonomous.outpostMainShootOnMove
 import frc.robot.autonomous.shootOnMoveTestPath
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
@@ -109,5 +110,6 @@ object RobotContainer {
             depotMainNoShootOnMove()
         )
         autoChooser.addOption("depotMainShootOnMove", depotMainShootOnMove())
+        autoChooser.addOption("outpostMainShootOnMove", outpostMainShootOnMove())
     }
 }

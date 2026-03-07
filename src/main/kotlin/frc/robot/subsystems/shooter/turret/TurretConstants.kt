@@ -23,7 +23,7 @@ val SETPOINT_TOLERANCE
     get() = isShootingOnMove.asBoolean.switchable(5.deg, 3.deg)
 
 const val ENCODER_ID = 5
-val ABSOLUTE_ENCODER_OFFSET = (0.5).rot
+val ABSOLUTE_ENCODER_OFFSET = (-0.489502).rot
 
 val FORWARD_LIMIT = 0.668457.rot
 val REVERSE_LIMIT = (-0.1).rot
@@ -41,7 +41,7 @@ val ENCODER_CONFIG =
         MagnetSensor.SensorDirection =
             SensorDirectionValue.CounterClockwise_Positive
         MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5
-        MagnetSensor.MagnetOffset = ABSOLUTE_ENCODER_OFFSET[rotations]
+        MagnetSensor.MagnetOffset = -ABSOLUTE_ENCODER_OFFSET[rotations]
     }
 
 val CONFIG =

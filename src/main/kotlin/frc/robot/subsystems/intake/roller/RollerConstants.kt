@@ -21,7 +21,7 @@ enum class RollerPositions(val velocity: AngularVelocity) {
 val REAL_GAINS = Gains(kP = 0.2, kV = 0.5)
 val SIM_GAINS = Gains(kP = 1.0)
 
-val INTAKE_BASE_SPEED = 25.rps
+val INTAKE_BASE_SPEED = 60.rps
 
 const val ROBOT_VELOCITY_MULTIPLIER = 10.0
 
