@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.rad_ps
 import frc.robot.lib.extensions.radiansPerSecond
+import frc.robot.lib.extensions.rps
 import frc.robot.lib.universal_motor.MotorLogConfig
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.Logger
@@ -31,6 +32,9 @@ object Flywheel : SubsystemBase(), FlywheelVelocitiesCommandFactory {
 
     private val velocityOut = VelocityVoltage(0.0)
     private var setpoint = 0.radiansPerSecond
+
+    val isActive = Trigger { setpoint > 0.rps }
+
     val inputs
         get() = motor.inputs
 

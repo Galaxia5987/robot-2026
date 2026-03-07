@@ -59,7 +59,7 @@ class Shooting(dontShootTrigger: Trigger, canFeedTrigger: Trigger) {
             .and(isAutoCurrentlyShooting)
             .logTrigger("$LOGGING_PATH/canShootToHub")
 
-    private val cantShootToHub =
+    val cantShootToHub =
         canShootToHub.negate().onTrue(ShootingState.IDLE.set())
 
     private val canFeed =
