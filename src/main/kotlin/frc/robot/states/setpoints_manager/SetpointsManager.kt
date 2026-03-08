@@ -14,6 +14,7 @@ import frc.robot.states.DriverOverrides
 import frc.robot.states.setpoints_manager.SetpointsManager.ShootingType
 import frc.robot.states.setpoints_manager.SetpointsManager.shootingType
 import frc.robot.states.setpoints_manager.shooting_modes.calibrationShootingMap
+import frc.robot.states.setpoints_manager.shooting_modes.feedShootingMap
 import frc.robot.states.setpoints_manager.shooting_modes.interpolationShootingMap
 import frc.robot.states.setpoints_manager.shooting_modes.shootOnMoveMap
 import frc.robot.states.setpoints_manager.shooting_modes.staticShootingMap
@@ -27,10 +28,14 @@ object SetpointsManager {
         level = LogLevel.COMP
     )
     var currentGoal: Pose2d = HUB_TRANSLATION.toPose()
+    var isFeeding = false
 
     private val goalHubTrigger =
         inAllianceZone.or(isAuto).onTrue(
-            runOnce({ currentGoal = HUB_TRANSLATION.toPose() })
+            runOnce({
+                currentGoal = HUB_TRANSLATION.toPose()
+                isFeeding = false
+            })
                 .ignoringDisable(true)
         )
 
@@ -39,7 +44,10 @@ object SetpointsManager {
             .and(!inAllianceZone)
             .and(isAuto.negate())
             .onTrue(
-                runOnce({ currentGoal = DEPOT_TRANSLATION.toPose() })
+                runOnce({
+                    currentGoal = DEPOT_TRANSLATION.toPose()
+                    isFeeding = true
+                })
                     .ignoringDisable(true)
             )
 
@@ -49,7 +57,10 @@ object SetpointsManager {
             .and(!inAllianceZone)
             .and(isAuto.negate())
             .onTrue(
-                runOnce({ currentGoal = OUTPOST_LOCATION.toPose() })
+                runOnce({
+                    currentGoal = OUTPOST_LOCATION.toPose()
+                    isFeeding = true
+                })
                     .ignoringDisable(true)
             )
 
@@ -57,7 +68,8 @@ object SetpointsManager {
         STATIC,
         INTERPOLATION,
         SHOOT_ON_MOVE,
-        CALIBRATION
+        CALIBRATION,
+        FEEDING
     }
 
     @LoggedOutput(
@@ -69,10 +81,15 @@ object SetpointsManager {
             when {
                 DriverOverrides.StaticShootingOverride.trigger.asBoolean ->
                     ShootingType.STATIC
+
                 DriverOverrides.ShootingCalibrationOverride.trigger.asBoolean ->
                     ShootingType.CALIBRATION
+
                 DriverOverrides.ShootOnMoveOverride.trigger.asBoolean ->
                     ShootingType.SHOOT_ON_MOVE
+
+                isFeeding -> ShootingType.FEEDING
+
                 else -> ShootingType.INTERPOLATION
             }
 
@@ -95,9 +112,10 @@ fun <T : SubsystemBase, M : () -> Measure<out Unit>> T.aimingSetpoint(): M {
                 ShootingType.STATIC -> staticShootingMap[this]!!
                 ShootingType.INTERPOLATION -> interpolationShootingMap[this]!!
                 ShootingType.CALIBRATION -> calibrationShootingMap[this]!!
-                else -> shootOnMoveMap[this]!!
+                ShootingType.SHOOT_ON_MOVE -> shootOnMoveMap[this]!!
+                ShootingType.FEEDING -> feedShootingMap[this]!!
             }
         result.invoke()
     }
-        as M
+            as M
 }
