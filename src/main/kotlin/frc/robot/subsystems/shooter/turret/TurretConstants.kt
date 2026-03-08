@@ -25,8 +25,8 @@ val SETPOINT_TOLERANCE
 const val ENCODER_ID = 5
 val ABSOLUTE_ENCODER_OFFSET = (-0.489502).rot
 
-val FORWARD_LIMIT = 0.668457.rot
-val REVERSE_LIMIT = (-0.255).rot
+val FORWARD_LIMIT = 0.821.rot
+val REVERSE_LIMIT = (-0.179).rot
 
 val SOFTWARE_LIMIT_CONFIG =
     SoftwareLimitSwitchConfigs().apply {

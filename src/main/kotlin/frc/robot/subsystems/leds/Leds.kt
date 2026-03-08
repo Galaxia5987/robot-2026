@@ -64,7 +64,7 @@ object LEDSubsystem : SubsystemBase() {
 
             IntakingStates.INTAKING.trigger.asBoolean -> LedMode.INTAKING
 
-            Sensors.hasFuel.asBoolean || Roller.isActive.asBoolean ->
+            Sensors.hasFuel.asBoolean ->
                 LedMode.HAS_FUEL
 
             else -> LedMode.EMPTY
