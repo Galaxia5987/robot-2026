@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj.DriverStation
 import frc.robot.lib.IS_RED
 import frc.robot.lib.extensions.min
 import frc.robot.lib.extensions.sec
+import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean
+import org.littletonrobotics.junction.networktables.LoggedNetworkString
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
@@ -14,6 +16,10 @@ enum class ShiftType {
     ALL
 }
 
+private val autoWinner = LoggedNetworkString("/DriverDashboard/WinningAuto", "AUTO")
+private val ignoreShifts = LoggedNetworkBoolean("/DriverDashboard/IgnoreShifts", false)
+
+
 data class GameShift(
     val startTime: Time,
     val endTime: Time,
@@ -21,7 +27,11 @@ data class GameShift(
 )
 
 fun didWeWinAuto(): Boolean{
-    val msg = DriverStation.getGameSpecificMessage()
+    val msg = when(autoWinner.get()){
+        "RED" -> "R"
+        "BLUE" -> "B"
+        else -> DriverStation.getGameSpecificMessage()
+    }
     if(msg.isNullOrEmpty()) return true
 
     return when(msg.firstOrNull()?.uppercaseChar()){
@@ -53,4 +63,4 @@ val isOurHubActive: Boolean
         ShiftType.WON_AUTO -> didWeWinAuto()
         ShiftType.LOST_AUTO -> !didWeWinAuto()
         else -> true
-    }
+    } || ignoreShifts.get()
