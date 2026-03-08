@@ -1,3 +1,26 @@
+def fetchFile(String file, String commitHash, File tempCloneDir, File targetDir){
+    def sourceFile = new File(tempCloneDir, "analyze/$file")
+    if (!sourceFile.exists()) {
+        logger.lifecycle("$file not found, skipping")
+        return
+    }
+
+    def targetFile = new File(targetDir, file)
+
+    // Read original content
+    def originalContent = sourceFile.getText("UTF-8")
+
+    // Prepend commit hash comment
+    def newContent = """// Commit: ${commitHash}
+
+${originalContent}"""
+
+    targetFile.write(newContent, "UTF-8")
+
+    logger.lifecycle("$file synced successfully (commit ${commitHash})")
+
+}
+
 tasks.register("fetchShotCalculator") {
     description = "Fetch ShotCalculator.kt from private repo if accessible"
     group = "build setup"
@@ -27,6 +50,8 @@ tasks.register("fetchShotCalculator") {
                 ignoreExitValue = true
             }
 
+            logger.lifecycle("Cloned repo")
+
             // Get commit hash
             def commitHash = "unknown"
             try {
@@ -46,25 +71,9 @@ tasks.register("fetchShotCalculator") {
                 gitDir.deleteDir()
             }
 
-            def sourceFile = new File(tempCloneDir, "analyze/ShotCalculator.kt")
-            if (!sourceFile.exists()) {
-                logger.lifecycle("ShotCalculator.kt not found, skipping")
-                return
-            }
+            fetchFile("ShotCalculator.kt", commitHash, tempCloneDir, targetDir)
+            fetchFile("FeedingShotCalculator.kt", commitHash, tempCloneDir, targetDir)
 
-            def targetFile = new File(targetDir, "ShotCalculator.kt")
-
-            // Read original content
-            def originalContent = sourceFile.getText("UTF-8")
-
-            // Prepend commit hash comment
-            def newContent = """// Commit: ${commitHash}
-
-${originalContent}"""
-
-            targetFile.write(newContent, "UTF-8")
-
-            logger.lifecycle("ShotCalculator.kt synced successfully (commit ${commitHash})")
 
         } catch (Exception e) {
             logger.lifecycle("Skipping ShotCalculator sync: ${e.message}")
