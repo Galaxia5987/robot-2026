@@ -67,7 +67,7 @@ object LEDSubsystem : SubsystemBase() {
             Sensors.hasFuel.asBoolean || Roller.isActive.asBoolean ->
                 LedMode.HAS_FUEL
 
-            else -> LedMode.SHOOTING_ON_MOVE
+            else -> LedMode.EMPTY
         }
 
     private fun setMode(mode: LedMode) {
