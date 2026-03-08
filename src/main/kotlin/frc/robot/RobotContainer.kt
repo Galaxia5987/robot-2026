@@ -15,6 +15,7 @@ import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.setpoints_manager.aimingSetpoint
 import frc.robot.states.shooting.Shooting
 import frc.robot.subsystems.drive.DriveCommands
+import frc.robot.subsystems.leds.LEDSubsystem
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.turret.Turret
 import org.ironmaple.simulation.SimulatedArena
@@ -33,7 +34,6 @@ object RobotContainer {
                 "Auto Choices",
                 AutoBuilder.buildAutoChooser()
             )
-
         registerAutoCommands()
         configureButtonBindings()
         configureDefaultCommands()
@@ -45,6 +45,7 @@ object RobotContainer {
         }
 
         enableAutoLogOutputFor(this)
+        LEDSubsystem
     }
 
     private fun configureDefaultCommands() {

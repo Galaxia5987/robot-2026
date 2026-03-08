@@ -28,7 +28,7 @@ object LEDSubsystem : SubsystemBase() {
         EMPTY,
     }
 
-    private val candle = CANdle(0)
+    private val candle = CANdle(39)
     private val solidColorRequest = SolidColor(startIndex, endIndex)
     private var currentMode: LedMode? = null
 

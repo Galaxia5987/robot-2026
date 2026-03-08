@@ -10,6 +10,7 @@ import frc.robot.isAuto
 import frc.robot.isEnabled
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.logTrigger
+import frc.robot.lib.extensions.not
 import frc.robot.lib.extensions.sec
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.setpoints_manager.SetpointsManager.isShootingOnMove
@@ -63,7 +64,7 @@ class Shooting(dontShootTrigger: Trigger, canFeedTrigger: Trigger) {
         canShootToHub.negate().onTrue(ShootingState.IDLE.set())
 
     private val canFeed =
-        canFeedTrigger.and(inAllianceZone.negate()).and(isEnabled)
+        canFeedTrigger.and(inAllianceZone.negate()).and(Turret.atSetpoint).and(isEnabled)
 
     private val idleAndCanShootToHub =
         ShootingState.IDLE.trigger
@@ -85,7 +86,7 @@ class Shooting(dontShootTrigger: Trigger, canFeedTrigger: Trigger) {
 
     private val setShootingIfCanFeed =
         ShootingState.IDLE.trigger
-            .and(canFeedTrigger)
+            .and(canFeed)
             .onTrue(ShootingState.SHOOTING.set())
             .logTrigger("$LOGGING_PATH/setShootingIfCanFeed")
 
@@ -121,7 +122,7 @@ class Shooting(dontShootTrigger: Trigger, canFeedTrigger: Trigger) {
             .and(inAllianceZone)
 
     private val shouldStopFeeding =
-        canFeedTrigger.negate().and(inAllianceZone.negate())
+        (canFeedTrigger.negate().or(Turret.atSetpoint.negate())).and(!inAllianceZone)
 
     private val setIdleIfShouldStopShooting =
         ShootingState.SHOOTING.trigger

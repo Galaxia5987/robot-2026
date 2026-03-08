@@ -32,6 +32,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.InitializerKt;
+import frc.robot.field.FieldTriggersKt;
 import frc.robot.lib.AllianceHelperKt;
 import frc.robot.states.setpoints_manager.SetpointsManager;
 import java.text.DecimalFormat;
@@ -128,7 +129,7 @@ public class DriveCommands {
                                             ? drive.getRotation().plus(Rotation2d.fromDegrees(180))
                                             : drive.getRotation());
 
-                    if (SetpointsManager.INSTANCE.isShootingOnMove().getAsBoolean()) {
+                    if (SetpointsManager.INSTANCE.isShootingOnMove().getAsBoolean() && FieldTriggersKt.getInAllianceZone().getAsBoolean()) {
                         robotRelativeSpeeds.vxMetersPerSecond =
                                 slewRateLimiterX.calculate(robotRelativeSpeeds.vxMetersPerSecond);
                         robotRelativeSpeeds.vyMetersPerSecond =
