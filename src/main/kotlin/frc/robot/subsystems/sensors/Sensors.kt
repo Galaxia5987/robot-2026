@@ -65,7 +65,7 @@ object Sensors : SubsystemBase() {
 
     val hasFuel: Trigger =
         isSpindexerLoaded
-//            .or(hopperFrontHasBalls) // TODO: Uncomment
+            .or(hopperFrontHasBalls)
             .or(isFull)
             .or(isIntakeOpen)
             .or(isShootingOnMove)
