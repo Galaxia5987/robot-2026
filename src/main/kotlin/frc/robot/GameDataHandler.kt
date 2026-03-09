@@ -17,7 +17,6 @@ enum class ShiftType {
 }
 
 private val autoWinner = LoggedNetworkString("/DriverDashboard/WinningAuto", "AUTO") // TODO: Remove and switch3
-private val ignoreShifts = LoggedNetworkBoolean("/DriverDashboard/IgnoreShifts", false)
 
 
 data class GameShift(
@@ -63,7 +62,7 @@ val isOurHubActive: Boolean
         ShiftType.WON_AUTO -> didWeWinAuto()
         ShiftType.LOST_AUTO -> !didWeWinAuto()
         else -> true
-    } || ignoreShifts.get()
+    } || DriverStation.getMatchTime() < 0.0
 
 //val timeLeftForShift: Time
 //    get() = matchTime - currentShift?.endTime

@@ -53,16 +53,18 @@ object LEDSubsystem : SubsystemBase() {
 
             DriverStation.isDisabled() -> LedMode.DISABLED
 
+            RobotContainer.shooting?.cantShootToHub?.asBoolean == true ->
+                LedMode.CANT_SHOOT
+
             isShootingOnMove.asBoolean && ShootingState.SHOOTING.trigger.asBoolean -> LedMode.SHOOTING_ON_MOVE
 
             ShootingState.SHOOTING.trigger.asBoolean -> LedMode.SHOOTING
 
-            RobotContainer.shooting?.cantShootToHub?.asBoolean == true ->
-                LedMode.CANT_SHOOT
 
             ShootingState.PRIMING.trigger.asBoolean -> LedMode.PRIMING
 
             IntakingStates.PUMPING.trigger.asBoolean -> LedMode.PUMPING
+
 
             IntakingStates.INTAKING.trigger.asBoolean -> LedMode.INTAKING
 
@@ -74,10 +76,10 @@ object LEDSubsystem : SubsystemBase() {
         currentMode = mode
         when (mode) {
             LedMode.DISABLED -> setRainbow()
+            LedMode.CANT_SHOOT -> setFlicker(RED)
             LedMode.SHIFT_END -> setFlicker(WHITE)
             LedMode.SHOOTING_ON_MOVE -> setRainbow()
             LedMode.SHOOTING -> setFlicker(GREEN)
-            LedMode.CANT_SHOOT -> setFlicker(RED)
             LedMode.PRIMING -> setSolidColor(YELLOW)
             LedMode.PUMPING -> setFlicker(BLUE)
             LedMode.INTAKING -> setSolidColor(BLUE)
