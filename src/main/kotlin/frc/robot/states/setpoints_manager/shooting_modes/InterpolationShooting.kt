@@ -15,7 +15,6 @@ import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.m
 import frc.robot.lib.extensions.rps
-import frc.robot.lib.math.interpolation.InterpolatingDouble
 import frc.robot.lib.math.interpolation.InterpolatingDoubleMap
 import frc.robot.lib.shooting.ShootingTableReader
 import frc.robot.states.setpoints_manager.SetpointsManager.currentGoal
@@ -24,6 +23,7 @@ import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 import frc.robot.subsystems.shooter.pre_shooter.PreShooterVelocity
 import frc.robot.subsystems.shooter.turret.Turret
+import frc.robot.subsystems.shooter.turret.compensatedTurretTranslationFieldOriented
 import frc.robot.subsystems.shooter.turret.turretAimingSetpoint
 import frc.robot.subsystems.shooter.turret.turretTranslationFieldOriented
 import org.team5987.annotation.LogLevel
@@ -31,13 +31,17 @@ import org.team5987.annotation.LoggedOutput
 
 @LoggedOutput(LogLevel.COMP)
 val turretDistanceFromGoal: Distance
+    get() = turretTranslationFieldOriented.getDistance(currentGoal.translation).m
+
+val compensatedTurretDistanceFromGoal: Distance
     get() =
-        turretTranslationFieldOriented.getDistance(currentGoal.translation).m
+        compensatedTurretTranslationFieldOriented
+            .getDistance(currentGoal.translation).m
 
 private val SHOOTER_VELOCITY_BY_DISTANCE: InterpolatingDoubleMap =
     ShootingTableReader.parse(
         Filesystem.getDeployDirectory().path +
-            "/shootData/distanceToVelocity.csv"
+                "/shootData/distanceToVelocity.csv"
     )
 
 private fun getTurretSetpoint(): Angle {
@@ -46,12 +50,12 @@ private fun getTurretSetpoint(): Angle {
 
 private fun getHoodSetpoint(): Angle =
     (90.deg -
-        calculatePitch(
+            calculatePitch(
                 turretDistanceFromGoal[m],
                 drive.chassisSpeeds.vxMetersPerSecond,
                 drive.chassisSpeeds.vyMetersPerSecond
             )
-            .deg)
+                .deg)
 
 private fun getFlywheelSetpoint(): AngularVelocity {
     val turretOrientedChassisSpeeds = turretOrientedChassisSpeeds
