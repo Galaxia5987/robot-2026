@@ -51,14 +51,24 @@ private val SHIFTS = listOf(
 )
 
 val matchTime: Time // getMatchTime returns time left in the current period, so add 2min 20sec when in auto
-    get() = DriverStation.getMatchTime().sec + if (DriverStation.isAutonomous()) (2.min + 20.sec) else 0.sec
+    get() {
+        val teleopDuration = 2.min + 20.sec
+        val rawTime = DriverStation.getMatchTime()
+
+        if (rawTime < 0.0) return 0.sec
+
+        return rawTime.sec + if (DriverStation.isAutonomous()) teleopDuration else 0.sec
+    }
 
 val currentShift: GameShift?
-    get() = SHIFTS.find { matchTime in it.endTime..it.startTime }
+    get() {
+        val currentTime = matchTime
+        return SHIFTS.find { currentTime >= it.endTime && currentTime < it.startTime }
+    }
 
 @LoggedOutput(LogLevel.COMP)
 val isOurHubActive: Boolean
-    get() = when((currentShift?.shiftType)) {
+    get() = when (currentShift?.shiftType) {
         ShiftType.ALL -> true
         ShiftType.WON_AUTO -> didWeWinAuto()
         ShiftType.LOST_AUTO -> !didWeWinAuto()
