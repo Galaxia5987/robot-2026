@@ -1,19 +1,34 @@
 package frc.robot
 
-import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.math.geometry.Pose3d
+import edu.wpi.first.math.geometry.*
 import edu.wpi.first.networktables.NetworkTableInstance
-import frc.robot.lib.extensions.distanceFromPoint
-import frc.robot.lib.extensions.get
-import frc.robot.lib.extensions.m
+import frc.robot.lib.extensions.*
+import frc.robot.lib.getTranslation3d
+import frc.robot.subsystems.intake.extender.Extender
 import org.littletonrobotics.junction.Logger
-import org.team5987.annotation.LogLevel
-import org.team5987.annotation.LoggedOutput
+import kotlin.math.cos
+import kotlin.math.sin
 
 const val areaWeight = 0.6
 const val distanceWeight = 0.4
 
 object ObjectDetection {
+    private val INTAKE_ANGLE = 9.deg
+
+    private val EXTENDER_ANGLE_POSE: Translation3d
+        get() =
+            getTranslation3d(
+                x = Extender.inputs.distance * cos(INTAKE_ANGLE[rad]),
+                z = -Extender.inputs.distance * sin(INTAKE_ANGLE[rad])
+            )
+
+    private val robotToCamera = {
+        Transform3d(
+            Translation3d(0.3.m, 0.0.m, 0.5.m) + EXTENDER_ANGLE_POSE,
+            Rotation3d(0.0.deg, 0.0.deg, 0.0.deg)
+        )
+    }
+
     private val posesSubscriber =
         NetworkTableInstance.getDefault().getTable("/AdvantageKit/RealsenseVision").getStructArrayTopic(
             "poses",
@@ -25,10 +40,15 @@ object ObjectDetection {
             "areas"
         ).subscribe(floatArrayOf())
 
+    private val poses
+        get() = posesSubscriber.get().map {
+            Pose3d.kZero.plus(robotToCamera()).plus(Transform3d(Pose3d.kZero, it))
+        }
+
 
     val optimalCluster: Pose2d?
         get() = findOptimalCluster(
-            posesSubscriber.get().map { it.toPose2d() },
+            poses.map { it.toPose2d() },
             areaSubscriber.get().map { it.toDouble() }
         )
 
