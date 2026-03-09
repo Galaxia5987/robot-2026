@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot
 
+import com.ctre.phoenix6.Orchestra
 import com.pathplanner.lib.commands.FollowPathCommand
 import com.pathplanner.lib.commands.PathfindingCommand
 import edu.wpi.first.hal.FRCNetComm.tInstances
@@ -10,6 +11,7 @@ import edu.wpi.first.hal.FRCNetComm.tResourceType
 import edu.wpi.first.hal.HAL
 import edu.wpi.first.math.VecBuilder
 import edu.wpi.first.wpilibj.DriverStation
+import edu.wpi.first.wpilibj.Filesystem
 import edu.wpi.first.wpilibj.PowerDistribution
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.Command
@@ -24,12 +26,14 @@ import frc.robot.sim.MapleSimShooter
 import frc.robot.states.intaking.IntakingTriggers
 import frc.robot.states.setpoints_manager.SetpointsManager
 import frc.robot.states.spindexer.SpindexerTriggers
+import frc.robot.subsystems.intake.roller.Roller
 import frc.robot.subsystems.sensors.Sensors
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.*
 import org.littletonrobotics.junction.networktables.NT4Publisher
 import org.littletonrobotics.junction.wpilog.WPILOGReader
 import org.littletonrobotics.junction.wpilog.WPILOGWriter
+import java.io.File
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -43,6 +47,10 @@ object Robot : LoggedRobot() {
     var mapleSimHopper: MapleSimHopper? = null
     var mapleSimIntake: MapleSimIntake? = null
     var mapleSimShooter: MapleSimShooter? = null
+
+    private val elevatorMusic = Orchestra(File(Filesystem.getDeployDirectory(),"elevator.chrp").path).apply {
+//        addInstrument(Roller.motorDevice)
+    }
 
     /**
      * This function is run when the robot is first started up and should be
@@ -188,7 +196,9 @@ object Robot : LoggedRobot() {
     override fun teleopPeriodic() {}
 
     /** This function is called once when the robot is disabled. */
-    override fun disabledInit() {}
+    override fun disabledInit() {
+        elevatorMusic.play()
+    }
 
     /** This function is called periodically when disabled. */
     override fun disabledPeriodic() {}

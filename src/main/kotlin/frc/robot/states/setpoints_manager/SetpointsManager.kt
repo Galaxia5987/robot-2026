@@ -85,10 +85,11 @@ object SetpointsManager {
                 DriverOverrides.ShootingCalibrationOverride.trigger.asBoolean ->
                     ShootingType.CALIBRATION
 
+                isFeeding -> ShootingType.FEEDING
+
                 DriverOverrides.ShootOnMoveOverride.trigger.asBoolean ->
                     ShootingType.SHOOT_ON_MOVE
 
-                isFeeding -> ShootingType.FEEDING
 
                 else -> ShootingType.INTERPOLATION
             }

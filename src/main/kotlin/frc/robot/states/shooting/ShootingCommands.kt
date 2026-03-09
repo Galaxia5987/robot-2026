@@ -14,10 +14,9 @@ import frc.robot.states.spindexer.SpindexerCommands
 import frc.robot.subsystems.shooter.flywheel.Flywheel
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 
-val shouldPump: Trigger =
-    inAllianceZone
-        .and(isShootingOnMove.negate())
+val shouldPump: Trigger = IntakingStates.INTAKING.trigger.negate().and(ShootingState.SHOOTING.trigger).whileTrue(IntakingStates.PUMPING.set())
         .logTrigger("$LOGGING_PATH/shouldPump")
+
 
 // State Commands
 fun idle(): Command =
@@ -44,6 +43,6 @@ fun backfeeding(): Command = PreShooter.reverse()
 fun shooting(): Command =
     Commands.sequence(
             SpindexerCommands.startFeeding(),
-            IntakingStates.PUMPING.set().onlyIf(shouldPump)
+//            IntakingStates.PUMPING.set().onlyIf(shouldPump)
         )
         .alongWith(priming())
