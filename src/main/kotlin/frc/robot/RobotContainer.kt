@@ -1,29 +1,25 @@
 package frc.robot
 
-import com.ctre.phoenix6.Orchestra
 import com.pathplanner.lib.auto.AutoBuilder
 import edu.wpi.first.units.measure.Angle
-import edu.wpi.first.wpilibj.Filesystem
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
+import frc.robot.autonomous.depotDoubleCycle
 import frc.robot.autonomous.depotMainNoShootOnMove
 import frc.robot.autonomous.depotMainShootOnMove
 import frc.robot.autonomous.outpostMainShootOnMove
-import frc.robot.autonomous.shootOnMoveTestPath
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.setpoints_manager.aimingSetpoint
 import frc.robot.states.shooting.Shooting
 import frc.robot.subsystems.drive.DriveCommands
-import frc.robot.subsystems.intake.roller.Roller
 import frc.robot.subsystems.leds.LEDSubsystem
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.turret.Turret
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
-import java.io.File
 
 object RobotContainer {
     private val driverController = CommandPS5Controller(0)
@@ -113,12 +109,13 @@ object RobotContainer {
             DriveCommands.feedforwardCharacterization()
         )
 
-        autoChooser.addOption("ShootOnMoveTestPath", shootOnMoveTestPath())
+        autoChooser.addOption("ShootOnMoveTestPath", depotDoubleCycle())
         autoChooser.addOption(
             "depotMainNoShootOnMove",
             depotMainNoShootOnMove()
         )
         autoChooser.addOption("depotMainShootOnMove", depotMainShootOnMove())
         autoChooser.addOption("outpostMainShootOnMove", outpostMainShootOnMove())
+        autoChooser.addOption("depotDoubleCycle", depotDoubleCycle())
     }
 }

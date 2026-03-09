@@ -4,7 +4,7 @@ import com.ctre.phoenix6.signals.RGBWColor
 import java.awt.Color
 
 const val startIndex = 8
-const val endIndex = 150
+const val endIndex = 47
 
 // Colors
 

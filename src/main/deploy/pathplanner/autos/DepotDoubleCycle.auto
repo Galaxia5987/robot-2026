@@ -17,13 +17,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "FuelToDepotStart"
+                  "pathName": "FuelToDepotShoot"
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "DepotStartToScatteredFuel"
+                  "pathName": "DepotShootToScatteredFuel"
                 }
               },
               {

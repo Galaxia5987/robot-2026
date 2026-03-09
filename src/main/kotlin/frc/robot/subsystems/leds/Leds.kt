@@ -1,10 +1,12 @@
 package frc.robot.subsystems.leds
 
+import com.ctre.phoenix6.controls.LarsonAnimation
 import com.ctre.phoenix6.controls.RainbowAnimation
 import com.ctre.phoenix6.controls.SolidColor
 import com.ctre.phoenix6.controls.StrobeAnimation
 import com.ctre.phoenix6.controls.TwinkleAnimation
 import com.ctre.phoenix6.hardware.CANdle
+import com.ctre.phoenix6.signals.LarsonBounceValue
 import com.ctre.phoenix6.signals.RGBWColor
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -12,10 +14,12 @@ import frc.robot.RobotContainer
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.setpoints_manager.SetpointsManager.isShootingOnMove
 import frc.robot.states.shooting.ShootingState
+import org.team5987.annotation.LogLevel
+import org.team5987.annotation.LoggedOutput
 
 object LEDSubsystem : SubsystemBase() {
 
-    private enum class LedMode {
+    enum class LedMode {
         DISABLED,
         SHIFT_END,
         SHOOTING_ON_MOVE,
@@ -31,7 +35,9 @@ object LEDSubsystem : SubsystemBase() {
     private val solidColorRequest = SolidColor(startIndex, endIndex)
     private val flickerRequest = StrobeAnimation(startIndex, endIndex)
     private val rainbowRequest = RainbowAnimation(startIndex, endIndex)
-    private var currentMode: LedMode? = null
+    private val chaseRequest = LarsonAnimation(startIndex, endIndex).withSize(5)
+    @LoggedOutput(LogLevel.DEV)
+    var currentMode: LedMode = LedMode.EMPTY
 
     private fun setSolidColor(color: RGBWColor) {
         candle.setControl(solidColorRequest.withColor(color))
@@ -39,6 +45,10 @@ object LEDSubsystem : SubsystemBase() {
 
     private fun setRainbow() {
         candle.setControl(rainbowRequest)
+    }
+
+    private fun setChase(color: RGBWColor){
+        candle.setControl(chaseRequest.withColor(color))
     }
 
     private fun setFlicker(color: RGBWColor) {
@@ -75,7 +85,7 @@ object LEDSubsystem : SubsystemBase() {
         if (mode == currentMode) return
         currentMode = mode
         when (mode) {
-            LedMode.DISABLED -> setRainbow()
+            LedMode.DISABLED -> setChase(BLUE)
             LedMode.CANT_SHOOT -> setFlicker(RED)
             LedMode.SHIFT_END -> setFlicker(WHITE)
             LedMode.SHOOTING_ON_MOVE -> setRainbow()

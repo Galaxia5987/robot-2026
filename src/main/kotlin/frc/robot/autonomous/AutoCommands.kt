@@ -48,17 +48,6 @@ val setStopShooting = EventTrigger("setStopShooting").onTrue(stopShootInAuto())
 
 val setPriming = EventTrigger("setPriming").onTrue(ShootingState.PRIMING.set())
 
-fun shootOnMoveTestPath(): Command =
-    AutoBuilder.followPath(PathPlannerPath.fromPathFile("Test"))
-
-fun depotDoubleCycle(): Command =
-    Commands.sequence(
-        runPathAndReset("StartToFuelDepotSide"),
-        runPath("FuelToDepotStart").alongWith(setShootInAuto()),
-        Commands.waitTime(8.sec),
-        stopShootInAuto(),
-    )
-
 fun depotMainNoShootOnMove(): Command =
     Commands.sequence(
         runPathAndReset("StartToFuelDepotSide"),
@@ -89,4 +78,12 @@ fun outpostMainShootOnMove(): Command =
         runPath("FuelOutpostSideToOutpostShootOnMove"),
         Commands.waitTime(5.sec).alongWith(Commands.waitTime(1.0.sec), IntakingStates.PUMPING.set()),
         runPath("OutpostToScatteredFuel")
+    )
+
+fun depotDoubleCycle(): Command =
+    Commands.sequence(
+        runPathAndReset("StartToFuelDepotSide"),
+        runPath("FuelToDepotShoot"),
+        Commands.waitTime(5.sec),
+        runPath("DepotShootToScatteredFuel"),
     )

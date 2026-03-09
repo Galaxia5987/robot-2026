@@ -39,7 +39,7 @@ object Roller : SubsystemBase(), RollerPositionsCommandFactory {
     override fun setTarget(value: RollerPositions): Command = runOnce {
         setpoint = value.velocity
         motor.setControl(
-            velocityVoltage.withVelocity(value.velocity).withEnableFOC(false)
+            velocityVoltage.withVelocity(value.velocity)
         )
     }
 
