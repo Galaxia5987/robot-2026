@@ -33,8 +33,11 @@ import frc.robot.ConstantsKt;
 import frc.robot.InitializerKt;
 import frc.robot.field.FieldTriggersKt;
 import frc.robot.lib.AllianceHelperKt;
+import frc.robot.lib.ContinuousConditionalCommand;
 import frc.robot.lib.LoggedNetworkGains;
 import frc.robot.states.setpoints_manager.SetpointsManager;
+import org.littletonrobotics.junction.Logger;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
@@ -79,7 +82,8 @@ public class DriveCommands {
     private static final SlewRateLimiter slewRateLimiterY =
             new SlewRateLimiter(accelerationLimitShootOnMove);
 
-    private DriveCommands() {}
+    private DriveCommands() {
+    }
 
     private static Translation2d getLinearVelocityFromJoysticks(double x, double y) {
         // Apply deadband
@@ -157,34 +161,37 @@ public class DriveCommands {
                 });
     }
 
-    private static Rotation2d getStickDirection(double x, double y) {
+    public static Rotation2d getStickDirection(double x, double y) {
         double angle = 90 - Math.toDegrees(Math.atan2(
                 y,
                 x
         ));
-        angle = (angle + 360) % 360;
+        angle = (angle + 360) % 360 + 90;
 
-
-        return new Rotation2d(Degrees.of(angle));
+        Logger.recordOutput("DriveCommands/StickDirection", Rotation2d.fromDegrees(angle));
+        return Rotation2d.fromDegrees(angle);
     }
 
     public static Command joystickDriveForwardLook(
-            Drive drive,
             DoubleSupplier xSupplier,
             DoubleSupplier ySupplier,
-            DoubleSupplier omegaXSupplier,
-            DoubleSupplier omegaYSupplier) {
-        return joystickDriveAtAngle(
-                drive,
+            DoubleSupplier omegaSupplier,
+            Supplier<Rotation2d> stickDirection
+    ) {
+        return new ContinuousConditionalCommand(
+                joystickDrive(
                 xSupplier,
                 ySupplier,
-                () -> {
-                    double omegaX = omegaXSupplier.getAsDouble();
-                    double omegaY = omegaYSupplier.getAsDouble();
-                    if (Math.hypot(omegaX, omegaY) > 0.05){
-                        return getStickDirection(omegaX, omegaY);
-                    }
-                    return getStickDirection(xSupplier.getAsDouble(), ySupplier.getAsDouble());
+                omegaSupplier),
+                joystickDriveAtAngle(
+                        drive,
+                        xSupplier,
+                        ySupplier,
+                        stickDirection
+                        )
+                ,() -> {
+                    Logger.recordOutput("DriveCommands/omega", Math.abs(omegaSupplier.getAsDouble()));
+                    return Math.abs(omegaSupplier.getAsDouble()) > DEADBAND || Math.hypot(xSupplier.getAsDouble(), ySupplier.getAsDouble()) < DEADBAND;
                 }
         );
     }
@@ -314,7 +321,9 @@ public class DriveCommands {
                                 }));
     }
 
-    /** Measures the robot's wheel radius by spinning in a circle. */
+    /**
+     * Measures the robot's wheel radius by spinning in a circle.
+     */
     public static Command wheelRadiusCharacterization() {
         SlewRateLimiter limiter = new SlewRateLimiter(WHEEL_RADIUS_RAMP_RATE);
         WheelRadiusCharacterizationState state = new WheelRadiusCharacterizationState();
@@ -392,8 +401,8 @@ public class DriveCommands {
                                                             + formatter.format(wheelRadius)
                                                             + " meters, "
                                                             + formatter.format(
-                                                                    Units.metersToInches(
-                                                                            wheelRadius))
+                                                            Units.metersToInches(
+                                                                    wheelRadius))
                                                             + " inches");
                                         })));
     }

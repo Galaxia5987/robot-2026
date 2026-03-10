@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.010857142857143,
-        "y": 8.16346832311067
+        "x": 7.89652941176827,
+        "y": 7.510563025208194
       },
       "isLocked": false,
       "linkedName": "fuelEndDepotSide"
     },
     {
       "anchor": {
-        "x": 4.58864705882353,
-        "y": 7.28190756302521
+        "x": 4.611512605045581,
+        "y": 7.274285714283825
       },
       "prevControl": {
-        "x": 4.992605042016806,
-        "y": 7.28190756302521
+        "x": 5.015470588238857,
+        "y": 7.274285714283825
       },
       "nextControl": {
-        "x": 2.9478728196940747,
-        "y": 7.28190756302521
+        "x": 2.9707383659161257,
+        "y": 7.274285714283825
       },
       "isLocked": false,
       "linkedName": null
@@ -46,7 +46,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.8262843488650004,
+      "waypointRelativePos": 0.7773386034255578,
       "rotationDegrees": 90.0
     },
     {
@@ -57,11 +57,11 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.8073891625615761,
+      "minWaypointRelativePos": 0.9076470588235227,
       "maxWaypointRelativePos": 2.0,
       "constraints": {
         "maxVelocity": 1.3,
-        "maxAcceleration": 2.5,
+        "maxAcceleration": 2.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 1800.0,
         "nominalVoltage": 12.0,

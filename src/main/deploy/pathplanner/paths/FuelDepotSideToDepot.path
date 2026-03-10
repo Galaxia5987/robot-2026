@@ -17,15 +17,15 @@
     {
       "anchor": {
         "x": 4.634378151260505,
-        "y": 7.617268907563025
+        "y": 7.34
       },
       "prevControl": {
-        "x": 6.254151920070787,
-        "y": 7.506968659234078
+        "x": 6.233798986789836,
+        "y": 7.278811783899195
       },
       "nextControl": {
-        "x": 2.9973949305851684,
-        "y": 7.728741052147407
+        "x": 2.965193277309222,
+        "y": 7.403857142854917
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +36,8 @@
         "y": 6.032
       },
       "prevControl": {
-        "x": 1.0355052553212194,
-        "y": 5.843740925921052
+        "x": 1.852403361342836,
+        "y": 6.847462184871723
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,11 +47,11 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.8363636363636391,
-      "rotationDegrees": -90.0
+      "rotationDegrees": 90.0
     },
     {
       "waypointRelativePos": 1.1362514029180677,
-      "rotationDegrees": -90.0
+      "rotationDegrees": 90.0
     }
   ],
   "constraintZones": [
