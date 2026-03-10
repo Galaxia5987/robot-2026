@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 7.807577875222371,
-        "y": 4.730019071847314
+        "y": 5.2
       },
       "prevControl": null,
       "nextControl": {
         "x": 7.830085592011411,
-        "y": 7.043238231098431
+        "y": 7.513219159251117
       },
       "isLocked": false,
       "linkedName": "fuelEndDepotSide"

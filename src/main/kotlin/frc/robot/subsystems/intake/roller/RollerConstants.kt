@@ -21,9 +21,12 @@ enum class RollerPositions(val velocity: AngularVelocity) {
 val REAL_GAINS = Gains(kP = 0.2, kV = 0.5)
 val SIM_GAINS = Gains(kP = 1.0)
 
-val INTAKE_BASE_SPEED = 60.rps
+val INTAKE_BASE_SPEED = 25.rps
 
 const val ROBOT_VELOCITY_MULTIPLIER = 10.0
+
+val NORMAL_CURRENT_LIMITS = createCurrentLimits(30.amps, 5.amps)
+val HIGH_CURRENT_LIMITS = createCurrentLimits(60.amps, 5.amps)
 
 const val PORT = 10
 const val GEAR_RATIO = 2.5
@@ -35,8 +38,9 @@ val MOTOR_CONFIG =
                 Inverted = InvertedValue.Clockwise_Positive
             }
         Slot0 = REAL_GAINS.toSlotConfig()
-
-        CurrentLimits = createCurrentLimits(30.amps, 5.amps)
+        CurrentLimits = NORMAL_CURRENT_LIMITS
         Feedback =
-            FeedbackConfigs().apply { SensorToMechanismRatio = GEAR_RATIO }
+            FeedbackConfigs().apply {
+                SensorToMechanismRatio = GEAR_RATIO
+            }
     }
