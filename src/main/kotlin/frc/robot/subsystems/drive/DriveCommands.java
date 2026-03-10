@@ -78,6 +78,24 @@ public class DriveCommands {
                 .getTranslation();
     }
 
+    public static double getOmegaFromJoysticks(double driverOmega) {
+        double omega = MathUtil.applyDeadband(driverOmega, DEADBAND);
+        return omega * omega * Math.signum(omega);
+    }
+
+    public static ChassisSpeeds getSpeedsFromJoysticks(
+            double driverX, double driverY, double driverOmega) {
+        // Get linear velocity
+        Translation2d linearVelocity =
+                getLinearVelocityFromJoysticks(driverX, driverY).times(drive.getMaxLinearSpeedMetersPerSec());
+
+        // Calculate angular velocity
+        double omega = getOmegaFromJoysticks(driverOmega);
+
+        return new ChassisSpeeds(
+                linearVelocity.getX(), linearVelocity.getY(), omega * drive.getMaxLinearSpeedMetersPerSec());
+    }
+
     public static Command resetGyro() {
         return drive.defer(
                         () ->
@@ -103,23 +121,10 @@ public class DriveCommands {
             DoubleSupplier xSupplier, DoubleSupplier ySupplier, DoubleSupplier omegaSupplier) {
         return drive.run(
                 () -> {
-                    // Get linear velocity
-                    Translation2d linearVelocity =
-                            getLinearVelocityFromJoysticks(
-                                    xSupplier.getAsDouble(), ySupplier.getAsDouble());
-
-                    // Apply rotation deadband
-                    double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
-
-                    // Square rotation value for more precise control
-                    omega = Math.copySign(omega * omega, omega);
-
-                    // Convert to field relative speeds & send command
                     ChassisSpeeds speeds =
-                            new ChassisSpeeds(
-                                    linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-                                    linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
-                                    omega * drive.getMaxAngularSpeedRadPerSec());
+                            getSpeedsFromJoysticks(
+                                    xSupplier.getAsDouble(), ySupplier.getAsDouble(), omegaSupplier.getAsDouble());
+
                     boolean isFlipped = AllianceHelperKt.getIS_RED();
 
                     ChassisSpeeds robotRelativeSpeeds =
