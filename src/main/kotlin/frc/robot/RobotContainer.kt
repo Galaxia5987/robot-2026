@@ -46,6 +46,7 @@ object RobotContainer {
 
         enableAutoLogOutputFor(this)
         LEDSubsystem
+        ObjectDetection
     }
 
     private fun configureDefaultCommands() {

@@ -40,15 +40,20 @@ object ObjectDetection {
             "areas"
         ).subscribe(floatArrayOf())
 
-    private val poses
+    private val posesRobotRelative
         get() = posesSubscriber.get().map {
             Pose3d.kZero.plus(robotToCamera()).plus(Transform3d(Pose3d.kZero, it))
+        }
+
+    private val posesFieldRelative
+        get() = posesRobotRelative.map {
+            drive.pose + it.toPose2d().toTransform()
         }
 
 
     val optimalCluster: Pose2d?
         get() = findOptimalCluster(
-            poses.map { it.toPose2d() },
+            posesFieldRelative,
             areaSubscriber.get().map { it.toDouble() }
         )
 
