@@ -1,5 +1,6 @@
 package frc.robot.subsystems.intake.roller
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs
 import com.ctre.phoenix6.controls.VelocityVoltage
 import edu.wpi.first.units.measure.AngularVelocity
 import edu.wpi.first.wpilibj2.command.Command
@@ -49,6 +50,13 @@ object Roller : SubsystemBase(), RollerPositionsCommandFactory {
     }
 
     fun intake(): Command = defer { run { setControl(INTAKE_BASE_SPEED) } }
+
+    private fun setCurrentLimits(currentLimitConfig: CurrentLimitsConfigs): Command = runOnce {
+        motor.applyConfiguration(MOTOR_CONFIG.withCurrentLimits(currentLimitConfig))
+    }
+
+    fun setHighCurrentLimits(): Command = setCurrentLimits(HIGH_CURRENT_LIMITS)
+    fun setNormalCurrentLimits(): Command = setCurrentLimits(NORMAL_CURRENT_LIMITS)
 
     override fun periodic() {
         motor.periodic()

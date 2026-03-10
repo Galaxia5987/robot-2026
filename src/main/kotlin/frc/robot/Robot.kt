@@ -163,6 +163,7 @@ object Robot : LoggedRobot() {
         if (::autonomousCommand.isInitialized) {
             autonomousCommand.cancel()
         }
+        Roller.setNormalCurrentLimits()
     }
 
     override fun simulationInit() {

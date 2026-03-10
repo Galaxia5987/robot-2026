@@ -13,6 +13,7 @@ import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.shooting.ShootingState
 import frc.robot.states.shooting.setShootInAuto
 import frc.robot.states.shooting.stopShootInAuto
+import frc.robot.subsystems.intake.roller.Roller
 
 private fun runPath(path: String, mirror: Boolean = false): Command {
     var path = PathPlannerPath.fromPathFile(path)
@@ -47,6 +48,9 @@ val setShooting = EventTrigger("setShooting").onTrue(setShootInAuto())
 val setStopShooting = EventTrigger("setStopShooting").onTrue(stopShootInAuto())
 
 val setPriming = EventTrigger("setPriming").onTrue(ShootingState.PRIMING.set())
+
+val setRollerHighCurrentLimit = EventTrigger("setRollerHighCurrentLimit").onTrue(Roller.setHighCurrentLimits())
+val setRollerNormalCurrentLimit = EventTrigger("setRollerNormalCurrentLimit").onTrue(Roller.setNormalCurrentLimits())
 
 fun depotMainNoShootOnMove(): Command =
     Commands.sequence(

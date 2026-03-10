@@ -3,73 +3,89 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.8579172610556345,
+        "x": 3.858,
         "y": 7.638416547788873
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.9927960057061345,
-        "y": 7.638416547788873
+        "x": 5.878416901396232,
+        "y": 7.632004710656249
       },
       "isLocked": false,
       "linkedName": "TrenchDepotShoot"
     },
     {
       "anchor": {
-        "x": 6.342139800285306,
-        "y": 5.257703281027104
+        "x": 6.168286577608227,
+        "y": 6.5228815486862
       },
       "prevControl": {
-        "x": 7.053766048502139,
-        "y": 7.224379457917262
+        "x": 6.382867853521518,
+        "y": 6.890735164537557
       },
       "nextControl": {
-        "x": 5.99633009356143,
-        "y": 4.302011000626574
+        "x": 5.880411699920102,
+        "y": 6.029381758363699
       },
       "isLocked": false,
       "linkedName": "depotSideScattered"
     },
     {
       "anchor": {
-        "x": 7.23490727532097,
-        "y": 3.7309415121255354
+        "x": 5.99953779136907,
+        "y": 4.486129222271258
       },
       "prevControl": {
-        "x": 6.419771754636234,
-        "y": 3.2263338088445086
+        "x": 5.655732583529777,
+        "y": 4.952371878426669
       },
       "nextControl": {
-        "x": 7.982347637697613,
-        "y": 4.193642688834886
+        "x": 6.230162529321032,
+        "y": 4.173373371149507
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.855962910128387,
-        "y": 5.257703281027104
+        "x": 7.227213492851205,
+        "y": 5.072356633690563
       },
       "prevControl": {
-        "x": 8.068735881762768,
-        "y": 4.484455164606239
+        "x": 7.259217433438962,
+        "y": 4.445553934915681
       },
       "nextControl": {
-        "x": 7.325477888727283,
-        "y": 7.185563480736817
+        "x": 7.193498800041864,
+        "y": 5.732664709919949
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.543666191155491,
-        "y": 7.28
+        "x": 6.542482732071031,
+        "y": 7.039240331360537
       },
       "prevControl": {
-        "x": 8.166490727532096,
-        "y": 7.461141226818831
+        "x": 6.761835008866459,
+        "y": 6.82476556498262
+      },
+      "nextControl": {
+        "x": 6.170687009260389,
+        "y": 7.402768816020346
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.858,
+        "y": 7.32
+      },
+      "prevControl": {
+        "x": 4.366129814007323,
+        "y": 7.2794783287986995
       },
       "nextControl": null,
       "isLocked": false,
@@ -78,20 +94,12 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.000000000000002,
-      "rotationDegrees": -109.09349200048537
+      "waypointRelativePos": 0.8577075098814103,
+      "rotationDegrees": -90.0
     },
     {
-      "waypointRelativePos": 1.6641221374045656,
-      "rotationDegrees": -21.81336445738631
-    },
-    {
-      "waypointRelativePos": 2.251908396946559,
-      "rotationDegrees": 58.48939877751075
-    },
-    {
-      "waypointRelativePos": 3.13740458015266,
-      "rotationDegrees": 102.10549006805526
+      "waypointRelativePos": 2.9604743083003857,
+      "rotationDegrees": 64.03347733436985
     }
   ],
   "constraintZones": [],
@@ -100,6 +108,12 @@
     {
       "name": "setIntaking",
       "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "setStopIntaking",
+      "waypointRelativePos": 3.9,
       "endWaypointRelativePos": null,
       "command": null
     }
