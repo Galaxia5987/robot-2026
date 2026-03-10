@@ -157,38 +157,6 @@ public class DriveCommands {
                 });
     }
 
-    private static Rotation2d getStickDirection(double x, double y) {
-        double angle = 90 - Math.toDegrees(Math.atan2(
-                y,
-                x
-        ));
-        angle = (angle + 360) % 360;
-
-
-        return new Rotation2d(Degrees.of(angle));
-    }
-
-    public static Command joystickDriveForwardLook(
-            Drive drive,
-            DoubleSupplier xSupplier,
-            DoubleSupplier ySupplier,
-            DoubleSupplier omegaXSupplier,
-            DoubleSupplier omegaYSupplier) {
-        return joystickDriveAtAngle(
-                drive,
-                xSupplier,
-                ySupplier,
-                () -> {
-                    double omegaX = omegaXSupplier.getAsDouble();
-                    double omegaY = omegaYSupplier.getAsDouble();
-                    if (Math.hypot(omegaX, omegaY) > 0.05){
-                        return getStickDirection(omegaX, omegaY);
-                    }
-                    return getStickDirection(xSupplier.getAsDouble(), ySupplier.getAsDouble());
-                }
-        );
-    }
-
     /**
      * Field relative drive command using joystick for linear control and PID for angular control.
      * Possible use cases include snapping to an angle, aiming at a vision target, or controlling
@@ -198,6 +166,7 @@ public class DriveCommands {
             Drive drive,
             DoubleSupplier xSupplier,
             DoubleSupplier ySupplier,
+            DoubleSupplier omegaSupplier,
             Supplier<Rotation2d> rotationSupplier) {
 
         // Create PID controller
@@ -218,15 +187,20 @@ public class DriveCommands {
                             Translation2d linearVelocity =
                                     getLinearVelocityFromJoysticks(
                                             xSupplier.getAsDouble(), ySupplier.getAsDouble());
+                            double omega;
+                            if(Math.hypot(xSupplier.getAsDouble(), ySupplier.getAsDouble()) < DEADBAND || Math.abs(omegaSupplier.getAsDouble()) > DEADBAND) {
+                                omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
 
-                            // Calculate angular speed
-                            double omega =
-                                    MathUtil.applyDeadband(
-                                            angleController.calculate(
-                                                    drive.getRotation().getRadians(),
-                                                    rotationSupplier.get().getRadians()),
-                                            Degrees.of(2.0).in(Radians));
-
+                                // Square rotation value for more precise control
+                                omega = Math.copySign(omega * omega, omega);
+                            }else {
+                                omega =
+                                        MathUtil.applyDeadband(
+                                                angleController.calculate(
+                                                        drive.getRotation().getRadians(),
+                                                        rotationSupplier.get().getRadians()),
+                                                Degrees.of(2.0).in(Radians));
+                            }
                             // Convert to field relative speeds & send command
                             ChassisSpeeds speeds =
                                     new ChassisSpeeds(

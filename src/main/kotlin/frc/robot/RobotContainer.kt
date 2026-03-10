@@ -1,6 +1,7 @@
 package frc.robot
 
 import com.pathplanner.lib.auto.AutoBuilder
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
@@ -52,10 +53,12 @@ object RobotContainer {
 
     private fun configureDefaultCommands() {
         drive.defaultCommand =
-            DriveCommands.joystickDrive(
+            DriveCommands.joystickDriveAtAngle(
+                drive,
                 { -driverController.leftY },
                 { -driverController.leftX },
-                { -driverController.rightX * 1.2 }
+                { -driverController.rightX * 1.2 },
+                { Rotation2d(driverController.leftY,driverController.leftX)}
             )
         Turret.defaultCommand =
             Turret.setAngle(Turret.aimingSetpoint<Turret, () -> Angle>())
