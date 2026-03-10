@@ -2,6 +2,7 @@ package frc.robot
 
 import edu.wpi.first.math.geometry.*
 import edu.wpi.first.networktables.NetworkTableInstance
+import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.lib.extensions.*
 import frc.robot.lib.getTranslation3d
 import frc.robot.subsystems.intake.extender.Extender
@@ -12,9 +13,8 @@ import kotlin.math.sin
 const val areaWeight = 0.6
 const val distanceWeight = 0.4
 
-object ObjectDetection {
+object ObjectDetection : SubsystemBase() {
     private val INTAKE_ANGLE = 9.deg
-
     private val EXTENDER_ANGLE_POSE: Translation3d
         get() =
             getTranslation3d(
@@ -40,22 +40,13 @@ object ObjectDetection {
             "areas"
         ).subscribe(floatArrayOf())
 
-    private val posesRobotRelative
-        get() = posesSubscriber.get().map {
-            Pose3d.kZero.plus(robotToCamera()).plus(Transform3d(Pose3d.kZero, it))
-        }
-
     private val posesFieldRelative
-        get() = posesRobotRelative.map {
-            drive.pose + it.toPose2d().toTransform()
+        get() = posesSubscriber.get().map {
+            drive.pose + Pose3d.kZero.plus(robotToCamera()).plus(Transform3d(Pose3d.kZero, it)).toPose2d().toTransform()
         }
 
+    var optimalCluster: Pose2d? = null
 
-    val optimalCluster: Pose2d?
-        get() = findOptimalCluster(
-            posesFieldRelative,
-            areaSubscriber.get().map { it.toDouble() }
-        )
 
     fun findOptimalCluster(poses: List<Pose2d>, areas: List<Double>): Pose2d? {
         if (poses.isEmpty() || areas.isEmpty()) return null
@@ -98,4 +89,10 @@ object ObjectDetection {
         return (value - min) / (max - min)
     }
 
+    override fun periodic() {
+        optimalCluster = findOptimalCluster(
+            posesFieldRelative,
+            areaSubscriber.get().map { it.toDouble() }
+        )
+    }
 }
