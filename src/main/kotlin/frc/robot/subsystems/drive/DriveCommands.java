@@ -13,8 +13,6 @@
 
 package frc.robot.subsystems.drive;
 
-import static edu.wpi.first.units.Units.Degrees;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -31,9 +29,11 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.ConstantsKt;
 import frc.robot.InitializerKt;
 import frc.robot.field.FieldTriggersKt;
 import frc.robot.lib.AllianceHelperKt;
+import frc.robot.lib.LoggedNetworkGains;
 import frc.robot.states.setpoints_manager.SetpointsManager;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -41,6 +41,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
+
+import static edu.wpi.first.units.Units.*;
 
 public class DriveCommands {
     private static final Drive drive = InitializerKt.getDrive();
@@ -56,6 +58,21 @@ public class DriveCommands {
     private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
 
     private static final double accelerationLimitShootOnMove = 2.2; // m/s^2
+
+    private static final LoggedNetworkGains angleGains =
+            new LoggedNetworkGains(
+                    "angleGains",
+                    5.0,
+                    0.0,
+                    0.4,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    RotationsPerSecond.zero(),
+                    RotationsPerSecondPerSecond.zero(),
+                    0.0,
+                    "JoystickDrive");
 
     private static final SlewRateLimiter slewRateLimiterX =
             new SlewRateLimiter(accelerationLimitShootOnMove);
@@ -140,6 +157,38 @@ public class DriveCommands {
                 });
     }
 
+    private static Rotation2d getStickDirection(double x, double y) {
+        double angle = 90 - Math.toDegrees(Math.atan2(
+                y,
+                x
+        ));
+        angle = (angle + 360) % 360;
+
+
+        return new Rotation2d(Degrees.of(angle));
+    }
+
+    public static Command joystickDriveForwardLook(
+            Drive drive,
+            DoubleSupplier xSupplier,
+            DoubleSupplier ySupplier,
+            DoubleSupplier omegaXSupplier,
+            DoubleSupplier omegaYSupplier) {
+        return joystickDriveAtAngle(
+                drive,
+                xSupplier,
+                ySupplier,
+                () -> {
+                    double omegaX = omegaXSupplier.getAsDouble();
+                    double omegaY = omegaYSupplier.getAsDouble();
+                    if (Math.hypot(omegaX, omegaY) > 0.05){
+                        return getStickDirection(omegaX, omegaY);
+                    }
+                    return getStickDirection(xSupplier.getAsDouble(), ySupplier.getAsDouble());
+                }
+        );
+    }
+
     /**
      * Field relative drive command using joystick for linear control and PID for angular control.
      * Possible use cases include snapping to an angle, aiming at a vision target, or controlling
@@ -154,11 +203,12 @@ public class DriveCommands {
         // Create PID controller
         ProfiledPIDController angleController =
                 new ProfiledPIDController(
-                        ANGLE_KP,
-                        0.0,
-                        ANGLE_KD,
+                        angleGains.getKP().get(),
+                        angleGains.getKI().get(),
+                        angleGains.getKD().get(),
                         new TrapezoidProfile.Constraints(
-                                ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
+                                DegreesPerSecond.of(360.0).in(RadiansPerSecond),
+                                DegreesPerSecondPerSecond.of(540).in(RadiansPerSecondPerSecond)));
         angleController.enableContinuousInput(-Math.PI, Math.PI);
 
         // Construct command
@@ -171,9 +221,11 @@ public class DriveCommands {
 
                             // Calculate angular speed
                             double omega =
-                                    angleController.calculate(
-                                            drive.getRotation().getRadians(),
-                                            rotationSupplier.get().getRadians());
+                                    MathUtil.applyDeadband(
+                                            angleController.calculate(
+                                                    drive.getRotation().getRadians(),
+                                                    rotationSupplier.get().getRadians()),
+                                            Degrees.of(2.0).in(Radians));
 
                             // Convert to field relative speeds & send command
                             ChassisSpeeds speeds =
@@ -191,7 +243,7 @@ public class DriveCommands {
                                             speeds,
                                             isFlipped
                                                     ? drive.getRotation()
-                                                            .plus(new Rotation2d(Math.PI))
+                                                    .plus(new Rotation2d(Math.PI))
                                                     : drive.getRotation()));
                         })
 
