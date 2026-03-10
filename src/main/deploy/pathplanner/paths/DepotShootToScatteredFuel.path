@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.8579172610556345,
+        "x": 3.858,
         "y": 7.638416547788873
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.9927960057061345,
+        "x": 5.9928787446505005,
         "y": 7.638416547788873
       },
       "isLocked": false,
@@ -64,11 +64,11 @@
     },
     {
       "anchor": {
-        "x": 4.543666191155491,
+        "x": 3.858,
         "y": 7.28
       },
       "prevControl": {
-        "x": 8.166490727532096,
+        "x": 7.4808245363766055,
         "y": 7.461141226818831
       },
       "nextControl": null,
@@ -79,7 +79,7 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 1.000000000000002,
-      "rotationDegrees": -109.09349200048537
+      "rotationDegrees": -109.09349200048538
     },
     {
       "waypointRelativePos": 1.6641221374045656,
@@ -87,11 +87,11 @@
     },
     {
       "waypointRelativePos": 2.251908396946559,
-      "rotationDegrees": 58.48939877751075
+      "rotationDegrees": 48.407316671253135
     },
     {
       "waypointRelativePos": 3.13740458015266,
-      "rotationDegrees": 102.10549006805526
+      "rotationDegrees": 93.69564839607412
     }
   ],
   "constraintZones": [],
@@ -100,6 +100,12 @@
     {
       "name": "setIntaking",
       "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "setStopIntaking",
+      "waypointRelativePos": 3.452941176470579,
       "endWaypointRelativePos": null,
       "command": null
     }
