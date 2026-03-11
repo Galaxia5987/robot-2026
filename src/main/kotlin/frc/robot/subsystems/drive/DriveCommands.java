@@ -13,15 +13,15 @@
 
 package frc.robot.subsystems.drive;
 
+import com.pathplanner.lib.config.PIDConstants;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -32,16 +32,14 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.ConstantsKt;
 import frc.robot.InitializerKt;
 import frc.robot.field.FieldTriggersKt;
-import frc.robot.lib.AllianceHelperKt;
-import frc.robot.lib.ContinuousConditionalCommand;
-import frc.robot.lib.LoggedNetworkGains;
+import frc.robot.lib.*;
 import frc.robot.states.setpoints_manager.SetpointsManager;
-import org.littletonrobotics.junction.Logger;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
@@ -62,20 +60,11 @@ public class DriveCommands {
 
     private static final double accelerationLimitShootOnMove = 2.2; // m/s^2
 
-    private static final LoggedNetworkGains angleGains =
-            new LoggedNetworkGains(
-                    "angleGains",
-                    5.0,
+    private static final PIDConstants angleGains =
+            new PIDConstants(
+                    3.5,
                     0.0,
-                    0.4,
-                    0.0,
-                    0.0,
-                    0.0,
-                    0.0,
-                    RotationsPerSecond.zero(),
-                    RotationsPerSecondPerSecond.zero(),
-                    0.0,
-                    "JoystickDrive");
+                    0.0);
 
     private static final SlewRateLimiter slewRateLimiterX =
             new SlewRateLimiter(accelerationLimitShootOnMove);
@@ -174,14 +163,12 @@ public class DriveCommands {
             Supplier<Rotation2d> rotationSupplier) {
 
         // Create PID controller
-        ProfiledPIDController angleController =
-                new ProfiledPIDController(
-                        angleGains.getKP().get(),
-                        angleGains.getKI().get(),
-                        angleGains.getKD().get(),
-                        new TrapezoidProfile.Constraints(
-                                DegreesPerSecond.of(360.0).in(RadiansPerSecond),
-                                DegreesPerSecondPerSecond.of(540).in(RadiansPerSecondPerSecond)));
+        PIDController angleController =
+                new PIDController(
+                        angleGains.kP,
+                        angleGains.kI,
+                        angleGains.kD);
+
         angleController.enableContinuousInput(-Math.PI, Math.PI);
 
         // Construct command
@@ -192,18 +179,20 @@ public class DriveCommands {
                                     getLinearVelocityFromJoysticks(
                                             xSupplier.getAsDouble(), ySupplier.getAsDouble());
                             double omega;
-                            if(Math.hypot(xSupplier.getAsDouble(), ySupplier.getAsDouble()) < DEADBAND || Math.abs(omegaSupplier.getAsDouble()) > DEADBAND) {
+                            if (Math.hypot(xSupplier.getAsDouble(), ySupplier.getAsDouble()) < DEADBAND || Math.abs(omegaSupplier.getAsDouble()) > DEADBAND) {
                                 omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
 
                                 // Square rotation value for more precise control
-                                omega = Math.copySign(omega * omega, omega);
-                            }else {
+                                omega = Math.copySign(omega * omega, omega) * drive.getMaxAngularSpeedRadPerSec();
+                            } else {
+                                Rotation2d currentSetpoint = rotationSupplier.get();
+                                double pidOutput = angleController.calculate(
+                                        drive.getRotation().getRadians(),
+                                        rotationSupplier.get().getRadians());
                                 omega =
                                         MathUtil.applyDeadband(
-                                                angleController.calculate(
-                                                        drive.getRotation().getRadians(),
-                                                        rotationSupplier.get().getRadians()),
-                                                Degrees.of(2.0).in(Radians));
+                                                pidOutput,
+                                                DegreesPerSecond.of(2.0).in(RadiansPerSecond));
                             }
                             // Convert to field relative speeds & send command
                             ChassisSpeeds speeds =
@@ -226,7 +215,7 @@ public class DriveCommands {
                         })
 
                 // Reset PID controller when command starts
-                .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
+                .beforeStarting(angleController::reset);
     }
 
     /**
