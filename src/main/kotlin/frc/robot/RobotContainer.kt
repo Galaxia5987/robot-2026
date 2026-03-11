@@ -21,6 +21,7 @@ import frc.robot.subsystems.leds.LEDSubsystem
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.turret.Turret
 import org.ironmaple.simulation.SimulatedArena
+import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 
 object RobotContainer {
@@ -54,14 +55,16 @@ object RobotContainer {
 
     private fun configureDefaultCommands() {
         drive.defaultCommand =
-            DriveCommands.joystickDrive(
+            DriveCommands.joystickDriveAtAngle(
+                drive,
                 { -driverController.leftY },
                 { -driverController.leftX },
                 { -driverController.rightX * 1.2 },
-//                {
-//                    Rotation2d( -driverController.leftY, -[]\
-                //                    ]\[])
-//                }
+                {
+                    val rotation = Rotation2d(driverController.leftY,driverController.leftX)
+                    Logger.recordOutput("ForwardLookDrive/angle", rotation)
+                    rotation
+                }
             )
         Turret.defaultCommand =
             Turret.setAngle(Turret.aimingSetpoint<Turret, () -> Angle>())
