@@ -14,6 +14,7 @@ import frc.robot.lib.extensions.not
 import frc.robot.lib.extensions.sec
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.setpoints_manager.SetpointsManager.isShootingOnMove
+import frc.robot.subsystems.intake.funnel.Funnel
 import frc.robot.subsystems.sensors.Sensors
 import frc.robot.subsystems.shooter.flywheel.Flywheel
 import frc.robot.subsystems.shooter.hood.Hood
@@ -112,13 +113,13 @@ class Shooting(dontShootTrigger: Trigger, canFeedTrigger: Trigger) {
 
     private val shouldShootingToHubStop =
         (Sensors.hasFuel
-                .negate()
-                .or(
-                    IntakingStates.INTAKING.trigger.and(
-                        isShootingOnMove.negate()
-                    )
+            .negate()
+            .or(
+                IntakingStates.INTAKING.trigger.and(
+                    isShootingOnMove.negate()
                 )
-                .or(Turret.atSetpoint.negate()))
+            )
+            .or(Turret.atSetpoint.negate()))
             .and(inAllianceZone)
 
     private val shouldStopFeeding =
@@ -129,4 +130,8 @@ class Shooting(dontShootTrigger: Trigger, canFeedTrigger: Trigger) {
             .and(shouldShootingToHubStop.or(shouldStopFeeding))
             .onTrue(ShootingState.IDLE.set())
             .logTrigger("$LOGGING_PATH/setIdleIfShouldStopShooting")
+
+    private val setFunnel =
+        (ShootingState.IDLE.trigger.negate().or(IntakingStates.INTAKING.trigger)).and(isEnabled).onTrue(Funnel.start())
+            .onFalse(Funnel.stop())
 }
