@@ -10,7 +10,9 @@ import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.*
 import frc.robot.lib.switchable
+import frc.robot.states.setpoints_manager.SetpointsManager
 import frc.robot.states.setpoints_manager.SetpointsManager.isShootingOnMove
+import frc.robot.states.shooting.ShootingState
 
 const val PORT = 14
 const val RATIO = 55.0
@@ -20,7 +22,13 @@ val REAL_GAINS = Gains(kP = 110.0, kS = 0.2)
 
 // TODO: Calibrate turret for small movements
 val SETPOINT_TOLERANCE
-    get() = isShootingOnMove.asBoolean.switchable(5.deg, 3.deg)
+    get() = if (SetpointsManager.isFeeding) {
+        8.deg
+    } else if (isShootingOnMove.asBoolean) {
+        5.deg
+    } else {
+        3.deg
+    }
 
 const val ENCODER_ID = 5
 val ABSOLUTE_ENCODER_OFFSET = (-0.489502).rot
