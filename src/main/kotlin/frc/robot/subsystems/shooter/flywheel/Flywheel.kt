@@ -2,6 +2,7 @@ package frc.robot.subsystems.shooter.flywheel
 
 import com.ctre.phoenix6.controls.Follower
 import com.ctre.phoenix6.controls.VelocityVoltage
+import edu.wpi.first.math.filter.Debouncer
 import edu.wpi.first.units.measure.AngularVelocity
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -66,7 +67,7 @@ object Flywheel : SubsystemBase(), FlywheelVelocitiesCommandFactory {
 
     val atSetpoint = Trigger {
         motor.inputs.velocity.isNear(setpoint, FLYWHEEL_TOLERANCE)
-    }
+    }.debounce(0.13, Debouncer.DebounceType.kFalling)
 
     fun setVelocity(velocity: () -> AngularVelocity): Command = run {
         setpoint = velocity.invoke()

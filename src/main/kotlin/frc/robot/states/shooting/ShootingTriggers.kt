@@ -1,5 +1,6 @@
 package frc.robot.states.shooting
 
+import edu.wpi.first.math.filter.Debouncer
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.Trigger
@@ -23,7 +24,7 @@ import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
 private const val LOGGING_PATH = "StateMachines/Shooting"
-private val allSubsystemsAtSetpointDebounce = 0.2.sec
+private val allSubsystemsAtSetpointDebounce = 0.1.sec
 
 private val isIdle = ShootingState.IDLE.trigger.onTrue(idle())
 private val isPriming = ShootingState.PRIMING.trigger.onTrue(priming())
@@ -37,7 +38,7 @@ val allSubsystemsAtSetpoint: Trigger =
         .and(Turret.atSetpoint)
         .and(Flywheel.atSetpoint)
         //        .and(PreShooter.atSetpoint)
-        .debounce(allSubsystemsAtSetpointDebounce[sec])
+        .debounce(allSubsystemsAtSetpointDebounce[sec], Debouncer.DebounceType.kRising)
         .logTrigger("$LOGGING_PATH/allSubsystemsAtSetpoint")
 
 var commandShootOnAuto = false

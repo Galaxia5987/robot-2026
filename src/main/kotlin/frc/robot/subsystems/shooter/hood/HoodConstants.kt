@@ -26,7 +26,7 @@ const val GEAR_RATIO = 46.77199935913086
 // The actual angle, (relative to the ground) of the hood on the robot.
 val HOOD_STARTING_ANGLE = 15.deg
 
-val ABSOLUTE_ENCODER_OFFSET = (-0.005127).rot
+val ABSOLUTE_ENCODER_OFFSET = (-0.003906).rot
 
 val FORWARD_LIMIT = 0.061.rot
 val REVERSE_LIMIT = 0.rot
