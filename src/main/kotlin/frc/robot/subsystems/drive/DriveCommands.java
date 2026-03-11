@@ -124,11 +124,16 @@ public class DriveCommands {
                     // Square rotation value for more precise control
                     omega = Math.copySign(omega * omega, omega);
 
+                    double maxSpeed = drive.getMaxLinearSpeedMetersPerSec();
+                    if (SetpointsManager.INSTANCE.isShootingOnMove().getAsBoolean() && FieldTriggersKt.getInAllianceZone().getAsBoolean()) {
+                        maxSpeed = 2.0;
+                    }
+
                     // Convert to field relative speeds & send command
                     ChassisSpeeds speeds =
                             new ChassisSpeeds(
-                                    linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-                                    linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+                                    linearVelocity.getX() * maxSpeed,
+                                    linearVelocity.getY() * maxSpeed,
                                     omega * drive.getMaxAngularSpeedRadPerSec());
                     boolean isFlipped = AllianceHelperKt.getIS_RED();
 
@@ -138,13 +143,6 @@ public class DriveCommands {
                                     isFlipped
                                             ? drive.getRotation().plus(Rotation2d.fromDegrees(180))
                                             : drive.getRotation());
-
-                    if (SetpointsManager.INSTANCE.isShootingOnMove().getAsBoolean() && FieldTriggersKt.getInAllianceZone().getAsBoolean()) {
-                        robotRelativeSpeeds.vxMetersPerSecond =
-                                slewRateLimiterX.calculate(robotRelativeSpeeds.vxMetersPerSecond);
-                        robotRelativeSpeeds.vyMetersPerSecond =
-                                slewRateLimiterY.calculate(robotRelativeSpeeds.vyMetersPerSecond);
-                    }
 
                     drive.runVelocity(robotRelativeSpeeds);
                 });
