@@ -33,8 +33,11 @@ import frc.robot.ConstantsKt;
 import frc.robot.InitializerKt;
 import frc.robot.field.FieldTriggersKt;
 import frc.robot.lib.AllianceHelperKt;
+import frc.robot.lib.ContinuousConditionalCommand;
 import frc.robot.lib.LoggedNetworkGains;
 import frc.robot.states.setpoints_manager.SetpointsManager;
+import org.littletonrobotics.junction.Logger;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
@@ -79,7 +82,8 @@ public class DriveCommands {
     private static final SlewRateLimiter slewRateLimiterY =
             new SlewRateLimiter(accelerationLimitShootOnMove);
 
-    private DriveCommands() {}
+    private DriveCommands() {
+    }
 
     private static Translation2d getLinearVelocityFromJoysticks(double x, double y) {
         // Apply deadband
@@ -288,7 +292,9 @@ public class DriveCommands {
                                 }));
     }
 
-    /** Measures the robot's wheel radius by spinning in a circle. */
+    /**
+     * Measures the robot's wheel radius by spinning in a circle.
+     */
     public static Command wheelRadiusCharacterization() {
         SlewRateLimiter limiter = new SlewRateLimiter(WHEEL_RADIUS_RAMP_RATE);
         WheelRadiusCharacterizationState state = new WheelRadiusCharacterizationState();
@@ -366,8 +372,8 @@ public class DriveCommands {
                                                             + formatter.format(wheelRadius)
                                                             + " meters, "
                                                             + formatter.format(
-                                                                    Units.metersToInches(
-                                                                            wheelRadius))
+                                                            Units.metersToInches(
+                                                                    wheelRadius))
                                                             + " inches");
                                         })));
     }

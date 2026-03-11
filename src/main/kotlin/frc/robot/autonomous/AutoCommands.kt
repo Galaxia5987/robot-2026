@@ -60,8 +60,7 @@ fun depotMainNoShootOnMove(): Command =
         Commands.waitTime(10.sec),
         IntakingStates.INTAKING.set(),
         Commands.waitTime(0.5.sec),
-        runPath("PickupDepot"),
-        runPath("ExitDepot")
+        runPath("DepotPickupAndReturn")
     )
 
 fun depotMainShootOnMove(): Command =
@@ -71,9 +70,7 @@ fun depotMainShootOnMove(): Command =
         Commands.waitTime(5.sec).alongWith(IntakingStates.PUMPING.set()),
         IntakingStates.INTAKING.set(),
         Commands.waitTime(0.5.sec),
-        runPath("PickupDepot"),
-        runPath("ExitDepot"),
-        runPath("DepotToFuelShootOnMove")
+        runPath("DepotPickupAndReturn")
     )
 
 fun outpostMainShootOnMove(): Command =
