@@ -22,7 +22,7 @@ ${originalContent}"""
 }
 
 tasks.register("fetchShotCalculator") {
-    description = "Fetch ShotCalculator.kt from private repo if accessible"
+    description = "Fetch ShotCalculator.java from private repo if accessible"
     group = "build setup"
 
     doLast {
@@ -71,8 +71,8 @@ tasks.register("fetchShotCalculator") {
                 gitDir.deleteDir()
             }
 
-            fetchFile("ShotCalculator.kt", commitHash, tempCloneDir, targetDir)
-            fetchFile("FeedingShotCalculator.kt", commitHash, tempCloneDir, targetDir)
+            fetchFile("ShotCalculator.java", commitHash, tempCloneDir, targetDir)
+            fetchFile("FeedingShotCalculator.java", commitHash, tempCloneDir, targetDir)
 
 
         } catch (Exception e) {
