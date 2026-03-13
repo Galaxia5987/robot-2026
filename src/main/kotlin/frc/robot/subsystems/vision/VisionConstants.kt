@@ -62,23 +62,14 @@ val CAMERA_TO_TURRET_TRANSLATION =
 //            )
 //            .toTransform()
 
+val CAMERA_CONFIG: CameraConfig =
+    CameraConfig(
+        { Transform3d(100.mm, 100.mm, 100.mm, getRotation3d(0.deg)) },
+        tagIdsToFilter = { listOf(9, 10, 26, 25) },
+        stddevFactor = 1.0
+    )
 
-val CAMERA_CONFIG: CameraConfig = CameraConfig(
-    {
-        Transform3d(
-            100.mm,
-            100.mm,
-            100.mm,
-            getRotation3d(0.deg)
-        )
-    },
-    tagIdsToFilter = { listOf(9, 10, 26, 25) },
-    stddevFactor = 1.0
-)
-
-val OV_NAME_TO_CONFIG = mapOf(
-    "limeLight" to CAMERA_CONFIG
-)
+val OV_NAME_TO_CONFIG = mapOf("limeLight" to CAMERA_CONFIG)
 
 var realsenseRobotToCamera = Transform3d(Translation3d(), Rotation3d())
 

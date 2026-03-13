@@ -63,7 +63,7 @@ public class TunerConstants {
 
     // The stator current at which the wheels start to slip;
     // This needs to be tuned to your individual robot
-    private static final Current kSlipCurrent = Amps.of(80);
+    private static final Current kSlipCurrent = Amps.of(140);
 
     // Initial configs for the drive and steer motors and the azimuth encoder; these cannot be null.
     // Some configs will be overwritten; check the `with*InitialConfigs()` API documentation.
@@ -71,11 +71,12 @@ public class TunerConstants {
             new TalonFXConfiguration()
                     .withCurrentLimits(
                             new CurrentLimitsConfigs()
-                                    .withStatorCurrentLimit(Amps.of(80))
-                                    .withSupplyCurrentLimit(Amps.of(45))
-                                    .withSupplyCurrentLowerLimit(Amps.of(50.0))
-                                    .withSupplyCurrentLowerTime(Seconds.of(0.4))
-                                    .withStatorCurrentLimitEnable(true));
+                                    .withStatorCurrentLimit(Amps.of(140))
+                                    .withSupplyCurrentLimit(Amps.of(80))
+                                    .withSupplyCurrentLowerLimit(Amps.of(75.0))
+                                    .withSupplyCurrentLowerTime(Seconds.of(2.0))
+                                    .withStatorCurrentLimitEnable(true)
+                                    .withSupplyCurrentLimitEnable(true));
     private static final TalonFXConfiguration steerInitialConfigs =
             new TalonFXConfiguration()
                     .withCurrentLimits(
@@ -85,16 +86,17 @@ public class TunerConstants {
                                     // low
                                     // stator current limit to help avoid brownouts without
                                     // impacting performance.
-                                    .withStatorCurrentLimit(Amps.of(80))
-                                    .withSupplyCurrentLimit(Amps.of(35))
-                                    .withSupplyCurrentLowerLimit(Amps.of(50.0))
-                                    .withSupplyCurrentLowerTime(Seconds.of(0.4))
-                                    .withStatorCurrentLimitEnable(true));
+                                    .withStatorCurrentLimit(Amps.of(140))
+                                    .withSupplyCurrentLimit(Amps.of(80))
+                                    .withSupplyCurrentLowerLimit(Amps.of(75))
+                                    .withSupplyCurrentLowerTime(Seconds.of(2.0))
+                                    .withStatorCurrentLimitEnable(true)
+                                    .withSupplyCurrentLimitEnable(true));
     private static final CANcoderConfiguration encoderInitialConfigs = new CANcoderConfiguration();
     // Configs for the Pigeon 2; leave this null to skip applying Pigeon 2 configs
     private static final Pigeon2Configuration pigeonConfigs = null;
 
-    public static final String kCANBusName = "swerveDrive";
+    public static final String kCANBusName = "";
 
     // CAN bus that the devices are located on;
     // All swerve devices must share the same CAN bus
@@ -102,7 +104,7 @@ public class TunerConstants {
 
     // Theoretical free speed (m/s) at 12 V applied output;
     // This needs to be tuned to your individual robot
-    public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(4.00);
+    public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(6.00);
 
     // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
     // This may need to be tuned to your individual robot
