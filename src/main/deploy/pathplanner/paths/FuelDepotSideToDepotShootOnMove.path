@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.807577875222371,
-        "y": 5.2
+        "x": 7.808,
+        "y": 4.7
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.89652941176827,
-        "y": 7.510563025208194
+        "x": 7.896951536545899,
+        "y": 7.010563025208194
       },
       "isLocked": false,
       "linkedName": "fuelEndDepotSide"

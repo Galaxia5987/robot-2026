@@ -188,7 +188,7 @@ object Robot : LoggedRobot() {
         val timestamp = Timer.getTimestamp()
         val stdDevs = VecBuilder.fill(0.01, 0.01, 0.01)
         val observation =
-            BetterPoseEstimator.VisionObservation(pose, timestamp, stdDevs)
+            BetterPoseEstimator.VisionObservation(pose, timestamp, stdDevs.get(0), stdDevs.get(1), stdDevs.get(1))
 
         BetterPoseEstimator.getInstance().addVisionObservation(observation)
         arena.simulationPeriodic()

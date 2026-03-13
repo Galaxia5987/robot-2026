@@ -9,7 +9,7 @@ import org.team5987.annotation.LoggedOutput
 
 const val LOOP_TIME = 0.02 // [s]
 
-val logLevel = LogLevel.DEV
+val logLevel = LogLevel.DEBUG
 
 @LoggedOutput(LogLevel.COMP)
 val CURRENT_MODE: Mode

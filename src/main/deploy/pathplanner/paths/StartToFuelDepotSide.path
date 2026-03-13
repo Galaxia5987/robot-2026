@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 7.807577875222371,
-        "y": 5.2
+        "x": 7.808,
+        "y": 4.7
       },
       "prevControl": {
-        "x": 7.772054812483812,
-        "y": 5.447463354890522
+        "x": 7.77247693726144,
+        "y": 4.947463354890522
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +48,7 @@
   "constraintZones": [
     {
       "name": "Ball Pickup constraint zone",
-      "minWaypointRelativePos": 0.8645320197044413,
+      "minWaypointRelativePos": 1.406470588235284,
       "maxWaypointRelativePos": 1.9500000000000002,
       "constraints": {
         "maxVelocity": 1.1,
@@ -86,8 +86,8 @@
     "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 1800.0,
-    "nominalVoltage": 12.0,
-    "unlimited": false
+    "nominalVoltage": 13.0,
+    "unlimited": true
   },
   "goalEndState": {
     "velocity": 0,
@@ -99,5 +99,5 @@
     "velocity": 0.0,
     "rotation": -90.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
