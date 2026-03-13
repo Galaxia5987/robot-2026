@@ -5,10 +5,10 @@ import edu.wpi.first.units.Unit
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.AngularVelocity
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import frc.robot.FeedingShotCalculator.calculateFeedingPitch
+import frc.robot.FeedingShotCalculator.calculateFeedingVelocity
+import frc.robot.FeedingShotCalculator.calculateFeedingYaw
 import frc.robot.ShotCalculator.calculateAngularVelocity
-import frc.robot.calculateFeedingPitch
-import frc.robot.calculateFeedingVelocity
-import frc.robot.calculateFeedingYaw
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.m
