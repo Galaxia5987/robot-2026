@@ -38,7 +38,10 @@ val allSubsystemsAtSetpoint: Trigger =
         .and(Turret.atSetpoint)
         .and(Flywheel.atSetpoint)
         //        .and(PreShooter.atSetpoint)
-        .debounce(allSubsystemsAtSetpointDebounce[sec], Debouncer.DebounceType.kRising)
+        .debounce(
+            allSubsystemsAtSetpointDebounce[sec],
+            Debouncer.DebounceType.kRising
+        )
         .logTrigger("$LOGGING_PATH/allSubsystemsAtSetpoint")
 
 var commandShootOnAuto = false
@@ -62,11 +65,13 @@ class Shooting(dontShootTrigger: Trigger, canFeedTrigger: Trigger) {
             .and(isAutoCurrentlyShooting)
             .logTrigger("$LOGGING_PATH/canShootToHub")
 
-    val cantShootToHub =
-        canShootToHub.negate().onTrue(ShootingState.IDLE.set())
+    val cantShootToHub = canShootToHub.negate().onTrue(ShootingState.IDLE.set())
 
     private val canFeed =
-        canFeedTrigger.and(inAllianceZone.negate()).and(Turret.atSetpoint).and(isEnabled)
+        canFeedTrigger
+            .and(inAllianceZone.negate())
+            .and(Turret.atSetpoint)
+            .and(isEnabled)
 
     private val idleAndCanShootToHub =
         ShootingState.IDLE.trigger
@@ -114,17 +119,19 @@ class Shooting(dontShootTrigger: Trigger, canFeedTrigger: Trigger) {
 
     private val shouldShootingToHubStop =
         (Sensors.hasFuel
-            .negate()
-            .or(
-                IntakingStates.INTAKING.trigger.and(
-                    isShootingOnMove.negate()
+                .negate()
+                .or(
+                    IntakingStates.INTAKING.trigger.and(
+                        isShootingOnMove.negate()
+                    )
                 )
-            )
-            .or(Turret.atSetpoint.negate()))
+                .or(Turret.atSetpoint.negate()))
             .and(inAllianceZone)
 
     private val shouldStopFeeding =
-        (canFeedTrigger.negate().or(Turret.atSetpoint.negate())).and(!inAllianceZone)
+        (canFeedTrigger.negate().or(Turret.atSetpoint.negate())).and(
+            !inAllianceZone
+        )
 
     private val setIdleIfShouldStopShooting =
         ShootingState.SHOOTING.trigger
@@ -133,6 +140,10 @@ class Shooting(dontShootTrigger: Trigger, canFeedTrigger: Trigger) {
             .logTrigger("$LOGGING_PATH/setIdleIfShouldStopShooting")
 
     private val setFunnel =
-        (ShootingState.IDLE.trigger.negate().or(IntakingStates.INTAKING.trigger)).and(isEnabled).onTrue(Funnel.start())
+        (ShootingState.IDLE.trigger
+                .negate()
+                .or(IntakingStates.INTAKING.trigger))
+            .and(isEnabled)
+            .onTrue(Funnel.start())
             .onFalse(Funnel.stop())
 }

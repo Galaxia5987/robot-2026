@@ -9,10 +9,8 @@ import com.ctre.phoenix6.signals.StaticFeedforwardSignValue
 import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.*
-import frc.robot.lib.switchable
 import frc.robot.states.setpoints_manager.SetpointsManager
 import frc.robot.states.setpoints_manager.SetpointsManager.isShootingOnMove
-import frc.robot.states.shooting.ShootingState
 
 const val PORT = 14
 const val RATIO = 55.0
@@ -22,19 +20,20 @@ val REAL_GAINS = Gains(kP = 110.0, kS = 0.2)
 
 // TODO: Calibrate turret for small movements
 val SETPOINT_TOLERANCE
-    get() = if (SetpointsManager.isFeeding) {
-        8.deg
-    } else if (isShootingOnMove.asBoolean) {
-        5.deg
-    } else {
-        3.deg
-    }
+    get() =
+        if (SetpointsManager.isFeeding) {
+            8.deg
+        } else if (isShootingOnMove.asBoolean) {
+            5.deg
+        } else {
+            3.deg
+        }
 
 const val ENCODER_ID = 5
 val ABSOLUTE_ENCODER_OFFSET = (-0.489502).rot
 
-val FORWARD_LIMIT = 0.821.rot
-val REVERSE_LIMIT = (-0.179).rot
+val FORWARD_LIMIT = 0.99.rot
+val REVERSE_LIMIT = 0.rot
 
 val SOFTWARE_LIMIT_CONFIG =
     SoftwareLimitSwitchConfigs().apply {

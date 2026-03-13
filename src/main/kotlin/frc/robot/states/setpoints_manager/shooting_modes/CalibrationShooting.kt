@@ -5,7 +5,7 @@ import edu.wpi.first.units.Unit
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.AngularVelocity
 import edu.wpi.first.wpilibj2.command.SubsystemBase
-import frc.robot.calculatePitch
+import frc.robot.ShotCalculator.calculatePitch
 import frc.robot.drive
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get

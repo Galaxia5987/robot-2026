@@ -31,13 +31,15 @@ object SetpointsManager {
     var isFeeding = false
 
     private val goalHubTrigger =
-        inAllianceZone.or(isAuto).onTrue(
-            runOnce({
-                currentGoal = HUB_TRANSLATION.toPose()
-                isFeeding = false
-            })
-                .ignoringDisable(true)
-        )
+        inAllianceZone
+            .or(isAuto)
+            .onTrue(
+                runOnce({
+                        currentGoal = HUB_TRANSLATION.toPose()
+                        isFeeding = false
+                    })
+                    .ignoringDisable(true)
+            )
 
     private val goalDepotTrigger =
         isCloserToDepotSide
@@ -45,9 +47,9 @@ object SetpointsManager {
             .and(isAuto.negate())
             .onTrue(
                 runOnce({
-                    currentGoal = DEPOT_TRANSLATION.toPose()
-                    isFeeding = true
-                })
+                        currentGoal = DEPOT_TRANSLATION.toPose()
+                        isFeeding = true
+                    })
                     .ignoringDisable(true)
             )
 
@@ -58,9 +60,9 @@ object SetpointsManager {
             .and(isAuto.negate())
             .onTrue(
                 runOnce({
-                    currentGoal = OUTPOST_LOCATION.toPose()
-                    isFeeding = true
-                })
+                        currentGoal = OUTPOST_LOCATION.toPose()
+                        isFeeding = true
+                    })
                     .ignoringDisable(true)
             )
 
@@ -81,16 +83,11 @@ object SetpointsManager {
             when {
                 DriverOverrides.StaticShootingOverride.trigger.asBoolean ->
                     ShootingType.STATIC
-
                 DriverOverrides.ShootingCalibrationOverride.trigger.asBoolean ->
                     ShootingType.CALIBRATION
-
                 isFeeding -> ShootingType.FEEDING
-
                 DriverOverrides.ShootOnMoveOverride.trigger.asBoolean ->
                     ShootingType.SHOOT_ON_MOVE
-
-
                 else -> ShootingType.INTERPOLATION
             }
 
@@ -118,5 +115,5 @@ fun <T : SubsystemBase, M : () -> Measure<out Unit>> T.aimingSetpoint(): M {
             }
         result.invoke()
     }
-            as M
+        as M
 }

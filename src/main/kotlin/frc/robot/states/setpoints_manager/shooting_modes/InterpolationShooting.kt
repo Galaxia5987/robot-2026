@@ -7,9 +7,9 @@ import edu.wpi.first.units.measure.AngularVelocity
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj.Filesystem
 import edu.wpi.first.wpilibj2.command.SubsystemBase
-import frc.robot.calculateAngularVelocity
-import frc.robot.calculatePitch
-import frc.robot.calculateVelocity
+import frc.robot.ShotCalculator.calculateAngularVelocity
+import frc.robot.ShotCalculator.calculatePitch
+import frc.robot.ShotCalculator.calculateVelocity
 import frc.robot.drive
 import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
@@ -31,17 +31,19 @@ import org.team5987.annotation.LoggedOutput
 
 @LoggedOutput(LogLevel.COMP)
 val turretDistanceFromGoal: Distance
-    get() = turretTranslationFieldOriented.getDistance(currentGoal.translation).m
+    get() =
+        turretTranslationFieldOriented.getDistance(currentGoal.translation).m
 
 val compensatedTurretDistanceFromGoal: Distance
     get() =
         compensatedTurretTranslationFieldOriented
-            .getDistance(currentGoal.translation).m
+            .getDistance(currentGoal.translation)
+            .m
 
 private val SHOOTER_VELOCITY_BY_DISTANCE: InterpolatingDoubleMap =
     ShootingTableReader.parse(
         Filesystem.getDeployDirectory().path +
-                "/shootData/distanceToVelocity.csv"
+            "/shootData/distanceToVelocity.csv"
     )
 
 private fun getTurretSetpoint(): Angle {
@@ -50,25 +52,26 @@ private fun getTurretSetpoint(): Angle {
 
 private fun getHoodSetpoint(): Angle =
     (90.deg -
-            calculatePitch(
+        calculatePitch(
                 turretDistanceFromGoal[m],
                 drive.chassisSpeeds.vxMetersPerSecond,
                 drive.chassisSpeeds.vyMetersPerSecond
             )
-                .deg)
+            .deg)
 
 private fun getFlywheelSetpoint(): AngularVelocity {
     val turretOrientedChassisSpeeds = turretOrientedChassisSpeeds
-    return (1 * calculateAngularVelocity(
-        calculateVelocity(
-            turretDistanceFromGoal[m],
-            turretOrientedChassisSpeeds.x,
-            turretOrientedChassisSpeeds.y
-        )
-    ))
+    return (1 *
+            calculateAngularVelocity(
+                calculateVelocity(
+                    turretDistanceFromGoal[m],
+                    turretOrientedChassisSpeeds.x,
+                    turretOrientedChassisSpeeds.y
+                )
+            ))
         .rps
-//    val flywheelKey = InterpolatingDouble(turretDistanceFromGoal[m])
-//    return SHOOTER_VELOCITY_BY_DISTANCE.getInterpolated(flywheelKey).value.rps
+    //    val flywheelKey = InterpolatingDouble(turretDistanceFromGoal[m])
+    //    return SHOOTER_VELOCITY_BY_DISTANCE.getInterpolated(flywheelKey).value.rps
 }
 
 private fun getPreShooterSetpoint(): AngularVelocity {

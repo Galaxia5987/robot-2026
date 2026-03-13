@@ -27,9 +27,10 @@ open class Vision(
     private vararg val ios: VisionIO
 ) : SubsystemBase() {
     private val inputs = Array(ios.size) { VisionIOInputsAutoLogged() }
-    private val disconnectedAlerts = Array(ios.size) { index ->
-        Alert("Vision camera $index is disconnected.", AlertType.kWarning)
-    }
+    private val disconnectedAlerts =
+        Array(ios.size) { index ->
+            Alert("Vision camera $index is disconnected.", AlertType.kWarning)
+        }
 
     private val invalidPosesBuffer = arrayOfNulls<Pose3d>(ios.size)
     private val emptyPoseArray = emptyArray<Pose3d>()
@@ -38,10 +39,13 @@ open class Vision(
 
     private fun PoseObservation.isInvalid(): Boolean =
         tagCount == 0 || // Must have at least one tag
-                (tagCount == 1 && ambiguity > MAX_AMBIGUITY) || // Cannot be high ambiguity
-                pose.z.absoluteValue > MAX_Z_ERROR || // Must have realistic Z coordinate
-                // Must be within the field boundaries
-                !(pose.x in 0.0..APRILTAG_LAYOUT.fieldLength && pose.y in 0.0..APRILTAG_LAYOUT.fieldWidth)
+        (tagCount == 1 &&
+                ambiguity > MAX_AMBIGUITY) || // Cannot be high ambiguity
+            pose.z.absoluteValue >
+                MAX_Z_ERROR || // Must have realistic Z coordinate
+            // Must be within the field boundaries
+            !(pose.x in 0.0..APRILTAG_LAYOUT.fieldLength &&
+                pose.y in 0.0..APRILTAG_LAYOUT.fieldWidth)
 
     override fun periodic() {
         var invalidPosesCount = 0
@@ -56,7 +60,10 @@ open class Vision(
 
             // Lazy-init log keys after names are populated
             if (logKeys == null) {
-                logKeys = Array(ios.size) { index -> "$LOG_PREFIX${inputs[index].name}" }
+                logKeys =
+                    Array(ios.size) { index ->
+                        "$LOG_PREFIX${inputs[index].name}"
+                    }
             }
 
             // Update logging
@@ -75,17 +82,20 @@ open class Vision(
             val avgDist = estimatedPose.averageTagDistance
             val stdFactor = (avgDist * avgDist) / tagCountDouble
 
-            val linearStdDev = (LINEAR_STD_DEV_BASELINE * stdFactor) / tagCountDouble
-            val angularStdDev = (ANGULAR_STD_DEV_BASELINE * stdFactor) / tagCountDouble
+            val linearStdDev =
+                (LINEAR_STD_DEV_BASELINE * stdFactor) / tagCountDouble
+            val angularStdDev =
+                (ANGULAR_STD_DEV_BASELINE * stdFactor) / tagCountDouble
 
             // Pass raw primitives, avoiding VecBuilder.fill() matrix allocations
-            val observation = BetterPoseEstimator.VisionObservation(
-                estimatedPose.pose,
-                estimatedPose.timestamp,
-                linearStdDev,
-                linearStdDev,
-                angularStdDev
-            )
+            val observation =
+                BetterPoseEstimator.VisionObservation(
+                    estimatedPose.pose,
+                    estimatedPose.timestamp,
+                    linearStdDev,
+                    linearStdDev,
+                    angularStdDev
+                )
 
             consumer.invoke(observation)
         }
@@ -94,7 +104,8 @@ open class Vision(
         if (invalidPosesCount == 0) {
             Logger.recordOutput("InvalidVisionMeasurements", *emptyPoseArray)
         } else {
-            val outputArray = Array(invalidPosesCount) { invalidPosesBuffer[it]!! }
+            val outputArray =
+                Array(invalidPosesCount) { invalidPosesBuffer[it]!! }
             Logger.recordOutput("InvalidVisionMeasurements", *outputArray)
         }
     }

@@ -26,7 +26,8 @@ val turretTranslationFieldOriented: Translation2d
         )
 
 val compensatedTurretTranslationFieldOriented: Translation2d
-    get() = drive.compensatedPose.translation.plus(
+    get() =
+        drive.compensatedPose.translation.plus(
             TURRET_TO_ROBOT.rotateBy(drive.pose.rotation)
         )
 

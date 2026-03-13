@@ -39,9 +39,7 @@ object Roller : SubsystemBase(), RollerPositionsCommandFactory {
 
     override fun setTarget(value: RollerPositions): Command = runOnce {
         setpoint = value.velocity
-        motor.setControl(
-            velocityVoltage.withVelocity(value.velocity)
-        )
+        motor.setControl(velocityVoltage.withVelocity(value.velocity))
     }
 
     private fun setControl(velocity: AngularVelocity) {
@@ -51,12 +49,17 @@ object Roller : SubsystemBase(), RollerPositionsCommandFactory {
 
     fun intake(): Command = defer { run { setControl(INTAKE_BASE_SPEED) } }
 
-    private fun setCurrentLimits(currentLimitConfig: CurrentLimitsConfigs): Command = runOnce {
-        motor.applyConfiguration(MOTOR_CONFIG.withCurrentLimits(currentLimitConfig))
+    private fun setCurrentLimits(
+        currentLimitConfig: CurrentLimitsConfigs
+    ): Command = runOnce {
+        motor.applyConfiguration(
+            MOTOR_CONFIG.withCurrentLimits(currentLimitConfig)
+        )
     }
 
     fun setHighCurrentLimits(): Command = setCurrentLimits(HIGH_CURRENT_LIMITS)
-    fun setNormalCurrentLimits(): Command = setCurrentLimits(NORMAL_CURRENT_LIMITS)
+    fun setNormalCurrentLimits(): Command =
+        setCurrentLimits(NORMAL_CURRENT_LIMITS)
 
     override fun periodic() {
         motor.periodic()

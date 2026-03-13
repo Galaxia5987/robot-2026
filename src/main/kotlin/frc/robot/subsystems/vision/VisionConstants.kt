@@ -49,7 +49,7 @@ const val TURRET_CAMERA_NAME = "turret"
 private val TURRET_TRANSLATION =
     Translation3d((-117.5).mm, 207.5.mm, 360.888.mm)
 val CAMERA_TO_TURRET_TRANSLATION =
-    Translation3d((-75.97130).mm, 122.mm, 167.03609.mm)
+    Translation3d((-29.605).mm, 121.93750.mm, 167.35652.mm)
 
 val TURRET_CAMERA_ROBOT_TO_CAMERA: Transform3d
     get() =
@@ -116,9 +116,9 @@ val FRONT_CONFIG =
     CameraConfig(
         robotToCamera = {
             Transform3d(
-                105.241.mm,
-                347.50000.mm,
-                525.46448.mm,
+                110.804.mm,
+                317.411.mm,
+                519.31667.mm,
                 Rotation3d(0.0.deg, (-20).deg, 0.deg)
             )
         },

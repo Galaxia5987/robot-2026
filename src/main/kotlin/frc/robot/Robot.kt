@@ -28,12 +28,12 @@ import frc.robot.states.setpoints_manager.SetpointsManager
 import frc.robot.states.spindexer.SpindexerTriggers
 import frc.robot.subsystems.intake.roller.Roller
 import frc.robot.subsystems.sensors.Sensors
+import java.io.File
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.*
 import org.littletonrobotics.junction.networktables.NT4Publisher
 import org.littletonrobotics.junction.wpilog.WPILOGReader
 import org.littletonrobotics.junction.wpilog.WPILOGWriter
-import java.io.File
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -48,9 +48,11 @@ object Robot : LoggedRobot() {
     var mapleSimIntake: MapleSimIntake? = null
     var mapleSimShooter: MapleSimShooter? = null
 
-    private val elevatorMusic = Orchestra(File(Filesystem.getDeployDirectory(),"elevator.chrp").path).apply {
-//        addInstrument(Roller.motorDevice)
-    }
+    private val elevatorMusic =
+        Orchestra(File(Filesystem.getDeployDirectory(), "elevator.chrp").path)
+            .apply {
+                //        addInstrument(Roller.motorDevice)
+            }
 
     /**
      * This function is run when the robot is first started up and should be
@@ -188,7 +190,13 @@ object Robot : LoggedRobot() {
         val timestamp = Timer.getTimestamp()
         val stdDevs = VecBuilder.fill(0.01, 0.01, 0.01)
         val observation =
-            BetterPoseEstimator.VisionObservation(pose, timestamp, stdDevs.get(0), stdDevs.get(1), stdDevs.get(1))
+            BetterPoseEstimator.VisionObservation(
+                pose,
+                timestamp,
+                stdDevs.get(0),
+                stdDevs.get(1),
+                stdDevs.get(1)
+            )
 
         BetterPoseEstimator.getInstance().addVisionObservation(observation)
         arena.simulationPeriodic()

@@ -1,7 +1,6 @@
 package frc.robot
 
 import com.pathplanner.lib.auto.AutoBuilder
-import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
@@ -21,7 +20,6 @@ import frc.robot.subsystems.leds.LEDSubsystem
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.turret.Turret
 import org.ironmaple.simulation.SimulatedArena
-import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 
 object RobotContainer {
@@ -49,27 +47,27 @@ object RobotContainer {
 
         enableAutoLogOutputFor(this)
         LEDSubsystem
-
-
     }
 
     private fun configureDefaultCommands() {
-        drive.defaultCommand = DriveCommands.joystickDrive(
-            { -driverController.leftY },
-            { -driverController.leftX },
-            { -driverController.rightX * 1.2 },
-        )
-//            DriveCommands.joystickDriveAtAngle(
-//                drive,
-//                { -driverController.leftY },
-//                { -driverController.leftX },
-//                { -driverController.rightX * 1.2 },
-//                {
-//                    val rotation = Rotation2d(driverController.leftY,driverController.leftX)
-//                    Logger.recordOutput("ForwardLookDrive/angle", rotation)
-//                    rotation
-//                }
-//            )
+        drive.defaultCommand =
+            DriveCommands.joystickDrive(
+                { -driverController.leftY },
+                { -driverController.leftX },
+                { -driverController.rightX * 1.2 },
+            )
+        //            DriveCommands.joystickDriveAtAngle(
+        //                drive,
+        //                { -driverController.leftY },
+        //                { -driverController.leftX },
+        //                { -driverController.rightX * 1.2 },
+        //                {
+        //                    val rotation =
+        // Rotation2d(driverController.leftY,driverController.leftX)
+        //                    Logger.recordOutput("ForwardLookDrive/angle", rotation)
+        //                    rotation
+        //                }
+        //            )
         Turret.defaultCommand =
             Turret.setAngle(Turret.aimingSetpoint<Turret, () -> Angle>())
         Hood.defaultCommand =
@@ -130,7 +128,10 @@ object RobotContainer {
             depotMainNoShootOnMove()
         )
         autoChooser.addOption("depotMainShootOnMove", depotMainShootOnMove())
-        autoChooser.addOption("outpostMainShootOnMove", outpostMainShootOnMove())
+        autoChooser.addOption(
+            "outpostMainShootOnMove",
+            outpostMainShootOnMove()
+        )
         autoChooser.addOption("depotDoubleCycle", depotDoubleCycle())
     }
 }

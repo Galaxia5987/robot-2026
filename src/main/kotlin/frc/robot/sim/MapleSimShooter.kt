@@ -4,7 +4,7 @@ import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.geometry.Translation3d
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
-import frc.robot.calculateVelocity
+import frc.robot.ShotCalculator.calculateVelocity
 import frc.robot.drive
 import frc.robot.field.HUB_TRANSLATION
 import frc.robot.lib.extensions.cm

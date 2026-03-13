@@ -40,7 +40,5 @@ val MOTOR_CONFIG =
         Slot0 = REAL_GAINS.toSlotConfig()
         CurrentLimits = NORMAL_CURRENT_LIMITS
         Feedback =
-            FeedbackConfigs().apply {
-                SensorToMechanismRatio = GEAR_RATIO
-            }
+            FeedbackConfigs().apply { SensorToMechanismRatio = GEAR_RATIO }
     }

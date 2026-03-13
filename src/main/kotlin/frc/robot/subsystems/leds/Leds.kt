@@ -4,9 +4,7 @@ import com.ctre.phoenix6.controls.LarsonAnimation
 import com.ctre.phoenix6.controls.RainbowAnimation
 import com.ctre.phoenix6.controls.SolidColor
 import com.ctre.phoenix6.controls.StrobeAnimation
-import com.ctre.phoenix6.controls.TwinkleAnimation
 import com.ctre.phoenix6.hardware.CANdle
-import com.ctre.phoenix6.signals.LarsonBounceValue
 import com.ctre.phoenix6.signals.RGBWColor
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -36,8 +34,7 @@ object LEDSubsystem : SubsystemBase() {
     private val flickerRequest = StrobeAnimation(startIndex, endIndex)
     private val rainbowRequest = RainbowAnimation(startIndex, endIndex)
     private val chaseRequest = LarsonAnimation(startIndex, endIndex).withSize(5)
-    @LoggedOutput(LogLevel.DEV)
-    var currentMode: LedMode = LedMode.EMPTY
+    @LoggedOutput(LogLevel.DEV) var currentMode: LedMode = LedMode.EMPTY
 
     private fun setSolidColor(color: RGBWColor) {
         candle.setControl(solidColorRequest.withColor(color))
@@ -47,37 +44,29 @@ object LEDSubsystem : SubsystemBase() {
         candle.setControl(rainbowRequest)
     }
 
-    private fun setChase(color: RGBWColor){
+    private fun setChase(color: RGBWColor) {
         candle.setControl(chaseRequest.withColor(color))
     }
 
     private fun setFlicker(color: RGBWColor) {
         candle.setControl(flickerRequest.withColor(color))
-
     }
 
     private fun desiredMode(): LedMode =
         when {
 
-//            timeLeftForShift <= 3.sec -> LedMode.SHIFT_END
+            //            timeLeftForShift <= 3.sec -> LedMode.SHIFT_END
 
             DriverStation.isDisabled() -> LedMode.DISABLED
-
             RobotContainer.shooting?.cantShootToHub?.asBoolean == true ->
                 LedMode.CANT_SHOOT
-
-            isShootingOnMove.asBoolean && ShootingState.SHOOTING.trigger.asBoolean -> LedMode.SHOOTING_ON_MOVE
-
+            isShootingOnMove.asBoolean &&
+                ShootingState.SHOOTING.trigger.asBoolean ->
+                LedMode.SHOOTING_ON_MOVE
             ShootingState.SHOOTING.trigger.asBoolean -> LedMode.SHOOTING
-
-
             ShootingState.PRIMING.trigger.asBoolean -> LedMode.PRIMING
-
             IntakingStates.PUMPING.trigger.asBoolean -> LedMode.PUMPING
-
-
             IntakingStates.INTAKING.trigger.asBoolean -> LedMode.INTAKING
-
             else -> LedMode.EMPTY
         }
 

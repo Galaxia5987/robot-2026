@@ -13,6 +13,8 @@
 
 package frc.robot.subsystems.drive;
 
+import static edu.wpi.first.units.Units.*;
+
 import com.pathplanner.lib.config.PIDConstants;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -29,21 +31,16 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.ConstantsKt;
 import frc.robot.InitializerKt;
 import frc.robot.field.FieldTriggersKt;
 import frc.robot.lib.*;
 import frc.robot.states.setpoints_manager.SetpointsManager;
-
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
-
-import static edu.wpi.first.units.Units.*;
 
 public class DriveCommands {
     private static final Drive drive = InitializerKt.getDrive();
@@ -60,19 +57,14 @@ public class DriveCommands {
 
     private static final double accelerationLimitShootOnMove = 2.2; // m/s^2
 
-    private static final PIDConstants angleGains =
-            new PIDConstants(
-                    3.5,
-                    0.0,
-                    0.0);
+    private static final PIDConstants angleGains = new PIDConstants(3.5, 0.0, 0.0);
 
     private static final SlewRateLimiter slewRateLimiterX =
             new SlewRateLimiter(accelerationLimitShootOnMove);
     private static final SlewRateLimiter slewRateLimiterY =
             new SlewRateLimiter(accelerationLimitShootOnMove);
 
-    private DriveCommands() {
-    }
+    private DriveCommands() {}
 
     private static Translation2d getLinearVelocityFromJoysticks(double x, double y) {
         // Apply deadband
@@ -125,7 +117,8 @@ public class DriveCommands {
                     omega = Math.copySign(omega * omega, omega);
 
                     double maxSpeed = drive.getMaxLinearSpeedMetersPerSec();
-                    if (SetpointsManager.INSTANCE.isShootingOnMove().getAsBoolean() && FieldTriggersKt.getInAllianceZone().getAsBoolean()) {
+                    if (SetpointsManager.INSTANCE.isShootingOnMove().getAsBoolean()
+                            && FieldTriggersKt.getInAllianceZone().getAsBoolean()) {
                         maxSpeed = 2.0;
                     }
 
@@ -162,10 +155,7 @@ public class DriveCommands {
 
         // Create PID controller
         PIDController angleController =
-                new PIDController(
-                        angleGains.kP,
-                        angleGains.kI,
-                        angleGains.kD);
+                new PIDController(angleGains.kP, angleGains.kI, angleGains.kD);
 
         angleController.enableContinuousInput(-Math.PI, Math.PI);
 
@@ -177,16 +167,23 @@ public class DriveCommands {
                                     getLinearVelocityFromJoysticks(
                                             xSupplier.getAsDouble(), ySupplier.getAsDouble());
                             double omega;
-                            if (Math.hypot(xSupplier.getAsDouble(), ySupplier.getAsDouble()) < DEADBAND || Math.abs(omegaSupplier.getAsDouble()) > DEADBAND) {
-                                omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
+                            if (Math.hypot(xSupplier.getAsDouble(), ySupplier.getAsDouble())
+                                            < DEADBAND
+                                    || Math.abs(omegaSupplier.getAsDouble()) > DEADBAND) {
+                                omega =
+                                        MathUtil.applyDeadband(
+                                                omegaSupplier.getAsDouble(), DEADBAND);
 
                                 // Square rotation value for more precise control
-                                omega = Math.copySign(omega * omega, omega) * drive.getMaxAngularSpeedRadPerSec();
+                                omega =
+                                        Math.copySign(omega * omega, omega)
+                                                * drive.getMaxAngularSpeedRadPerSec();
                             } else {
                                 Rotation2d currentSetpoint = rotationSupplier.get();
-                                double pidOutput = angleController.calculate(
-                                        drive.getRotation().getRadians(),
-                                        rotationSupplier.get().getRadians());
+                                double pidOutput =
+                                        angleController.calculate(
+                                                drive.getRotation().getRadians(),
+                                                rotationSupplier.get().getRadians());
                                 omega =
                                         MathUtil.applyDeadband(
                                                 pidOutput,
@@ -208,7 +205,7 @@ public class DriveCommands {
                                             speeds,
                                             isFlipped
                                                     ? drive.getRotation()
-                                                    .plus(new Rotation2d(Math.PI))
+                                                            .plus(new Rotation2d(Math.PI))
                                                     : drive.getRotation()));
                         })
 
@@ -279,9 +276,7 @@ public class DriveCommands {
                                 }));
     }
 
-    /**
-     * Measures the robot's wheel radius by spinning in a circle.
-     */
+    /** Measures the robot's wheel radius by spinning in a circle. */
     public static Command wheelRadiusCharacterization() {
         SlewRateLimiter limiter = new SlewRateLimiter(WHEEL_RADIUS_RAMP_RATE);
         WheelRadiusCharacterizationState state = new WheelRadiusCharacterizationState();
@@ -359,8 +354,8 @@ public class DriveCommands {
                                                             + formatter.format(wheelRadius)
                                                             + " meters, "
                                                             + formatter.format(
-                                                            Units.metersToInches(
-                                                                    wheelRadius))
+                                                                    Units.metersToInches(
+                                                                            wheelRadius))
                                                             + " inches");
                                         })));
     }

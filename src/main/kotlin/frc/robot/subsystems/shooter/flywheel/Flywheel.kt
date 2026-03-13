@@ -65,9 +65,9 @@ object Flywheel : SubsystemBase(), FlywheelVelocitiesCommandFactory {
             40.0
         )
 
-    val atSetpoint = Trigger {
-        motor.inputs.velocity.isNear(setpoint, FLYWHEEL_TOLERANCE)
-    }.debounce(0.13, Debouncer.DebounceType.kFalling)
+    val atSetpoint =
+        Trigger { motor.inputs.velocity.isNear(setpoint, FLYWHEEL_TOLERANCE) }
+            .debounce(0.13, Debouncer.DebounceType.kFalling)
 
     fun setVelocity(velocity: () -> AngularVelocity): Command = run {
         setpoint = velocity.invoke()

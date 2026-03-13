@@ -10,7 +10,6 @@ package frc.robot.lib;
 import static frc.robot.subsystems.drive.Drive.getModuleTranslations;
 
 import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
@@ -19,7 +18,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-
 import java.util.*;
 
 // Taken from 6238 Mechanical Advantage
@@ -43,11 +41,11 @@ public class BetterPoseEstimator {
 
     private final SwerveDriveKinematics kinematics;
     private SwerveModulePosition[] lastWheelPositions =
-            new SwerveModulePosition[]{
-                    new SwerveModulePosition(),
-                    new SwerveModulePosition(),
-                    new SwerveModulePosition(),
-                    new SwerveModulePosition()
+            new SwerveModulePosition[] {
+                new SwerveModulePosition(),
+                new SwerveModulePosition(),
+                new SwerveModulePosition(),
+                new SwerveModulePosition()
             };
     private Rotation2d gyroOffset = Rotation2d.kZero;
 
@@ -133,7 +131,9 @@ public class BetterPoseEstimator {
 
         poseBuffer.addSample(observation.timestamp(), odometryPose);
 
-        if (observation.roll() != null && observation.pitch() != null && observation.yaw() != null) {
+        if (observation.roll() != null
+                && observation.pitch() != null
+                && observation.yaw() != null) {
             rotationBuffer.addSample(
                     observation.timestamp(),
                     new Rotation3d(
@@ -148,7 +148,8 @@ public class BetterPoseEstimator {
 
     public void addVisionObservation(VisionObservation observation) {
         try {
-            if (poseBuffer.getInternalBuffer().lastKey() - poseBufferSizeSec > observation.timestamp()) {
+            if (poseBuffer.getInternalBuffer().lastKey() - poseBufferSizeSec
+                    > observation.timestamp()) {
                 return;
             }
         } catch (NoSuchElementException ex) {
@@ -169,15 +170,20 @@ public class BetterPoseEstimator {
 
         double k0 = (qStdDevX == 0.0) ? 0.0 : qStdDevX / (qStdDevX + Math.sqrt(qStdDevX * r0));
         double k1 = (qStdDevY == 0.0) ? 0.0 : qStdDevY / (qStdDevY + Math.sqrt(qStdDevY * r1));
-        double k2 = (qStdDevTheta == 0.0) ? 0.0 : qStdDevTheta / (qStdDevTheta + Math.sqrt(qStdDevTheta * r2));
+        double k2 =
+                (qStdDevTheta == 0.0)
+                        ? 0.0
+                        : qStdDevTheta / (qStdDevTheta + Math.sqrt(qStdDevTheta * r2));
 
-        Transform2d transform = new Transform2d(estimateAtTime, observation.visionPose().toPose2d());
+        Transform2d transform =
+                new Transform2d(estimateAtTime, observation.visionPose().toPose2d());
 
         // Apply the Kalman gain scalars directly
-        Transform2d scaledTransform = new Transform2d(
-                transform.getX() * k0,
-                transform.getY() * k1,
-                Rotation2d.fromRadians(transform.getRotation().getRadians() * k2));
+        Transform2d scaledTransform =
+                new Transform2d(
+                        transform.getX() * k0,
+                        transform.getY() * k1,
+                        Rotation2d.fromRadians(transform.getRotation().getRadians() * k2));
 
         estimatedPose = estimateAtTime.plus(scaledTransform).plus(sampleToOdometryTransform);
     }
@@ -189,8 +195,7 @@ public class BetterPoseEstimator {
         }
 
         return Optional.of(
-                estimatedPose.transformBy(new Transform2d(odometryPose, oldOdometryPose.get()))
-        );
+                estimatedPose.transformBy(new Transform2d(odometryPose, oldOdometryPose.get())));
     }
 
     public Optional<Rotation3d> getEstimatedRotation3dAtTimestamp(double timestamp) {
@@ -202,14 +207,12 @@ public class BetterPoseEstimator {
             SwerveModulePosition[] wheelPositions,
             Rotation2d roll,
             Rotation2d pitch,
-            Rotation2d yaw) {
-    }
+            Rotation2d yaw) {}
 
     public record VisionObservation(
             Pose3d visionPose,
             double timestamp,
             double xStdDev,
             double yStdDev,
-            double thetaStdDev) {
-    }
+            double thetaStdDev) {}
 }

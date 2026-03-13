@@ -14,7 +14,9 @@ fun closed(): Command =
     Commands.parallel(
         Commands.sequence(
             Roller.slow(),
-            Commands.waitUntil({ Extender.inputs.voltage.isNear(0.volts, 0.5.volts) }),
+            Commands.waitUntil({
+                Extender.inputs.voltage.isNear(0.volts, 0.5.volts)
+            }),
             Roller.stop()
         ),
         Extender.close(),

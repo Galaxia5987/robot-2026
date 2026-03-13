@@ -23,7 +23,10 @@ private fun runPath(path: String, mirror: Boolean = false): Command {
     return AutoBuilder.followPath(path)
 }
 
-private fun runPathAndReset(pathName: String, mirror: Boolean = false): Command {
+private fun runPathAndReset(
+    pathName: String,
+    mirror: Boolean = false
+): Command {
     val path = PathPlannerPath.fromPathFile(pathName)
     var startPose = path.startingHolonomicPose.get()
     if (mirror) {
@@ -31,9 +34,9 @@ private fun runPathAndReset(pathName: String, mirror: Boolean = false): Command 
     }
 
     return Commands.runOnce({
-        BetterPoseEstimator.getInstance()
-            .resetPose(startPose.flipIfNeeded())
-    })
+            BetterPoseEstimator.getInstance()
+                .resetPose(startPose.flipIfNeeded())
+        })
         .andThen(runPath(pathName, mirror))
 }
 
@@ -49,8 +52,12 @@ val setStopShooting = EventTrigger("setStopShooting").onTrue(stopShootInAuto())
 
 val setPriming = EventTrigger("setPriming").onTrue(ShootingState.PRIMING.set())
 
-val setRollerHighCurrentLimit = EventTrigger("setRollerHighCurrentLimit").onTrue(Roller.setHighCurrentLimits())
-val setRollerNormalCurrentLimit = EventTrigger("setRollerNormalCurrentLimit").onTrue(Roller.setNormalCurrentLimits())
+val setRollerHighCurrentLimit =
+    EventTrigger("setRollerHighCurrentLimit")
+        .onTrue(Roller.setHighCurrentLimits())
+val setRollerNormalCurrentLimit =
+    EventTrigger("setRollerNormalCurrentLimit")
+        .onTrue(Roller.setNormalCurrentLimits())
 
 fun depotMainNoShootOnMove(): Command =
     Commands.sequence(
@@ -77,7 +84,11 @@ fun outpostMainShootOnMove(): Command =
     Commands.sequence(
         runPathAndReset(pathName = "StartToFuelDepotSide", mirror = true),
         runPath("FuelOutpostSideToOutpostShootOnMove"),
-        Commands.waitTime(5.sec).alongWith(Commands.waitTime(1.0.sec), IntakingStates.PUMPING.set()),
+        Commands.waitTime(5.sec)
+            .alongWith(
+                Commands.waitTime(1.0.sec),
+                IntakingStates.PUMPING.set()
+            ),
         runPath("OutpostToScatteredFuel")
     )
 

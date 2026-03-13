@@ -27,8 +27,9 @@ object Funnel : SubsystemBase() {
 
     private val voltageOut = VoltageOut(0.0)
 
-    private fun setControl(voltage: Voltage): Command = runOnce { motor.setControl(voltageOut.withOutput(voltage)) }
-
+    private fun setControl(voltage: Voltage): Command = runOnce {
+        motor.setControl(voltageOut.withOutput(voltage))
+    }
 
     fun start(): Command = setControl(START_VOLTAGE)
     fun stop(): Command = setControl(0.volts)

@@ -5,7 +5,7 @@ import edu.wpi.first.units.Unit
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.AngularVelocity
 import edu.wpi.first.wpilibj2.command.SubsystemBase
-import frc.robot.calculateAngularVelocity
+import frc.robot.ShotCalculator.calculateAngularVelocity
 import frc.robot.calculateFeedingPitch
 import frc.robot.calculateFeedingVelocity
 import frc.robot.calculateFeedingYaw
@@ -25,25 +25,25 @@ private fun getTurretSetpoint(): Angle {
     val speeds = turretOrientedChassisSpeeds
     return constraintTurretLimits(
         turretAngleToHub -
-                calculateFeedingYaw(turretDistanceFromGoal[m], speeds.x, speeds.y).deg
+            calculateFeedingYaw(turretDistanceFromGoal[m], speeds.x, speeds.y)
+                .deg
     )
 }
 
 private fun getHoodSetpoint(): Angle {
-    return (90.deg -
-            calculateFeedingPitch()
-                .deg)
+    return (90.deg - calculateFeedingPitch().deg)
 }
 
 private fun getFlywheelSetpoint(): AngularVelocity {
     val turretOrientedChassisSpeeds = turretOrientedChassisSpeeds
-    return (1 * calculateAngularVelocity(
-        calculateFeedingVelocity(
-            turretDistanceFromGoal[m],
-            turretOrientedChassisSpeeds.x,
-            turretOrientedChassisSpeeds.y
-        )
-    ))
+    return (1 *
+            calculateAngularVelocity(
+                calculateFeedingVelocity(
+                    turretDistanceFromGoal[m],
+                    turretOrientedChassisSpeeds.x,
+                    turretOrientedChassisSpeeds.y
+                )
+            ))
         .rps
 }
 

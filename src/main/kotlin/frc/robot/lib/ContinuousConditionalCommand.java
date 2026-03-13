@@ -9,7 +9,6 @@ import static edu.wpi.first.util.ErrorMessages.requireNonNullParam;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
 import java.util.function.BooleanSupplier;
 
 /**
@@ -38,7 +37,8 @@ public class ContinuousConditionalCommand extends Command {
      * @param condition the condition to determine which command to run
      */
     @SuppressWarnings("this-escape")
-    public ContinuousConditionalCommand(Command onTrue, Command onFalse, BooleanSupplier condition) {
+    public ContinuousConditionalCommand(
+            Command onTrue, Command onFalse, BooleanSupplier condition) {
         m_onTrue = requireNonNullParam(onTrue, "onTrue", "ContinuousConditionalCommand");
         m_onFalse = requireNonNullParam(onFalse, "onFalse", "ContinuousConditionalCommand");
         m_condition = requireNonNullParam(condition, "condition", "ContinuousConditionalCommand");
@@ -65,12 +65,12 @@ public class ContinuousConditionalCommand extends Command {
     public void execute() {
         if (m_condition.getAsBoolean()) {
             m_selectedCommand = m_onTrue;
-            if(!isOnTrueInitialized){
+            if (!isOnTrueInitialized) {
                 m_selectedCommand.initialize();
             }
         } else {
             m_selectedCommand = m_onFalse;
-            if(!isOnFalseInitialized){
+            if (!isOnFalseInitialized) {
                 m_selectedCommand.initialize();
             }
         }
