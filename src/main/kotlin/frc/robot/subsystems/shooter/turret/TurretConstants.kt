@@ -35,6 +35,10 @@ val ABSOLUTE_ENCODER_OFFSET = (-0.489502).rot
 val FORWARD_LIMIT = 0.99.rot
 val REVERSE_LIMIT = 0.rot
 
+val TURRET_ZERO_FORCE_POINT = 0.36.rot
+const val kTension = 0.43
+const val kSetpointVelocity = 2.0
+
 val SOFTWARE_LIMIT_CONFIG =
     SoftwareLimitSwitchConfigs().apply {
         ForwardSoftLimitEnable = true

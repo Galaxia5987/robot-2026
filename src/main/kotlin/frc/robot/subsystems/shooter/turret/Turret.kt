@@ -8,11 +8,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.createDisableTriggerForCoast
 import frc.robot.lib.extensions.get
+import frc.robot.lib.extensions.rad
 import frc.robot.lib.extensions.radians
+import frc.robot.lib.extensions.rot
 import frc.robot.lib.extensions.rotations
 import frc.robot.lib.universal_motor.MotorLogConfig
 import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.Logger
+import kotlin.math.cos
+import kotlin.math.sin
 
 object Turret : SubsystemBase() {
     private val motor: UniversalTalonFX =
@@ -65,6 +69,8 @@ object Turret : SubsystemBase() {
             setpointVelocityRps = deltaRotations / dt
         }
 
+        val diffFromForcePoint = (motor.inputs.position - TURRET_ZERO_FORCE_POINT)[rad]
+
         setpoint = newSetpoint
         lastSetpoint = newSetpoint
         lastTime = currentTime
@@ -72,7 +78,10 @@ object Turret : SubsystemBase() {
         motor.setControl(
             positionVoltage
                 .withPosition(setpoint)
-                .withFeedForward(2 * setpointVelocityRps)
+                .withFeedForward(
+                    kSetpointVelocity * setpointVelocityRps +
+                            kTension * Math.sin(diffFromForcePoint)
+                )
         )
     }
 
