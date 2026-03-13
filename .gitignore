@@ -171,8 +171,8 @@ networktables.json
 /log-downloader/venv/
 /src/main/kotlin/frc/robot/BuildConstants.java
 /.kotlin/sessions/
-/src/main/kotlin/frc/robot/ShotCalculator.kt
-/src/main/kotlin/frc/robot/FeedingShotCalculator.kt
+/src/main/kotlin/frc/robot/ShotCalculator.java
+/src/main/kotlin/frc/robot/FeedingShotCalculator.java
 /BalisticSimulator/.idea/BalisticSimulator.iml
 /BalisticSimulator/.idea/modules.xml
 /src/main/kotlin/ShotCalculator.kt
