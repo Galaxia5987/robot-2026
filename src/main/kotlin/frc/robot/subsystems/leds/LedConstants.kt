@@ -3,7 +3,7 @@ package frc.robot.subsystems.leds
 import com.ctre.phoenix6.signals.RGBWColor
 
 const val startIndex = 8
-const val endIndex = 47
+const val endIndex = 73
 
 // Colors
 
