@@ -2,6 +2,7 @@ package frc.robot.subsystems.shooter.turret
 
 import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.hardware.CANcoder
+import edu.wpi.first.math.filter.Debouncer
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -44,7 +45,7 @@ object Turret : SubsystemBase() {
 
     val atSetpoint = Trigger {
         motor.inputs.position.isNear(setpoint, SETPOINT_TOLERANCE)
-    }
+    }.debounce(0.15, Debouncer.DebounceType.kFalling)
 
     init {
         absoluteEncoder.configurator.apply(ENCODER_CONFIG)
