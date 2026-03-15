@@ -14,6 +14,7 @@
 package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
+import static frc.robot.subsystems.drive.Drive.DRIVE_BASE_RADIUS;
 
 import com.pathplanner.lib.config.PIDConstants;
 import edu.wpi.first.math.MathUtil;
@@ -117,9 +118,11 @@ public class DriveCommands {
                     omega = Math.copySign(omega * omega, omega);
 
                     double maxSpeed = drive.getMaxLinearSpeedMetersPerSec();
+                    double maxAngularSpeed = drive.getMaxAngularSpeedRadPerSec();
                     if (SetpointsManager.INSTANCE.isShootingOnMove().getAsBoolean()
                             && FieldTriggersKt.getInAllianceZone().getAsBoolean()) {
                         maxSpeed = 2.0;
+                        maxAngularSpeed = 2.0 / DRIVE_BASE_RADIUS;
                     }
 
                     // Convert to field relative speeds & send command
@@ -127,7 +130,7 @@ public class DriveCommands {
                             new ChassisSpeeds(
                                     linearVelocity.getX() * maxSpeed,
                                     linearVelocity.getY() * maxSpeed,
-                                    omega * drive.getMaxAngularSpeedRadPerSec());
+                                    omega * maxAngularSpeed);
                     boolean isFlipped = AllianceHelperKt.getIS_RED();
 
                     ChassisSpeeds robotRelativeSpeeds =
@@ -335,7 +338,7 @@ public class DriveCommands {
                                                                 / 4.0;
                                             }
                                             double wheelRadius =
-                                                    (state.gyroDelta * Drive.DRIVE_BASE_RADIUS)
+                                                    (state.gyroDelta * DRIVE_BASE_RADIUS)
                                                             / wheelDelta;
 
                                             NumberFormat formatter = new DecimalFormat("#0.000");

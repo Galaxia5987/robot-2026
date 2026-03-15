@@ -54,7 +54,7 @@ object RobotContainer {
             DriveCommands.joystickDrive(
                 { -driverController.leftY },
                 { -driverController.leftX },
-                { -driverController.rightX * 1.2 },
+                { -driverController.rightX },
             )
         //            DriveCommands.joystickDriveAtAngle(
         //                drive,
