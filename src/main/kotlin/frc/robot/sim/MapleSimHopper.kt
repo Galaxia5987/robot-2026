@@ -87,24 +87,11 @@ class MapleSimHopper {
         get() = createLayers(3, addForwardRows = true).toTypedArray()
     var fuelInRobotPoses: () -> Array<Pose3d> = { empty }
 
-    val emptyTrigger: Trigger =
-        Sensors.hasFuel
-            .negate()
-            .and(Sensors.isFull.negate())
-            .onTrue(Commands.runOnce({ fuelInRobotPoses = { empty } }))
+    val emptyTrigger: Trigger = Trigger ({false})
 
-    val thirdFullTrigger: Trigger =
-        Sensors.hasFuel
-            .and(Sensors.isFull.negate())
-            .onTrue(Commands.runOnce({ fuelInRobotPoses = { thirdFull } }))
+    val thirdFullTrigger: Trigger = Trigger ({false})
 
-    val halfFullTrigger: Trigger =
-        Sensors.isFull
-            .and(Sensors.isFull.negate())
-            .onTrue(
-                Commands.runOnce({ fuelInRobotPoses = { cantCloseIntake } })
-            )
+    val halfFullTrigger: Trigger = Trigger ({false})
 
-    val fullTrigger: Trigger =
-        Sensors.isFull.onTrue(Commands.runOnce({ fuelInRobotPoses = { full } }))
+    val fullTrigger: Trigger = Trigger ({false})
 }
