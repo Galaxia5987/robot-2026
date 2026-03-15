@@ -122,7 +122,7 @@ public class DriveCommands {
                     if (SetpointsManager.INSTANCE.isShootingOnMove().getAsBoolean()
                             && FieldTriggersKt.getInAllianceZone().getAsBoolean()) {
                         maxSpeed = 2.0;
-                        maxAngularSpeed = 2.0 / DRIVE_BASE_RADIUS;
+                        maxAngularSpeed = 3.14;
                     }
 
                     // Convert to field relative speeds & send command

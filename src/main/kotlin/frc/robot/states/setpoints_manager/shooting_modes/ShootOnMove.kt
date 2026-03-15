@@ -23,43 +23,47 @@ import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 import frc.robot.subsystems.shooter.pre_shooter.PreShooterVelocity
 import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.shooter.turret.constraintTurretLimits
+import frc.robot.subsystems.shooter.turret.getTurretTangentialVelocityFieldRelative
 import frc.robot.subsystems.shooter.turret.turretAngleToHub
 import kotlin.math.tanh
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
-fun ChassisSpeeds.to2dVector(): Translation2d =
+private fun ChassisSpeeds.to2dVector(): Translation2d =
     Translation2d(this.vxMetersPerSecond, this.vyMetersPerSecond)
 
 @LoggedOutput(path = "Odometry", level = LogLevel.COMP)
 val turretOrientedChassisSpeeds: Translation2d
-    get() =
-        drive.chassisSpeedsSetpoint
-            .to2dVector()
+    get() {
+        val speeds = drive.chassisSpeeds
+        return speeds
+            .to2dVector().plus(getTurretTangentialVelocityFieldRelative(speeds.omegaRadiansPerSecond))
             .rotateBy(Turret.position.toRotation2d())
+    }
+
 
 private fun getTurretSetpoint(): Angle {
     val speeds = turretOrientedChassisSpeeds
     return constraintTurretLimits(
         turretAngleToHub -
-            calculateYaw(
+                calculateYaw(
                     compensatedTurretDistanceFromGoal[m],
                     speeds.x,
                     speeds.y
                 )
-                .deg
+                    .deg
     )
 }
 
 private fun getHoodSetpoint(): Angle {
     val turretOrientedChassisSpeeds = turretOrientedChassisSpeeds
     return (90.deg -
-        calculatePitch(
+            calculatePitch(
                 compensatedTurretDistanceFromGoal[m],
                 turretOrientedChassisSpeeds.x,
                 turretOrientedChassisSpeeds.y
             )
-            .deg)
+                .deg)
 }
 
 private fun getFlywheelSetpoint(): AngularVelocity {

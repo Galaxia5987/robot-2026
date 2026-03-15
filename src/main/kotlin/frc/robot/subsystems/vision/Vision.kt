@@ -13,6 +13,7 @@
 
 package frc.robot.subsystems.vision
 
+import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.wpilibj.Alert
 import edu.wpi.first.wpilibj.Alert.AlertType
@@ -24,6 +25,7 @@ import org.littletonrobotics.junction.Logger
 
 open class Vision(
     private val consumer: (BetterPoseEstimator.VisionObservation) -> Unit,
+    private val resetOdometryCallback: (Pose2d) -> Unit,
     private vararg val ios: VisionIO
 ) : SubsystemBase() {
     private val inputs = Array(ios.size) { VisionIOInputsAutoLogged() }
@@ -35,6 +37,7 @@ open class Vision(
     private val invalidPosesBuffer = arrayOfNulls<Pose3d>(ios.size)
     private val emptyPoseArray = emptyArray<Pose3d>()
 
+    private var lastOdometryResetTimeStamp = -1.0;
     private var logKeys: Array<String>? = null
 
     private fun PoseObservation.isInvalid(): Boolean =
@@ -59,7 +62,7 @@ open class Vision(
             visionIO.updateInputs(cameraInputs)
 
             // Update logging
-            Logger.processInputs("Vision/${inputs[i].name}", cameraInputs)
+            Logger.processInputs("Subsystems/Vision/${inputs[i].name}", cameraInputs)
 
             // Update disconnected alert
             disconnectedAlerts[i].set(!cameraInputs.connected)
@@ -89,10 +92,13 @@ open class Vision(
                     angularStdDev
                 )
 
+            if (estimatedPose.tagCount > 2 && estimatedPose.timestamp - lastOdometryResetTimeStamp > 2.5) {
+                lastOdometryResetTimeStamp = estimatedPose.timestamp
+                resetOdometryCallback.invoke(estimatedPose.pose.toPose2d())
+            }
             consumer.invoke(observation)
         }
 
-        // Log invalid poses efficiently
         if (invalidPosesCount == 0) {
             Logger.recordOutput("InvalidVisionMeasurements", *emptyPoseArray)
         } else {

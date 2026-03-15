@@ -93,4 +93,4 @@ private val visionIOs =
     }.toTypedArray()
 
 val vision =
-    Vision(BetterPoseEstimator.getInstance()::addVisionObservation, *visionIOs)
+    Vision(BetterPoseEstimator.getInstance()::addVisionObservation, drive::resetOdometry, *visionIOs)

@@ -13,13 +13,14 @@
 
 package frc.robot.subsystems.vision
 
+import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Transform3d
-import frc.robot.subsystems.vision.VisionIO.*
-import java.util.*
-import org.photonvision.EstimatedRobotPose
+import frc.robot.subsystems.vision.VisionIO.PoseObservation
+import frc.robot.subsystems.vision.VisionIO.VisionIOInputs
 import org.photonvision.PhotonCamera
 import org.photonvision.PhotonPoseEstimator
+
 
 /** IO implementation for real PhotonVision hardware. */
 open class VisionIOPhotonVision(
@@ -38,45 +39,31 @@ open class VisionIOPhotonVision(
 
         // Read new camera observations
         val tagIds = mutableSetOf<Short>()
-        val poseObservations = mutableListOf<PoseObservation>()
 
         camera.allUnreadResults.forEach { result ->
             // Update latest target observation
             if (result.hasTargets()) {
                 poseEstimator.robotToCameraTransform = robotToCamera()
 
-                val estimatedOptionalRobotPose: Optional<EstimatedRobotPose> =
-                    if (result.multitagResult.isPresent) {
-                        val result =
-                            poseEstimator.estimateCoprocMultiTagPose(result)
+                var observation: PoseObservation? = null
 
-                        if (result.isEmpty) {
-                            return@forEach
-                        }
+                if (result.multitagResult.isPresent) {
+                    val estimatedPose =
+                        poseEstimator.estimateCoprocMultiTagPose(result)
 
-                        val pose = result.get()
-                        poseEstimator.resetHeadingData(
-                            pose.timestampSeconds,
-                            pose.estimatedPose.rotation
-                        )
-                        result
-                    } else {
-                        poseEstimator.estimatePnpDistanceTrigSolvePose(result)
+                    if (estimatedPose.isEmpty) {
+                        return@forEach
                     }
 
-                if (estimatedOptionalRobotPose.isEmpty) {
-                    return@forEach
-                }
+                    val pose = estimatedPose.get()
+                    poseEstimator.resetHeadingData(
+                        pose.timestampSeconds,
+                        pose.estimatedPose.rotation
+                    )
 
-                val estimatedRobotPose = estimatedOptionalRobotPose.get()
+                    val estimatedRobotPose = estimatedPose.get()
 
-                poseEstimator.addHeadingData(
-                    result.timestampSeconds,
-                    botRotation()
-                )
-
-                inputs.estimatedPose =
-                    PoseObservation(
+                    observation = PoseObservation(
                         estimatedRobotPose.timestampSeconds,
                         estimatedRobotPose.estimatedPose,
                         estimatedRobotPose.targetsUsed
@@ -87,10 +74,30 @@ open class VisionIOPhotonVision(
                             .map { it.bestCameraToTarget.translation.norm }
                             .average()
                     )
-            }
+                } else {
+                    val target = result.targets[0]
+                    val tagPose = APRILTAG_LAYOUT.getTagPose(target.fiducialId)
+                    if (tagPose.isPresent) {
+                        val fieldToTarget =
+                            Transform3d(tagPose.get().translation, tagPose.get().rotation)
+                        val cameraToTarget = target.bestCameraToTarget
+                        val fieldToCamera = fieldToTarget.plus(cameraToTarget.inverse())
+                        val fieldToRobot = fieldToCamera.plus(poseEstimator.robotToCameraTransform.inverse())
+                        val robotPose = Pose3d(fieldToRobot.translation, fieldToRobot.rotation)
 
-            // Update PhotonPoseEstimator based on gyro readings
-            poseEstimator.addHeadingData(result.timestampSeconds, botRotation())
+
+                        observation = PoseObservation(
+                            result.timestampSeconds,
+                            robotPose,
+                            target.poseAmbiguity,
+                            1,
+                            cameraToTarget.translation.norm,
+                        )
+                    }
+                }
+
+                inputs.estimatedPose = observation!!
+            }
         }
 
         // Save pose observations and tag IDs to inputs object

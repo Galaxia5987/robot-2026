@@ -6,11 +6,14 @@ import com.ctre.phoenix6.signals.InvertedValue
 import com.ctre.phoenix6.signals.NeutralModeValue
 import com.ctre.phoenix6.signals.SensorDirectionValue
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue
+import edu.wpi.first.math.geometry.Translation2d
+import edu.wpi.first.math.kinematics.ChassisSpeeds
 import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.*
 import frc.robot.states.setpoints_manager.SetpointsManager
 import frc.robot.states.setpoints_manager.SetpointsManager.isShootingOnMove
+import javax.xml.crypto.dsig.Transform
 
 const val PORT = 14
 const val RATIO = 55.0
@@ -30,7 +33,7 @@ val SETPOINT_TOLERANCE
         }
 
 const val ENCODER_ID = 5
-val ABSOLUTE_ENCODER_OFFSET = (-0.489502).rot
+val ABSOLUTE_ENCODER_OFFSET = (-0.483887).rot
 
 val FORWARD_LIMIT = 0.99.rot
 val REVERSE_LIMIT = 0.rot
@@ -38,6 +41,18 @@ val REVERSE_LIMIT = 0.rot
 val TURRET_ZERO_FORCE_POINT = 0.36.rot
 const val kTension = 0.43
 const val kSetpointVelocity = 6.0
+
+const val TURRET_RADIUS_TO_CENTER_ROBOT_METERS = 0.23868132
+
+val TURRET_VELOCITY_ANGLE = 60.4426997.deg
+
+fun getTurretTangentialVelocityFieldRelative(omegaRadiansPerSecond: Double): Translation2d {
+    val magnitude = omegaRadiansPerSecond * TURRET_RADIUS_TO_CENTER_ROBOT_METERS
+    return Translation2d(
+        -Math.cos(TURRET_VELOCITY_ANGLE[rad]) * magnitude,
+        -Math.sin(TURRET_VELOCITY_ANGLE[rad]) * magnitude,
+    )
+}
 
 val SOFTWARE_LIMIT_CONFIG =
     SoftwareLimitSwitchConfigs().apply {

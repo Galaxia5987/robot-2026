@@ -37,6 +37,7 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -82,7 +83,7 @@ public class Drive extends SubsystemBase implements SysIdable {
                                     TunerConstants.BackRight.LocationX,
                                     TunerConstants.BackRight.LocationY)));
 
-    private static final double compensationConstant = 0.2; // Sec
+    private static final double compensationConstant = 0.0; // Sec
 
     // PathPlanner config constants
     private static final double ROBOT_MASS_KG = 67.15;
@@ -149,6 +150,8 @@ public class Drive extends SubsystemBase implements SysIdable {
     public ChassisSpeeds chassisSpeedsSetpoint = new ChassisSpeeds();
 
     private double lastSkidTimestamp = Double.NaN;
+
+    private Field2d fieldPose = new Field2d();
 
     public Drive(
             GyroIO gyroIO, ModuleIO[] moduleIOS, Consumer<Pose2d> resetSimulationPoseCallBack) {
@@ -515,8 +518,12 @@ public class Drive extends SubsystemBase implements SysIdable {
                                 new Translation2d(
                                         speeds.vxMetersPerSecond * compensationConstant,
                                         speeds.vyMetersPerSecond * compensationConstant),
-                                new Rotation2d(
-                                        speeds.omegaRadiansPerSecond * compensationConstant)));
+                                new Rotation2d()));
+    }
+
+    public Field2d getField2dPose(){
+        fieldPose.setRobotPose(getPose());
+        return fieldPose;
     }
 
     /** Returns the current odometry pose. */
