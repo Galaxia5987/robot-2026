@@ -45,7 +45,7 @@ open class Vision(
                 MAX_Z_ERROR || // Must have realistic Z coordinate
             // Must be within the field boundaries
             !(pose.x in 0.0..APRILTAG_LAYOUT.fieldLength &&
-                pose.y in 0.0..APRILTAG_LAYOUT.fieldWidth)
+                pose.y in 0.0..APRILTAG_LAYOUT.fieldWidth) && averageTagDistance > MAX_DISTANCE_METERS
 
     override fun periodic() {
         var invalidPosesCount = 0
@@ -58,16 +58,8 @@ open class Vision(
             // Update IO
             visionIO.updateInputs(cameraInputs)
 
-            // Lazy-init log keys after names are populated
-            if (logKeys == null) {
-                logKeys =
-                    Array(ios.size) { index ->
-                        "$LOG_PREFIX${inputs[index].name}"
-                    }
-            }
-
             // Update logging
-            Logger.processInputs(logKeys!![i], cameraInputs)
+            Logger.processInputs("Vision/${inputs[i].name}", cameraInputs)
 
             // Update disconnected alert
             disconnectedAlerts[i].set(!cameraInputs.connected)

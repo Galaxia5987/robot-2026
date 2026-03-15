@@ -46,6 +46,8 @@ data class CameraConfig(
 // Camera names, must match names configured on coprocessor
 const val TURRET_CAMERA_NAME = "turret"
 
+const val MAX_DISTANCE_METERS = 6.0
+
 private val TURRET_TRANSLATION =
     Translation3d((-117.5).mm, 207.5.mm, 360.888.mm)
 val CAMERA_TO_TURRET_TRANSLATION =
@@ -91,7 +93,7 @@ val RIGHT_CONFIG =
                 (-146.39146).mm,
                 (-371.60854).mm,
                 372.62536.mm,
-                Rotation3d(0.0.deg, (-20).deg, (-45).deg)
+                Rotation3d(0.0.deg, (-16.8255).deg, (-45).deg)
             )
         },
         tagIdsToFilter = { listOf() },
