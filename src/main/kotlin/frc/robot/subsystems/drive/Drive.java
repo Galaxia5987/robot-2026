@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -192,6 +193,7 @@ public class Drive extends SubsystemBase implements SysIdable {
         //        Pathfinding.setPathfinder(new LocalADStarAK());
         PathPlannerLogging.setLogActivePathCallback(
                 (activePath) -> {
+                    fieldPose.getObject("path").setPoses(activePath);
                     Logger.recordOutput(
                             "Odometry/Trajectory",
                             activePath.toArray(new Pose2d[activePath.size()]));
@@ -212,6 +214,7 @@ public class Drive extends SubsystemBase implements SysIdable {
                                         Logger.recordOutput("Drive/SysIdState", state.toString())),
                         new SysIdRoutine.Mechanism(
                                 (voltage) -> runCharacterization(voltage.in(Volts)), null, this));
+        SmartDashboard.putData("Field", fieldPose);
     }
 
     private void configureAutoBuilder() {
@@ -324,6 +327,7 @@ public class Drive extends SubsystemBase implements SysIdable {
             // isn't connected
             BetterPoseEstimator.getInstance().setRobotVelocity(getChassisSpeeds());
         }
+        fieldPose.setRobotPose(getPose());
     }
 
     private boolean isSkidding(
@@ -519,11 +523,6 @@ public class Drive extends SubsystemBase implements SysIdable {
                                         speeds.vxMetersPerSecond * compensationConstant,
                                         speeds.vyMetersPerSecond * compensationConstant),
                                 new Rotation2d()));
-    }
-
-    public Field2d getField2dPose(){
-        fieldPose.setRobotPose(getPose());
-        return fieldPose;
     }
 
     /** Returns the current odometry pose. */

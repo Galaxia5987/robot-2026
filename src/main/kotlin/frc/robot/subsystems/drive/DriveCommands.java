@@ -33,6 +33,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.InitializerKt;
+import frc.robot.RobotContainer;
 import frc.robot.field.FieldTriggersKt;
 import frc.robot.lib.*;
 import frc.robot.states.setpoints_manager.SetpointsManager;
@@ -40,6 +41,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
@@ -120,7 +122,7 @@ public class DriveCommands {
                     double maxSpeed = drive.getMaxLinearSpeedMetersPerSec();
                     double maxAngularSpeed = drive.getMaxAngularSpeedRadPerSec();
                     if (SetpointsManager.INSTANCE.isShootingOnMove().getAsBoolean()
-                            && FieldTriggersKt.getInAllianceZone().getAsBoolean()) {
+                            && FieldTriggersKt.getInAllianceZone().getAsBoolean() &&  !Objects.requireNonNull(RobotContainer.INSTANCE.getShooting()).getDontShootTrigger().getAsBoolean()) {
                         maxSpeed = 2.0;
                         maxAngularSpeed = 3.14;
                     }
@@ -172,7 +174,7 @@ public class DriveCommands {
                             double omega;
                             if (Math.hypot(xSupplier.getAsDouble(), ySupplier.getAsDouble())
                                             < DEADBAND
-                                    || Math.abs(omegaSupplier.getAsDouble()) > DEADBAND) {
+                                    || Math.abs(omegaSupplier.getAsDouble()) > DEADBAND || FieldTriggersKt.getInAllianceZone().getAsBoolean()) {
                                 omega =
                                         MathUtil.applyDeadband(
                                                 omegaSupplier.getAsDouble(), DEADBAND);

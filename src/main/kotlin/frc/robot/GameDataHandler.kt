@@ -57,7 +57,7 @@ private val SHIFTS =
         GameShift(30.sec, 0.sec, ShiftType.ALL) // endgame
     )
 
-@LoggedOutput(LogLevel.DEV)
+@LoggedOutput(LogLevel.COMP)
 val matchTime:
     Time // getMatchTime returns time left in the current period, so add 2min 20sec when in auto
     get() =
@@ -76,5 +76,10 @@ val isOurHubActive: Boolean
             else -> true
         } || DriverStation.getMatchTime() < 0.0
 
-// val timeLeftForShift: Time
-//    get() = matchTime - currentShift?.endTime
+//@LoggedOutput(LogLevel.COMP)
+ val timeLeftForShift: Time
+    get() = matchTime - currentShift?.endTime
+
+//@LoggedOutput(LogLevel.COMP)
+val dashboardShiftMessage
+    get() = (if(isOurHubActive) "ACTIVE" else "INACTIVE")

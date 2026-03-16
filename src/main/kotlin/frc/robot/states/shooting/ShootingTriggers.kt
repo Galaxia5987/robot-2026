@@ -50,7 +50,7 @@ fun setShootInAuto(): Command = runOnce({ commandShootOnAuto = true })
 
 fun stopShootInAuto(): Command = runOnce({ commandShootOnAuto = false })
 
-class Shooting(dontShootTrigger: Trigger, canFeedTrigger: Trigger) {
+class Shooting(val dontShootTrigger: Trigger, canFeedTrigger: Trigger) {
 
     val isAutoCurrentlyShooting: Trigger =
         Trigger { commandShootOnAuto }.or(isAuto.negate())

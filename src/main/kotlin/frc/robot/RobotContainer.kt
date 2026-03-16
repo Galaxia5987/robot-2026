@@ -1,6 +1,7 @@
 package frc.robot
 
 import com.pathplanner.lib.auto.AutoBuilder
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
@@ -56,18 +57,22 @@ object RobotContainer {
                 { -driverController.leftX },
                 { -driverController.rightX },
             )
-        //            DriveCommands.joystickDriveAtAngle(
-        //                drive,
-        //                { -driverController.leftY },
-        //                { -driverController.leftX },
-        //                { -driverController.rightX * 1.2 },
-        //                {
-        //                    val rotation =
-        // Rotation2d(driverController.leftY,driverController.leftX)
-        //                    Logger.recordOutput("ForwardLookDrive/angle", rotation)
-        //                    rotation
-        //                }
-        //            )
+//                    DriveCommands.joystickDriveAtAngle(
+//                        drive,
+//                        { -driverController.leftY },
+//                        { -driverController.leftX },
+//                        { -driverController.rightX * 1.2 },
+//                        {
+//                            val rotation =
+//                                Rotation2d(driverController.leftY, driverController.leftX)
+//                            rotation
+//                     ]\[\
+//                     ]\[
+//                     \][\
+//                     ][\
+//                     ]\[
+//                     }
+//                    )
         Turret.defaultCommand =
             Turret.setAngle(Turret.aimingSetpoint<Turret, () -> Angle>())
         Hood.defaultCommand =

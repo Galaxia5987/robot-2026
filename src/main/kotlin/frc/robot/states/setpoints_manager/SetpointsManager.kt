@@ -100,6 +100,7 @@ object SetpointsManager {
     }
 
     val isUsingStaticSetpoints = Trigger { shootingType == ShootingType.STATIC }
+    val isUsingFeeding = Trigger { isFeeding }
 }
 
 fun <T : SubsystemBase, M : () -> Measure<out Unit>> T.aimingSetpoint(): M {

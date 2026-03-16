@@ -9,7 +9,10 @@ import frc.robot.lib.extensions.sec
 import frc.robot.lib.unified_canrange.UnifiedCANRange
 import frc.robot.lib.unified_canrange.UnifiedCANRangeLogging
 import frc.robot.states.intaking.IntakingStates
+import frc.robot.states.setpoints_manager.SetpointsManager.isFeeding
 import frc.robot.states.setpoints_manager.SetpointsManager.isShootingOnMove
+import frc.robot.states.setpoints_manager.SetpointsManager.isUsingFeeding
+import frc.robot.states.shooting.ShootingState
 import frc.robot.subsystems.intake.extender.EXTENDER_SETPOINT_TOLERANCE
 import frc.robot.subsystems.intake.extender.Extender
 import org.littletonrobotics.junction.Logger
@@ -18,6 +21,8 @@ object Sensors : SubsystemBase() {
 
     private val FULL = 0.2.m // TODO: change the value
     private val HALF_FULL = 0.5.m // TODO: change the value
+
+    private var ballCounter = 0
 
     private val spindexerSensor =
         UnifiedCANRange(
@@ -60,6 +65,10 @@ object Sensors : SubsystemBase() {
             .or(isShootingOnMove)
             .debounce(HAS_FUEL_DEBOUNCE[sec], Debouncer.DebounceType.kFalling)
 
+    val countingTrigger = Trigger { spindexerSensor.isInRange }.and(isUsingFeeding.negate()).onTrue(runOnce {
+        ballCounter++
+    })
+
     override fun periodic() {
         spindexerSensor.periodic()
         frontSensor.periodic()
@@ -81,5 +90,6 @@ object Sensors : SubsystemBase() {
             "Subsystems/Sensors/hopperFrontHasBalls",
             hopperFrontHasBalls
         )
+        Logger.recordOutput("Subsystems/Sensors/ballsFired", ballCounter)
     }
 }
