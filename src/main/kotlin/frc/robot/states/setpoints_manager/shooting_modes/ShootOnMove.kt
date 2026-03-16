@@ -67,8 +67,7 @@ private fun getHoodSetpoint(): Angle {
 }
 
 private fun getFlywheelSetpoint(): AngularVelocity {
-    val turretOrientedChassisSpeeds = turretOrientedChassisSpeeds
-    return ((1 - (0.05 * tanh(turretOrientedChassisSpeeds.norm))) *
+    val turretOrientedChassisSpeeds = turretOrientedChassisSpeedsreturn ((0.97 - (0.07 * tanh(turretOrientedChassisSpeeds.norm))) *
             calculateAngularVelocity(
                 calculateVelocity(
                     compensatedTurretDistanceFromGoal[m],
