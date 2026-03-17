@@ -23,7 +23,7 @@ private val HUB_TRANSLATION_BLUE = Translation2d(4620.41.mm, 4034.63.mm)
 val HUB_TRANSLATION: Translation2d
     get() = HUB_TRANSLATION_BLUE.flipIfNeeded()
 
-private val OUTPOST_FEED_TRANSLATION = Translation2d(5.0.m, 1.407.m)
+private val OUTPOST_FEED_TRANSLATION = Translation2d(4.2.m, 1.407.m)
 
 val OUTPOST_LOCATION: Translation2d
     get() = OUTPOST_FEED_TRANSLATION.flipIfNeeded()

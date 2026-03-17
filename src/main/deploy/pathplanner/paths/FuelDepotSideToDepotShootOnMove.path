@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.808,
+        "x": 8.0,
         "y": 4.7
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.8131112004078815,
+        "x": 8.005111200407882,
         "y": 6.725980928152686
       },
       "isLocked": false,
@@ -103,6 +103,12 @@
     {
       "name": "setStopIntaking",
       "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "setShooting",
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": null
     }
