@@ -2,7 +2,7 @@ package frc.robot.field
 
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.drive
-import frc.robot.isOurHubActive
+import frc.robot.isOurHubPreActive
 import frc.robot.lib.extensions.logTrigger
 
 const val FIELD_LOGGING_PATH = "Field"
@@ -17,4 +17,4 @@ val isCloserToDepotSide: Trigger =
         .logTrigger("$FIELD_LOGGING_PATH/isCloserToDepotSide")
 
 val isHubActive =
-    Trigger { isOurHubActive }.logTrigger("$FIELD_LOGGING_PATH/isHubActive")
+    Trigger { isOurHubPreActive }.logTrigger("$FIELD_LOGGING_PATH/isHubActive")

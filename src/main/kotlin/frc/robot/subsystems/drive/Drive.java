@@ -315,17 +315,20 @@ public class Drive extends SubsystemBase implements SysIdable {
                 return;
             }
 
-            // Update odometry
-            BetterPoseEstimator.getInstance()
-                    .addOdometryObservation(
-                            new BetterPoseEstimator.OdometryObservation(
-                                    Timer.getTimestamp(),
-                                    getModulePositions(),
-                                    gyroInputs.rollPosition,
-                                    gyroInputs.pitchPosition,
-                                    gyroInputs.yawPosition)); // TODO: Add handling for if the gyro
-            // isn't connected
-            BetterPoseEstimator.getInstance().setRobotVelocity(getChassisSpeeds());
+            // TODO: Temperoray fix, CHANGE IN WORKSHOP!!!!
+            if (gyroInputs.connected) {
+                // Update odometry
+                BetterPoseEstimator.getInstance()
+                        .addOdometryObservation(
+                                new BetterPoseEstimator.OdometryObservation(
+                                        Timer.getTimestamp(),
+                                        getModulePositions(),
+                                        gyroInputs.rollPosition,
+                                        gyroInputs.pitchPosition,
+                                        gyroInputs.yawPosition)); // TODO: Add handling for if the gyro
+                // isn't connected
+                BetterPoseEstimator.getInstance().setRobotVelocity(getChassisSpeeds());
+            }
         }
         fieldPose.setRobotPose(getPose());
     }
