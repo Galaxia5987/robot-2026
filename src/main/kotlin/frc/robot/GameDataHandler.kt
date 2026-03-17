@@ -1,8 +1,11 @@
 package frc.robot
 
+import edu.wpi.first.units.Unit
+import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Time
 import edu.wpi.first.wpilibj.DriverStation
 import frc.robot.lib.IS_RED
+import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.min
 import frc.robot.lib.extensions.sec
 import org.littletonrobotics.junction.networktables.LoggedNetworkString
@@ -57,15 +60,21 @@ private val SHIFTS =
         GameShift(30.sec, 0.sec, ShiftType.ALL) // endgame
     )
 
-@LoggedOutput(LogLevel.COMP)
+@LoggedOutput(LogLevel.COMP, path = "GameData")
 val matchTime:
-    Time // getMatchTime returns time left in the current period, so add 2min 20sec when in auto
+    Double // getMatchTime returns time left in the current period, so add 2min 20sec when in auto
     get() =
-        DriverStation.getMatchTime().sec +
-            (if (DriverStation.isAutonomous()) (2.min + 20.sec) else 0.sec)
+        (DriverStation.getMatchTime().sec +
+            (if (DriverStation.isAutonomous()) (2.min + 20.sec) else 0.sec)).`in`(Units.Seconds)
 
 val currentShift: GameShift?
-    get() = SHIFTS.find { matchTime in it.endTime..it.startTime }
+    get() = SHIFTS.find { matchTime.sec in it.endTime..it.startTime }
+
+val nextShift: GameShift?
+    get() {
+        val currentIndex = SHIFTS.indexOfFirst { matchTime.sec in it.endTime..it.startTime }
+        return if (currentIndex > 0) SHIFTS[currentIndex - 1] else null
+    }
 
 val isOurHubActive: Boolean
     get() =
@@ -76,10 +85,19 @@ val isOurHubActive: Boolean
             else -> true
         } || DriverStation.getMatchTime() < 0.0
 
-//@LoggedOutput(LogLevel.COMP)
- val timeLeftForShift: Time
-    get() = matchTime - currentShift?.endTime
+@LoggedOutput(LogLevel.COMP, path = "GameData")
+ val timeLeftForShift: Double
+    get() = matchTime - (currentShift?.endTime ?: 0.sec)[sec]
 
-//@LoggedOutput(LogLevel.COMP)
-val dashboardShiftMessage
-    get() = (if(isOurHubActive) "ACTIVE" else "INACTIVE")
+private fun Boolean.toShiftActiveMessage() = if(matchTime <= 30) "ENDGAME" else if(this) "ACTIVE" else "INACTIVE"
+
+@LoggedOutput(LogLevel.COMP, path = "GameData")
+val primaryDashboardShiftMessage: String
+    get() = isOurHubActive.toShiftActiveMessage()
+
+@LoggedOutput(LogLevel.COMP, path = "GameData")
+val secondaryDashboardShiftMessage: String
+    get() {
+        val isNextShiftActive = !isOurHubActive || nextShift?.shiftType == ShiftType.ALL
+        return "${isNextShiftActive.toShiftActiveMessage()} in $timeLeftForShift seconds"
+    }
