@@ -18,23 +18,23 @@ val ALLIANCE_ZONE_WIDTH: Distance = 4.03.m
 
 val ALLIANCE_ZONE_HEIGHT: Distance = 8.07.m
 
-val HUB_TRANSLATION: Translation2d
-    get() = Translation2d(4620.41.mm, 4034.63.mm).flipIfNeeded()
+private val HUB_TRANSLATION_BLUE = Translation2d(4620.41.mm, 4034.63.mm)
 
-val CLIMB_TRANSLATION: Pose2d
-    get() = Pose2d(4090.6.mm, 5457.8.mm, Rotation2d(90.deg)).flipIfNeeded()
+val HUB_TRANSLATION: Translation2d
+    get() = HUB_TRANSLATION_BLUE.flipIfNeeded()
 
 private val OUTPOST_FEED_TRANSLATION = Translation2d(2.880.m, 1.407.m)
 
 val OUTPOST_LOCATION: Translation2d
     get() = OUTPOST_FEED_TRANSLATION.flipIfNeeded()
 
+private val DEPOT_TRANSLATION_BLUE = Translation2d(
+    OUTPOST_FEED_TRANSLATION.measureX,
+    FlippingUtil.fieldSizeY.m - OUTPOST_FEED_TRANSLATION.measureY
+)
+
 val DEPOT_TRANSLATION: Translation2d
-    get() =
-        Translation2d(
-                OUTPOST_FEED_TRANSLATION.measureX,
-                FlippingUtil.fieldSizeY.m - OUTPOST_FEED_TRANSLATION.measureY
-            )
+    get() = DEPOT_TRANSLATION_BLUE
             .flipIfNeeded()
 
 val TRENCH_WIDTH = 1331.75.mm
@@ -45,27 +45,27 @@ private val TRENCH =
         Translation2d(HUB_TRANSLATION.x.m + CROUCH_TOLERANCE, TRENCH_WIDTH)
     )
 
-val TRENCH_AREAS: List<Rectangle2d>
-    get() =
-        listOf(TRENCH, TRENCH.flip(), TRENCH.mirror(), TRENCH.flip().mirror())
+val TRENCH_AREAS: Array<Rectangle2d> =
+    arrayOf(TRENCH, TRENCH.flip(), TRENCH.mirror(), TRENCH.flip().mirror())
+
+private val ALLIANCE_ZONE_BLUE_RECTANGLE = Rectangle2d(
+    Translation2d(0.m, Int.MIN_VALUE.m),
+    Translation2d(ALLIANCE_ZONE_WIDTH, Int.MAX_VALUE.m)
+)
+
 val ALLIANCE_ZONE: Rectangle2d
-    get() =
-        Rectangle2d(
-                Translation2d(0.m, Int.MIN_VALUE.m),
-                Translation2d(ALLIANCE_ZONE_WIDTH, Int.MAX_VALUE.m)
-            )
-            .flipIfNeeded()
+    get() = ALLIANCE_ZONE_BLUE_RECTANGLE.flipIfNeeded()
+
+private val OUTPOST_CROSS_LINE_BLUE_RECTANGLE = Rectangle2d(
+    Translation2d(0.m, Int.MIN_VALUE.m),
+    Translation2d(
+        FlippingUtil.fieldSizeX,
+        FlippingUtil.fieldSizeY / 2
+    )
+)
 
 val OUTPOST_CROSS_LINE_RECTANGLE: Rectangle2d
-    get() =
-        Rectangle2d(
-                Translation2d(0.m, Int.MIN_VALUE.m),
-                Translation2d(
-                    FlippingUtil.fieldSizeX,
-                    FlippingUtil.fieldSizeY / 2
-                )
-            )
-            .flipIfNeeded()
+    get() = OUTPOST_CROSS_LINE_BLUE_RECTANGLE.flipIfNeeded()
 
 // For Debugging and tuning if necessary
 // var temp = TunablePose3d(key="/Tuning/TempPose")

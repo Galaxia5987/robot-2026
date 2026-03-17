@@ -6,6 +6,8 @@ import edu.wpi.first.units.Measure
 import edu.wpi.first.units.Unit
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.AngularVelocity
+import edu.wpi.first.wpilibj.DriverStation
+import edu.wpi.first.wpilibj.RobotController
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.*
 import frc.robot.ShotCalculator.calculateAngularVelocity
@@ -68,7 +70,7 @@ private fun getHoodSetpoint(): Angle {
 
 private fun getFlywheelSetpoint(): AngularVelocity {
     val turretOrientedChassisSpeeds = turretOrientedChassisSpeeds
-    return ((0.97 - (0.05 * tanh(turretOrientedChassisSpeeds.norm))) *
+    var output = ((0.97 - (0.05 * tanh(turretOrientedChassisSpeeds.norm))) *
             calculateAngularVelocity(
                 calculateVelocity(
                     compensatedTurretDistanceFromGoal[m],
@@ -76,7 +78,7 @@ private fun getFlywheelSetpoint(): AngularVelocity {
                     turretOrientedChassisSpeeds.y
                 )
             ))
-        .rps
+    return output.rps
 }
 
 private fun getPreShooterSetpoint(): AngularVelocity =

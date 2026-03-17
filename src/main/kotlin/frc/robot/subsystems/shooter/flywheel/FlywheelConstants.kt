@@ -51,6 +51,6 @@ val MOTOR_CONFIG =
         CurrentLimits =
             createCurrentLimits(
                 supplyCurrentLimit = 30.amps,
-                supplyCurrentPeakDifference = 10.amps
+                supplyCurrentPeakDifference = 5.amps
             )
     }

@@ -105,7 +105,7 @@ class Shooting(val dontShootTrigger: Trigger, canFeedTrigger: Trigger) {
             .logTrigger("$LOGGING_PATH/setShootingIfPrimed")
 
     //    private val setBackfeedingIfNotAtSetpoint =
-    //        ShootingState.SHOOTING.trigger]\[
+    //        ShootingState.SHOOTING.trigger
 
     //            .and(shooterAtSetpoint.negate())
     //            .onTrue(ShootingState.BACKFEEDING.set())

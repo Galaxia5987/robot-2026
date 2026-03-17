@@ -9,7 +9,7 @@ import frc.robot.lib.extensions.volts
 
 const val PORT = 20
 
-val START_VOLTAGE = 6.volts
+val START_VOLTAGE = 3.volts
 
 val MOTOR_CONFIG =
     TalonFXConfiguration().apply {
@@ -17,5 +17,5 @@ val MOTOR_CONFIG =
             MotorOutputConfigs().apply {
                 Inverted = InvertedValue.Clockwise_Positive
             }
-        CurrentLimits = createCurrentLimits(20.amps, 5.amps)
+        CurrentLimits = createCurrentLimits(15.amps, 5.amps)
     }

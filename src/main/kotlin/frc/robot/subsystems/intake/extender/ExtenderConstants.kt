@@ -22,7 +22,7 @@ val SIM_GAINS = Gains(kP = 1.4, kD = 0.3)
 val REAL_GAINS = Gains(kP = 3.5, kI = 2.0, kS = 2.0, kV = 2.5)
 
 // Minimum current for when the motor is stalled (can't close anymore)
-val STATOR_STALL_CURRENT = 50.amps
+val STATOR_STALL_CURRENT = 35.amps
 
 val STALL_DEBOUNCE = 0.1.sec
 
@@ -51,7 +51,7 @@ val CONFIG =
                 ReverseSoftLimitThreshold = -0.5
             }
 
-        CurrentLimits = createCurrentLimits(30.amps, 5.amps)
+        CurrentLimits = createCurrentLimits(20.amps, 5.amps)
     }
 
 @CommandEnum
