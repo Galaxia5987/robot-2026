@@ -89,6 +89,7 @@ val isOurHubPreActive: Boolean
             else -> true
         } || DriverStation.getMatchTime() < 0.0
 
+@LoggedOutput(LogLevel.COMP, path = "GameData")
 val isOurHubActive: Boolean
     get() =
         when ((currentShift?.shiftType)) {

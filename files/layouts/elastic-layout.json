@@ -16,10 +16,10 @@
         "containers": [
           {
             "title": "Auto Choices",
-            "x": 768.0,
-            "y": 640.0,
-            "width": 640.0,
-            "height": 384.0,
+            "x": 1152.0,
+            "y": 0.0,
+            "width": 512.0,
+            "height": 256.0,
             "type": "ComboBox Chooser",
             "properties": {
               "topic": "/SmartDashboard/Auto Choices",
@@ -29,10 +29,10 @@
           },
           {
             "title": "PhotonAlerts",
-            "x": 0.0,
-            "y": 384.0,
+            "x": 1664.0,
+            "y": 0.0,
             "width": 256.0,
-            "height": 384.0,
+            "height": 256.0,
             "type": "Alerts",
             "properties": {
               "topic": "/SmartDashboard/PhotonAlerts",
@@ -41,8 +41,8 @@
           },
           {
             "title": "Back",
-            "x": 128.0,
-            "y": 0.0,
+            "x": 384.0,
+            "y": 128.0,
             "width": 128.0,
             "height": 128.0,
             "type": "Boolean Box",
@@ -58,8 +58,8 @@
           },
           {
             "title": "Front",
-            "x": 0.0,
-            "y": 0.0,
+            "x": 512.0,
+            "y": 128.0,
             "width": 128.0,
             "height": 128.0,
             "type": "Boolean Box",
@@ -75,8 +75,8 @@
           },
           {
             "title": "Left",
-            "x": 0.0,
-            "y": 128.0,
+            "x": 384.0,
+            "y": 256.0,
             "width": 128.0,
             "height": 128.0,
             "type": "Boolean Box",
@@ -92,8 +92,8 @@
           },
           {
             "title": "Right",
-            "x": 128.0,
-            "y": 128.0,
+            "x": 512.0,
+            "y": 256.0,
             "width": 128.0,
             "height": 128.0,
             "type": "Boolean Box",
@@ -109,8 +109,8 @@
           },
           {
             "title": "Turret",
-            "x": 0.0,
-            "y": 256.0,
+            "x": 384.0,
+            "y": 0.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Boolean Box",
@@ -126,10 +126,10 @@
           },
           {
             "title": "matchTime",
-            "x": 1024.0,
+            "x": 640.0,
             "y": 0.0,
             "width": 512.0,
-            "height": 128.0,
+            "height": 256.0,
             "type": "Match Time",
             "properties": {
               "topic": "/AdvantageKit/RealOutputs/GameData/matchTime",
@@ -142,10 +142,10 @@
           },
           {
             "title": "timeLeftForShift",
-            "x": 1024.0,
+            "x": 640.0,
             "y": 384.0,
             "width": 512.0,
-            "height": 128.0,
+            "height": 256.0,
             "type": "Match Time",
             "properties": {
               "topic": "/AdvantageKit/RealOutputs/GameData/timeLeftForShift",
@@ -158,8 +158,8 @@
           },
           {
             "title": "primaryDashboardShiftMessage",
-            "x": 1024.0,
-            "y": 128.0,
+            "x": 640.0,
+            "y": 256.0,
             "width": 512.0,
             "height": 128.0,
             "type": "Large Text Display",
@@ -171,8 +171,8 @@
           },
           {
             "title": "secondaryDashboardShiftMessage",
-            "x": 1024.0,
-            "y": 256.0,
+            "x": 640.0,
+            "y": 640.0,
             "width": 512.0,
             "height": 128.0,
             "type": "Large Text Display",
@@ -184,10 +184,10 @@
           },
           {
             "title": "Field",
-            "x": 256.0,
+            "x": 0.0,
             "y": 0.0,
-            "width": 768.0,
-            "height": 384.0,
+            "width": 384.0,
+            "height": 896.0,
             "type": "Field",
             "properties": {
               "topic": "/SmartDashboard/Field",
@@ -197,10 +197,59 @@
               "robot_length": 0.85,
               "show_other_objects": true,
               "show_trajectories": true,
-              "field_rotation": 0.0,
+              "field_rotation": 90.0,
               "robot_color": 4294198070,
               "trajectory_color": 4294967295,
               "show_robot_outside_widget": true
+            }
+          },
+          {
+            "title": "Voltage",
+            "x": 1152.0,
+            "y": 256.0,
+            "width": 768.0,
+            "height": 128.0,
+            "type": "Voltage View",
+            "properties": {
+              "topic": "/AdvantageKit/PowerDistribution/Voltage",
+              "period": 0.06,
+              "data_type": "double",
+              "min_value": 4.0,
+              "max_value": 13.0,
+              "divisions": 5,
+              "inverted": false,
+              "orientation": "horizontal"
+            }
+          },
+          {
+            "title": "ballsFired",
+            "x": 1152.0,
+            "y": 384.0,
+            "width": 768.0,
+            "height": 128.0,
+            "type": "Number Bar",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/Subsystems/Sensors/ballsFired",
+              "period": 0.06,
+              "data_type": "int",
+              "min_value": 0.0,
+              "max_value": 500.0,
+              "divisions": 5,
+              "inverted": false,
+              "orientation": "horizontal"
+            }
+          },
+          {
+            "title": "shiftMessage",
+            "x": 384.0,
+            "y": 384.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Large Text Display",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/GameData/shiftMessage",
+              "period": 0.06,
+              "data_type": "string"
             }
           }
         ]
