@@ -59,24 +59,11 @@ val setRollerNormalCurrentLimit =
     EventTrigger("setRollerNormalCurrentLimit")
         .onTrue(Roller.setNormalCurrentLimits())
 
-fun depotMainNoShootOnMove(): Command =
-    Commands.sequence(
-        runPathAndReset("StartToFuelDepotSide"),
-        runPath("FuelDepotSideToDepot"),
-        setShootInAuto(),
-        Commands.waitTime(10.sec),
-        IntakingStates.INTAKING.set(),
-        Commands.waitTime(0.5.sec),
-        runPath("DepotPickupAndReturn")
-    )
-
 fun depotMainShootOnMove(): Command =
     Commands.sequence(
         runPathAndReset("StartToFuelDepotSide"),
         runPath("FuelDepotSideToDepotShootOnMove"),
         Commands.waitTime(5.sec).alongWith(IntakingStates.PUMPING.set()),
-        IntakingStates.INTAKING.set(),
-        Commands.waitTime(0.5.sec),
         runPath("DepotPickupAndReturn")
     )
 

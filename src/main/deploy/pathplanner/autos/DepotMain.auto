@@ -23,7 +23,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "FuelFromDepot"
+                  "pathName": null
                 }
               }
             ]

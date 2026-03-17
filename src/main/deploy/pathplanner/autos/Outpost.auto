@@ -13,19 +13,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "FuelOutpostSideToShooting"
+            "pathName": null
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "OutposeStartToScatteredFuel"
+            "pathName": null
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "ScatteredFuelOutpostSideToShooting"
+            "pathName": null
           }
         }
       ]
