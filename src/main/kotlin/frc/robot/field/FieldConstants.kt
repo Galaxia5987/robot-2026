@@ -67,6 +67,14 @@ private val OUTPOST_CROSS_LINE_BLUE_RECTANGLE = Rectangle2d(
 val OUTPOST_CROSS_LINE_RECTANGLE: Rectangle2d
     get() = OUTPOST_CROSS_LINE_BLUE_RECTANGLE.flipIfNeeded()
 
+private val CLIMB_RECTANGLE_BLUE = Rectangle2d(
+    Translation2d(0.0, 3.113),
+    Translation2d(1.060, 4.363)
+)
+
+val CLIMB_RECTANGLE: Rectangle2d
+    get() = CLIMB_RECTANGLE_BLUE.flipIfNeeded()
+
 // For Debugging and tuning if necessary
 // var temp = TunablePose3d(key="/Tuning/TempPose")
 //    private set
