@@ -1,6 +1,5 @@
 package frc.robot
 
-import edu.wpi.first.units.Unit
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.measure.Time
 import edu.wpi.first.wpilibj.DriverStation
@@ -67,15 +66,30 @@ val matchTime:
         (DriverStation.getMatchTime().sec +
             (if (DriverStation.isAutonomous()) (2.min + 20.sec) else 0.sec)).`in`(Units.Seconds)
 
+val currentShiftIndex
+    get() = SHIFTS.indexOfFirst { matchTime.sec in it.endTime..it.startTime }
+
+val currentPreShift
+    get() = SHIFTS.findLast { (matchTime.sec) in it.endTime..it.startTime+2.sec }
+
 val currentShift: GameShift?
-    get() = SHIFTS.find { matchTime.sec in it.endTime..it.startTime }
+    get() = SHIFTS.getOrNull(currentShiftIndex)
 
 val nextShift: GameShift?
     get() {
-        val currentIndex = SHIFTS.indexOfFirst { matchTime.sec in it.endTime..it.startTime }
-        return if (currentIndex > 0) SHIFTS[currentIndex - 1] else null
+        return if (currentShiftIndex < SHIFTS.size-1) SHIFTS[currentShiftIndex + 1] else null
     }
 
+val isOurHubPreActive: Boolean
+    get() =
+        when ((currentPreShift?.shiftType)) {
+            ShiftType.ALL -> true
+            ShiftType.WON_AUTO -> didWeWinAuto()
+            ShiftType.LOST_AUTO -> !didWeWinAuto()
+            else -> true
+        } || DriverStation.getMatchTime() < 0.0
+
+@LoggedOutput(LogLevel.COMP, path = "GameData")
 val isOurHubActive: Boolean
     get() =
         when ((currentShift?.shiftType)) {
@@ -89,7 +103,7 @@ val isOurHubActive: Boolean
  val timeLeftForShift: Double
     get() = matchTime - (currentShift?.endTime ?: 0.sec)[sec]
 
-private fun Boolean.toShiftActiveMessage() = if(matchTime <= 30) "ENDGAME" else if(this) "ACTIVE" else "INACTIVE"
+private fun Boolean.toShiftActiveMessage() = if(matchTime <= 30) "ENDGAME" else if(matchTime > (2.min + 20.sec)[sec]) "AUTO" else if(matchTime in (2.min + 10.sec)[sec]..(2.min + 20.sec)[sec]) "TRANSITION" else if(this) "ACTIVE" else "INACTIVE"
 
 @LoggedOutput(LogLevel.COMP, path = "GameData")
 val primaryDashboardShiftMessage: String
@@ -99,5 +113,9 @@ val primaryDashboardShiftMessage: String
 val secondaryDashboardShiftMessage: String
     get() {
         val isNextShiftActive = !isOurHubActive || nextShift?.shiftType == ShiftType.ALL
-        return "${isNextShiftActive.toShiftActiveMessage()} in $timeLeftForShift seconds"
+        return "${isNextShiftActive.toShiftActiveMessage()} in ${timeLeftForShift.toInt()} seconds"
     }
+
+@LoggedOutput(LogLevel.COMP, path = "GameData")
+val shiftMessage: String
+    get() = "${currentShiftIndex+1}/${SHIFTS.size}"
