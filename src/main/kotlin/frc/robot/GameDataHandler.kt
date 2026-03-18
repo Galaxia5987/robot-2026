@@ -7,6 +7,7 @@ import frc.robot.lib.IS_RED
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.min
 import frc.robot.lib.extensions.sec
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 import org.littletonrobotics.junction.networktables.LoggedNetworkString
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
@@ -18,10 +19,13 @@ enum class ShiftType {
 }
 
 private val autoWinner =
-    LoggedNetworkString(
-        "/DriverDashboard/WinningAuto",
-        "AUTO"
-    ) // TODO: Remove and switch3
+    LoggedDashboardChooser<String>(
+        "DriverDashboard/WinningAuto"
+    ).apply {
+        addDefaultOption("AUTO", "AUTO")
+        addOption("RED", "RED")
+        addOption("BLUE", "BLUE")
+    }
 
 data class GameShift(
     val startTime: Time,

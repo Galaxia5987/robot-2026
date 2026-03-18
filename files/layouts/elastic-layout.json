@@ -3,14 +3,7 @@
   "grid_size": 128,
   "tabs": [
     {
-      "name": "Teleoperated",
-      "grid_layout": {
-        "layouts": [],
-        "containers": []
-      }
-    },
-    {
-      "name": "Autonomous",
+      "name": "Main",
       "grid_layout": {
         "layouts": [],
         "containers": [
@@ -125,7 +118,7 @@
             }
           },
           {
-            "title": "matchTime",
+            "title": "Match Time",
             "x": 640.0,
             "y": 0.0,
             "width": 512.0,
@@ -141,7 +134,7 @@
             }
           },
           {
-            "title": "timeLeftForShift",
+            "title": "Time left for shift",
             "x": 640.0,
             "y": 384.0,
             "width": 512.0,
@@ -152,12 +145,12 @@
               "period": 0.06,
               "data_type": "double",
               "time_display_mode": "Minutes and Seconds",
-              "red_start_time": 20,
-              "yellow_start_time": 30
+              "red_start_time": 12,
+              "yellow_start_time": 25
             }
           },
           {
-            "title": "primaryDashboardShiftMessage",
+            "title": "Current Shift",
             "x": 640.0,
             "y": 256.0,
             "width": 512.0,
@@ -170,7 +163,7 @@
             }
           },
           {
-            "title": "secondaryDashboardShiftMessage",
+            "title": "Next Shift",
             "x": 640.0,
             "y": 640.0,
             "width": 512.0,
@@ -222,7 +215,7 @@
             }
           },
           {
-            "title": "ballsFired",
+            "title": "Balls Fired",
             "x": 1152.0,
             "y": 384.0,
             "width": 768.0,
@@ -240,7 +233,7 @@
             }
           },
           {
-            "title": "shiftMessage",
+            "title": "Shift Index",
             "x": 384.0,
             "y": 384.0,
             "width": 256.0,
@@ -248,6 +241,32 @@
             "type": "Large Text Display",
             "properties": {
               "topic": "/AdvantageKit/RealOutputs/GameData/shiftMessage",
+              "period": 0.06,
+              "data_type": "string"
+            }
+          },
+          {
+            "title": "WinningAuto",
+            "x": 384.0,
+            "y": 640.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/DriverDashboard/WinningAuto",
+              "period": 0.06,
+              "sort_options": false
+            }
+          },
+          {
+            "title": "FMS Winner",
+            "x": 384.0,
+            "y": 512.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Large Text Display",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/GameData/AutonomousWinner",
               "period": 0.06,
               "data_type": "string"
             }

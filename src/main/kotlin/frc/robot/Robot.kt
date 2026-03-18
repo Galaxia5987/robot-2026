@@ -175,6 +175,7 @@ object Robot : LoggedRobot() {
             autonomousCommand.cancel()
         }
         Roller.setNormalCurrentLimits()
+        Logger.recordOutput("GameData/AutonomousWinner",DriverStation.getGameSpecificMessage())
     }
 
     override fun simulationInit() {
