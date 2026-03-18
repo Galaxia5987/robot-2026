@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.Filesystem
 import edu.wpi.first.wpilibj.PowerDistribution
 import edu.wpi.first.wpilibj.Timer
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.ShotCalculator.calculateYaw
@@ -33,6 +34,7 @@ import frc.robot.states.setpoints_manager.SetpointsManager
 import frc.robot.states.setpoints_manager.shooting_modes.compensatedTurretDistanceFromGoal
 import frc.robot.states.setpoints_manager.shooting_modes.turretOrientedChassisSpeeds
 import frc.robot.states.spindexer.SpindexerTriggers
+import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.intake.roller.Roller
 import frc.robot.subsystems.sensors.Sensors
 import frc.robot.subsystems.shooter.turret.compensatedTurretTranslationFieldOriented
@@ -133,6 +135,8 @@ object Robot : LoggedRobot() {
                 FollowPathCommand.warmupCommand(),
                 PathfindingCommand.warmupCommand()
             )
+
+        SmartDashboard.putData("ResetByVision", DriveCommands.resetByPoseEstimation().ignoringDisable(true))
     }
 
     /**

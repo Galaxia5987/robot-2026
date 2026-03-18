@@ -270,6 +270,20 @@
               "period": 0.06,
               "data_type": "string"
             }
+          },
+          {
+            "title": "Reset By Vision",
+            "x": 1152.0,
+            "y": 512.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Command",
+            "properties": {
+              "topic": "/SmartDashboard/ResetByVision",
+              "period": 0.06,
+              "show_type": false,
+              "maximize_button_space": true
+            }
           }
         ]
       }
