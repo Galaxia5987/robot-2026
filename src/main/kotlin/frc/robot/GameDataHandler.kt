@@ -45,6 +45,13 @@ fun didWeWinAuto(): Boolean {
     }
 }
 
+fun isOurShift(shift: GameShift?) = when ((shift?.shiftType)) {
+    ShiftType.ALL -> true
+    ShiftType.WON_AUTO -> didWeWinAuto()
+    ShiftType.LOST_AUTO -> !didWeWinAuto()
+    else -> true
+} || DriverStation.getMatchTime() < 0.0
+
 private val SHIFTS =
     listOf(
         GameShift(
@@ -70,7 +77,7 @@ val currentShiftIndex
     get() = SHIFTS.indexOfFirst { matchTime.sec in it.endTime..it.startTime }
 
 val currentPreShift
-    get() = SHIFTS.findLast { (matchTime.sec) in it.endTime..it.startTime+2.sec }
+    get() = SHIFTS.findLast { (matchTime.sec) in it.endTime..it.startTime+(if(isOurShift(it)) 2.0.sec else 0.sec) }
 
 val currentShift: GameShift?
     get() = SHIFTS.getOrNull(currentShiftIndex)
@@ -81,23 +88,11 @@ val nextShift: GameShift?
     }
 
 val isOurHubPreActive: Boolean
-    get() =
-        when ((currentPreShift?.shiftType)) {
-            ShiftType.ALL -> true
-            ShiftType.WON_AUTO -> didWeWinAuto()
-            ShiftType.LOST_AUTO -> !didWeWinAuto()
-            else -> true
-        } || DriverStation.getMatchTime() < 0.0
+    get() = isOurShift(currentPreShift)
 
 @LoggedOutput(LogLevel.COMP, path = "GameData")
 val isOurHubActive: Boolean
-    get() =
-        when ((currentShift?.shiftType)) {
-            ShiftType.ALL -> true
-            ShiftType.WON_AUTO -> didWeWinAuto()
-            ShiftType.LOST_AUTO -> !didWeWinAuto()
-            else -> true
-        } || DriverStation.getMatchTime() < 0.0
+    get() = isOurShift(currentShift)
 
 @LoggedOutput(LogLevel.COMP, path = "GameData")
  val timeLeftForShift: Double
