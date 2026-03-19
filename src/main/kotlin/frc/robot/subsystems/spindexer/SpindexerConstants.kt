@@ -21,6 +21,18 @@ const val GEAR_RATIO = 9.0
 
 val SETPOINT_TOLERANCE = 1.0.rps
 
+val REGULAR_CURRENT_LIMITS =
+    createCurrentLimits(
+        supplyCurrentLimit = 20.amps,
+        supplyCurrentPeakDifference = 5.amps
+    )
+
+val LOW_CURRENT_LIMITS =
+    createCurrentLimits(
+        supplyCurrentLimit = 10.amps,
+        supplyCurrentPeakDifference = 5.amps
+    )
+
 val MOTOR_CONFIG =
     TalonFXConfiguration().apply {
         Slot0 = GAINS.toSlotConfig()
@@ -28,7 +40,7 @@ val MOTOR_CONFIG =
             MotorOutputConfigs().apply {
                 Inverted = InvertedValue.CounterClockwise_Positive
             }
-        CurrentLimits = createCurrentLimits(20.amps, 5.0.amps)
+        CurrentLimits = REGULAR_CURRENT_LIMITS
         Feedback =
             FeedbackConfigs().apply { SensorToMechanismRatio = GEAR_RATIO }
     }

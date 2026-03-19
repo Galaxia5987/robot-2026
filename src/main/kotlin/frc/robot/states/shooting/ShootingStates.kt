@@ -16,7 +16,7 @@ enum class ShootingState {
     fun set(): Command =
         Commands.runOnce({
             state = this
-//            println("STATE IS NOW $state!!!")
+            //            println("STATE IS NOW $state!!!")
             Logger.recordOutput("StateMachines/Shooting/state", state)
         })
 }

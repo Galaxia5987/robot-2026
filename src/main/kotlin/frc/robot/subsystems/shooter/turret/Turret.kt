@@ -11,13 +11,11 @@ import frc.robot.lib.createDisableTriggerForCoast
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.rad
 import frc.robot.lib.extensions.radians
-import frc.robot.lib.extensions.rot
 import frc.robot.lib.extensions.rotations
 import frc.robot.lib.universal_motor.MotorLogConfig
 import frc.robot.lib.universal_motor.UniversalTalonFX
-import org.littletonrobotics.junction.Logger
-import kotlin.math.cos
 import kotlin.math.sin
+import org.littletonrobotics.junction.Logger
 
 object Turret : SubsystemBase() {
     private val motor: UniversalTalonFX =
@@ -43,9 +41,9 @@ object Turret : SubsystemBase() {
     val position
         get() = motor.inputs.position
 
-    val atSetpoint = Trigger {
-        motor.inputs.position.isNear(setpoint, SETPOINT_TOLERANCE)
-    }.debounce(0.15, Debouncer.DebounceType.kFalling)
+    val atSetpoint =
+        Trigger { motor.inputs.position.isNear(setpoint, SETPOINT_TOLERANCE) }
+            .debounce(0.15, Debouncer.DebounceType.kFalling)
 
     init {
         absoluteEncoder.configurator.apply(ENCODER_CONFIG)
@@ -70,7 +68,8 @@ object Turret : SubsystemBase() {
             setpointVelocityRps = deltaRotations / dt
         }
 
-        val diffFromForcePoint = (motor.inputs.position - TURRET_ZERO_FORCE_POINT)[rad]
+        val diffFromForcePoint =
+            (motor.inputs.position - TURRET_ZERO_FORCE_POINT)[rad]
 
         setpoint = newSetpoint
         lastSetpoint = newSetpoint
@@ -81,7 +80,7 @@ object Turret : SubsystemBase() {
                 .withPosition(setpoint)
                 .withFeedForward(
                     kSetpointVelocity * setpointVelocityRps +
-                            kTension * Math.sin(diffFromForcePoint)
+                        kTension * Math.sin(diffFromForcePoint)
                 )
         )
     }

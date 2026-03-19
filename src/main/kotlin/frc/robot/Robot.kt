@@ -17,13 +17,9 @@ import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
-import frc.robot.ShotCalculator.calculateYaw
 import frc.robot.lib.BetterPoseEstimator
-import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.lib.extensions.get
-import frc.robot.lib.extensions.m
-import frc.robot.lib.extensions.toPose
 import frc.robot.lib.extensions.toPose3d
 import frc.robot.lib.logged_output.LoggedOutputManager
 import frc.robot.sim.MapleSimHopper
@@ -31,14 +27,10 @@ import frc.robot.sim.MapleSimIntake
 import frc.robot.sim.MapleSimShooter
 import frc.robot.states.intaking.IntakingTriggers
 import frc.robot.states.setpoints_manager.SetpointsManager
-import frc.robot.states.setpoints_manager.shooting_modes.compensatedTurretDistanceFromGoal
-import frc.robot.states.setpoints_manager.shooting_modes.turretOrientedChassisSpeeds
 import frc.robot.states.spindexer.SpindexerTriggers
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.intake.roller.Roller
 import frc.robot.subsystems.sensors.Sensors
-import frc.robot.subsystems.shooter.turret.compensatedTurretTranslationFieldOriented
-import frc.robot.subsystems.shooter.turret.getTurretTangentialVelocityFieldRelative
 import java.io.File
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.*
@@ -136,7 +128,10 @@ object Robot : LoggedRobot() {
                 PathfindingCommand.warmupCommand()
             )
 
-        SmartDashboard.putData("ResetByVision", DriveCommands.resetByPoseEstimation().ignoringDisable(true))
+        SmartDashboard.putData(
+            "ResetByVision",
+            DriveCommands.resetByPoseEstimation().ignoringDisable(true)
+        )
     }
 
     /**
@@ -179,7 +174,10 @@ object Robot : LoggedRobot() {
             autonomousCommand.cancel()
         }
         Roller.setNormalCurrentLimits()
-        Logger.recordOutput("GameData/AutonomousWinner",DriverStation.getGameSpecificMessage())
+        Logger.recordOutput(
+            "GameData/AutonomousWinner",
+            DriverStation.getGameSpecificMessage()
+        )
     }
 
     override fun simulationInit() {

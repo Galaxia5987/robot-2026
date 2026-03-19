@@ -8,7 +8,6 @@ import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.min
 import frc.robot.lib.extensions.sec
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
-import org.littletonrobotics.junction.networktables.LoggedNetworkString
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
@@ -19,9 +18,7 @@ enum class ShiftType {
 }
 
 private val autoWinner =
-    LoggedDashboardChooser<String>(
-        "DriverDashboard/WinningAuto"
-    ).apply {
+    LoggedDashboardChooser<String>("DriverDashboard/WinningAuto").apply {
         addDefaultOption("AUTO", "AUTO")
         addOption("RED", "RED")
         addOption("BLUE", "BLUE")
@@ -49,12 +46,13 @@ fun didWeWinAuto(): Boolean {
     }
 }
 
-fun isOurShift(shift: GameShift?) = when ((shift?.shiftType)) {
-    ShiftType.ALL -> true
-    ShiftType.WON_AUTO -> didWeWinAuto()
-    ShiftType.LOST_AUTO -> !didWeWinAuto()
-    else -> true
-} || DriverStation.getMatchTime() < 0.0
+fun isOurShift(shift: GameShift?) =
+    when ((shift?.shiftType)) {
+        ShiftType.ALL -> true
+        ShiftType.WON_AUTO -> didWeWinAuto()
+        ShiftType.LOST_AUTO -> !didWeWinAuto()
+        else -> true
+    } || DriverStation.getMatchTime() < 0.0
 
 private val SHIFTS =
     listOf(
@@ -75,20 +73,28 @@ val matchTime:
     Double // getMatchTime returns time left in the current period, so add 2min 20sec when in auto
     get() =
         (DriverStation.getMatchTime().sec +
-            (if (DriverStation.isAutonomous()) (2.min + 20.sec) else 0.sec)).`in`(Units.Seconds)
+                (if (DriverStation.isAutonomous()) (2.min + 20.sec) else 0.sec))
+            .`in`(Units.Seconds)
 
 val currentShiftIndex
     get() = SHIFTS.indexOfFirst { matchTime.sec in it.endTime..it.startTime }
 
 val currentPreShift
-    get() = SHIFTS.findLast { (matchTime.sec) in it.endTime..it.startTime+(if(isOurShift(it)) 2.0.sec else 0.sec) }
+    get() =
+        SHIFTS.findLast {
+            (matchTime.sec) in
+                it.endTime..it.startTime +
+                        (if (isOurShift(it)) 2.0.sec else 0.sec)
+        }
 
 val currentShift: GameShift?
     get() = SHIFTS.getOrNull(currentShiftIndex)
 
 val nextShift: GameShift?
     get() {
-        return if (currentShiftIndex < SHIFTS.size-1) SHIFTS[currentShiftIndex + 1] else null
+        return if (currentShiftIndex < SHIFTS.size - 1)
+            SHIFTS[currentShiftIndex + 1]
+        else null
     }
 
 val isOurHubPreActive: Boolean
@@ -99,10 +105,15 @@ val isOurHubActive: Boolean
     get() = isOurShift(currentShift)
 
 @LoggedOutput(LogLevel.COMP, path = "GameData")
- val timeLeftForShift: Double
+val timeLeftForShift: Double
     get() = matchTime - (currentShift?.endTime ?: 0.sec)[sec]
 
-private fun Boolean.toShiftActiveMessage() = if(matchTime <= 30) "ENDGAME" else if(matchTime > (2.min + 20.sec)[sec]) "AUTO" else if(matchTime in (2.min + 10.sec)[sec]..(2.min + 20.sec)[sec]) "TRANSITION" else if(this) "ACTIVE" else "INACTIVE"
+private fun Boolean.toShiftActiveMessage() =
+    if (matchTime <= 30) "ENDGAME"
+    else if (matchTime > (2.min + 20.sec)[sec]) "AUTO"
+    else if (matchTime in (2.min + 10.sec)[sec]..(2.min + 20.sec)[sec])
+        "TRANSITION"
+    else if (this) "ACTIVE" else "INACTIVE"
 
 @LoggedOutput(LogLevel.COMP, path = "GameData")
 val primaryDashboardShiftMessage: String
@@ -111,7 +122,8 @@ val primaryDashboardShiftMessage: String
 @LoggedOutput(LogLevel.COMP, path = "GameData")
 val secondaryDashboardShiftMessage: String
     get() {
-        val isNextShiftActive = !isOurHubActive || nextShift?.shiftType == ShiftType.ALL
+        val isNextShiftActive =
+            !isOurHubActive || nextShift?.shiftType == ShiftType.ALL
         return "${isNextShiftActive.toShiftActiveMessage()} in ${timeLeftForShift.toInt()} seconds"
     }
 

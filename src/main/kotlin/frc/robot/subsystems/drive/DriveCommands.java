@@ -101,11 +101,19 @@ public class DriveCommands {
                 .ignoringDisable(true);
     }
 
-    public static Command resetByPoseEstimation(){
-        return drive.defer(()-> drive.runOnce(() ->{
-            drive.resetOdometry(BetterPoseEstimator.getInstance().getEstimatedPose());
-            drive.resetGyro(BetterPoseEstimator.getInstance().getEstimatedPose().getRotation().getMeasure());
-        }));
+    public static Command resetByPoseEstimation() {
+        return drive.defer(
+                () ->
+                        drive.runOnce(
+                                () -> {
+                                    drive.resetOdometry(
+                                            BetterPoseEstimator.getInstance().getEstimatedPose());
+                                    drive.resetGyro(
+                                            BetterPoseEstimator.getInstance()
+                                                    .getEstimatedPose()
+                                                    .getRotation()
+                                                    .getMeasure());
+                                }));
     }
 
     /**
@@ -129,7 +137,10 @@ public class DriveCommands {
                     double maxSpeed = drive.getMaxLinearSpeedMetersPerSec();
                     double maxAngularSpeed = drive.getMaxAngularSpeedRadPerSec();
                     if (SetpointsManager.INSTANCE.isShootingOnMove().getAsBoolean()
-                            && FieldTriggersKt.getInAllianceZone().getAsBoolean() &&  !Objects.requireNonNull(RobotContainer.INSTANCE.getShooting()).getDontShootTrigger().getAsBoolean()) {
+                            && FieldTriggersKt.getInAllianceZone().getAsBoolean()
+                            && !Objects.requireNonNull(RobotContainer.INSTANCE.getShooting())
+                                    .getDontShootTrigger()
+                                    .getAsBoolean()) {
                         maxSpeed = 2.0;
                         maxAngularSpeed = 3.14;
                     }
@@ -181,7 +192,8 @@ public class DriveCommands {
                             double omega;
                             if (Math.hypot(xSupplier.getAsDouble(), ySupplier.getAsDouble())
                                             < DEADBAND
-                                    || Math.abs(omegaSupplier.getAsDouble()) > DEADBAND || FieldTriggersKt.getInAllianceZone().getAsBoolean()) {
+                                    || Math.abs(omegaSupplier.getAsDouble()) > DEADBAND
+                                    || FieldTriggersKt.getInAllianceZone().getAsBoolean()) {
                                 omega =
                                         MathUtil.applyDeadband(
                                                 omegaSupplier.getAsDouble(), DEADBAND);

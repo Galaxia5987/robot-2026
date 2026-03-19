@@ -4,17 +4,18 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.drive
 import frc.robot.isOurHubPreActive
 import frc.robot.lib.extensions.logTrigger
-import frc.robot.states.setpoints_manager.shooting_modes.turretDistanceFromGoal
 import frc.robot.subsystems.shooter.turret.turretTranslationFieldOriented
 
 const val FIELD_LOGGING_PATH = "Field"
 
 val inAllianceZone =
-    Trigger { ALLIANCE_ZONE.contains(turretTranslationFieldOriented) }.and { !CLIMB_RECTANGLE.contains(turretTranslationFieldOriented)}
+    Trigger { ALLIANCE_ZONE.contains(turretTranslationFieldOriented) }
+        .and { !CLIMB_RECTANGLE.contains(turretTranslationFieldOriented) }
         .logTrigger("$FIELD_LOGGING_PATH/inAllianceZone")
 
 val inExtendedAllianceZone =
-    Trigger { EXTENDED_ALLIANCE_ZONE.contains(turretTranslationFieldOriented) }.and { !CLIMB_RECTANGLE.contains(turretTranslationFieldOriented)}
+    Trigger { EXTENDED_ALLIANCE_ZONE.contains(turretTranslationFieldOriented) }
+        .and { !CLIMB_RECTANGLE.contains(turretTranslationFieldOriented) }
         .logTrigger("$FIELD_LOGGING_PATH/inExtendedAllianceZone")
 
 val isCloserToDepotSide: Trigger =
