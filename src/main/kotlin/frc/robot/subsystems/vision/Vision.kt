@@ -49,8 +49,7 @@ open class Vision(
                 MAX_Z_ERROR || // Must have realistic Z coordinate
             // Must be within the field boundaries
             !(pose.x in 0.0..APRILTAG_LAYOUT.fieldLength &&
-                pose.y in 0.0..APRILTAG_LAYOUT.fieldWidth) &&
-                averageTagDistance > MAX_DISTANCE_METERS
+                pose.y in 0.0..APRILTAG_LAYOUT.fieldWidth) || averageTagDistance > MAX_DISTANCE_METERS
 
     override fun periodic() {
         var invalidPosesCount = 0
