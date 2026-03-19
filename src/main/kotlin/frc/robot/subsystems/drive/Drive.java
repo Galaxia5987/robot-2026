@@ -30,7 +30,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearAcceleration;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.Alert;
@@ -471,6 +473,10 @@ public class Drive extends SubsystemBase implements SysIdable {
             states[i] = modules[i].getPosition();
         }
         return states;
+    }
+
+    public AngularVelocity getGyroOmega(){
+        return Units.RadiansPerSecond.of(gyroInputs.yawVelocityRadPerSec);
     }
 
     /** Returns the measured chassis speeds of the robot. */
