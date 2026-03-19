@@ -110,12 +110,10 @@ object SetpointsManager {
             .onTrue(
                 Flywheel.setLowCurrentLimits(),
                 PreShooter.setLowCurrentLimits(),
-                Spindexer.setLowCurrentLimits()
             )
             .onFalse(
                 Flywheel.setRegularCurrentLimits(),
                 PreShooter.setLowCurrentLimits(),
-                Spindexer.setRegularCurrentLimits()
             )
 }
 
