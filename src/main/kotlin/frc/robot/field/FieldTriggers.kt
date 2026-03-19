@@ -13,6 +13,10 @@ val inAllianceZone =
     Trigger { ALLIANCE_ZONE.contains(turretTranslationFieldOriented) }.and { !CLIMB_RECTANGLE.contains(turretTranslationFieldOriented)}
         .logTrigger("$FIELD_LOGGING_PATH/inAllianceZone")
 
+val inExtendedAllianceZone =
+    Trigger { EXTENDED_ALLIANCE_ZONE.contains(turretTranslationFieldOriented) }.and { !CLIMB_RECTANGLE.contains(turretTranslationFieldOriented)}
+        .logTrigger("$FIELD_LOGGING_PATH/inExtendedAllianceZone")
+
 val isCloserToDepotSide: Trigger =
     Trigger { OUTPOST_CROSS_LINE_RECTANGLE.contains(drive.pose.translation) }
         .negate()

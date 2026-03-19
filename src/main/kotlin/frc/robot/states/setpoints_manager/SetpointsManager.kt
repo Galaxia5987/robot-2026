@@ -31,7 +31,7 @@ object SetpointsManager {
     var isFeeding = false
 
     private val goalHubTrigger =
-        inAllianceZone
+        inExtendedAllianceZone
             .or(isAuto)
             .onTrue(
                 runOnce({
@@ -43,7 +43,7 @@ object SetpointsManager {
 
     private val goalDepotTrigger =
         isCloserToDepotSide
-            .and(!inAllianceZone)
+            .and(!inExtendedAllianceZone)
             .and(isAuto.negate())
             .onTrue(
                 runOnce({
@@ -56,7 +56,7 @@ object SetpointsManager {
     private val goalOutpostTrigger =
         isCloserToDepotSide
             .negate()
-            .and(!inAllianceZone)
+            .and(!inExtendedAllianceZone)
             .and(isAuto.negate())
             .onTrue(
                 runOnce({

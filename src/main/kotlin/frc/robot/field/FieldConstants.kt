@@ -16,6 +16,8 @@ import frc.robot.subsystems.shooter.hood.CROUCH_TOLERANCE
 
 val ALLIANCE_ZONE_WIDTH: Distance = 4.03.m
 
+val EXTENDED_ALLIANCE_ZONE_WIDTH: Distance = 5.237.m
+
 val ALLIANCE_ZONE_HEIGHT: Distance = 8.07.m
 
 private val HUB_TRANSLATION_BLUE = Translation2d(4620.41.mm, 4034.63.mm)
@@ -53,8 +55,16 @@ private val ALLIANCE_ZONE_BLUE_RECTANGLE = Rectangle2d(
     Translation2d(ALLIANCE_ZONE_WIDTH, Int.MAX_VALUE.m)
 )
 
+private val EXTENDED_ALLIANCE_ZONE_BLUE_RECTANGLE = Rectangle2d(
+    Translation2d(0.m, Int.MIN_VALUE.m),
+    Translation2d(EXTENDED_ALLIANCE_ZONE_WIDTH, Int.MAX_VALUE.m)
+)
+
 val ALLIANCE_ZONE: Rectangle2d
     get() = ALLIANCE_ZONE_BLUE_RECTANGLE.flipIfNeeded()
+
+val EXTENDED_ALLIANCE_ZONE: Rectangle2d
+    get() = EXTENDED_ALLIANCE_ZONE_BLUE_RECTANGLE.flipIfNeeded()
 
 private val OUTPOST_CROSS_LINE_BLUE_RECTANGLE = Rectangle2d(
     Translation2d(0.m, Int.MIN_VALUE.m),

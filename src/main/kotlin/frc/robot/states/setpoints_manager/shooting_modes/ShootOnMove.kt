@@ -30,6 +30,7 @@ import frc.robot.subsystems.shooter.turret.turretAngleToHub
 import kotlin.math.tanh
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
+import kotlin.math.abs
 
 private fun ChassisSpeeds.to2dVector(): Translation2d =
     Translation2d(this.vxMetersPerSecond, this.vyMetersPerSecond)
@@ -46,15 +47,19 @@ val turretOrientedChassisSpeeds: Translation2d
 
 private fun getTurretSetpoint(): Angle {
     val speeds = turretOrientedChassisSpeeds
-    return constraintTurretLimits(
+    val constrainedWithCompensation = constraintTurretLimits(
         turretAngleToHub -
                 calculateYaw(
                     compensatedTurretDistanceFromGoal[m],
                     speeds.x,
                     speeds.y
-                )
-                    .deg
-    )
+                ).deg)
+
+    val constrainedStaticShooting = constraintTurretLimits(turretAngleToHub)
+    if(abs(constrainedWithCompensation[deg] - constrainedStaticShooting[deg]) > 180){
+        return constrainedStaticShooting
+    }
+    return constrainedWithCompensation
 }
 
 private fun getHoodSetpoint(): Angle {
