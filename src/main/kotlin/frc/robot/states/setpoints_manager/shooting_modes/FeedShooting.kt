@@ -20,14 +20,29 @@ import frc.robot.subsystems.shooter.pre_shooter.PreShooterVelocity
 import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.shooter.turret.constraintTurretLimits
 import frc.robot.subsystems.shooter.turret.turretAngleToHub
+import kotlin.math.abs
 
 private fun getTurretSetpoint(): Angle {
     val speeds = turretOrientedChassisSpeeds
-    return constraintTurretLimits(
-        turretAngleToHub -
-            calculateFeedingYaw(turretDistanceFromGoal[m], speeds.x, speeds.y)
-                .deg
-    )
+    val constrainedWithCompensation =
+        constraintTurretLimits(
+            turretAngleToHub -
+                calculateFeedingYaw(
+                        compensatedTurretDistanceFromGoal[m],
+                        speeds.x,
+                        speeds.y
+                    )
+                    .deg
+        )
+
+    val constrainedStaticShooting = constraintTurretLimits(turretAngleToHub)
+    if (
+        abs(constrainedWithCompensation[deg] - constrainedStaticShooting[deg]) >
+            180
+    ) {
+        return constrainedStaticShooting
+    }
+    return constrainedWithCompensation
 }
 
 private fun getHoodSetpoint(): Angle {

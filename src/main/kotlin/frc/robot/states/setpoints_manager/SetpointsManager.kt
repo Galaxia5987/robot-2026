@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.field.*
 import frc.robot.isAuto
 import frc.robot.lib.extensions.not
+import frc.robot.lib.extensions.onFalse
+import frc.robot.lib.extensions.onTrue
 import frc.robot.lib.extensions.toPose
 import frc.robot.states.DriverOverrides
 import frc.robot.states.setpoints_manager.SetpointsManager.ShootingType
@@ -18,6 +20,9 @@ import frc.robot.states.setpoints_manager.shooting_modes.feedShootingMap
 import frc.robot.states.setpoints_manager.shooting_modes.interpolationShootingMap
 import frc.robot.states.setpoints_manager.shooting_modes.shootOnMoveMap
 import frc.robot.states.setpoints_manager.shooting_modes.staticShootingMap
+import frc.robot.subsystems.shooter.flywheel.Flywheel
+import frc.robot.subsystems.shooter.pre_shooter.PreShooter
+import frc.robot.subsystems.spindexer.Spindexer
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 
@@ -31,7 +36,7 @@ object SetpointsManager {
     var isFeeding = false
 
     private val goalHubTrigger =
-        inAllianceZone
+        inExtendedAllianceZone
             .or(isAuto)
             .onTrue(
                 runOnce({
@@ -43,7 +48,7 @@ object SetpointsManager {
 
     private val goalDepotTrigger =
         isCloserToDepotSide
-            .and(!inAllianceZone)
+            .and(!inExtendedAllianceZone)
             .and(isAuto.negate())
             .onTrue(
                 runOnce({
@@ -56,7 +61,7 @@ object SetpointsManager {
     private val goalOutpostTrigger =
         isCloserToDepotSide
             .negate()
-            .and(!inAllianceZone)
+            .and(!inExtendedAllianceZone)
             .and(isAuto.negate())
             .onTrue(
                 runOnce({
@@ -100,7 +105,16 @@ object SetpointsManager {
     }
 
     val isUsingStaticSetpoints = Trigger { shootingType == ShootingType.STATIC }
-    val isUsingFeeding = Trigger { isFeeding }
+    val isUsingFeeding =
+        Trigger { isFeeding }
+            .onTrue(
+                Flywheel.setLowCurrentLimits(),
+                PreShooter.setLowCurrentLimits(),
+            )
+            .onFalse(
+                Flywheel.setRegularCurrentLimits(),
+                PreShooter.setLowCurrentLimits(),
+            )
 }
 
 fun <T : SubsystemBase, M : () -> Measure<out Unit>> T.aimingSetpoint(): M {

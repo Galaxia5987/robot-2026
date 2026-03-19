@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.47284873949579886,
-        "y": 4.98010924369748
+        "x": 0.48,
+        "y": 4.98
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.180142857139647,
-        "y": 4.9191344537850314
+        "x": 2.1872941176438476,
+        "y": 4.919025210087552
       },
       "isLocked": false,
       "linkedName": "depot"
@@ -20,7 +20,7 @@
         "y": 7.3581115047669785
       },
       "prevControl": {
-        "x": 1.5275542961640707,
+        "x": 1.5275542961640705,
         "y": 6.381234381382189
       },
       "nextControl": {
@@ -85,7 +85,7 @@
   "eventMarkers": [
     {
       "name": "setIntaking",
-      "waypointRelativePos": 1.6685294117646903,
+      "waypointRelativePos": 1.6473529411764742,
       "endWaypointRelativePos": null,
       "command": null
     }

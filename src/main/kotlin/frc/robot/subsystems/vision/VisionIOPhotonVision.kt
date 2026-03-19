@@ -21,7 +21,6 @@ import frc.robot.subsystems.vision.VisionIO.VisionIOInputs
 import org.photonvision.PhotonCamera
 import org.photonvision.PhotonPoseEstimator
 
-
 /** IO implementation for real PhotonVision hardware. */
 open class VisionIOPhotonVision(
     name: String,
@@ -63,36 +62,48 @@ open class VisionIOPhotonVision(
 
                     val estimatedRobotPose = estimatedPose.get()
 
-                    observation = PoseObservation(
-                        estimatedRobotPose.timestampSeconds,
-                        estimatedRobotPose.estimatedPose,
-                        estimatedRobotPose.targetsUsed
-                            .map { it.poseAmbiguity }
-                            .average(),
-                        estimatedRobotPose.targetsUsed.size,
-                        estimatedRobotPose.targetsUsed
-                            .map { it.bestCameraToTarget.translation.norm }
-                            .average()
-                    )
+                    observation =
+                        PoseObservation(
+                            estimatedRobotPose.timestampSeconds,
+                            estimatedRobotPose.estimatedPose,
+                            estimatedRobotPose.targetsUsed
+                                .map { it.poseAmbiguity }
+                                .average(),
+                            estimatedRobotPose.targetsUsed.size,
+                            estimatedRobotPose.targetsUsed
+                                .map { it.bestCameraToTarget.translation.norm }
+                                .average()
+                        )
                 } else {
                     val target = result.targets[0]
                     val tagPose = APRILTAG_LAYOUT.getTagPose(target.fiducialId)
                     if (tagPose.isPresent) {
                         val fieldToTarget =
-                            Transform3d(tagPose.get().translation, tagPose.get().rotation)
+                            Transform3d(
+                                tagPose.get().translation,
+                                tagPose.get().rotation
+                            )
                         val cameraToTarget = target.bestCameraToTarget
-                        val fieldToCamera = fieldToTarget.plus(cameraToTarget.inverse())
-                        val fieldToRobot = fieldToCamera.plus(poseEstimator.robotToCameraTransform.inverse())
-                        val robotPose = Pose3d(fieldToRobot.translation, fieldToRobot.rotation)
+                        val fieldToCamera =
+                            fieldToTarget.plus(cameraToTarget.inverse())
+                        val fieldToRobot =
+                            fieldToCamera.plus(
+                                poseEstimator.robotToCameraTransform.inverse()
+                            )
+                        val robotPose =
+                            Pose3d(
+                                fieldToRobot.translation,
+                                fieldToRobot.rotation
+                            )
 
-
-                        observation = PoseObservation(
-                            result.timestampSeconds,
-                            robotPose,
-                            target.poseAmbiguity,
-                            1,
-                            cameraToTarget.translation.norm,
-                        )
+                        observation =
+                            PoseObservation(
+                                result.timestampSeconds,
+                                robotPose,
+                                target.poseAmbiguity,
+                                1,
+                                cameraToTarget.translation.norm,
+                            )
                     }
                 }
 

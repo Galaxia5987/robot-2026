@@ -51,7 +51,7 @@ const val MAX_DISTANCE_METERS = 6.0
 private val TURRET_TRANSLATION =
     Translation3d((-117.5).mm, 207.5.mm, 360.888.mm)
 val CAMERA_TO_TURRET_TRANSLATION =
-    Translation3d((-29.605).mm, 121.93750.mm, 167.35652.mm)
+    Translation3d((-45.19869).mm, 120.93750.mm, 177.00942.mm)
 
 val TURRET_CAMERA_ROBOT_TO_CAMERA: Transform3d
     get() =

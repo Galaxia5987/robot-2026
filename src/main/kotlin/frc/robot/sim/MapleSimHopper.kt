@@ -3,7 +3,6 @@ package frc.robot.sim
 import edu.wpi.first.math.geometry.Pose3d
 import edu.wpi.first.math.geometry.Rotation3d
 import edu.wpi.first.math.geometry.Transform3d
-import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.drive
 import frc.robot.lib.extensions.cm
@@ -13,7 +12,6 @@ import frc.robot.lib.extensions.toPose3d
 import frc.robot.lib.extensions.toRotation3d
 import frc.robot.lib.extensions.toTranslation3d
 import frc.robot.lib.getTranslation2d
-import frc.robot.subsystems.sensors.Sensors
 import kotlin.collections.flatMap
 
 class MapleSimHopper {
@@ -87,11 +85,11 @@ class MapleSimHopper {
         get() = createLayers(3, addForwardRows = true).toTypedArray()
     var fuelInRobotPoses: () -> Array<Pose3d> = { empty }
 
-    val emptyTrigger: Trigger = Trigger ({false})
+    val emptyTrigger: Trigger = Trigger({ false })
 
-    val thirdFullTrigger: Trigger = Trigger ({false})
+    val thirdFullTrigger: Trigger = Trigger({ false })
 
-    val halfFullTrigger: Trigger = Trigger ({false})
+    val halfFullTrigger: Trigger = Trigger({ false })
 
-    val fullTrigger: Trigger = Trigger ({false})
+    val fullTrigger: Trigger = Trigger({ false })
 }

@@ -61,8 +61,7 @@ val setRollerNormalCurrentLimit =
 
 fun depotMainShootOnMove(): Command =
     Commands.sequence(
-        runPathAndReset("StartToFuelDepotSide"),
-        runPath("FuelDepotSideToDepotShootOnMove"),
+        runPath("DepotSidePickupAndReturn"),
         Commands.waitTime(5.sec).alongWith(IntakingStates.PUMPING.set()),
         runPath("DepotPickupAndReturn")
     )

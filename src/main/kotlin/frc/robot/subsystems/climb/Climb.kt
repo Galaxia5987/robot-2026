@@ -49,10 +49,9 @@ object Climb : SubsystemBase(), ClimbLevelsCommandFactory {
         )
     }
 
-    private fun setVoltage(voltage: Voltage): Command =
-        runOnce {
-            motor.setControl(voltageOut.withOutput(voltage))
-        }
+    private fun setVoltage(voltage: Voltage): Command = runOnce {
+        motor.setControl(voltageOut.withOutput(voltage))
+    }
 
     fun stop(): Command = setVoltage(0.volts)
     fun up(): Command = setVoltage(3.volts)

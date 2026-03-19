@@ -327,7 +327,8 @@ public class Drive extends SubsystemBase implements SysIdable {
                                         getModulePositions(),
                                         gyroInputs.rollPosition,
                                         gyroInputs.pitchPosition,
-                                        gyroInputs.yawPosition)); // TODO: Add handling for if the gyro
+                                        gyroInputs.yawPosition)); // TODO: Add handling for if the
+                // gyro
                 // isn't connected
                 BetterPoseEstimator.getInstance().setRobotVelocity(getChassisSpeeds());
             }

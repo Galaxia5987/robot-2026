@@ -23,6 +23,8 @@ import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.shooter.turret.constraintTurretLimits
 import frc.robot.subsystems.shooter.turret.getTurretTangentialVelocityFieldRelative
 import frc.robot.subsystems.shooter.turret.turretAngleToHub
+import kotlin.math.abs
+import kotlin.math.tanh
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 import kotlin.math.tanh
@@ -69,34 +71,44 @@ val turretOrientedChassisSpeeds: Translation2d
             .rotateBy(Turret.position.toRotation2d())
     }
 
-
 private fun getTurretSetpoint(): Angle {
     val speeds = turretOrientedChassisSpeeds
-    return constraintTurretLimits(
-        turretAngleToHub -
+    val constrainedWithCompensation =
+        constraintTurretLimits(
+            turretAngleToHub -
                 calculateYaw(
-                    compensatedTurretDistanceFromGoal[m],
-                    speeds.x,
-                    speeds.y
-                )
+                        compensatedTurretDistanceFromGoal[m],
+                        speeds.x,
+                        speeds.y
+                    )
                     .deg
-    )
+        )
+
+    val constrainedStaticShooting = constraintTurretLimits(turretAngleToHub)
+    if (
+        abs(constrainedWithCompensation[deg] - constrainedStaticShooting[deg]) >
+            180
+    ) {
+        return constrainedStaticShooting
+    }
+    return constrainedWithCompensation
 }
 
 private fun getHoodSetpoint(): Angle {
     val turretOrientedChassisSpeeds = turretOrientedChassisSpeeds
     return (90.deg -
-            calculatePitch(
+        calculatePitch(
                 compensatedTurretDistanceFromGoal[m],
                 turretOrientedChassisSpeeds.x,
                 turretOrientedChassisSpeeds.y
             )
-                .deg)
+            .deg)
 }
 
 private fun getFlywheelSetpoint(): AngularVelocity {
     val turretOrientedChassisSpeeds = turretOrientedChassisSpeeds
-    var output = ((0.97 - (0.05 * tanh(turretOrientedChassisSpeeds.norm))) *
+    var output =
+        ((0.97 - (0.05 * tanh(turretOrientedChassisSpeeds.norm))) *
             calculateAngularVelocity(
                 calculateVelocity(
                     compensatedTurretDistanceFromGoal[m],

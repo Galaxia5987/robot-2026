@@ -207,12 +207,9 @@ object LoggedOutputManager : SubsystemBase() {
                             recordOutput(key, it as Measure<*>)
                         }
                     }
-
                 String::class.java.isAssignableFrom(type) ->
                     addRunnable(key) {
-                        value().ifNotNull {
-                            recordOutput(key, it as String)
-                        }
+                        value().ifNotNull { recordOutput(key, it as String) }
                     }
                 else -> {
                     addRunnable(key) {

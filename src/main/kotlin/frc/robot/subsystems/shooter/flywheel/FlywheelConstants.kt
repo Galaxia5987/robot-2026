@@ -38,6 +38,18 @@ enum class FlywheelVelocities(val velocity: AngularVelocity) {
     ZERO(0.rps)
 }
 
+val REGULAR_CURRENT_LIMITS =
+    createCurrentLimits(
+        supplyCurrentLimit = 30.amps,
+        supplyCurrentPeakDifference = 5.amps
+    )
+
+val LOW_CURRENT_LIMITS =
+    createCurrentLimits(
+        supplyCurrentLimit = 20.amps,
+        supplyCurrentPeakDifference = 5.amps
+    )
+
 val MOTOR_CONFIG =
     TalonFXConfiguration().apply {
         MotorOutput =
@@ -48,9 +60,5 @@ val MOTOR_CONFIG =
         Feedback = FeedbackConfigs().apply { GEAR_RATIO }
         Slot0 = REAL_GAINS.toSlotConfig()
 
-        CurrentLimits =
-            createCurrentLimits(
-                supplyCurrentLimit = 30.amps,
-                supplyCurrentPeakDifference = 5.amps
-            )
+        CurrentLimits = REGULAR_CURRENT_LIMITS
     }
