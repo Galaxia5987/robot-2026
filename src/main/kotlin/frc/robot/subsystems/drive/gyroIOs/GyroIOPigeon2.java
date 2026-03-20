@@ -27,9 +27,12 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.PhoenixOdometryThread;
 import frc.robot.subsystems.drive.TunerConstants;
+
 import java.util.Queue;
 
-/** IO implementation for Pigeon 2. */
+/**
+ * IO implementation for Pigeon 2.
+ */
 public class GyroIOPigeon2 implements GyroIO {
     private final Pigeon2 pigeon =
             new Pigeon2(TunerConstants.DrivetrainConstants.Pigeon2Id, TunerConstants.kCANBus);
@@ -65,15 +68,13 @@ public class GyroIOPigeon2 implements GyroIO {
     public void updateInputs(GyroIOInputs inputs) {
         inputs.connected = BaseStatusSignal.refreshAll(yaw, yawVelocity).equals(StatusCode.OK);
         double accelX =
-                accelXFilter.calculate(
-                        pigeon.getAccelerationX()
-                                .getValue()
-                                .in(edu.wpi.first.units.Units.MetersPerSecondPerSecond));
+                pigeon.getAccelerationX()
+                        .getValue()
+                        .in(edu.wpi.first.units.Units.MetersPerSecondPerSecond);
         double accelY =
-                accelYFilter.calculate(
-                        pigeon.getAccelerationY()
-                                .getValue()
-                                .in(edu.wpi.first.units.Units.MetersPerSecondPerSecond));
+                pigeon.getAccelerationY()
+                        .getValue()
+                        .in(edu.wpi.first.units.Units.MetersPerSecondPerSecond);
         Translation2d accel =
                 new Translation2d(accelX, accelY).rotateBy(Rotation2d.fromDegrees(138.403843 + 90));
         inputs.accelerationX = edu.wpi.first.units.Units.MetersPerSecondPerSecond.of(accel.getX());
