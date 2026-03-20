@@ -39,8 +39,6 @@ open class Vision(
 
     private var lastOdometryResetTimeStamp = -1.0
 
-    private var logKeys: Array<String>? = null
-
     private fun PoseObservation.isInvalid(): Boolean =
         tagCount == 0 || // Must have at least one tag
         (tagCount == 1 &&
@@ -70,6 +68,10 @@ open class Vision(
 
             // Update disconnected alert
             disconnectedAlerts[i].set(!cameraInputs.connected)
+
+            if (!cameraInputs.connected) {
+                continue
+            }
 
             val estimatedPose = cameraInputs.estimatedPose
             if (estimatedPose.isInvalid()) {

@@ -24,7 +24,7 @@ import java.util.*;
 public class BetterPoseEstimator {
     private static final double poseBufferSizeSec = 2.0;
     private static final Matrix<N3, N1> odometryStateStdDevs =
-            new Matrix<>(VecBuilder.fill(0.5, 0.5, 0.5));
+            new Matrix<>(VecBuilder.fill(0.3, 0.3, 0.01));
 
     private Pose2d odometryPose = Pose2d.kZero;
     private Pose2d estimatedPose = Pose2d.kZero;

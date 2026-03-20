@@ -66,8 +66,9 @@ val turretOrientedChassisSpeeds: Translation2d
             .to2dVector()
             .plus(
                 getTurretTangentialVelocityFieldRelative(
-                    speeds.omegaRadiansPerSecond
+                    drive.gyroOmega[rad_ps]
                 )
+
             )
             .rotateBy(Turret.position.toRotation2d())
     }
