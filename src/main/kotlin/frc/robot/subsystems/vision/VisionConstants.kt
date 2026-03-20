@@ -46,7 +46,7 @@ data class CameraConfig(
 // Camera names, must match names configured on coprocessor
 const val TURRET_CAMERA_NAME = "turret"
 
-const val MAX_DISTANCE_METERS = 6.0
+const val MAX_DISTANCE_METERS = 5.75
 
 private val TURRET_TRANSLATION =
     Translation3d((-117.5).mm, 207.5.mm, 360.888.mm)
@@ -61,7 +61,7 @@ val TURRET_CAMERA_ROBOT_TO_CAMERA: Transform3d
                         TURRET_TRANSLATION,
                         -Turret.position.toYaw()
                     )),
-                getRotation3d(yaw = -Turret.position, pitch = ((-25).deg))
+                getRotation3d(yaw = -Turret.position, pitch = ((-24.781651).deg))
             )
             .toTransform()
 
@@ -118,9 +118,9 @@ val FRONT_CONFIG =
     CameraConfig(
         robotToCamera = {
             Transform3d(
-                110.804.mm,
-                317.411.mm,
-                519.31667.mm,
+                (-174.327).mm,
+                (-309.901).mm,
+                528.733.mm,
                 Rotation3d(0.0.deg, (-20).deg, 0.deg)
             )
         },
