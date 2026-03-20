@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.LOOP_TIME
 import frc.robot.ShotCalculator.*
 import frc.robot.drive
+import frc.robot.field.HUB_TRANSLATION
 import frc.robot.lib.AccelerationComplementaryFilter
 import frc.robot.lib.AccelerationFilter
 import frc.robot.lib.AccelerationKalmanFusion
@@ -26,6 +27,7 @@ import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.shooter.turret.constraintTurretLimits
 import frc.robot.subsystems.shooter.turret.getTurretTangentialVelocityFieldRelative
 import frc.robot.subsystems.shooter.turret.turretAngleToHub
+import frc.robot.subsystems.shooter.turret.turretTranslationFieldOriented
 import org.dyn4j.geometry.Rotation
 import org.littletonrobotics.junction.Logger
 import kotlin.math.abs
@@ -33,9 +35,10 @@ import kotlin.math.tanh
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
 import kotlin.math.tanh
+import kotlin.math.withSign
 
 private const val LATENCY_FACTOR = 0.2
-private val RIO_TO_ORIGIN = Transform2d((-93.39010).mm,243.92419.mm, Rotation2d())
+private val RIO_TO_ORIGIN = Transform2d((-93.39010).mm, 243.92419.mm, Rotation2d())
 
 private val accelFilter: AccelerationFilter = AccelerationComplementaryFilter(RIO_TO_ORIGIN)
 
@@ -44,13 +47,13 @@ private var lastVelocityY: Double = 0.0
 private var lastOmega: Double = 0.0
 private val rioAccel = BuiltInAccelerometer()
 
-private val rioFilterX = LinearFilter.singlePoleIIR(1/5.0, LOOP_TIME)
-private val rioFilterY = LinearFilter.singlePoleIIR(1/5.0, LOOP_TIME)
-private val pigeonFilterX = LinearFilter.singlePoleIIR(1/5.0, LOOP_TIME)
-private val pigeonFilterY = LinearFilter.singlePoleIIR(1/5.0, LOOP_TIME)
-private val swerveFilterX = LinearFilter.singlePoleIIR(1/5.0, LOOP_TIME)
-private val swerveFilterY = LinearFilter.singlePoleIIR(1/5.0, LOOP_TIME)
-private val alphaFilter = LinearFilter.singlePoleIIR(1/5.0, LOOP_TIME)
+private val rioFilterX = LinearFilter.singlePoleIIR(1 / 5.0, LOOP_TIME)
+private val rioFilterY = LinearFilter.singlePoleIIR(1 / 5.0, LOOP_TIME)
+private val pigeonFilterX = LinearFilter.singlePoleIIR(1 / 5.0, LOOP_TIME)
+private val pigeonFilterY = LinearFilter.singlePoleIIR(1 / 5.0, LOOP_TIME)
+private val swerveFilterX = LinearFilter.singlePoleIIR(1 / 5.0, LOOP_TIME)
+private val swerveFilterY = LinearFilter.singlePoleIIR(1 / 5.0, LOOP_TIME)
+private val alphaFilter = LinearFilter.singlePoleIIR(1 / 5.0, LOOP_TIME)
 
 private fun ChassisSpeeds.to2dVector(): Translation2d =
     Translation2d(this.vxMetersPerSecond, this.vyMetersPerSecond)
@@ -59,46 +62,11 @@ private fun ChassisSpeeds.to2dVector(): Translation2d =
 val turretOrientedChassisSpeeds: Translation2d
     get() {
         val speeds = drive.chassisSpeeds
-        val omega = drive.gyroOmega[rad_ps]
-        val alpha = (omega - lastOmega) / LOOP_TIME
-
-        val swerveX = swerveFilterX.calculate((speeds.vxMetersPerSecond - lastVelocityX) / LOOP_TIME)
-        val swerveY = swerveFilterY.calculate((speeds.vyMetersPerSecond - lastVelocityY) / LOOP_TIME)
-        val rioX = rioFilterX.calculate(rioAccel.z)
-        val rioY = rioFilterY.calculate(-rioAccel.y)
-        val pigeonX = pigeonFilterX.calculate(drive.accelerationX[mps_ps])
-        val pigeonY = pigeonFilterY.calculate(drive.accelerationY[mps_ps])
-        val alphaFiltered = alphaFilter.calculate(alpha)
-
-        accelFilter.update(
-           swerveX,
-            swerveY,
-            rioX,
-            rioY,
-            pigeonX,
-            pigeonY,
-            omega,
-            alphaFiltered
-        )
-        lastVelocityX = speeds.vxMetersPerSecond
-        lastVelocityY = speeds.vyMetersPerSecond
-        lastOmega = omega
-
-        Logger.recordOutput("Accel/swerveX", swerveX)
-        Logger.recordOutput("Accel/swerveY", swerveY)
-        Logger.recordOutput("Accel/rioAccelX", rioX)
-        Logger.recordOutput("Accel/rioAccelY", rioY)
-        Logger.recordOutput("Accel/pigeonX", pigeonX)
-        Logger.recordOutput("Accel/pigeonY", pigeonY)
-        Logger.recordOutput("Accel/alpha", alphaFiltered)
-        Logger.recordOutput("Accel/outputX", accelFilter.estimatedAccelerationX)
-        Logger.recordOutput("Accel/outputY", accelFilter.estimatedAccelerationY)
-
         return speeds
-            .to2dVector().plus(getTurretTangentialVelocityFieldRelative(omega + alpha * LATENCY_FACTOR))
+            .to2dVector()
             .plus(
-                Translation2d(accelFilter.estimatedAccelerationX, accelFilter.estimatedAccelerationY).times(
-                    LATENCY_FACTOR
+                getTurretTangentialVelocityFieldRelative(
+                    speeds.omegaRadiansPerSecond
                 )
             )
             .rotateBy(Turret.position.toRotation2d())
@@ -109,46 +77,50 @@ private fun getTurretSetpoint(): Angle {
     val constrainedWithCompensation =
         constraintTurretLimits(
             turretAngleToHub -
-                calculateYaw(
+                    calculateYaw(
                         compensatedTurretDistanceFromGoal[m],
                         speeds.x,
                         speeds.y
                     )
-                    .deg
+                        .deg
         )
 
     val constrainedStaticShooting = constraintTurretLimits(turretAngleToHub)
     if (
         abs(constrainedWithCompensation[deg] - constrainedStaticShooting[deg]) >
-            180
+        180
     ) {
         return constrainedStaticShooting
     }
     return constrainedWithCompensation
 }
 
+
 private fun getHoodSetpoint(): Angle {
     val turretOrientedChassisSpeeds = turretOrientedChassisSpeeds
     return (90.deg -
-        calculatePitch(
+            calculatePitch(
                 compensatedTurretDistanceFromGoal[m],
                 turretOrientedChassisSpeeds.x,
                 turretOrientedChassisSpeeds.y
             )
-            .deg)
+                .deg)
 }
 
 private fun getFlywheelSetpoint(): AngularVelocity {
     val turretOrientedChassisSpeeds = turretOrientedChassisSpeeds
     var output =
-        ((0.97 - (0.05 * tanh(turretOrientedChassisSpeeds.norm))) *
-            calculateAngularVelocity(
-                calculateVelocity(
-                    compensatedTurretDistanceFromGoal[m],
-                    turretOrientedChassisSpeeds.x,
-                    turretOrientedChassisSpeeds.y
-                )
-            ))
+        ((0.97 + (0.05 * tanh(turretOrientedChassisSpeeds.x))) *
+                calculateAngularVelocity(
+                    calculateVelocity(
+                        compensatedTurretDistanceFromGoal[m],
+                        turretOrientedChassisSpeeds.x,
+                        turretOrientedChassisSpeeds.y
+                    )
+                ))
+
+    output *= 1 + 3.0 / 89.0 * Math.exp(1.3 * (compensatedTurretDistanceFromGoal[m] - 4.6))
+
     return output.rps
 }
 

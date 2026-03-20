@@ -49,6 +49,7 @@ object SetpointsManager {
     private val goalDepotTrigger =
         isCloserToDepotSide
             .and(!inExtendedAllianceZone)
+            .and(inClimbRectangle.negate())
             .and(isAuto.negate())
             .onTrue(
                 runOnce({
@@ -62,6 +63,7 @@ object SetpointsManager {
         isCloserToDepotSide
             .negate()
             .and(!inExtendedAllianceZone)
+            .and(inClimbRectangle.negate())
             .and(isAuto.negate())
             .onTrue(
                 runOnce({

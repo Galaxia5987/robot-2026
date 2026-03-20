@@ -8,14 +8,16 @@ import frc.robot.subsystems.shooter.turret.turretTranslationFieldOriented
 
 const val FIELD_LOGGING_PATH = "Field"
 
+val inClimbRectangle = Trigger { CLIMB_RECTANGLE.contains(turretTranslationFieldOriented) }
+
 val inAllianceZone =
     Trigger { ALLIANCE_ZONE.contains(turretTranslationFieldOriented) }
-        .and { !CLIMB_RECTANGLE.contains(turretTranslationFieldOriented) }
+        .and(inClimbRectangle.negate())
         .logTrigger("$FIELD_LOGGING_PATH/inAllianceZone")
 
 val inExtendedAllianceZone =
     Trigger { EXTENDED_ALLIANCE_ZONE.contains(turretTranslationFieldOriented) }
-        .and { !CLIMB_RECTANGLE.contains(turretTranslationFieldOriented) }
+        .and(inClimbRectangle.negate())
         .logTrigger("$FIELD_LOGGING_PATH/inExtendedAllianceZone")
 
 val isCloserToDepotSide: Trigger =
