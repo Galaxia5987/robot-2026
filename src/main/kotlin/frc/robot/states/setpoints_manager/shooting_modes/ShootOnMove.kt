@@ -1,5 +1,7 @@
 package frc.robot.states.setpoints_manager.shooting_modes
 
+import edu.wpi.first.math.filter.LinearFilter
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Transform2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
@@ -12,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import frc.robot.LOOP_TIME
 import frc.robot.ShotCalculator.*
 import frc.robot.drive
+import frc.robot.lib.AccelerationComplementaryFilter
 import frc.robot.lib.AccelerationFilter
 import frc.robot.lib.AccelerationKalmanFusion
 import frc.robot.lib.extensions.*
@@ -23,6 +26,8 @@ import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.shooter.turret.constraintTurretLimits
 import frc.robot.subsystems.shooter.turret.getTurretTangentialVelocityFieldRelative
 import frc.robot.subsystems.shooter.turret.turretAngleToHub
+import org.dyn4j.geometry.Rotation
+import org.littletonrobotics.junction.Logger
 import kotlin.math.abs
 import kotlin.math.tanh
 import org.team5987.annotation.LogLevel
@@ -30,14 +35,22 @@ import org.team5987.annotation.LoggedOutput
 import kotlin.math.tanh
 
 private const val LATENCY_FACTOR = 0.2
-private val RIO_TO_ORIGIN = Transform2d()
+private val RIO_TO_ORIGIN = Transform2d((-93.39010).mm,243.92419.mm, Rotation2d())
 
-private val accelFilter: AccelerationFilter = AccelerationKalmanFusion(RIO_TO_ORIGIN)
+private val accelFilter: AccelerationFilter = AccelerationComplementaryFilter(RIO_TO_ORIGIN)
 
 private var lastVelocityX: Double = 0.0
 private var lastVelocityY: Double = 0.0
 private var lastOmega: Double = 0.0
 private val rioAccel = BuiltInAccelerometer()
+
+private val rioFilterX = LinearFilter.singlePoleIIR(1/5.0, LOOP_TIME)
+private val rioFilterY = LinearFilter.singlePoleIIR(1/5.0, LOOP_TIME)
+private val pigeonFilterX = LinearFilter.singlePoleIIR(1/5.0, LOOP_TIME)
+private val pigeonFilterY = LinearFilter.singlePoleIIR(1/5.0, LOOP_TIME)
+private val swerveFilterX = LinearFilter.singlePoleIIR(1/5.0, LOOP_TIME)
+private val swerveFilterY = LinearFilter.singlePoleIIR(1/5.0, LOOP_TIME)
+private val alphaFilter = LinearFilter.singlePoleIIR(1/5.0, LOOP_TIME)
 
 private fun ChassisSpeeds.to2dVector(): Translation2d =
     Translation2d(this.vxMetersPerSecond, this.vyMetersPerSecond)
@@ -47,20 +60,40 @@ val turretOrientedChassisSpeeds: Translation2d
     get() {
         val speeds = drive.chassisSpeeds
         val omega = drive.gyroOmega[rad_ps]
-        val alpha = (omega - lastOmega) / LOOP_TIME // TODO: put this in a low pass filter
+        val alpha = (omega - lastOmega) / LOOP_TIME
+
+        val swerveX = swerveFilterX.calculate((speeds.vxMetersPerSecond - lastVelocityX) / LOOP_TIME)
+        val swerveY = swerveFilterY.calculate((speeds.vyMetersPerSecond - lastVelocityY) / LOOP_TIME)
+        val rioX = rioFilterX.calculate(rioAccel.z)
+        val rioY = rioFilterY.calculate(-rioAccel.y)
+        val pigeonX = pigeonFilterX.calculate(drive.accelerationX[mps_ps])
+        val pigeonY = pigeonFilterY.calculate(drive.accelerationY[mps_ps])
+        val alphaFiltered = alphaFilter.calculate(alpha)
+
         accelFilter.update(
-            (speeds.vxMetersPerSecond - lastVelocityX) / LOOP_TIME,
-            (speeds.vyMetersPerSecond - lastVelocityY) / LOOP_TIME,
-            rioAccel.x,
-            rioAccel.y,
-            drive.accelerationX[mps_ps],
-            drive.accelerationY[mps_ps],
+           swerveX,
+            swerveY,
+            rioX,
+            rioY,
+            pigeonX,
+            pigeonY,
             omega,
-            alpha
+            alphaFiltered
         )
         lastVelocityX = speeds.vxMetersPerSecond
         lastVelocityY = speeds.vyMetersPerSecond
         lastOmega = omega
+
+        Logger.recordOutput("Accel/swerveX", swerveX)
+        Logger.recordOutput("Accel/swerveY", swerveY)
+        Logger.recordOutput("Accel/rioAccelX", rioX)
+        Logger.recordOutput("Accel/rioAccelY", rioY)
+        Logger.recordOutput("Accel/pigeonX", pigeonX)
+        Logger.recordOutput("Accel/pigeonY", pigeonY)
+        Logger.recordOutput("Accel/alpha", alphaFiltered)
+        Logger.recordOutput("Accel/outputX", accelFilter.estimatedAccelerationX)
+        Logger.recordOutput("Accel/outputY", accelFilter.estimatedAccelerationY)
+
         return speeds
             .to2dVector().plus(getTurretTangentialVelocityFieldRelative(omega + alpha * LATENCY_FACTOR))
             .plus(
