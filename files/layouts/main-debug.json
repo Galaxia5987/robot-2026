@@ -9,44 +9,44 @@
         "sidebar": {
           "width": 340,
           "expanded": [
-            "/AdvantageKit/RealOutputs/TurretCameraPose",
-            "/AdvantageKit/RealOutputs/OUTPOST_CROSS_LINE_RECTANGLE/0",
-            "/AdvantageKit/Subsystems/PreShooter/motorId 13",
-            "/AdvantageKit/Subsystems/Flywheel/motorId 16",
-            "/AdvantageKit/Subsystems/Turret/motorId 14",
+            "/RealOutputs/TurretCameraPose",
+            "/RealOutputs/OUTPOST_CROSS_LINE_RECTANGLE/0",
+            "/Subsystems/PreShooter/motorId 13",
+            "/Subsystems/Flywheel/motorId 16",
+            "/Subsystems/Turret/motorId 14",
             "/CameraPublisher/photonvision_Port_1181_Input_MJPEG_Server",
-            "/AdvantageKit/RealOutputs/Subsystems/Vision",
-            "/AdvantageKit/RealOutputs/Subsystems/Vision/turret",
-            "/AdvantageKit/Subsystems/Vision/turret/PoseObservations",
-            "/AdvantageKit/Subsystems/Vision/turret/PoseObservations/0",
-            "/AdvantageKit/Subsystems/Vision/turret/PoseObservations/0/pose",
-            "/AdvantageKit/Subsystems/Vision/turret/PoseObservations/0/pose/translation",
-            "/AdvantageKit/RealOutputs/Odometry/Robot/translation",
-            "/AdvantageKit/RealOutputs/StateMachines/Intaking",
-            "/AdvantageKit/Subsystems/Spindexer/motorId 12",
-            "/AdvantageKit/RealOutputs",
-            "/AdvantageKit/Subsystems",
-            "/AdvantageKit/Subsystems/Vision/turret/EstimatedPose",
-            "/AdvantageKit/Subsystems/Vision/front/EstimatedPose",
-            "/AdvantageKit/RealOutputs/StateMachines/Shooting",
-            "/AdvantageKit/RealOutputs/Field",
-            "/AdvantageKit/RealOutputs/Choreo",
-            "/AdvantageKit/RealOutputs/distanceFromGoal",
-            "/AdvantageKit/RealOutputs/distanceFromGoal/distanceFromGoal",
+            "/RealOutputs/Subsystems/Vision",
+            "/RealOutputs/Subsystems/Vision/turret",
+            "/Subsystems/Vision/turret/PoseObservations",
+            "/Subsystems/Vision/turret/PoseObservations/0",
+            "/Subsystems/Vision/turret/PoseObservations/0/pose",
+            "/Subsystems/Vision/turret/PoseObservations/0/pose/translation",
+            "/RealOutputs/Odometry/Robot/translation",
+            "/RealOutputs/StateMachines/Intaking",
+            "/Subsystems/Spindexer/motorId 12",
+            "/RealOutputs",
+            "/Subsystems",
+            "/Subsystems/Vision/turret/EstimatedPose",
+            "/Subsystems/Vision/front/EstimatedPose",
+            "/RealOutputs/StateMachines/Shooting",
+            "/RealOutputs/Field",
+            "/RealOutputs/Choreo",
+            "/RealOutputs/distanceFromGoal",
+            "/RealOutputs/distanceFromGoal/distanceFromGoal",
             "/Tuning",
             "/Tuning/Flywheel",
-            "/AdvantageKit/RealOutputs/Subsystems/Hood/adjustedFieldRelativeSpeeds",
-            "/AdvantageKit/RealOutputs/Subsystems/Hood/adjustedFieldRelativeSpeeds/0",
-            "/AdvantageKit",
-            "/AdvantageKit/RealOutputs/SwerveChassisSpeeds",
-            "/AdvantageKit/RealOutputs/SwerveStates/Measured/0",
-            "/AdvantageKit/RealOutputs/SwerveStates/SetpointsOptimized",
-            "/AdvantageKit/RealOutputs/SwerveStates/SetpointsOptimized/0",
-            "/AdvantageKit/RealOutputs/SwerveChassisSpeeds/Measured",
+            "/RealOutputs/Subsystems/Hood/adjustedFieldRelativeSpeeds",
+            "/RealOutputs/Subsystems/Hood/adjustedFieldRelativeSpeeds/0",
+            "",
+            "/RealOutputs/SwerveChassisSpeeds",
+            "/RealOutputs/SwerveStates/Measured/0",
+            "/RealOutputs/SwerveStates/SetpointsOptimized",
+            "/RealOutputs/SwerveStates/SetpointsOptimized/0",
+            "/RealOutputs/SwerveChassisSpeeds/Measured",
             "/photonvision/coprocessors/C0-74-2B-FA-B4-75/cameraNames",
             "/photonvision/coprocessors/F0-74-E4-7F-54-04/cameraNames",
-            "/AdvantageKit/RealOutputs/Subsystems",
-            "/AdvantageKit/Subsystems/Vision"
+            "/RealOutputs/Subsystems",
+            "/Subsystems/Vision"
           ]
         },
         "tabs": {
@@ -67,7 +67,7 @@
                 "leftSources": [
                   {
                     "type": "stepped",
-                    "logKey": "NT:/AdvantageKit/Subsystems/Sensors/spindexerSensor/SignalStrength",
+                    "logKey": "/Subsystems/Sensors/spindexerSensor/SignalStrength",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -80,7 +80,7 @@
                 "discreteSources": [
                   {
                     "type": "stripes",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Sensors/cantCloseIntake",
+                    "logKey": "/RealOutputs/Subsystems/Sensors/cantCloseIntake",
                     "logType": "Boolean",
                     "visible": true,
                     "options": {
@@ -89,7 +89,7 @@
                   },
                   {
                     "type": "stripes",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Sensors/hasFuel",
+                    "logKey": "/RealOutputs/Subsystems/Sensors/hasFuel",
                     "logType": "Boolean",
                     "visible": true,
                     "options": {
@@ -98,7 +98,7 @@
                   },
                   {
                     "type": "stripes",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Sensors/isFull",
+                    "logKey": "/RealOutputs/Subsystems/Sensors/isFull",
                     "logType": "Boolean",
                     "visible": true,
                     "options": {
@@ -107,7 +107,7 @@
                   },
                   {
                     "type": "stripes",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Sensors/isSpindexerLoaded",
+                    "logKey": "/RealOutputs/Subsystems/Sensors/isSpindexerLoaded",
                     "logType": "Boolean",
                     "visible": true,
                     "options": {
@@ -139,7 +139,7 @@
                 "leftSources": [
                   {
                     "type": "stepped",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/distanceFromGoal/distanceFromGoal/baseUnitMagnitude",
+                    "logKey": "/RealOutputs/distanceFromGoal/distanceFromGoal/baseUnitMagnitude",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -152,7 +152,7 @@
                 "discreteSources": [
                   {
                     "type": "stripes",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Sensors/hasFuel",
+                    "logKey": "/RealOutputs/Subsystems/Sensors/hasFuel",
                     "logType": "Boolean",
                     "visible": true,
                     "options": {
@@ -161,7 +161,7 @@
                   },
                   {
                     "type": "stripes",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/StateMachines/Shooting/canShoot",
+                    "logKey": "/RealOutputs/StateMachines/Shooting/canShoot",
                     "logType": "Boolean",
                     "visible": true,
                     "options": {
@@ -170,7 +170,7 @@
                   },
                   {
                     "type": "stripes",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/StateMachines/Shooting/lockIfNeeded",
+                    "logKey": "/RealOutputs/StateMachines/Shooting/lockIfNeeded",
                     "logType": "Boolean",
                     "visible": true,
                     "options": {
@@ -179,7 +179,7 @@
                   },
                   {
                     "type": "stripes",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/StateMachines/Shooting/shootingType",
+                    "logKey": "/RealOutputs/StateMachines/Shooting/shootingType",
                     "logType": "String",
                     "visible": true,
                     "options": {
@@ -188,7 +188,7 @@
                   },
                   {
                     "type": "stripes",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/StateMachines/Shooting/state",
+                    "logKey": "/RealOutputs/StateMachines/Shooting/state",
                     "logType": "String",
                     "visible": true,
                     "options": {
@@ -197,7 +197,7 @@
                   },
                   {
                     "type": "stripes",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/StateMachines/Shooting/shooterAtSetpoint",
+                    "logKey": "/RealOutputs/StateMachines/Shooting/shooterAtSetpoint",
                     "logType": "Boolean",
                     "visible": true,
                     "options": {
@@ -231,7 +231,7 @@
                 "discreteSources": [
                   {
                     "type": "stripes",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Sensors/hasFuel",
+                    "logKey": "/RealOutputs/Subsystems/Sensors/hasFuel",
                     "logType": "Boolean",
                     "visible": true,
                     "options": {
@@ -240,7 +240,7 @@
                   },
                   {
                     "type": "stripes",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Field/inAllianceZone",
+                    "logKey": "/RealOutputs/Field/inAllianceZone",
                     "logType": "Boolean",
                     "visible": true,
                     "options": {
@@ -249,7 +249,7 @@
                   },
                   {
                     "type": "stripes",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/isOurHubActive/isOurHubActive",
+                    "logKey": "/RealOutputs/isOurHubActive/isOurHubActive",
                     "logType": "Boolean",
                     "visible": true,
                     "options": {
@@ -258,7 +258,7 @@
                   },
                   {
                     "type": "stripes",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/StateMachines/Intaking/state",
+                    "logKey": "/RealOutputs/StateMachines/Intaking/state",
                     "logType": "String",
                     "visible": true,
                     "options": {
@@ -267,7 +267,7 @@
                   },
                   {
                     "type": "stripes",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/StateMachines/Shooting/canShoot",
+                    "logKey": "/RealOutputs/StateMachines/Shooting/canShoot",
                     "logType": "Boolean",
                     "visible": true,
                     "options": {
@@ -299,7 +299,7 @@
                 "leftSources": [
                   {
                     "type": "stepped",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/distanceFromGoal/distanceFromGoal/baseUnitMagnitude",
+                    "logKey": "/RealOutputs/distanceFromGoal/distanceFromGoal/baseUnitMagnitude",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -312,7 +312,7 @@
                 "discreteSources": [
                   {
                     "type": "stripes",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Flywheel/atSetpoint",
+                    "logKey": "/RealOutputs/Subsystems/Flywheel/atSetpoint",
                     "logType": "Boolean",
                     "visible": true,
                     "options": {
@@ -321,7 +321,7 @@
                   },
                   {
                     "type": "stripes",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Turret/atSetpoint",
+                    "logKey": "/RealOutputs/Subsystems/Turret/atSetpoint",
                     "logType": "Boolean",
                     "visible": true,
                     "options": {
@@ -330,7 +330,7 @@
                   },
                   {
                     "type": "stripes",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Hood/atSetpoint",
+                    "logKey": "/RealOutputs/Subsystems/Hood/atSetpoint",
                     "logType": "Boolean",
                     "visible": true,
                     "options": {
@@ -339,7 +339,7 @@
                   },
                   {
                     "type": "stripes",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/PreShooter/atSetpoint",
+                    "logKey": "/RealOutputs/Subsystems/PreShooter/atSetpoint",
                     "logType": "Boolean",
                     "visible": true,
                     "options": {
@@ -386,7 +386,7 @@
                 "leftSources": [
                   {
                     "type": "stepped",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Turret/position",
+                    "logKey": "/RealOutputs/Subsystems/Turret/position",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -396,7 +396,7 @@
                   },
                   {
                     "type": "stepped",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Turret/setpoint",
+                    "logKey": "/RealOutputs/Subsystems/Turret/setpoint",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -406,7 +406,7 @@
                   },
                   {
                     "type": "stepped",
-                    "logKey": "NT:/AdvantageKit/Subsystems/Turret/motorId 14/Position",
+                    "logKey": "/Subsystems/Turret/motorId 14/Position",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -419,7 +419,7 @@
                 "discreteSources": [
                   {
                     "type": "stripes",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Turret/atSetpoint",
+                    "logKey": "/RealOutputs/Subsystems/Turret/atSetpoint",
                     "logType": "Boolean",
                     "visible": true,
                     "options": {
@@ -456,7 +456,7 @@
                 "leftSources": [
                   {
                     "type": "stepped",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Hood/setpoint",
+                    "logKey": "/RealOutputs/Subsystems/Hood/setpoint",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -466,7 +466,7 @@
                   },
                   {
                     "type": "stepped",
-                    "logKey": "NT:/AdvantageKit/Subsystems/Hood/motorId 15/Position",
+                    "logKey": "/Subsystems/Hood/motorId 15/Position",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -478,7 +478,7 @@
                 "rightSources": [
                   {
                     "type": "stepped",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/distanceFromGoal/distanceFromGoal/magnitude",
+                    "logKey": "/RealOutputs/distanceFromGoal/distanceFromGoal/magnitude",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -490,7 +490,7 @@
                 "discreteSources": [
                   {
                     "type": "stripes",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Hood/atSetpoint",
+                    "logKey": "/RealOutputs/Subsystems/Hood/atSetpoint",
                     "logType": "Boolean",
                     "visible": true,
                     "options": {
@@ -527,7 +527,7 @@
                 "leftSources": [
                   {
                     "type": "stepped",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/SwerveStates/SetpointsOptimized/0/angle/value",
+                    "logKey": "/RealOutputs/SwerveStates/SetpointsOptimized/0/angle/value",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -537,7 +537,7 @@
                   },
                   {
                     "type": "stepped",
-                    "logKey": "NT:/AdvantageKit/Drive/Module0/TurnAbsolutePosition/value",
+                    "logKey": "/Drive/Module0/TurnAbsolutePosition/value",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -568,7 +568,7 @@
             {
               "type": 5,
               "title": "Console",
-              "controller": "NT:/AdvantageKit/RealOutputs/Console",
+              "controller": "/RealOutputs/Console",
               "controllerUUID": "gfa39qoympyzfx4ysp1kf61vkwau3s8t",
               "renderer": {
                 "highlight": false
@@ -582,7 +582,7 @@
                 "leftSources": [
                   {
                     "type": "stepped",
-                    "logKey": "NT:/AdvantageKit/Subsystems/Flywheel/motorId 16/Velocity",
+                    "logKey": "/Subsystems/Flywheel/motorId 16/Velocity",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -592,7 +592,7 @@
                   },
                   {
                     "type": "stepped",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Flywheel/setpoint",
+                    "logKey": "/RealOutputs/Subsystems/Flywheel/setpoint",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -604,7 +604,7 @@
                 "rightSources": [
                   {
                     "type": "stepped",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/distanceFromGoal/distanceFromGoal/magnitude",
+                    "logKey": "/RealOutputs/distanceFromGoal/distanceFromGoal/magnitude",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -616,7 +616,7 @@
                 "discreteSources": [
                   {
                     "type": "stripes",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Flywheel/atSetpoint",
+                    "logKey": "/RealOutputs/Subsystems/Flywheel/atSetpoint",
                     "logType": "Boolean",
                     "visible": true,
                     "options": {
@@ -625,7 +625,7 @@
                   },
                   {
                     "type": "stripes",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/StateMachines/Shooting/shootingType",
+                    "logKey": "/RealOutputs/StateMachines/Shooting/shootingType",
                     "logType": "String",
                     "visible": true,
                     "options": {
@@ -662,7 +662,7 @@
                 "leftSources": [
                   {
                     "type": "stepped",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/PreShooter/setpoint",
+                    "logKey": "/RealOutputs/Subsystems/PreShooter/setpoint",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -672,7 +672,7 @@
                   },
                   {
                     "type": "stepped",
-                    "logKey": "NT:/AdvantageKit/Subsystems/PreShooter/motorId 13/Velocity",
+                    "logKey": "/Subsystems/PreShooter/motorId 13/Velocity",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -685,7 +685,7 @@
                 "discreteSources": [
                   {
                     "type": "stripes",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/PreShooter/atSetpoint",
+                    "logKey": "/RealOutputs/Subsystems/PreShooter/atSetpoint",
                     "logType": "Boolean",
                     "visible": true,
                     "options": {
@@ -722,7 +722,7 @@
                 "leftSources": [
                   {
                     "type": "stepped",
-                    "logKey": "NT:/AdvantageKit/Drive/Module0/DriveCurrentAmps",
+                    "logKey": "/Drive/Module0/DriveCurrentAmps",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -734,7 +734,7 @@
                 "rightSources": [
                   {
                     "type": "stepped",
-                    "logKey": "NT:/AdvantageKit/Drive/Module0/DriveVelocityRadPerSec",
+                    "logKey": "/Drive/Module0/DriveVelocityRadPerSec",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -792,7 +792,7 @@
                 "sources": [
                   {
                     "type": "robot",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Odometry/Robot",
+                    "logKey": "/RealOutputs/Odometry/Robot",
                     "logType": "Pose2d",
                     "visible": true,
                     "options": {
@@ -801,7 +801,7 @@
                   },
                   {
                     "type": "trajectory",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Choreo/Trajectory",
+                    "logKey": "/RealOutputs/Choreo/Trajectory",
                     "logType": "Pose2d[]",
                     "visible": true,
                     "options": {
@@ -811,7 +811,7 @@
                   },
                   {
                     "type": "ghost",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Odometry/LookAheadTranslation",
+                    "logKey": "/RealOutputs/Odometry/LookAheadTranslation",
                     "logType": "Pose2d[]",
                     "visible": false,
                     "options": {
@@ -834,7 +834,7 @@
                 "leftSources": [
                   {
                     "type": "stepped",
-                    "logKey": "NT:/AdvantageKit/Subsystems/Extender/motorId 11/Distance",
+                    "logKey": "/Subsystems/Extender/motorId 11/Distance",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -844,7 +844,7 @@
                   },
                   {
                     "type": "stepped",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Extender/setpoint",
+                    "logKey": "/RealOutputs/Subsystems/Extender/setpoint",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -854,7 +854,7 @@
                   },
                   {
                     "type": "stepped",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Extender/lastStallDistance",
+                    "logKey": "/RealOutputs/Subsystems/Extender/lastStallDistance",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -867,7 +867,7 @@
                 "discreteSources": [
                   {
                     "type": "stripes",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/StateMachines/Intaking/state",
+                    "logKey": "/RealOutputs/StateMachines/Intaking/state",
                     "logType": "String",
                     "visible": true,
                     "options": {
@@ -876,7 +876,7 @@
                   },
                   {
                     "type": "stripes",
-                    "logKey": "NT:/AdvantageKit/RealOutputs/Subsystems/Extender/isStalling",
+                    "logKey": "/RealOutputs/Subsystems/Extender/isStalling",
                     "logType": "Boolean",
                     "visible": true,
                     "options": {
@@ -908,7 +908,7 @@
                 "leftSources": [
                   {
                     "type": "stepped",
-                    "logKey": "NT:/AdvantageKit/Drive/Module0/TurnAbsolutePosition/value",
+                    "logKey": "/Drive/Module0/TurnAbsolutePosition/value",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -918,7 +918,7 @@
                   },
                   {
                     "type": "stepped",
-                    "logKey": "NT:/AdvantageKit/Drive/Module1/TurnAbsolutePosition/value",
+                    "logKey": "/Drive/Module1/TurnAbsolutePosition/value",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -928,7 +928,7 @@
                   },
                   {
                     "type": "stepped",
-                    "logKey": "NT:/AdvantageKit/Drive/Module2/TurnAbsolutePosition/value",
+                    "logKey": "/Drive/Module2/TurnAbsolutePosition/value",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -938,7 +938,7 @@
                   },
                   {
                     "type": "stepped",
-                    "logKey": "NT:/AdvantageKit/Drive/Module3/TurnAbsolutePosition/value",
+                    "logKey": "/Drive/Module3/TurnAbsolutePosition/value",
                     "logType": "Number",
                     "visible": true,
                     "options": {

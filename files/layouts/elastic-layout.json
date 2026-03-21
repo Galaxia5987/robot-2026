@@ -266,7 +266,7 @@
             "height": 128.0,
             "type": "Large Text Display",
             "properties": {
-              "topic": "/AdvantageKit/RealOutputs/GameData/AutonomousWinner",
+              "topic": "/AdvantageKit/DriverStation/GameSpecificMessage",
               "period": 0.06,
               "data_type": "string"
             }

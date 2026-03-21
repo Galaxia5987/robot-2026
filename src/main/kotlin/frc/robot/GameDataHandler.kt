@@ -108,23 +108,23 @@ val isOurHubActive: Boolean
 val timeLeftForShift: Double
     get() = matchTime - (currentShift?.endTime ?: 0.sec)[sec]
 
-private fun Boolean.toShiftActiveMessage() =
-    if (matchTime <= 30) "ENDGAME"
-    else if (matchTime > (2.min + 20.sec)[sec]) "AUTO"
-    else if (matchTime in (2.min + 10.sec)[sec]..(2.min + 20.sec)[sec])
+private fun Boolean.toShiftActiveMessage(startTime: Double, nextShift: Boolean) =
+    if (startTime <= 30 || (nextShift && startTime <= 55)) "ENDGAME"
+    else if (startTime > (2.min + 20.sec)[sec]) "AUTO"
+    else if (startTime in (2.min + 10.sec)[sec]..(2.min + 20.sec)[sec])
         "TRANSITION"
     else if (this) "ACTIVE" else "INACTIVE"
 
 @LoggedOutput(LogLevel.COMP, path = "GameData")
 val primaryDashboardShiftMessage: String
-    get() = isOurHubActive.toShiftActiveMessage()
+    get() = isOurHubActive.toShiftActiveMessage(matchTime, false)
 
 @LoggedOutput(LogLevel.COMP, path = "GameData")
 val secondaryDashboardShiftMessage: String
     get() {
         val isNextShiftActive =
             !isOurHubActive || nextShift?.shiftType == ShiftType.ALL
-        return "${isNextShiftActive.toShiftActiveMessage()} in ${timeLeftForShift.toInt()} seconds"
+        return "${isNextShiftActive.toShiftActiveMessage(matchTime, true)} in ${timeLeftForShift.toInt()} seconds"
     }
 
 @LoggedOutput(LogLevel.COMP, path = "GameData")
