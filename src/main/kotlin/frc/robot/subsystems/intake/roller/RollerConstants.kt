@@ -21,7 +21,7 @@ enum class RollerPositions(val velocity: AngularVelocity) {
 val REAL_GAINS = Gains(kP = 0.2, kV = 0.5)
 val SIM_GAINS = Gains(kP = 1.0)
 
-val INTAKE_BASE_SPEED = 20.rps
+val INTAKE_BASE_SPEED =  35.rps
 
 val NORMAL_CURRENT_LIMITS = createCurrentLimits(25.amps, 5.amps)
 val HIGH_CURRENT_LIMITS = createCurrentLimits(60.amps, 5.amps)
