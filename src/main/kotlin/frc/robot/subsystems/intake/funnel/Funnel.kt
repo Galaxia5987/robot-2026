@@ -32,6 +32,7 @@ object Funnel : SubsystemBase() {
     }
 
     fun start(): Command = setControl(START_VOLTAGE)
+    fun reverse(): Command = setControl(-START_VOLTAGE)
     fun stop(): Command = setControl(0.volts)
 
     override fun periodic() {

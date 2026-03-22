@@ -37,3 +37,5 @@ fun pumping(): Command =
             Commands.waitTime(PUMP_TIME)
         )
         .alongWith(Roller.slow())
+
+fun outtake(): Command = Extender.open().alongWith(Roller.outtake())

@@ -80,6 +80,11 @@ private val CLIMB_RECTANGLE_BLUE =
 val CLIMB_RECTANGLE: Rectangle2d
     get() = CLIMB_RECTANGLE_BLUE.flipIfNeeded()
 
+private val DEPOT_SIDE_DOUBLE_FEEDING_RECTANGLE: Rectangle2d = Rectangle2d(Translation2d(6.806,0.790), Translation2d(5.610, 0.478))
+
+val DOUBLE_FEEDING_RECTANGLE: Rectangle2d
+    get() = DEPOT_SIDE_DOUBLE_FEEDING_RECTANGLE.flipIfNeeded()
+
 // For Debugging and tuning if necessary
 // var temp = TunablePose3d(key="/Tuning/TempPose")
 //    private set

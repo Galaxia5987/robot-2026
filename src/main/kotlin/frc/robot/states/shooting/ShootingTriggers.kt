@@ -7,11 +7,14 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.drive
 import frc.robot.field.inAllianceZone
 import frc.robot.field.isHubActive
+import frc.robot.field.isInDoubleFeedingRotation
+import frc.robot.field.isInDoubleFeedingZone
 import frc.robot.isAuto
 import frc.robot.isEnabled
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.logTrigger
 import frc.robot.lib.extensions.not
+import frc.robot.lib.extensions.onTrue
 import frc.robot.lib.extensions.sec
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.setpoints_manager.SetpointsManager.isShootingOnMove
@@ -139,11 +142,22 @@ class Shooting(val dontShootTrigger: Trigger, canFeedTrigger: Trigger) {
             .onTrue(ShootingState.IDLE.set())
             .logTrigger("$LOGGING_PATH/setIdleIfShouldStopShooting")
 
+    val canDoubleFeed: Trigger = canFeed.and(isInDoubleFeedingZone).and(IntakingStates.INTAKING.trigger.negate()).and(
+        isInDoubleFeedingRotation
+    ).onTrue(
+        IntakingStates.OUTTAKING.set()
+    ).onFalse(IntakingStates.CLOSED.set())
+
     private val setFunnel =
         (ShootingState.IDLE.trigger
                 .negate()
                 .or(IntakingStates.INTAKING.trigger))
             .and(isEnabled)
+            .and(canDoubleFeed.negate())
             .onTrue(Funnel.start())
             .onFalse(Funnel.stop())
+
+    private val stopFunnelDoubleFeeding = setFunnel.negate().and(canDoubleFeed.negate()).onTrue(Funnel.stop())
+
+    private val setFunnelDoubleFeeding = canDoubleFeed.onTrue(Funnel.reverse())
 }

@@ -14,7 +14,7 @@ import org.team5987.annotation.command_enum.CommandEnum
 @CommandEnum
 enum class RollerPositions(val velocity: AngularVelocity) {
     SLOW(5.rps),
-    OUTTAKE((-10).rps),
+    OUTTAKE((-20).rps),
     STOP(0.rps)
 }
 

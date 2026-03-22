@@ -10,6 +10,7 @@ private const val LOGGING_PATH = "StateMachines/Intaking"
 enum class IntakingStates {
     CLOSED,
     INTAKING,
+    OUTTAKING,
     PUMPING;
 
     val trigger = Trigger { state == this }
