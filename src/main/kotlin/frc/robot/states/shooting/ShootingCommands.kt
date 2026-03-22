@@ -17,7 +17,7 @@ val shouldPump: Trigger =
     IntakingStates.INTAKING.trigger
         .negate()
         .and(ShootingState.SHOOTING.trigger)
-        .and(RobotContainer.shooting?.canDoubleFeed?.negate() ?: Trigger{false})
+        .and(Trigger({RobotContainer.shooting?.canDoubleFeed?.negate()?.asBoolean ?: true}))
         .whileTrue(IntakingStates.PUMPING.set())
         .logTrigger("$LOGGING_PATH/shouldPump")
 
