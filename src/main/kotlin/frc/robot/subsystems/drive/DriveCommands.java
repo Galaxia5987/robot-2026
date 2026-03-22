@@ -18,13 +18,14 @@ import static frc.robot.subsystems.drive.Drive.DRIVE_BASE_RADIUS;
 
 import com.pathplanner.lib.config.PIDConstants;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -37,6 +38,7 @@ import frc.robot.RobotContainer;
 import frc.robot.field.FieldTriggersKt;
 import frc.robot.lib.*;
 import frc.robot.states.setpoints_manager.SetpointsManager;
+import frc.robot.subsystems.shooter.hood.Hood;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
@@ -44,6 +46,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class DriveCommands {
     private static final Drive drive = InitializerKt.getDrive();
@@ -60,12 +63,16 @@ public class DriveCommands {
 
     private static final double accelerationLimitShootOnMove = 2.2; // m/s^2
 
-    private static final PIDConstants angleGains = new PIDConstants(3.5, 0.0, 0.0);
+    private static final PIDConstants angleGains = new PIDConstants(5.0, 0.0, 0.0);
+    private static final TrapezoidProfile.Constraints angleConstraints =
+            new TrapezoidProfile.Constraints(100000, 100000);
 
     private static final SlewRateLimiter slewRateLimiterX =
             new SlewRateLimiter(accelerationLimitShootOnMove);
     private static final SlewRateLimiter slewRateLimiterY =
             new SlewRateLimiter(accelerationLimitShootOnMove);
+
+    private static Rotation2d lastRotationSetpoint = Rotation2d.kZero;
 
     private DriveCommands() {}
 
@@ -177,8 +184,9 @@ public class DriveCommands {
             Supplier<Rotation2d> rotationSupplier) {
 
         // Create PID controller
-        PIDController angleController =
-                new PIDController(angleGains.kP, angleGains.kI, angleGains.kD);
+        ProfiledPIDController angleController =
+                new ProfiledPIDController(
+                        angleGains.kP, angleGains.kI, angleGains.kD, angleConstraints);
 
         angleController.enableContinuousInput(-Math.PI, Math.PI);
 
@@ -190,24 +198,41 @@ public class DriveCommands {
                                     getLinearVelocityFromJoysticks(
                                             xSupplier.getAsDouble(), ySupplier.getAsDouble());
                             double omega;
-                            if (Math.hypot(xSupplier.getAsDouble(), ySupplier.getAsDouble())
-                                            < DEADBAND
-                                    || Math.abs(omegaSupplier.getAsDouble()) > DEADBAND
-                                    || FieldTriggersKt.getInAllianceZone().getAsBoolean()) {
+
+                            double maxSpeed = drive.getMaxLinearSpeedMetersPerSec();
+                            double maxAngularSpeed = drive.getMaxAngularSpeedRadPerSec();
+
+                            if (SetpointsManager.INSTANCE.isShootingOnMove().getAsBoolean()
+                                    && FieldTriggersKt.getInAllianceZone().getAsBoolean()
+                                    && !Objects.requireNonNull(
+                                                    RobotContainer.INSTANCE.getShooting())
+                                            .getDontShootTrigger()
+                                            .getAsBoolean()) {
+                                maxSpeed = 2.0;
+                                maxAngularSpeed = 3.14;
+                            }
+
+                            if (!Hood.INSTANCE.getShouldCrouch().getAsBoolean()) {
                                 omega =
                                         MathUtil.applyDeadband(
                                                 omegaSupplier.getAsDouble(), DEADBAND);
 
                                 // Square rotation value for more precise control
-                                omega =
-                                        Math.copySign(omega * omega, omega)
-                                                * drive.getMaxAngularSpeedRadPerSec();
+                                omega = Math.copySign(omega * omega, omega) * maxAngularSpeed;
                             } else {
-                                Rotation2d currentSetpoint = rotationSupplier.get();
+                                var setpoint = rotationSupplier.get();
+                                var currentRotationRadians = drive.getRotation().getRadians();
+
+                                Logger.recordOutput("trenchAlignment/rotationSetpoint", setpoint);
+
+                                if (setpoint != lastRotationSetpoint) {
+                                    angleController.reset(currentRotationRadians);
+                                    lastRotationSetpoint = setpoint;
+                                }
+
                                 double pidOutput =
                                         angleController.calculate(
-                                                drive.getRotation().getRadians(),
-                                                rotationSupplier.get().getRadians());
+                                                currentRotationRadians, setpoint.getRadians());
                                 omega =
                                         MathUtil.applyDeadband(
                                                 pidOutput,
@@ -216,10 +241,8 @@ public class DriveCommands {
                             // Convert to field relative speeds & send command
                             ChassisSpeeds speeds =
                                     new ChassisSpeeds(
-                                            linearVelocity.getX()
-                                                    * drive.getMaxLinearSpeedMetersPerSec(),
-                                            linearVelocity.getY()
-                                                    * drive.getMaxLinearSpeedMetersPerSec(),
+                                            linearVelocity.getX() * maxSpeed,
+                                            linearVelocity.getY() * maxSpeed,
                                             omega);
                             boolean isFlipped =
                                     DriverStation.getAlliance().isPresent()
@@ -234,7 +257,7 @@ public class DriveCommands {
                         })
 
                 // Reset PID controller when command starts
-                .beforeStarting(angleController::reset);
+                .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
     }
 
     /**

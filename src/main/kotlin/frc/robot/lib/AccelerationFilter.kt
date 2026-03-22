@@ -12,20 +12,25 @@ import edu.wpi.first.wpilibj.Timer
 import frc.robot.LOOP_TIME
 import kotlin.math.pow
 
-interface AccelerationFilter{
+interface AccelerationFilter {
     val estimatedAccelerationX: Double
     val estimatedAccelerationY: Double
     fun update(
-        swerveAx: Double, swerveAy: Double,
-        rioX: Double, rioY: Double,
-        pigeonX: Double, pigeonY: Double,
-        gyroOmega: Double, gyroAlpha: Double
+        swerveAx: Double,
+        swerveAy: Double,
+        rioX: Double,
+        rioY: Double,
+        pigeonX: Double,
+        pigeonY: Double,
+        gyroOmega: Double,
+        gyroAlpha: Double
     )
 }
 
 class AccelerationKalmanFusion(
     val rioToCenter: Transform2d,
-    measurementStdDevs: Matrix<N6, N1> = VecBuilder.fill(0.5, 0.5, 0.1, 0.1, 0.1, 0.1),
+    measurementStdDevs: Matrix<N6, N1> =
+        VecBuilder.fill(0.5, 0.5, 0.1, 0.1, 0.1, 0.1),
     stateStdDevs: Matrix<N2, N1> = VecBuilder.fill(0.1, 0.1)
 ) : AccelerationFilter {
 
@@ -43,38 +48,55 @@ class AccelerationKalmanFusion(
 
     init {
 
-
-        ekf = ExtendedKalmanFilter(
-            Nat.N2(), Nat.N2(), Nat.N6(),
-            { x, _ -> x },
-            { x, u -> getMeasurements(x, u) },
-            stateStdDevs,
-            measurementStdDevs,
-            LOOP_TIME
-        )
+        ekf =
+            ExtendedKalmanFilter(
+                Nat.N2(),
+                Nat.N2(),
+                Nat.N6(),
+                { x, _ -> x },
+                { x, u -> getMeasurements(x, u) },
+                stateStdDevs,
+                measurementStdDevs,
+                LOOP_TIME
+            )
     }
 
-    private fun getMeasurements(x: Matrix<N2, N1>, u: Matrix<N2, N1>): Matrix<N6, N1> {
+    private fun getMeasurements(
+        x: Matrix<N2, N1>,
+        u: Matrix<N2, N1>
+    ): Matrix<N6, N1> {
         val ax = x.get(0, 0)
         val ay = x.get(1, 0)
         val omegaSq = u.get(0, 0).pow(2)
         val alpha = u.get(1, 0)
 
-        expectedMeasurements.set(0, 0, ax)              // Swerve X
-        expectedMeasurements.set(1, 0, ay)              // Swerve Y
-        expectedMeasurements.set(2, 0, ax - (alpha * rioToCenter.y) - (omegaSq * rioToCenter.x)) // RIO X
-        expectedMeasurements.set(3, 0, ay + (alpha * rioToCenter.x) - (omegaSq * rioToCenter.y)) // RIO Y
-        expectedMeasurements.set(4, 0, ax)              // Pigeon X
-        expectedMeasurements.set(5, 0, ay)              // Pigeon Y
+        expectedMeasurements.set(0, 0, ax) // Swerve X
+        expectedMeasurements.set(1, 0, ay) // Swerve Y
+        expectedMeasurements.set(
+            2,
+            0,
+            ax - (alpha * rioToCenter.y) - (omegaSq * rioToCenter.x)
+        ) // RIO X
+        expectedMeasurements.set(
+            3,
+            0,
+            ay + (alpha * rioToCenter.x) - (omegaSq * rioToCenter.y)
+        ) // RIO Y
+        expectedMeasurements.set(4, 0, ax) // Pigeon X
+        expectedMeasurements.set(5, 0, ay) // Pigeon Y
 
         return expectedMeasurements
     }
 
     override fun update(
-        swerveAx: Double, swerveAy: Double,
-        rioX: Double, rioY: Double,
-        pigeonX: Double, pigeonY: Double,
-        gyroOmega: Double, gyroAlpha: Double
+        swerveAx: Double,
+        swerveAy: Double,
+        rioX: Double,
+        rioY: Double,
+        pigeonX: Double,
+        pigeonY: Double,
+        gyroOmega: Double,
+        gyroAlpha: Double
     ) {
         val currentTime = Timer.getFPGATimestamp()
         val dt = currentTime - lastTime
@@ -114,20 +136,34 @@ class AccelerationComplementaryFilter(
         private set
 
     override fun update(
-        swerveAx: Double, swerveAy: Double,
-        rioX: Double, rioY: Double,
-        pigeonX: Double, pigeonY: Double,
-        gyroOmega: Double, gyroAlpha: Double
+        swerveAx: Double,
+        swerveAy: Double,
+        rioX: Double,
+        rioY: Double,
+        pigeonX: Double,
+        pigeonY: Double,
+        gyroOmega: Double,
+        gyroAlpha: Double
     ) {
         val omegaSq = gyroOmega.pow(2)
 
-        val rioCenterX = rioX + (gyroAlpha * rioToCenter.y) + (omegaSq * rioToCenter.x)
-        val rioCenterY = rioY - (gyroAlpha * rioToCenter.x) + (omegaSq * rioToCenter.y)
+        val rioCenterX =
+            rioX + (gyroAlpha * rioToCenter.y) + (omegaSq * rioToCenter.x)
+        val rioCenterY =
+            rioY - (gyroAlpha * rioToCenter.x) + (omegaSq * rioToCenter.y)
 
-        val measuredAx = (swerveAx * swerveWeight) + (rioCenterX * rioWeight) + (pigeonX * pigeonWeight)
-        val measuredAy = (swerveAy * swerveWeight) + (rioCenterY * rioWeight) + (pigeonY * pigeonWeight)
+        val measuredAx =
+            (swerveAx * swerveWeight) +
+                (rioCenterX * rioWeight) +
+                (pigeonX * pigeonWeight)
+        val measuredAy =
+            (swerveAy * swerveWeight) +
+                (rioCenterY * rioWeight) +
+                (pigeonY * pigeonWeight)
 
-        estimatedAccelerationX = (alpha * estimatedAccelerationX) + ((1.0 - alpha) * measuredAx)
-        estimatedAccelerationY = (alpha * estimatedAccelerationY) + ((1.0 - alpha) * measuredAy)
+        estimatedAccelerationX =
+            (alpha * estimatedAccelerationX) + ((1.0 - alpha) * measuredAx)
+        estimatedAccelerationY =
+            (alpha * estimatedAccelerationY) + ((1.0 - alpha) * measuredAy)
     }
 }

@@ -8,7 +8,9 @@ import frc.robot.subsystems.shooter.turret.turretTranslationFieldOriented
 
 const val FIELD_LOGGING_PATH = "Field"
 
-val inClimbRectangle = Trigger { CLIMB_RECTANGLE.contains(turretTranslationFieldOriented) }
+val inClimbRectangle = Trigger {
+    CLIMB_RECTANGLE.contains(turretTranslationFieldOriented)
+}
 
 val inAllianceZone =
     Trigger { ALLIANCE_ZONE.contains(turretTranslationFieldOriented) }

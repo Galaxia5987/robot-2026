@@ -475,7 +475,7 @@ public class Drive extends SubsystemBase implements SysIdable {
         return states;
     }
 
-    public AngularVelocity getGyroOmega(){
+    public AngularVelocity getGyroOmega() {
         return Units.RadiansPerSecond.of(gyroInputs.yawVelocityRadPerSec);
     }
 

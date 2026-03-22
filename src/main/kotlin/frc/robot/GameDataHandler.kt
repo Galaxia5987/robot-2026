@@ -108,7 +108,10 @@ val isOurHubActive: Boolean
 val timeLeftForShift: Double
     get() = matchTime - (currentShift?.endTime ?: 0.sec)[sec]
 
-private fun Boolean.toShiftActiveMessage(startTime: Double, nextShift: Boolean) =
+private fun Boolean.toShiftActiveMessage(
+    startTime: Double,
+    nextShift: Boolean
+) =
     if (startTime <= 30 || (nextShift && startTime <= 55)) "ENDGAME"
     else if (startTime > (2.min + 20.sec)[sec]) "AUTO"
     else if (startTime in (2.min + 10.sec)[sec]..(2.min + 20.sec)[sec])

@@ -1,6 +1,7 @@
 package frc.robot
 
 import com.pathplanner.lib.auto.AutoBuilder
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
@@ -19,6 +20,7 @@ import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.leds.LEDSubsystem
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.turret.Turret
+import kotlin.math.roundToInt
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 
@@ -51,27 +53,21 @@ object RobotContainer {
 
     private fun configureDefaultCommands() {
         drive.defaultCommand =
-            DriveCommands.joystickDrive(
+            //            DriveCommands.joystickDrive(
+            //                { -driverController.leftY },
+            //                { -driverController.leftX },
+            //                { -driverController.rightX },
+            //            )
+            DriveCommands.joystickDriveAtAngle(
+                drive,
                 { -driverController.leftY },
                 { -driverController.leftX },
-                { -driverController.rightX },
+                { -driverController.rightX * 1.2 },
+                {
+                    val snappedLocation = drive.rotation.degrees / 90.0
+                    Rotation2d.fromDegrees(snappedLocation.roundToInt() * 90.0)
+                }
             )
-        //                    DriveCommands.joystickDriveAtAngle(
-        //                        drive,
-        //                        { -driverController.leftY },
-        //                        { -driverController.leftX },
-        //                        { -driverController.rightX * 1.2 },
-        //                        {
-        //                            val rotation =
-        //                                Rotation2d(driverController.leftY, driverController.leftX)
-        //                            rotation
-        //                     ]\[\
-        //                     ]\[
-        //                     \][\
-        //                     ][\
-        //                     ]\[
-        //                     }
-        //                    )
         Turret.defaultCommand =
             Turret.setAngle(Turret.aimingSetpoint<Turret, () -> Angle>())
         Hood.defaultCommand =
