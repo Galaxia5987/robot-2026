@@ -27,6 +27,7 @@ import frc.robot.sim.MapleSimIntake
 import frc.robot.sim.MapleSimShooter
 import frc.robot.states.intaking.IntakingTriggers
 import frc.robot.states.setpoints_manager.SetpointsManager
+import frc.robot.states.setpoints_manager.shooting_modes.logFactors
 import frc.robot.states.spindexer.SpindexerTriggers
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.intake.roller.Roller
@@ -132,6 +133,7 @@ object Robot : LoggedRobot() {
             "ResetByVision",
             DriveCommands.resetByPoseEstimation().ignoringDisable(true)
         )
+        logFactors()
     }
 
     /**
