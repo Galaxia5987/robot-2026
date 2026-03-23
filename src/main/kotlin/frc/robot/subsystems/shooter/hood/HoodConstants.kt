@@ -2,13 +2,11 @@ package frc.robot.subsystems.shooter.hood
 
 import com.ctre.phoenix6.configs.*
 import com.ctre.phoenix6.signals.*
-import edu.wpi.first.units.measure.Angle
 import frc.robot.lib.Gains
 import frc.robot.lib.createCurrentLimits
 import frc.robot.lib.extensions.*
 import frc.robot.lib.switchable
 import frc.robot.states.setpoints_manager.SetpointsManager.isShootingOnMove
-import org.team5987.annotation.command_enum.CommandEnum
 
 const val PORT = 15
 
@@ -71,10 +69,3 @@ val CONFIG =
 
         CurrentLimits = createCurrentLimits(15.amps, 5.amps)
     }
-
-@CommandEnum
-enum class HoodPositions(var angle: Angle) {
-    UP(10.deg),
-    DOWN(0.deg)
-}
-// TODO: real values

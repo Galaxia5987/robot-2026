@@ -13,20 +13,22 @@ import frc.robot.lib.extensions.deg
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.m
 import frc.robot.lib.extensions.rps
+import frc.robot.states.setpoints_manager.SetpointsManager
+import frc.robot.states.setpoints_manager.SetpointsManager.compensatedTurretDistanceFromGoal
+import frc.robot.states.setpoints_manager.SetpointsManager.turretDistanceFromGoal
 import frc.robot.subsystems.shooter.flywheel.Flywheel
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
 import frc.robot.subsystems.shooter.pre_shooter.PreShooterVelocity
 import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.shooter.turret.constraintTurretLimits
-import frc.robot.subsystems.shooter.turret.turretAngleToHub
 import kotlin.math.abs
 
 private fun getTurretSetpoint(): Angle {
     val speeds = turretOrientedChassisSpeeds
     val constrainedWithCompensation =
         constraintTurretLimits(
-            turretAngleToHub -
+            SetpointsManager.turretAngleToHub -
                 calculateFeedingYaw(
                         compensatedTurretDistanceFromGoal[m],
                         speeds.x,
@@ -35,7 +37,8 @@ private fun getTurretSetpoint(): Angle {
                     .deg
         )
 
-    val constrainedStaticShooting = constraintTurretLimits(turretAngleToHub)
+    val constrainedStaticShooting =
+        constraintTurretLimits(SetpointsManager.turretAngleToHub)
     if (
         abs(constrainedWithCompensation[deg] - constrainedStaticShooting[deg]) >
             180

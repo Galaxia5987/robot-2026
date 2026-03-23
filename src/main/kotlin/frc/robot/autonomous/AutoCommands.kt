@@ -40,9 +40,6 @@ private fun runPathAndReset(
         .andThen(runPath(pathName, mirror))
 }
 
-// TODO: After basic trajectory following is working open path planner and look at the paths then
-// implement here the trajectory chaining as one command with state machine integrated commands as
-// well
 val setIntaking =
     EventTrigger("setIntaking").onTrue(IntakingStates.INTAKING.set())
 val setStopIntaking =

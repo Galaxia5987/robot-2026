@@ -16,7 +16,7 @@ const val MAIN_PORT = 19
 val REAL_GAINS =
     Gains(
         1.0,
-    ) // TODO: calibrations
+    ) // TODO: calibrate
 val SIM_GAINS = Gains(1.0, kG = 10.0)
 
 const val GEAR_RATIO = 33.0

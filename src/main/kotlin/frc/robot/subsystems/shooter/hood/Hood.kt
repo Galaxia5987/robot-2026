@@ -4,6 +4,7 @@ import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.CANcoder
 import edu.wpi.first.math.kinematics.ChassisSpeeds
+import edu.wpi.first.units.Units.Degrees
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
@@ -22,10 +23,10 @@ import frc.robot.lib.extensions.volts
 import frc.robot.lib.sysid.SysIdable
 import frc.robot.lib.universal_motor.MotorLogConfig
 import frc.robot.lib.universal_motor.UniversalTalonFX
-import frc.robot.subsystems.shooter.turret.turretTranslationFieldOriented
+import frc.robot.states.setpoints_manager.SetpointsManager.turretTranslationFieldOriented
 import org.littletonrobotics.junction.Logger
 
-object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
+object Hood : SubsystemBase(), SysIdable {
     private val motor =
         UniversalTalonFX(
             port = PORT,
@@ -43,40 +44,9 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
 
     private var setpoint = 0.radians
 
-    val shouldCrouch: Trigger = Trigger {
-        TRENCH_AREAS.any { it.contains(turretTranslationFieldOriented) }
-            .or(
-                TRENCH_AREAS.any {
-                    val dt = 0.3
-                    val fieldOrientedSpeeds = drive.fieldOrientedSpeeds
+    private var shouldCrouchCached = false
 
-                    val fieldOrientedAcceleration =
-                        ChassisSpeeds.fromRobotRelativeSpeeds(
-                            ChassisSpeeds(
-                                drive.accelerationX[mps_ps],
-                                drive.accelerationY[mps_ps],
-                                0.0
-                            ),
-                            drive.rotation
-                        )
-
-                    val lookAheadTranslation =
-                        turretTranslationFieldOriented
-                            .toPose()
-                            .estimateAt(
-                                dt,
-                                fieldOrientedSpeeds,
-                                fieldOrientedAcceleration
-                            )
-
-                    Logger.recordOutput(
-                        "Odometry/LookAheadTranslation",
-                        lookAheadTranslation.toPose()
-                    )
-                    it.contains(lookAheadTranslation)
-                }
-            )
-    }
+    val shouldCrouch: Trigger = Trigger { shouldCrouchCached }
 
     val atSetpoint = Trigger {
         motor.inputs.position.isNear(setpoint, TOLERANCE)
@@ -97,9 +67,8 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
     }
 
     fun setControlAngle(angle: Angle) {
-
         var newAngle =
-            if (shouldCrouch.asBoolean) HoodPositions.DOWN.angle
+            if (shouldCrouch.asBoolean) Degrees.zero()
             else angle - HOOD_STARTING_ANGLE
 
         if (newAngle < 0.deg) {
@@ -110,15 +79,44 @@ object Hood : SubsystemBase(), SysIdable, HoodPositionsCommandFactory {
         motor.setControl(positionRequest.withPosition(newAngle))
     }
 
-    fun setAngle(angle: Angle): Command = runOnce { setControlAngle(angle) }
-
     fun setAngle(angle: () -> Angle): Command = run { setControlAngle(angle()) }
 
-    override fun setTarget(value: HoodPositions): Command =
-        setAngle(value.angle)
+    private fun computeShouldCrouch(): Boolean {
+        if (TRENCH_AREAS.any { it.contains(turretTranslationFieldOriented) }) {
+            return true
+        }
+
+        val dt = 0.3
+        val fieldOrientedSpeeds = drive.fieldOrientedSpeeds
+
+        val fieldOrientedAcceleration =
+            ChassisSpeeds.fromRobotRelativeSpeeds(
+                ChassisSpeeds(
+                    drive.accelerationX[mps_ps],
+                    drive.accelerationY[mps_ps],
+                    0.0
+                ),
+                drive.rotation
+            )
+
+        val lookAheadTranslation =
+            turretTranslationFieldOriented
+                .toPose()
+                .estimateAt(dt, fieldOrientedSpeeds, fieldOrientedAcceleration)
+
+        Logger.recordOutput(
+            "Odometry/LookAheadTranslation",
+            lookAheadTranslation.toPose()
+        )
+
+        return TRENCH_AREAS.any { it.contains(lookAheadTranslation) }
+    }
 
     override fun periodic() {
         motor.periodic()
+
+        shouldCrouchCached = computeShouldCrouch()
+
         Logger.recordOutput("Subsystems/Hood/atSetpoint", atSetpoint)
         Logger.recordOutput("Subsystems/Hood/shouldCrouch", shouldCrouch)
         Logger.recordOutput(
