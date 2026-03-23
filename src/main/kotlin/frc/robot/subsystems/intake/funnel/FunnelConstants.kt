@@ -9,7 +9,8 @@ import frc.robot.lib.extensions.volts
 
 const val PORT = 20
 
-val START_VOLTAGE = 3.volts
+val START_VOLTAGE = 6.volts
+val REVERSE_VOLTAGE = (-9).volts
 
 val MOTOR_CONFIG =
     TalonFXConfiguration().apply {
