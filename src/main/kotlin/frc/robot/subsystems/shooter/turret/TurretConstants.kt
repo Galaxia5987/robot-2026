@@ -31,11 +31,10 @@ val SETPOINT_TOLERANCE
         }
 
 const val ENCODER_ID = 5
-val ABSOLUTE_ENCODER_OFFSET = (-0.483887).rot
+val ABSOLUTE_ENCODER_OFFSET = (0.161377).rot
 
 val FORWARD_LIMIT = 0.99.rot
 val REVERSE_LIMIT = 0.rot
-
 val TURRET_ZERO_FORCE_POINT = 0.36.rot
 const val kTension = 0.43
 const val kSetpointVelocity = 6.0
