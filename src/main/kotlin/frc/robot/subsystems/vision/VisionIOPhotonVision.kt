@@ -108,6 +108,8 @@ open class VisionIOPhotonVision(
                 }
 
                 inputs.estimatedPose = observation!!
+            } else {
+                inputs.estimatedPose = null
             }
         }
 

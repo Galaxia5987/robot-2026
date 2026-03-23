@@ -70,7 +70,7 @@ open class Vision(
             // Update disconnected alert
             disconnectedAlerts[i].set(!cameraInputs.connected)
 
-            if (!cameraInputs.connected) {
+            if (!cameraInputs.connected || cameraInputs.estimatedPose == null) {
                 continue
             }
 
