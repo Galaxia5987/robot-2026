@@ -83,8 +83,8 @@ val currentPreShift
     get() =
         SHIFTS.findLast {
             (matchTime.sec) in
-                it.endTime..it.startTime +
-                        (if (isOurShift(it)) 2.0.sec else 0.sec)
+                it.endTime-(if (isOurShift(it)) 2.0.sec else 0.sec)..it.startTime +
+                        (if (isOurShift(it)) 2.0.sec else -3.0.sec)
         }
 
 val currentShift: GameShift?
