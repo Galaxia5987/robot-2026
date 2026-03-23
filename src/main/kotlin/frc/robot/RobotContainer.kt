@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
+import frc.robot.autonomous.bullshitChallenge
 import frc.robot.autonomous.depotDoubleCycle
 import frc.robot.autonomous.depotMainShootOnMove
 import frc.robot.autonomous.outpostMainShootOnMove
@@ -93,6 +94,8 @@ object RobotContainer {
 
     private fun registerAutoCommands() {
         autoChooser.addDefaultOption("Empty", Commands.none())
+
+        autoChooser.addOption("bullshitChallenge", bullshitChallenge())
 
         // SysIds
         autoChooser.addOption(

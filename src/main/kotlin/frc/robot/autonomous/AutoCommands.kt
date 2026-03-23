@@ -68,7 +68,7 @@ fun depotMainShootOnMove(): Command =
 
 fun outpostMainShootOnMove(): Command =
     Commands.sequence(
-        runPathAndReset(pathName = "StartToFuelDepotSide", mirror = true),
+        runPath("StartToFuelDepotSide", mirror = true),
         runPath("FuelOutpostSideToOutpostShootOnMove"),
         Commands.waitTime(5.sec)
             .alongWith(
@@ -80,8 +80,17 @@ fun outpostMainShootOnMove(): Command =
 
 fun depotDoubleCycle(): Command =
     Commands.sequence(
-        runPathAndReset("StartToFuelDepotSide"),
+        runPath("StartToFuelDepotSide"),
         runPath("FuelToDepotShoot"),
         Commands.waitTime(5.sec),
         runPath("DepotShootToScatteredFuel"),
+    )
+
+fun bullshitChallenge(): Command =
+    Commands.sequence(
+        runPath("StartToFarFuelDepotSide", mirror = true),
+        runPath("FarFuelDepotSideToShooting", mirror = true),
+        Commands.waitTime(5.sec),
+        runPath("DepotSideShootingToCloseFuel", mirror = true),
+        runPath("FuelToDepotShoot", mirror = true),
     )

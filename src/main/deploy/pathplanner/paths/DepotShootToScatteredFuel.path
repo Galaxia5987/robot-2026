@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.858,
-        "y": 7.638416547788873
+        "x": 3.711907894739083,
+        "y": 7.602620614031684
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.878416901396232,
-        "y": 7.632004710656249
+        "x": 5.732324796135314,
+        "y": 7.59620877689906
       },
       "isLocked": false,
       "linkedName": "TrenchDepotShoot"

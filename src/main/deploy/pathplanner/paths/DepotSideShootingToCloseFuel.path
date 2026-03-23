@@ -3,53 +3,53 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.88,
-        "y": 5.201142857138384
+        "x": 3.711907894739083,
+        "y": 7.602620614031684
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.28620258670954,
-        "y": 6.8464864885224035
+        "x": 4.711907894739083,
+        "y": 7.602620614031684
       },
       "isLocked": false,
-      "linkedName": "fuelEndDepotSide"
+      "linkedName": "TrenchDepotShoot"
     },
     {
       "anchor": {
-        "x": 6.920932773109245,
-        "y": 6.946546218487395
+        "x": 7.88,
+        "y": 6.804473684210526
       },
       "prevControl": {
-        "x": 7.111276351284581,
-        "y": 6.709777377342466
+        "x": 7.88,
+        "y": 7.504473684210526
       },
       "nextControl": {
-        "x": 6.608436974789916,
-        "y": 7.335260504201679
+        "x": 7.88,
+        "y": 6.109473684210526
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.711907894739083,
-        "y": 7.602620614031684
+        "x": 7.88,
+        "y": 5.201142857138384
       },
       "prevControl": {
-        "x": 6.386209121078407,
-        "y": 7.550985578847854
+        "x": 7.88,
+        "y": 6.330137701938726
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "TrenchDepotShoot"
+      "linkedName": "fuelEndDepotSide"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.0,
-      "maxWaypointRelativePos": 0.45,
+      "minWaypointRelativePos": 1.160256410256409,
+      "maxWaypointRelativePos": 2.0,
       "constraints": {
         "maxVelocity": 4.01,
         "maxAcceleration": 4.0,
@@ -63,20 +63,14 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "setStopIntaking",
-      "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
-      "name": "setShooting",
+      "name": "setRollerHighCurrentLimit",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": null
     },
     {
-      "name": "setRollerNormalCurrentLimit",
-      "waypointRelativePos": 0,
+      "name": "setIntaking",
+      "waypointRelativePos": 0.49679487179487153,
       "endWaypointRelativePos": null,
       "command": null
     }
