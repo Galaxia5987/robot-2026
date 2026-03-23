@@ -19,6 +19,8 @@ import frc.robot.lib.AccelerationComplementaryFilter
 import frc.robot.lib.AccelerationFilter
 import frc.robot.lib.extensions.*
 import frc.robot.states.*
+import frc.robot.states.setpoints_manager.SetpointsManager.compensatedTurretDistanceFromGoal
+import frc.robot.states.setpoints_manager.SetpointsManager.turretAngleToHub
 import frc.robot.subsystems.shooter.flywheel.Flywheel
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
@@ -26,12 +28,11 @@ import frc.robot.subsystems.shooter.pre_shooter.PreShooterVelocity
 import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.shooter.turret.constraintTurretLimits
 import frc.robot.subsystems.shooter.turret.getTurretTangentialVelocityFieldRelative
-import frc.robot.subsystems.shooter.turret.turretAngleToHub
+import kotlin.math.abs
+import kotlin.math.tanh
 import org.littletonrobotics.junction.Logger
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
-import kotlin.math.abs
-import kotlin.math.tanh
 
 private const val LATENCY_FACTOR = 0.2
 private val RIO_TO_ORIGIN =
@@ -75,18 +76,18 @@ private fun getTurretSetpoint(): Angle {
     val constrainedWithCompensation =
         constraintTurretLimits(
             turretAngleToHub -
-                    calculateYaw(
+                calculateYaw(
                         compensatedTurretDistanceFromGoal[m],
                         speeds.x,
                         speeds.y
                     )
-                        .deg
+                    .deg
         )
 
     val constrainedStaticShooting = constraintTurretLimits(turretAngleToHub)
     if (
         abs(constrainedWithCompensation[deg] - constrainedStaticShooting[deg]) >
-        180
+            180
     ) {
         return constrainedStaticShooting
     }
@@ -96,12 +97,12 @@ private fun getTurretSetpoint(): Angle {
 private fun getHoodSetpoint(): Angle {
     val turretOrientedChassisSpeeds = turretOrientedChassisSpeeds
     return (90.deg -
-            calculatePitch(
+        calculatePitch(
                 compensatedTurretDistanceFromGoal[m],
                 turretOrientedChassisSpeeds.x,
                 turretOrientedChassisSpeeds.y
             )
-                .deg)
+            .deg)
 }
 
 private var kStaticCalibration = 0.97
@@ -111,48 +112,54 @@ private var kMovingCalibration = 0.05
 fun logFactors() {
     Logger.recordOutput(
         "Calibration/Mode",
-        if (DriverOverrides.ShootingCalibrationOverride.trigger.asBoolean) "Calibration" else "Regular"
+        if (DriverOverrides.ShootingCalibrationOverride.trigger.asBoolean)
+            "Calibration"
+        else "Regular"
     )
     Logger.recordOutput("Calibration/StaticFactor", kStaticCalibration)
     Logger.recordOutput("Calibration/MovingFactor", kMovingCalibration)
 }
 
-private fun changeStaticFactor(addition: Double) = Commands.runOnce({
-    kStaticCalibration += addition
-    logFactors()
-})
+private fun changeStaticFactor(addition: Double) =
+    Commands.runOnce({
+        kStaticCalibration += addition
+        logFactors()
+    })
 
-private fun changeMovingFactor(addition: Double) = Commands.runOnce({
-    kMovingCalibration += addition
-    logFactors()
-})
+private fun changeMovingFactor(addition: Double) =
+    Commands.runOnce({
+        kMovingCalibration += addition
+        logFactors()
+    })
 
-private val changeCalibrationFactors = DriverOverrides.ShootingCalibrationOverride.trigger.apply {
-    // moving
-    and(movingCalibrationDecreaseButton).onTrue(changeMovingFactor(-0.01))
-    and(movingCalibrationIncreaseButton).onTrue(changeMovingFactor(0.01))
-    // static
-    and(staticCalibrationDecreaseButton).onTrue(changeStaticFactor(-0.01))
-    and(staticCalibrationIncreaseButton).onTrue(changeStaticFactor(0.01))
+private val changeCalibrationFactors =
+    DriverOverrides.ShootingCalibrationOverride.trigger.apply {
+        // moving
+        and(movingCalibrationDecreaseButton).onTrue(changeMovingFactor(-0.01))
+        and(movingCalibrationIncreaseButton).onTrue(changeMovingFactor(0.01))
+        // static
+        and(staticCalibrationDecreaseButton).onTrue(changeStaticFactor(-0.01))
+        and(staticCalibrationIncreaseButton).onTrue(changeStaticFactor(0.01))
 
-    onChange(Commands.runOnce(::logFactors))
-}
+        onChange(Commands.runOnce(::logFactors))
+    }
 
 private fun getFlywheelSetpoint(): AngularVelocity {
     val turretOrientedChassisSpeeds = turretOrientedChassisSpeeds
     var output =
-        ((kStaticCalibration + (kMovingCalibration * tanh(turretOrientedChassisSpeeds.x))) *
-                calculateAngularVelocity(
-                    calculateVelocity(
-                        compensatedTurretDistanceFromGoal[m],
-                        turretOrientedChassisSpeeds.x,
-                        turretOrientedChassisSpeeds.y
-                    )
-                ))
+        ((kStaticCalibration +
+            (kMovingCalibration * tanh(turretOrientedChassisSpeeds.x))) *
+            calculateAngularVelocity(
+                calculateVelocity(
+                    compensatedTurretDistanceFromGoal[m],
+                    turretOrientedChassisSpeeds.x,
+                    turretOrientedChassisSpeeds.y
+                )
+            ))
 
     output *=
         1 +
-                3.0 / 89.0 *
+            3.0 / 89.0 *
                 Math.exp(1.3 * (compensatedTurretDistanceFromGoal[m] - 4.6))
 
     return output.rps

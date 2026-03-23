@@ -1,39 +1,31 @@
 package frc.robot.states.setpoints_manager
 
 import edu.wpi.first.math.geometry.Pose2d
-import edu.wpi.first.units.Measure
-import edu.wpi.first.units.Unit
-import edu.wpi.first.wpilibj2.command.Commands.runOnce
+import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.math.geometry.Translation2d
+import edu.wpi.first.units.Units.Degrees
+import edu.wpi.first.units.Units.Meters
+import edu.wpi.first.units.measure.Angle
+import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.drive
 import frc.robot.field.*
 import frc.robot.isAuto
+import frc.robot.lib.extensions.m
 import frc.robot.lib.extensions.not
 import frc.robot.lib.extensions.onFalse
 import frc.robot.lib.extensions.onTrue
+import frc.robot.lib.extensions.rotationToPoint
 import frc.robot.lib.extensions.toPose
 import frc.robot.states.DriverOverrides
-import frc.robot.states.setpoints_manager.SetpointsManager.ShootingType
-import frc.robot.states.setpoints_manager.SetpointsManager.shootingType
-import frc.robot.states.setpoints_manager.shooting_modes.calibrationShootingMap
-import frc.robot.states.setpoints_manager.shooting_modes.feedShootingMap
-import frc.robot.states.setpoints_manager.shooting_modes.interpolationShootingMap
-import frc.robot.states.setpoints_manager.shooting_modes.shootOnMoveMap
-import frc.robot.states.setpoints_manager.shooting_modes.staticShootingMap
 import frc.robot.subsystems.shooter.flywheel.Flywheel
 import frc.robot.subsystems.shooter.pre_shooter.PreShooter
-import org.team5987.annotation.LogLevel
-import org.team5987.annotation.LoggedOutput
+import frc.robot.subsystems.shooter.turret.TURRET_TO_ROBOT
+import frc.robot.subsystems.shooter.turret.constraintTurretLimits
+import org.littletonrobotics.junction.Logger
 
-object SetpointsManager {
-
-    @LoggedOutput(
-        key = "StateMachines/Shooting/currentGoal",
-        level = LogLevel.COMP
-    )
-    var currentGoal: Pose2d = HUB_TRANSLATION.toPose()
-    var isFeeding = false
-
+object SetpointsManager : SubsystemBase() {
     private val goalHubTrigger =
         inExtendedAllianceZone
             .or(isAuto)
@@ -72,18 +64,29 @@ object SetpointsManager {
                     .ignoringDisable(true)
             )
 
-    enum class ShootingType {
-        STATIC,
-        INTERPOLATION,
-        SHOOT_ON_MOVE,
-        CALIBRATION,
-        FEEDING
+    val isShootingOnMove = Trigger {
+        shootingType == ShootingType.SHOOT_ON_MOVE
     }
 
-    @LoggedOutput(
-        key = "StateMachines/Shooting/shootingType",
-        level = LogLevel.COMP
-    )
+    val isUsingInterpolation = Trigger {
+        shootingType == ShootingType.INTERPOLATION
+    }
+
+    val isUsingStaticSetpoints = Trigger { shootingType == ShootingType.STATIC }
+
+    val isUsingFeeding =
+        Trigger { isFeeding }
+            .onTrue(
+                Flywheel.setLowCurrentLimits(),
+                PreShooter.setLowCurrentLimits(),
+            )
+            .onFalse(
+                Flywheel.setRegularCurrentLimits(),
+                PreShooter.setLowCurrentLimits(),
+            )
+
+    var currentGoal: Pose2d = HUB_TRANSLATION.toPose()
+    var isFeeding = false
     val shootingType
         get() =
             when {
@@ -97,39 +100,60 @@ object SetpointsManager {
                 else -> ShootingType.INTERPOLATION
             }
 
-    val isShootingOnMove = Trigger {
-        shootingType == ShootingType.SHOOT_ON_MOVE
-    }
+    var turretTranslationFieldOriented: Translation2d = Translation2d()
+        private set
 
-    val isUsingInterpolation = Trigger {
-        shootingType == ShootingType.INTERPOLATION
-    }
+    var compensatedTurretTranslationFieldOriented: Translation2d =
+        Translation2d()
+        private set
 
-    val isUsingStaticSetpoints = Trigger { shootingType == ShootingType.STATIC }
-    val isUsingFeeding =
-        Trigger { isFeeding }
-            .onTrue(
-                Flywheel.setLowCurrentLimits(),
-                PreShooter.setLowCurrentLimits(),
+    private var turretAngleFromRobotToHub: Rotation2d = Rotation2d()
+
+    var turretAngleToHub: Angle = Degrees.zero()
+        private set
+
+    var constrainedTurretAngleToHub: Angle = Degrees.zero()
+        private set
+
+    var turretDistanceFromGoal: Distance = Meters.zero()
+        private set
+
+    var compensatedTurretDistanceFromGoal: Distance = Meters.zero()
+        private set
+
+    override fun periodic() {
+        val rotatedTurretOffset = TURRET_TO_ROBOT.rotateBy(drive.pose.rotation)
+
+        turretTranslationFieldOriented =
+            drive.pose.translation.plus(rotatedTurretOffset)
+
+        compensatedTurretTranslationFieldOriented =
+            drive.compensatedPose.translation.plus(rotatedTurretOffset)
+
+        turretAngleFromRobotToHub =
+            turretTranslationFieldOriented.rotationToPoint(
+                currentGoal.translation
             )
-            .onFalse(
-                Flywheel.setRegularCurrentLimits(),
-                PreShooter.setLowCurrentLimits(),
-            )
-}
 
-fun <T : SubsystemBase, M : () -> Measure<out Unit>> T.aimingSetpoint(): M {
-    @Suppress("UNCHECKED_CAST")
-    return {
-        val result =
-            when (shootingType) {
-                ShootingType.STATIC -> staticShootingMap[this]!!
-                ShootingType.INTERPOLATION -> interpolationShootingMap[this]!!
-                ShootingType.CALIBRATION -> calibrationShootingMap[this]!!
-                ShootingType.SHOOT_ON_MOVE -> shootOnMoveMap[this]!!
-                ShootingType.FEEDING -> feedShootingMap[this]!!
-            }
-        result.invoke()
+        turretAngleToHub =
+            (drive.pose.rotation - turretAngleFromRobotToHub).measure
+
+        constrainedTurretAngleToHub = constraintTurretLimits(turretAngleToHub)
+
+        turretDistanceFromGoal =
+            turretTranslationFieldOriented
+                .getDistance(currentGoal.translation)
+                .m
+        compensatedTurretDistanceFromGoal =
+            compensatedTurretTranslationFieldOriented
+                .getDistance(currentGoal.translation)
+                .m
+
+        Logger.recordOutput("StateMachines/Shooting/currentGoal", currentGoal)
+        Logger.recordOutput(
+            "StateMachines/Shooting/turretDistanceFromGoal",
+            turretDistanceFromGoal
+        )
+        Logger.recordOutput("StateMachines/Shooting/shootingType", shootingType)
     }
-        as M
 }

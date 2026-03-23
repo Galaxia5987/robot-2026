@@ -14,7 +14,6 @@ import frc.robot.lib.extensions.radians
 import frc.robot.lib.extensions.rotations
 import frc.robot.lib.universal_motor.MotorLogConfig
 import frc.robot.lib.universal_motor.UniversalTalonFX
-import kotlin.math.sin
 import org.littletonrobotics.junction.Logger
 
 object Turret : SubsystemBase() {
@@ -37,11 +36,10 @@ object Turret : SubsystemBase() {
     private var lastSetpoint = 0.radians
     private var lastTime = Timer.getFPGATimestamp()
     private var setpointVelocityRps = 0.0
-
     val position
         get() = motor.inputs.position
 
-    val atSetpoint =
+    val atSetpoint: Trigger =
         Trigger { motor.inputs.position.isNear(setpoint, SETPOINT_TOLERANCE) }
             .debounce(0.15, Debouncer.DebounceType.kFalling)
 
@@ -93,17 +91,5 @@ object Turret : SubsystemBase() {
             radians
         )
         Logger.recordOutput("Subsystems/Turret/atSetpoint", atSetpoint)
-        Logger.recordOutput(
-            "Subsystems/Turret/turretAimingSetpoint",
-            turretAimingSetpoint[radians],
-            radians
-        )
-        Logger.recordOutput(
-            "Subsystems/Turret/turretAngleToHub",
-            turretAngleToHub[radians],
-            radians
-        )
-        Logger.recordOutput("Subsystems/Turret/turretPose", turretPose)
-        Logger.recordOutput("Subsystems/Turret/isTurretAligned", atSetpoint)
     }
 }

@@ -15,7 +15,7 @@ import frc.robot.lib.extensions.mm
 import frc.robot.lib.extensions.mps
 import frc.robot.lib.extensions.toRotation2d
 import frc.robot.lib.extensions.toTranslation3d
-import frc.robot.states.setpoints_manager.shooting_modes.turretDistanceFromGoal
+import frc.robot.states.setpoints_manager.SetpointsManager.turretDistanceFromGoal
 import frc.robot.states.shooting.ShootingState
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.turret.Turret

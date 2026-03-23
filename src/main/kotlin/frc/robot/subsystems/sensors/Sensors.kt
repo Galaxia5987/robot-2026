@@ -4,7 +4,6 @@ import edu.wpi.first.math.filter.Debouncer
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import frc.robot.lib.extensions.get
-import frc.robot.lib.extensions.m
 import frc.robot.lib.extensions.sec
 import frc.robot.lib.unified_canrange.UnifiedCANRange
 import frc.robot.lib.unified_canrange.UnifiedCANRangeLogging
@@ -16,10 +15,6 @@ import frc.robot.subsystems.intake.extender.Extender
 import org.littletonrobotics.junction.Logger
 
 object Sensors : SubsystemBase() {
-
-    private val FULL = 0.2.m // TODO: change the value
-    private val HALF_FULL = 0.5.m // TODO: change the value
-
     private var ballCounter = 0
 
     private val spindexerSensor =

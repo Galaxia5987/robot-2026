@@ -17,7 +17,12 @@ val shouldPump: Trigger =
     IntakingStates.INTAKING.trigger
         .negate()
         .and(ShootingState.SHOOTING.trigger)
-        .and(Trigger({RobotContainer.shooting?.canDoubleFeed?.negate()?.asBoolean ?: true}))
+        .and(
+            Trigger({
+                RobotContainer.shooting?.canDoubleFeed?.negate()?.asBoolean
+                    ?: true
+            })
+        )
         .whileTrue(IntakingStates.PUMPING.set())
         .logTrigger("$LOGGING_PATH/shouldPump")
 
@@ -33,8 +38,8 @@ fun idle(): Command =
 
 fun priming(): Command =
     Flywheel.setVelocity(
-        Flywheel.aimingSetpoint<Flywheel, () -> AngularVelocity>()
-    )
+            Flywheel.aimingSetpoint<Flywheel, () -> AngularVelocity>()
+        )
         .alongWith(
             PreShooter.setVelocity(
                 PreShooter.aimingSetpoint<PreShooter, () -> AngularVelocity>()
@@ -45,7 +50,7 @@ fun backfeeding(): Command = PreShooter.reverse()
 
 fun shooting(): Command =
     Commands.sequence(
-        SpindexerCommands.startFeeding(),
-        //            IntakingStates.PUMPING.set().onlyIf(shouldPump)
-    )
+            SpindexerCommands.startFeeding(),
+            //            IntakingStates.PUMPING.set().onlyIf(shouldPump)
+            )
         .alongWith(priming())

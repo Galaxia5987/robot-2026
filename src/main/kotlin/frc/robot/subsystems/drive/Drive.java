@@ -146,6 +146,8 @@ public class Drive extends SubsystemBase implements SysIdable {
                 new SwerveModulePosition()
             };
 
+    public ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
+
     private final LoggedNetworkBoolean isTuningMode =
             new LoggedNetworkBoolean("/Tuning/Drive/tuningMode", false);
 
@@ -223,7 +225,7 @@ public class Drive extends SubsystemBase implements SysIdable {
         AutoBuilder.configure(
                 this::getPose,
                 this::resetOdometry,
-                this::getChassisSpeeds,
+                () -> chassisSpeeds,
                 this::runVelocity,
                 new PPHolonomicDriveController(
                         TunerConstants.autonomousTranslationPID,
@@ -268,6 +270,9 @@ public class Drive extends SubsystemBase implements SysIdable {
         // Update odometry
         double[] sampleTimestamps = modules[0].getOdometryTimestamps();
         int sampleCount = sampleTimestamps.length;
+
+        chassisSpeeds = kinematics.toChassisSpeeds(getModuleStates());
+        Logger.recordOutput("SwerveChassisSpeeds/Measured", chassisSpeeds);
 
         for (int i = 0; i < sampleCount; i++) {
             SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
@@ -317,7 +322,6 @@ public class Drive extends SubsystemBase implements SysIdable {
                 return;
             }
 
-            // TODO: Temperoray fix, CHANGE IN WORKSHOP!!!!
             if (gyroInputs.connected) {
                 // Update odometry
                 BetterPoseEstimator.getInstance()
@@ -327,10 +331,8 @@ public class Drive extends SubsystemBase implements SysIdable {
                                         getModulePositions(),
                                         gyroInputs.rollPosition,
                                         gyroInputs.pitchPosition,
-                                        gyroInputs.yawPosition)); // TODO: Add handling for if the
-                // gyro
-                // isn't connected
-                BetterPoseEstimator.getInstance().setRobotVelocity(getChassisSpeeds());
+                                        gyroInputs.yawPosition));
+                BetterPoseEstimator.getInstance().setRobotVelocity(chassisSpeeds);
             }
         }
         fieldPose.setRobotPose(getPose());
@@ -479,12 +481,6 @@ public class Drive extends SubsystemBase implements SysIdable {
         return Units.RadiansPerSecond.of(gyroInputs.yawVelocityRadPerSec);
     }
 
-    /** Returns the measured chassis speeds of the robot. */
-    @AutoLogOutput(key = "SwerveChassisSpeeds/Measured")
-    public ChassisSpeeds getChassisSpeeds() {
-        return kinematics.toChassisSpeeds(getModuleStates());
-    }
-
     @AutoLogOutput(key = "SwerveChassisSpeeds/MeasuredFieldOriented")
     public ChassisSpeeds getFieldOrientedSpeeds() {
         return ChassisSpeeds.fromRobotRelativeSpeeds(
@@ -525,7 +521,7 @@ public class Drive extends SubsystemBase implements SysIdable {
 
     @AutoLogOutput(key = "Odometry/CompensatedRobot")
     public Pose2d getCompensatedPose() {
-        ChassisSpeeds speeds = this.getChassisSpeeds();
+        ChassisSpeeds speeds = this.chassisSpeeds;
         return getPose()
                 .plus(
                         new Transform2d(

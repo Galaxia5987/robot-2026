@@ -142,7 +142,6 @@ fun profiledAlignToPose(
         )
         .withName("Drive/profiledAlignToPose")
 
-// TODO: Calibrate goal missing debounce
 fun profiledAlignToPose(
     goalPose: () -> Pose2d?,
     tolerance: Pose2d = TOLERANCE,

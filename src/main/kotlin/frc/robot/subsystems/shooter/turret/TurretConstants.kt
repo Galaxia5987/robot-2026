@@ -19,7 +19,8 @@ const val ENCODER_RATIO = 1.0
 val SIM_GAINS = Gains(kP = 0.5, kD = 0.075)
 val REAL_GAINS = Gains(kP = 110.0, kS = 0.2)
 
-// TODO: Calibrate turret for small movements
+val TURRET_TO_ROBOT = Translation2d((-117.5).mm, 207.5.mm)
+
 val SETPOINT_TOLERANCE
     get() =
         if (SetpointsManager.isFeeding) {
