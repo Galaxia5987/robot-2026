@@ -312,7 +312,7 @@ public class Drive extends SubsystemBase implements SysIdable {
             gyroDisconnectedAlert.set(
                     !gyroInputs.connected && ConstantsKt.getCURRENT_MODE() != Mode.SIM);
 
-            Logger.recordOutput("IsSkidding", isSkidding);
+            Logger.recordOutput("Odometry/IsSkidding", isSkidding);
             if (isSkidding) {
                 return;
             }
