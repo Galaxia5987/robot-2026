@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.711907894739083,
-        "y": 7.602620614031684
+        "x": 4.0,
+        "y": 7.603
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.711907894739083,
-        "y": 7.602620614031684
+        "x": 5.0,
+        "y": 7.603
       },
       "isLocked": false,
       "linkedName": "TrenchDepotShoot"
@@ -77,7 +77,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 4.01,
-    "maxAcceleration": 4.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 1800.0,
     "nominalVoltage": 12.0,

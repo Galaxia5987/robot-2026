@@ -93,9 +93,9 @@ val RIGHT_CONFIG =
     CameraConfig(
         robotToCamera = {
             Transform3d(
-                (-146.39146).mm,
-                (-371.60854).mm,
-                372.62536.mm,
+                (-149.796).mm,
+                (-368.204).mm,
+                370.87278.mm,
                 Rotation3d(0.0.deg, (-16.8255).deg, (-45).deg)
             )
         },
@@ -143,7 +143,7 @@ val OV_NAME_TO_CONFIG =
 var realsenseRobotToCamera = Transform3d(Translation3d(), Rotation3d())
 
 // Basic filtering thresholds
-const val MAX_AMBIGUITY = 0.3
+const val MAX_AMBIGUITY = 0.2
 const val MAX_Z_ERROR = 0.3
 
 // Standard deviation baselines, for 1 meter distance and 1 tag

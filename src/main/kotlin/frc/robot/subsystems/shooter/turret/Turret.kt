@@ -7,6 +7,8 @@ import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.field.inAllianceZone
+import frc.robot.isAuto
 import frc.robot.lib.createDisableTriggerForCoast
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.rad
@@ -55,7 +57,11 @@ object Turret : SubsystemBase() {
     }
 
     fun setAngle(angleSupplier: () -> Angle) = run {
-        var newSetpoint = angleSupplier()
+        if (isAuto.asBoolean && !inAllianceZone.asBoolean) {
+            return@run
+        }
+
+        val newSetpoint = angleSupplier()
         val currentTime = Timer.getFPGATimestamp()
         val dt = currentTime - lastTime
 

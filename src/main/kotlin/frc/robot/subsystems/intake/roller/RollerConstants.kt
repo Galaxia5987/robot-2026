@@ -24,7 +24,7 @@ val SIM_GAINS = Gains(kP = 1.0)
 val INTAKE_BASE_SPEED = 35.rps
 
 val NORMAL_CURRENT_LIMITS = createCurrentLimits(25.amps, 5.amps)
-val HIGH_CURRENT_LIMITS = createCurrentLimits(60.amps, 5.amps)
+val HIGH_CURRENT_LIMITS = createCurrentLimits(100.amps, 5.amps)
 
 const val PORT = 10
 const val GEAR_RATIO = 2.5

@@ -3,28 +3,28 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.856589912280702,
-        "y": 4.79468201754386
+        "x": 8.75,
+        "y": 5.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.856589912280702,
-        "y": 5.448656230050434
+        "x": 8.75,
+        "y": 5.653974212506575
       },
       "isLocked": false,
       "linkedName": "farFuelEndDepotSide"
     },
     {
       "anchor": {
-        "x": 8.856589912280702,
+        "x": 8.75,
         "y": 7.054495614035087
       },
       "prevControl": {
-        "x": 8.856589912284326,
+        "x": 8.750000000003624,
         "y": 6.424495614035087
       },
       "nextControl": {
-        "x": 8.856589912277078,
+        "x": 8.749999999996376,
         "y": 7.684495614035087
       },
       "isLocked": false,
@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 3.711907894739083,
-        "y": 7.602620614031684
+        "x": 4.0,
+        "y": 7.603
       },
       "prevControl": {
-        "x": 2.653907894739083,
-        "y": 7.602620614031684
+        "x": 2.942,
+        "y": 7.603
       },
       "nextControl": null,
       "isLocked": false,
@@ -56,7 +56,7 @@
     },
     {
       "name": "setRollerNormalCurrentLimit",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": null
     },
@@ -85,5 +85,5 @@
     "velocity": 0,
     "rotation": -90.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

@@ -18,7 +18,7 @@ import edu.wpi.first.units.measure.*;
 // https://v6.docs.ctr-electronics.com/en/stable/docs/tuner/tuner-swerve/index.html/
 public class TunerConstants {
     // Both sets of gains need to be tuned to your individual robot.
-    public static final PIDConstants autonomousTranslationPID = new PIDConstants(8.0, 0.0, 0.0);
+    public static final PIDConstants autonomousTranslationPID = new PIDConstants(5.0, 0.0, 0.0);
     public static final PIDConstants autonomousRotationPID = new PIDConstants(4.5, 0.0, 0.0);
 
     // The steer motor uses any SwerveModule.SteerRequestType control request with the
