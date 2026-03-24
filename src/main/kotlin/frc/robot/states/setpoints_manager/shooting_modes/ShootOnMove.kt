@@ -33,6 +33,7 @@ import kotlin.math.tanh
 import org.littletonrobotics.junction.Logger
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
+import kotlin.math.roundToInt
 
 private const val LATENCY_FACTOR = 0.2
 private val RIO_TO_ORIGIN =
@@ -112,7 +113,7 @@ private var kMovingCalibration = 0.05
 fun logFactors() {
     Logger.recordOutput(
         "Calibration/Mode",
-        if (DriverOverrides.ShootingCalibrationOverride.trigger.asBoolean)
+        if (DriverOverrides.ShootOnMoveCalibrationOverride.trigger.asBoolean)
             "Calibration"
         else "Regular"
     )
@@ -123,17 +124,19 @@ fun logFactors() {
 private fun changeStaticFactor(addition: Double) =
     Commands.runOnce({
         kStaticCalibration += addition
+        kStaticCalibration = (kStaticCalibration * 100).roundToInt() / 100.0
         logFactors()
     })
 
 private fun changeMovingFactor(addition: Double) =
     Commands.runOnce({
         kMovingCalibration += addition
+        kMovingCalibration = (kMovingCalibration * 100).roundToInt() / 100.0
         logFactors()
     })
 
 private val changeCalibrationFactors =
-    DriverOverrides.ShootingCalibrationOverride.trigger.apply {
+    DriverOverrides.ShootOnMoveCalibrationOverride.trigger.apply {
         // moving
         and(movingCalibrationDecreaseButton).onTrue(changeMovingFactor(-0.01))
         and(movingCalibrationIncreaseButton).onTrue(changeMovingFactor(0.01))
