@@ -26,14 +26,50 @@ import frc.robot.subsystems.shooter.turret.constraintTurretLimits
 import org.littletonrobotics.junction.Logger
 
 object SetpointsManager : SubsystemBase() {
+    var currentGoal: Pose2d = HUB_TRANSLATION.toPose()
+
+    var isFeeding = false
+    val shootingType
+        get() =
+            when {
+                DriverOverrides.StaticShootingOverride.trigger.asBoolean ->
+                    ShootingType.STATIC
+                DriverOverrides.ShootingCalibrationOverride.trigger.asBoolean ->
+                    ShootingType.CALIBRATION
+                isFeeding -> ShootingType.FEEDING
+                DriverOverrides.ShootOnMoveOverride.trigger.asBoolean ->
+                    ShootingType.SHOOT_ON_MOVE
+                else -> ShootingType.INTERPOLATION
+            }
+    var turretTranslationFieldOriented: Translation2d = Translation2d()
+        private set
+
+    var compensatedTurretTranslationFieldOriented: Translation2d =
+        Translation2d()
+        private set
+
+    private var turretAngleFromRobotToHub: Rotation2d = Rotation2d()
+
+    var turretAngleToHub: Angle = Degrees.zero()
+        private set
+
+    var constrainedTurretAngleToHub: Angle = Degrees.zero()
+        private set
+
+    var turretDistanceFromGoal: Distance = Meters.zero()
+        private set
+
+    var compensatedTurretDistanceFromGoal: Distance = Meters.zero()
+        private set
+
     private val goalHubTrigger =
         inExtendedAllianceZone
             .or(isAuto)
             .onTrue(
                 runOnce({
-                        currentGoal = HUB_TRANSLATION.toPose()
-                        isFeeding = false
-                    })
+                    currentGoal = HUB_TRANSLATION.toPose()
+                    isFeeding = false
+                })
                     .ignoringDisable(true)
             )
 
@@ -44,9 +80,9 @@ object SetpointsManager : SubsystemBase() {
             .and(isAuto.negate())
             .onTrue(
                 runOnce({
-                        currentGoal = DEPOT_TRANSLATION.toPose()
-                        isFeeding = true
-                    })
+                    currentGoal = DEPOT_TRANSLATION.toPose()
+                    isFeeding = true
+                })
                     .ignoringDisable(true)
             )
 
@@ -58,9 +94,9 @@ object SetpointsManager : SubsystemBase() {
             .and(isAuto.negate())
             .onTrue(
                 runOnce({
-                        currentGoal = OUTPOST_LOCATION.toPose()
-                        isFeeding = true
-                    })
+                    currentGoal = OUTPOST_LOCATION.toPose()
+                    isFeeding = true
+                })
                     .ignoringDisable(true)
             )
 
@@ -84,42 +120,6 @@ object SetpointsManager : SubsystemBase() {
                 Flywheel.setRegularCurrentLimits(),
                 PreShooter.setLowCurrentLimits(),
             )
-
-    var currentGoal: Pose2d = HUB_TRANSLATION.toPose()
-    var isFeeding = false
-    val shootingType
-        get() =
-            when {
-                DriverOverrides.StaticShootingOverride.trigger.asBoolean ->
-                    ShootingType.STATIC
-                DriverOverrides.ShootingCalibrationOverride.trigger.asBoolean ->
-                    ShootingType.CALIBRATION
-                isFeeding -> ShootingType.FEEDING
-                DriverOverrides.ShootOnMoveOverride.trigger.asBoolean ->
-                    ShootingType.SHOOT_ON_MOVE
-                else -> ShootingType.INTERPOLATION
-            }
-
-    var turretTranslationFieldOriented: Translation2d = Translation2d()
-        private set
-
-    var compensatedTurretTranslationFieldOriented: Translation2d =
-        Translation2d()
-        private set
-
-    private var turretAngleFromRobotToHub: Rotation2d = Rotation2d()
-
-    var turretAngleToHub: Angle = Degrees.zero()
-        private set
-
-    var constrainedTurretAngleToHub: Angle = Degrees.zero()
-        private set
-
-    var turretDistanceFromGoal: Distance = Meters.zero()
-        private set
-
-    var compensatedTurretDistanceFromGoal: Distance = Meters.zero()
-        private set
 
     override fun periodic() {
         val rotatedTurretOffset = TURRET_TO_ROBOT.rotateBy(drive.pose.rotation)
