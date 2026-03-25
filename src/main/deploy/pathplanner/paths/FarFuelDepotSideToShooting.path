@@ -17,15 +17,15 @@
     {
       "anchor": {
         "x": 8.75,
-        "y": 7.054495614035087
+        "y": 7.0684957983193275
       },
       "prevControl": {
         "x": 8.750000000003624,
-        "y": 6.424495614035087
+        "y": 6.438495798319328
       },
       "nextControl": {
         "x": 8.749999999996376,
-        "y": 7.684495614035087
+        "y": 7.698495798319327
       },
       "isLocked": false,
       "linkedName": "depotFarPickupMidWaypoint"
@@ -73,7 +73,7 @@
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 1800.0,
     "nominalVoltage": 12.0,
-    "unlimited": false
+    "unlimited": true
   },
   "goalEndState": {
     "velocity": 0,
