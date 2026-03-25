@@ -1,7 +1,9 @@
 package frc.robot.subsystems.intake.roller
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs
+import com.ctre.phoenix6.controls.Follower
 import com.ctre.phoenix6.controls.VelocityVoltage
+import com.ctre.phoenix6.signals.MotorAlignmentValue
 import edu.wpi.first.units.measure.AngularVelocity
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -14,7 +16,7 @@ import org.littletonrobotics.junction.Logger
 object Roller : SubsystemBase(), RollerPositionsCommandFactory {
     private val motor =
         UniversalTalonFX(
-            port = PORT,
+            port = MAIN_PORT,
             config = MOTOR_CONFIG,
             simGains = SIM_GAINS,
             subsystem = name,
@@ -28,6 +30,26 @@ object Roller : SubsystemBase(), RollerPositionsCommandFactory {
                     voltage = true
                 )
         )
+
+    init {
+        UniversalTalonFX(
+            port = AUX_PORT,
+            config = MOTOR_CONFIG,
+            simGains = SIM_GAINS,
+            subsystem = name,
+            logConfig =
+                MotorLogConfig(
+                    position = false,
+                    statorCurrent = false,
+                    current = false,
+                    velocity = true,
+                    absoluteEncoder = false,
+                    voltage = true
+                )
+        ).apply {
+            setControl(Follower(MAIN_PORT, MotorAlignmentValue.Opposed))
+        }
+    }
 
     private val velocityVoltage = VelocityVoltage(0.0)
     private var setpoint: AngularVelocity = 0.rps
