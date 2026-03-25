@@ -14,7 +14,7 @@ import frc.robot.lib.universal_motor.UniversalTalonFX
 import org.littletonrobotics.junction.Logger
 
 object Roller : SubsystemBase(), RollerPositionsCommandFactory {
-    private val motor =
+    private val mainMotor =
         UniversalTalonFX(
             port = MAIN_PORT,
             config = MOTOR_CONFIG,
@@ -31,24 +31,22 @@ object Roller : SubsystemBase(), RollerPositionsCommandFactory {
                 )
         )
 
-    init {
-        UniversalTalonFX(
-            port = AUX_PORT,
-            config = MOTOR_CONFIG,
-            simGains = SIM_GAINS,
-            subsystem = name,
-            logConfig =
-                MotorLogConfig(
-                    position = false,
-                    statorCurrent = false,
-                    current = false,
-                    velocity = true,
-                    absoluteEncoder = false,
-                    voltage = true
-                )
-        ).apply {
-            setControl(Follower(MAIN_PORT, MotorAlignmentValue.Opposed))
-        }
+    private val auxMotor = UniversalTalonFX(
+        port = AUX_PORT,
+        config = MOTOR_CONFIG,
+        simGains = SIM_GAINS,
+        subsystem = name,
+        logConfig =
+            MotorLogConfig(
+                position = false,
+                statorCurrent = false,
+                current = false,
+                velocity = true,
+                absoluteEncoder = false,
+                voltage = true
+            )
+    ).apply {
+        setControl(Follower(MAIN_PORT, MotorAlignmentValue.Opposed))
     }
 
     private val velocityVoltage = VelocityVoltage(0.0)
@@ -57,16 +55,16 @@ object Roller : SubsystemBase(), RollerPositionsCommandFactory {
     val isActive = Trigger { setpoint > 0.rps }
 
     val inputs
-        get() = motor.inputs
+        get() = mainMotor.inputs
 
     override fun setTarget(value: RollerPositions): Command = runOnce {
         setpoint = value.velocity
-        motor.setControl(velocityVoltage.withVelocity(value.velocity))
+        mainMotor.setControl(velocityVoltage.withVelocity(value.velocity))
     }
 
     private fun setControl(velocity: AngularVelocity) {
         setpoint = velocity
-        motor.setControl(velocityVoltage.withVelocity(velocity))
+        mainMotor.setControl(velocityVoltage.withVelocity(velocity))
     }
 
     fun intake(): Command = defer { run { setControl(INTAKE_BASE_SPEED) } }
@@ -74,7 +72,10 @@ object Roller : SubsystemBase(), RollerPositionsCommandFactory {
     private fun setCurrentLimits(
         currentLimitConfig: CurrentLimitsConfigs
     ): Command = runOnce {
-        motor.applyConfiguration(
+        mainMotor.applyConfiguration(
+            MOTOR_CONFIG.withCurrentLimits(currentLimitConfig)
+        )
+        auxMotor.applyConfiguration(
             MOTOR_CONFIG.withCurrentLimits(currentLimitConfig)
         )
     }
@@ -84,7 +85,7 @@ object Roller : SubsystemBase(), RollerPositionsCommandFactory {
         setCurrentLimits(NORMAL_CURRENT_LIMITS)
 
     override fun periodic() {
-        motor.periodic()
+        mainMotor.periodic()
         Logger.recordOutput("Subsystems/Roller/setpoint", setpoint)
     }
 }
