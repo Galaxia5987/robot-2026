@@ -24,11 +24,12 @@ val SIM_GAINS = Gains(kP = 1.0)
 val INTAKE_BASE_SPEED = 35.rps
 
 val NORMAL_CURRENT_LIMITS = createCurrentLimits(25.amps, 5.amps)
-val HIGH_CURRENT_LIMITS = createCurrentLimits(100.amps, 5.amps)
+val HIGH_CURRENT_LIMITS = createCurrentLimits(75.amps, 5.amps)
 
 const val MAIN_PORT = 10
 const val AUX_PORT = 30
 const val GEAR_RATIO = 2.5
+
 
 val MOTOR_CONFIG =
     TalonFXConfiguration().apply {

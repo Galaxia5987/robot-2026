@@ -67,7 +67,9 @@ object Roller : SubsystemBase(), RollerPositionsCommandFactory {
         mainMotor.setControl(velocityVoltage.withVelocity(velocity))
     }
 
-    fun intake(): Command = defer { run { setControl(INTAKE_BASE_SPEED) } }
+    fun intake(): Command = defer { run {
+        setControl(INTAKE_BASE_SPEED)
+    } }
 
     private fun setCurrentLimits(
         currentLimitConfig: CurrentLimitsConfigs

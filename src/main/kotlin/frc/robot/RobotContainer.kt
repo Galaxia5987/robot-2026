@@ -16,7 +16,6 @@ import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.setpoints_manager.aimingSetpoint
 import frc.robot.states.shooting.Shooting
-import frc.robot.subsystems.climb.Climb
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.leds.LEDSubsystem
 import frc.robot.subsystems.shooter.hood.Hood
@@ -85,9 +84,6 @@ object RobotContainer {
         intakeButton.negate().onTrue(IntakingStates.CLOSED.set())
 
         shooting = Shooting(driverController.L2(), driverController.L1())
-
-        driverController.povUp().whileTrue(Climb.up()).onFalse(Climb.stop())
-        driverController.povDown().whileTrue(Climb.down()).onFalse(Climb.stop())
     }
 
     fun getAutonomousCommand(): Command = autoChooser.get()

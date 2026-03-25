@@ -17,15 +17,15 @@
     {
       "anchor": {
         "x": 8.75,
-        "y": 7.0684957983193275
+        "y": 6.847462184873949
       },
       "prevControl": {
         "x": 8.75,
-        "y": 7.693621617607072
+        "y": 7.472588004161694
       },
       "nextControl": {
         "x": 8.75,
-        "y": 6.438495798319328
+        "y": 6.217462184873949
       },
       "isLocked": false,
       "linkedName": "depotFarPickupMidWaypoint"
@@ -33,11 +33,11 @@
     {
       "anchor": {
         "x": 8.75,
-        "y": 5.0
+        "y": 4.85
       },
       "prevControl": {
         "x": 8.75,
-        "y": 6.365536885009739
+        "y": 6.2155368850097386
       },
       "nextControl": null,
       "isLocked": false,
@@ -51,8 +51,8 @@
       "minWaypointRelativePos": 1.2699999999999834,
       "maxWaypointRelativePos": 2.0,
       "constraints": {
-        "maxVelocity": 1.1,
-        "maxAcceleration": 2.0,
+        "maxVelocity": 2.0,
+        "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 1800.0,
         "nominalVoltage": 12.0,
@@ -81,7 +81,7 @@
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 1800.0,
     "nominalVoltage": 12.0,
-    "unlimited": true
+    "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
@@ -93,5 +93,5 @@
     "velocity": 0,
     "rotation": -90.0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

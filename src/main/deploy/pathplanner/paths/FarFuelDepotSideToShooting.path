@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 8.75,
-        "y": 5.0
+        "y": 4.85
       },
       "prevControl": null,
       "nextControl": {
         "x": 8.75,
-        "y": 5.653974212506575
+        "y": 5.5039742125065745
       },
       "isLocked": false,
       "linkedName": "farFuelEndDepotSide"
@@ -17,15 +17,15 @@
     {
       "anchor": {
         "x": 8.75,
-        "y": 7.0684957983193275
+        "y": 6.847462184873949
       },
       "prevControl": {
-        "x": 8.750000000003624,
-        "y": 6.438495798319328
+        "x": 9.168205770220494,
+        "y": 6.372742121380415
       },
       "nextControl": {
-        "x": 8.749999999996376,
-        "y": 7.698495798319327
+        "x": 8.18598319327731,
+        "y": 7.487697478991596
       },
       "isLocked": false,
       "linkedName": "depotFarPickupMidWaypoint"
