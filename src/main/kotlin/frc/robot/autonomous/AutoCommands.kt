@@ -88,6 +88,5 @@ fun bullshitChallenge(): Command =
         runPath("StartToFarFuelDepotSide", mirror = true),
         runPath("FarFuelDepotSideToShooting", mirror = true),
         Commands.waitTime(9.sec),
-        runPath("DepotSideShootingToCloseFuel", mirror = true),
-        runPath("FuelToDepotShoot", mirror = true),
+        runPath("DepotSideBumpCycle", mirror = true),
     )
