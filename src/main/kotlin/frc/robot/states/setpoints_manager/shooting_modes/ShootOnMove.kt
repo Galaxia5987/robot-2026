@@ -126,14 +126,14 @@ private fun changeStaticFactor(addition: Double) =
         kStaticCalibration += addition
         kStaticCalibration = (kStaticCalibration * 100).roundToInt() / 100.0
         logFactors()
-    })
+    }).ignoringDisable(true)
 
 private fun changeMovingFactor(addition: Double) =
     Commands.runOnce({
         kMovingCalibration += addition
         kMovingCalibration = (kMovingCalibration * 100).roundToInt() / 100.0
         logFactors()
-    })
+    }).ignoringDisable(true)
 
 private val changeCalibrationFactors =
     DriverOverrides.ShootOnMoveCalibrationOverride.trigger.apply {
@@ -144,7 +144,7 @@ private val changeCalibrationFactors =
         and(staticCalibrationDecreaseButton).onTrue(changeStaticFactor(-0.01))
         and(staticCalibrationIncreaseButton).onTrue(changeStaticFactor(0.01))
 
-        onChange(Commands.runOnce(::logFactors))
+        onChange(Commands.runOnce(::logFactors).ignoringDisable(true))
     }
 
 private fun getFlywheelSetpoint(): AngularVelocity {
@@ -160,10 +160,13 @@ private fun getFlywheelSetpoint(): AngularVelocity {
                 )
             ))
 
-    output *=
-        1 +
-            3.0 / 89.0 *
-                Math.exp(1.3 * (compensatedTurretDistanceFromGoal[m] - 4.6))
+//    output *=
+//        1 +
+//            3.0 / 89.0 *
+//                Math.exp(1.3]\[
+//                * (compensatedTurretDistanceFromGoal[m] - 4.6))
+
+
 
     return output.rps
 }

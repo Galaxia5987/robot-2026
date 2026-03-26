@@ -96,6 +96,12 @@
       "command": null
     },
     {
+      "name": "setStopShooting",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
       "name": "setIntaking",
       "waypointRelativePos": 0.49679487179487153,
       "endWaypointRelativePos": null,
