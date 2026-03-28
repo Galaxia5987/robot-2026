@@ -53,7 +53,7 @@ fun setShootInAuto(): Command = runOnce({ commandShootOnAuto = true })
 
 fun stopShootInAuto(): Command = runOnce({ commandShootOnAuto = false })
 
-class Shooting(val dontShootTrigger: Trigger, canFeedTrigger: Trigger) {
+class Shooting(val dontShootTrigger: Trigger, canFeedTrigger: Trigger, outtakeTrigger: Trigger) {
 
     val isAutoCurrentlyShooting: Trigger =
         Trigger { commandShootOnAuto }.or(isAuto.negate())
@@ -150,17 +150,25 @@ class Shooting(val dontShootTrigger: Trigger, canFeedTrigger: Trigger) {
             .onTrue(IntakingStates.OUTTAKING.set())
             .onFalse(IntakingStates.CLOSED.set())
 
+    val canOuttake: Trigger =
+        outtakeTrigger
+            .and(IntakingStates.INTAKING.trigger.negate())
+            .onTrue(IntakingStates.OUTTAKING.set())
+            .onFalse(IntakingStates.CLOSED.set())
+
+
     private val setFunnel =
         (ShootingState.IDLE.trigger
                 .negate()
                 .or(IntakingStates.INTAKING.trigger))
             .and(isEnabled)
             .and(canDoubleFeed.negate())
+            .and(canOuttake.negate())
             .onTrue(Funnel.start())
             .onFalse(Funnel.stop())
 
     private val stopFunnelDoubleFeeding =
-        setFunnel.negate().and(canDoubleFeed.negate()).onTrue(Funnel.stop())
+        setFunnel.negate().and(canDoubleFeed.negate().or(canOuttake.negate())).onTrue(Funnel.stop())
 
-    private val setFunnelDoubleFeeding = canDoubleFeed.onTrue(Funnel.reverse())
+    private val setFunnelDoubleFeeding = canDoubleFeed.or(canOuttake).onTrue(Funnel.reverse())
 }
