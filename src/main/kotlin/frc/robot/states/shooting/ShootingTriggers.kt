@@ -142,13 +142,13 @@ class Shooting(val dontShootTrigger: Trigger, canFeedTrigger: Trigger) {
             .onTrue(ShootingState.IDLE.set())
             .logTrigger("$LOGGING_PATH/setIdleIfShouldStopShooting")
 
-    val canDoubleFeed: Trigger = Trigger { false }
-//        canFeed
-//            .and(isInDoubleFeedingZone)
-//            .and(IntakingStates.INTAKING.trigger.negate())
-//            .and(isInDoubleFeedingRotation)
-//            .onTrue(IntakingStates.OUTTAKING.set())
-//            .onFalse(IntakingStates.CLOSED.set())
+    val canDoubleFeed: Trigger =
+        canFeed
+            .and(isInDoubleFeedingZone)
+            .and(IntakingStates.INTAKING.trigger.negate())
+            .and(isInDoubleFeedingRotation)
+            .onTrue(IntakingStates.OUTTAKING.set())
+            .onFalse(IntakingStates.CLOSED.set())
 
     private val setFunnel =
         (ShootingState.IDLE.trigger
