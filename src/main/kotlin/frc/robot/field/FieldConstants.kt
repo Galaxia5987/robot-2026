@@ -22,7 +22,7 @@ private val HUB_TRANSLATION_BLUE = Translation2d(4620.41.mm, 4034.63.mm)
 val HUB_TRANSLATION: Translation2d
     get() = HUB_TRANSLATION_BLUE.flipIfNeeded()
 
-private val OUTPOST_FEED_TRANSLATION = Translation2d(2.607.m, 0.895.m)
+private val OUTPOST_FEED_TRANSLATION = Translation2d(2.607.m, 1.1.m)
 
 val OUTPOST_LOCATION: Translation2d
     get() = OUTPOST_FEED_TRANSLATION.flipIfNeeded()
@@ -81,7 +81,7 @@ val CLIMB_RECTANGLE: Rectangle2d
     get() = CLIMB_RECTANGLE_BLUE.flipIfNeeded()
 
 private val DEPOT_SIDE_DOUBLE_FEEDING_RECTANGLE_BLUE: Rectangle2d =
-    Rectangle2d(Translation2d(6.806, 0.790), Translation2d(4.706, 0.4))
+    Rectangle2d(Translation2d(7.852, 1.1), Translation2d(4.706, 0.2))
 
 private val OUTPOST_SIDE_DOUBLE_FEEDING_RECTANGLE_BLUE: Rectangle2d =
     DEPOT_SIDE_DOUBLE_FEEDING_RECTANGLE_BLUE.mirror()
