@@ -83,10 +83,18 @@ fun depotDoubleCycle(): Command =
         runPath("DepotShootToScatteredFuel"),
     )
 
-fun bullshitChallenge(): Command =
+fun isrChallengeOutpost(): Command =
     Commands.sequence(
         runPath("StartToFarFuelDepotSide", mirror = true),
         runPath("FarFuelDepotSideToShooting", mirror = true),
         Commands.waitTime(9.sec),
         runPath("DepotSideBumpCycle", mirror = true),
+    )
+
+fun isrChallengeDepot(): Command =
+    Commands.sequence(
+        runPath("StartToFarFuelDepotSide"),
+        runPath("FarFuelDepotSideToShooting"),
+        Commands.waitTime(9.sec),
+        runPath("DepotSideBumpCycle"),
     )

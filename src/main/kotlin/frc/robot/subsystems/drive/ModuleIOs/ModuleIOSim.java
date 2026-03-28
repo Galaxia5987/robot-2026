@@ -44,7 +44,7 @@ public class ModuleIOSim implements ModuleIO {
     private boolean turnClosedLoop = false;
     private final PIDController driveController;
     private final PIDController turnController;
-    private double driveFFVolts = 0.0;
+    private double driveFFVolts = 12.0;
     private double driveAppliedVolts = 0.0;
     private double turnAppliedVolts = 0.0;
 

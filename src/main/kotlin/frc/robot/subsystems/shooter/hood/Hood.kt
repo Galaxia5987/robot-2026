@@ -3,6 +3,8 @@ package frc.robot.subsystems.shooter.hood
 import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.controls.VoltageOut
 import com.ctre.phoenix6.hardware.CANcoder
+import edu.wpi.first.math.geometry.Rectangle2d
+import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.units.Units.Degrees
 import edu.wpi.first.units.measure.Angle
@@ -109,7 +111,19 @@ object Hood : SubsystemBase(), SysIdable {
             lookAheadTranslation.toPose()
         )
 
-        return TRENCH_AREAS.any { it.contains(lookAheadTranslation) }
+        if (TRENCH_AREAS.any { it.contains(lookAheadTranslation) }) {
+            return true
+        }
+
+        val rectangle = Rectangle2d(turretTranslationFieldOriented, lookAheadTranslation)
+
+        for (area in TRENCH_AREAS) {
+            if (rectangle.contains(Translation2d(area.center.x, (turretTranslationFieldOriented.y + lookAheadTranslation.y) / 2.0))) {
+                return true
+            }
+        }
+
+        return false
     }
 
     override fun periodic() {

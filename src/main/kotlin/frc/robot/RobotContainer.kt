@@ -7,9 +7,10 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
-import frc.robot.autonomous.bullshitChallenge
+import frc.robot.autonomous.isrChallengeOutpost
 import frc.robot.autonomous.depotDoubleCycle
 import frc.robot.autonomous.depotMainShootOnMove
+import frc.robot.autonomous.isrChallengeDepot
 import frc.robot.autonomous.outpostMainShootOnMove
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
@@ -91,7 +92,8 @@ object RobotContainer {
     private fun registerAutoCommands() {
         autoChooser.addDefaultOption("Empty", Commands.none())
 
-        autoChooser.addOption("bullshitChallenge", bullshitChallenge())
+        autoChooser.addOption("isrChallengeOutpost", isrChallengeOutpost())
+        autoChooser.addOption("isrChallengeDepot", isrChallengeDepot())
 
         // SysIds
         autoChooser.addOption(
