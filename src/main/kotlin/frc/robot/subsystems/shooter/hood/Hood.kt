@@ -115,10 +115,19 @@ object Hood : SubsystemBase(), SysIdable {
             return true
         }
 
-        val rectangle = Rectangle2d(turretTranslationFieldOriented, lookAheadTranslation)
+        val rectangle =
+            Rectangle2d(turretTranslationFieldOriented, lookAheadTranslation)
 
         for (area in TRENCH_AREAS) {
-            if (rectangle.contains(Translation2d(area.center.x, (turretTranslationFieldOriented.y + lookAheadTranslation.y) / 2.0))) {
+            if (
+                rectangle.contains(
+                    Translation2d(
+                        area.center.x,
+                        (turretTranslationFieldOriented.y +
+                            lookAheadTranslation.y) / 2.0
+                    )
+                )
+            ) {
                 return true
             }
         }

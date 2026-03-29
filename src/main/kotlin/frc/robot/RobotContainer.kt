@@ -7,11 +7,8 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
-import frc.robot.autonomous.isrChallengeOutpost
-import frc.robot.autonomous.depotDoubleCycle
-import frc.robot.autonomous.depotMainShootOnMove
-import frc.robot.autonomous.isrChallengeDepot
-import frc.robot.autonomous.outpostMainShootOnMove
+import frc.robot.autonomous.depotBumpDoubleCycle
+import frc.robot.autonomous.outpostBumpDoubleCycle
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.states.intaking.IntakingStates
@@ -84,16 +81,18 @@ object RobotContainer {
         intakeButton.onTrue(IntakingStates.INTAKING.set())
         intakeButton.negate().onTrue(IntakingStates.CLOSED.set())
 
-        shooting = Shooting(driverController.L2(), driverController.L1(), driverController.cross())
+        shooting =
+            Shooting(
+                driverController.L2(),
+                driverController.L1(),
+                driverController.cross()
+            )
     }
 
     fun getAutonomousCommand(): Command = autoChooser.get()
 
     private fun registerAutoCommands() {
         autoChooser.addDefaultOption("Empty", Commands.none())
-
-        autoChooser.addOption("isrChallengeOutpost", isrChallengeOutpost())
-        autoChooser.addOption("isrChallengeDepot", isrChallengeDepot())
 
         // SysIds
         autoChooser.addOption(
@@ -126,12 +125,10 @@ object RobotContainer {
             DriveCommands.feedforwardCharacterization()
         )
 
-        autoChooser.addOption("ShootOnMoveTestPath", depotDoubleCycle())
-        autoChooser.addOption("depotMainShootOnMove", depotMainShootOnMove())
+        autoChooser.addOption("depotBumpDoubleCycle", depotBumpDoubleCycle())
         autoChooser.addOption(
-            "outpostMainShootOnMove",
-            outpostMainShootOnMove()
+            "outpostBumpDoubleCycle",
+            outpostBumpDoubleCycle()
         )
-        autoChooser.addOption("depotDoubleCycle", depotDoubleCycle())
     }
 }

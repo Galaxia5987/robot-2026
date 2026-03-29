@@ -31,23 +31,25 @@ object Roller : SubsystemBase(), RollerPositionsCommandFactory {
                 )
         )
 
-    private val auxMotor = UniversalTalonFX(
-        port = AUX_PORT,
-        config = MOTOR_CONFIG,
-        simGains = SIM_GAINS,
-        subsystem = name,
-        logConfig =
-            MotorLogConfig(
-                position = false,
-                statorCurrent = false,
-                current = false,
-                velocity = true,
-                absoluteEncoder = false,
-                voltage = true
+    private val auxMotor =
+        UniversalTalonFX(
+                port = AUX_PORT,
+                config = MOTOR_CONFIG,
+                simGains = SIM_GAINS,
+                subsystem = name,
+                logConfig =
+                    MotorLogConfig(
+                        position = false,
+                        statorCurrent = false,
+                        current = false,
+                        velocity = true,
+                        absoluteEncoder = false,
+                        voltage = true
+                    )
             )
-    ).apply {
-        setControl(Follower(MAIN_PORT, MotorAlignmentValue.Opposed))
-    }
+            .apply {
+                setControl(Follower(MAIN_PORT, MotorAlignmentValue.Opposed))
+            }
 
     private val velocityVoltage = VelocityVoltage(0.0)
     private var setpoint: AngularVelocity = 0.rps
@@ -67,9 +69,7 @@ object Roller : SubsystemBase(), RollerPositionsCommandFactory {
         mainMotor.setControl(velocityVoltage.withVelocity(velocity))
     }
 
-    fun intake(): Command = defer { run {
-        setControl(INTAKE_BASE_SPEED)
-    } }
+    fun intake(): Command = defer { run { setControl(INTAKE_BASE_SPEED) } }
 
     private fun setCurrentLimits(
         currentLimitConfig: CurrentLimitsConfigs

@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.Commands
 import frc.robot.lib.BetterPoseEstimator
 import frc.robot.lib.extensions.flipIfNeeded
 import frc.robot.lib.extensions.mirror
-import frc.robot.lib.extensions.sec
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.shooting.ShootingState
 import frc.robot.states.shooting.setShootInAuto
@@ -56,14 +55,16 @@ val setRollerNormalCurrentLimit =
     EventTrigger("setRollerNormalCurrentLimit")
         .onTrue(Roller.setNormalCurrentLimits())
 
-fun depotBumpDoubleCycle(): Command = Commands.sequence(
-    runPath("DepotSideFirstBumpCycle"),
-    Commands.waitSeconds(3.0),
-    runPath("DepotSideSecondBumpCycle")
-)
+fun depotBumpDoubleCycle(): Command =
+    Commands.sequence(
+        runPath("DepotSideFirstBumpCycle"),
+        Commands.waitSeconds(3.0),
+        runPath("DepotSideSecondBumpCycle")
+    )
 
-fun depotOutpostDoubleCycle(): Command = Commands.sequence(
-    runPath("DepotSideFirstBumpCycle", mirror = true),
-    Commands.waitSeconds(3.0),
-    runPath("DepotSideSecondBumpCycle", mirror = true)
-)
+fun outpostBumpDoubleCycle(): Command =
+    Commands.sequence(
+        runPath("DepotSideFirstBumpCycle", mirror = true),
+        Commands.waitSeconds(3.0),
+        runPath("DepotSideSecondBumpCycle", mirror = true)
+    )

@@ -67,9 +67,9 @@ object SetpointsManager : SubsystemBase() {
             .or(isAuto)
             .onTrue(
                 runOnce({
-                    currentGoal = HUB_TRANSLATION.toPose()
-                    isFeeding = false
-                })
+                        currentGoal = HUB_TRANSLATION.toPose()
+                        isFeeding = false
+                    })
                     .ignoringDisable(true)
             )
 
@@ -80,9 +80,9 @@ object SetpointsManager : SubsystemBase() {
             .and(isAuto.negate())
             .onTrue(
                 runOnce({
-                    currentGoal = DEPOT_TRANSLATION.toPose()
-                    isFeeding = true
-                })
+                        currentGoal = DEPOT_TRANSLATION.toPose()
+                        isFeeding = true
+                    })
                     .ignoringDisable(true)
             )
 
@@ -94,9 +94,9 @@ object SetpointsManager : SubsystemBase() {
             .and(isAuto.negate())
             .onTrue(
                 runOnce({
-                    currentGoal = OUTPOST_LOCATION.toPose()
-                    isFeeding = true
-                })
+                        currentGoal = OUTPOST_LOCATION.toPose()
+                        isFeeding = true
+                    })
                     .ignoringDisable(true)
             )
 

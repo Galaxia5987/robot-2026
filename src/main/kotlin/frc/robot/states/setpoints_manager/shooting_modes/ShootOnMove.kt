@@ -29,11 +29,11 @@ import frc.robot.subsystems.shooter.turret.Turret
 import frc.robot.subsystems.shooter.turret.constraintTurretLimits
 import frc.robot.subsystems.shooter.turret.getTurretTangentialVelocityFieldRelative
 import kotlin.math.abs
+import kotlin.math.roundToInt
 import kotlin.math.tanh
 import org.littletonrobotics.junction.Logger
 import org.team5987.annotation.LogLevel
 import org.team5987.annotation.LoggedOutput
-import kotlin.math.roundToInt
 
 private const val LATENCY_FACTOR = 0.2
 private val RIO_TO_ORIGIN =
@@ -123,17 +123,19 @@ fun logFactors() {
 
 private fun changeStaticFactor(addition: Double) =
     Commands.runOnce({
-        kStaticCalibration += addition
-        kStaticCalibration = (kStaticCalibration * 100).roundToInt() / 100.0
-        logFactors()
-    }).ignoringDisable(true)
+            kStaticCalibration += addition
+            kStaticCalibration = (kStaticCalibration * 100).roundToInt() / 100.0
+            logFactors()
+        })
+        .ignoringDisable(true)
 
 private fun changeMovingFactor(addition: Double) =
     Commands.runOnce({
-        kMovingCalibration += addition
-        kMovingCalibration = (kMovingCalibration * 100).roundToInt() / 100.0
-        logFactors()
-    }).ignoringDisable(true)
+            kMovingCalibration += addition
+            kMovingCalibration = (kMovingCalibration * 100).roundToInt() / 100.0
+            logFactors()
+        })
+        .ignoringDisable(true)
 
 private val changeCalibrationFactors =
     DriverOverrides.ShootOnMoveCalibrationOverride.trigger.apply {
@@ -160,13 +162,11 @@ private fun getFlywheelSetpoint(): AngularVelocity {
                 )
             ))
 
-//    output *=
-//        1 +
-//            3.0 / 89.0 *
-//                Math.exp(1.3]\[
-//                * (compensatedTurretDistanceFromGoal[m] - 4.6))
-
-
+    //    output *=
+    //        1 +
+    //            3.0 / 89.0 *
+    //                Math.exp(1.3]\[
+    //                * (compensatedTurretDistanceFromGoal[m] - 4.6))
 
     return output.rps
 }
