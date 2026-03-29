@@ -11,19 +11,19 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "StartToFuelDepotSide"
+                  "pathName": null
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "FuelToDepotShoot"
+                  "pathName": null
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "DepotShootToScatteredFuel"
+                  "pathName": null
                 }
               },
               {

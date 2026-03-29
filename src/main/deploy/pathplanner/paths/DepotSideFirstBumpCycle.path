@@ -3,90 +3,108 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.0,
-        "y": 7.603
+        "x": 4.5,
+        "y": 7.512274134888589
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.0,
-        "y": 7.603
+        "x": 6.257290459498263,
+        "y": 7.506452901609772
       },
       "isLocked": false,
-      "linkedName": "TrenchDepotShoot"
+      "linkedName": "startDepotSide"
     },
     {
       "anchor": {
-        "x": 7.5,
-        "y": 6.804473684210526
+        "x": 8.146019345238095,
+        "y": 6.74952380952381
       },
       "prevControl": {
-        "x": 7.5,
-        "y": 7.504473684210526
+        "x": 7.761026785714286,
+        "y": 7.447730654761905
       },
       "nextControl": {
-        "x": 7.5,
-        "y": 6.109473684210526
+        "x": 8.266734589210266,
+        "y": 6.530599553506483
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.5,
-        "y": 4.789563025210084
+        "x": 7.976361607142856,
+        "y": 4.713630952380952
       },
       "prevControl": {
-        "x": 7.601860408572632,
-        "y": 5.017870837528052
+        "x": 8.639065342814208,
+        "y": 5.674551369104414
       },
       "nextControl": {
-        "x": 7.278966386554621,
-        "y": 4.294142857142857
+        "x": 7.454337797619047,
+        "y": 3.956696428571428
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.295941176470588,
-        "y": 4.9191344537815125
+        "x": 6.194955357142857,
+        "y": 5.29438244047619
       },
       "prevControl": {
-        "x": 6.805302883119849,
-        "y": 4.072810387348893
+        "x": 6.427527377014126,
+        "y": 5.202674994906062
       },
       "nextControl": {
-        "x": 5.800521008403361,
-        "y": 5.742294117647059
+        "x": 5.007070508985088,
+        "y": 5.762787389258538
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.424042016806723,
-        "y": 5.6508319327731105
+        "x": 2.78875,
+        "y": 5.627172619047619
       },
       "prevControl": {
-        "x": 3.4834789915966384,
-        "y": 5.605100840336135
+        "x": 4.001746673669468,
+        "y": 5.473007352941176
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "depotBumpCycleEnd"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.8287220026350397,
+      "waypointRelativePos": 0.3243243243243242,
       "rotationDegrees": -90.0
+    },
+    {
+      "waypointRelativePos": 1.454954954954958,
+      "rotationDegrees": -106.86167856897727
     },
     {
       "waypointRelativePos": 2.8279314888010503,
       "rotationDegrees": 132.21484060824156
     }
   ],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 1.7041095890410958,
+      "maxWaypointRelativePos": 2.4493150684931475,
+      "constraints": {
+        "maxVelocity": 1.4,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 1800.0,
+        "nominalVoltage": 13.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
@@ -113,7 +131,7 @@
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 1800.0,
-    "nominalVoltage": 12.0,
+    "nominalVoltage": 13.0,
     "unlimited": true
   },
   "goalEndState": {

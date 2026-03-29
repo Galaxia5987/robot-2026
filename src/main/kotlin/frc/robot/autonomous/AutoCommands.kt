@@ -56,45 +56,14 @@ val setRollerNormalCurrentLimit =
     EventTrigger("setRollerNormalCurrentLimit")
         .onTrue(Roller.setNormalCurrentLimits())
 
-fun depotMainShootOnMove(): Command =
-    Commands.sequence(
-        runPath("DepotSidePickupAndReturn"),
-        Commands.waitTime(5.sec).alongWith(IntakingStates.PUMPING.set()),
-        runPath("DepotPickupAndReturn")
-    )
+fun depotBumpDoubleCycle(): Command = Commands.sequence(
+    runPath("DepotSideFirstBumpCycle"),
+    Commands.waitSeconds(3.0),
+    runPath("DepotSideSecondBumpCycle")
+)
 
-fun outpostMainShootOnMove(): Command =
-    Commands.sequence(
-        runPath("StartToFuelDepotSide", mirror = true),
-        runPath("FuelOutpostSideToOutpostShootOnMove"),
-        Commands.waitTime(5.sec)
-            .alongWith(
-                Commands.waitTime(1.0.sec),
-                IntakingStates.PUMPING.set()
-            ),
-        runPath("OutpostToScatteredFuel")
-    )
-
-fun depotDoubleCycle(): Command =
-    Commands.sequence(
-        runPath("StartToFuelDepotSide"),
-        runPath("FuelToDepotShoot"),
-        Commands.waitTime(5.sec),
-        runPath("DepotShootToScatteredFuel"),
-    )
-
-fun isrChallengeOutpost(): Command =
-    Commands.sequence(
-        runPath("StartToFarFuelDepotSide", mirror = true),
-        runPath("FarFuelDepotSideToShooting", mirror = true),
-        Commands.waitTime(9.sec),
-        runPath("DepotSideBumpCycle", mirror = true),
-    )
-
-fun isrChallengeDepot(): Command =
-    Commands.sequence(
-        runPath("StartToFarFuelDepotSide"),
-        runPath("FarFuelDepotSideToShooting"),
-        Commands.waitTime(9.sec),
-        runPath("DepotSideBumpCycle"),
-    )
+fun depotOutpostDoubleCycle(): Command = Commands.sequence(
+    runPath("DepotSideFirstBumpCycle", mirror = true),
+    Commands.waitSeconds(3.0),
+    runPath("DepotSideSecondBumpCycle", mirror = true)
+)
