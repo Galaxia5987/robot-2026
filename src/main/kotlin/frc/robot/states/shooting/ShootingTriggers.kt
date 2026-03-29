@@ -154,7 +154,9 @@ class Shooting(val dontShootTrigger: Trigger, canFeedTrigger: Trigger, outtakeTr
         outtakeTrigger
             .and(IntakingStates.INTAKING.trigger.negate())
             .onTrue(IntakingStates.OUTTAKING.set())
-            .onFalse(IntakingStates.CLOSED.set())
+
+    val cantOuttakeAndIsNotShooting = canOuttake.negate().and(ShootingState.SHOOTING.trigger.negate()).onTrue(IntakingStates.CLOSED.set())
+    val cantOuttakeAndIsShooting = canOuttake.negate().and(ShootingState.SHOOTING.trigger).onTrue(IntakingStates.PUMPING.set())
 
 
     private val setFunnel =
@@ -168,7 +170,7 @@ class Shooting(val dontShootTrigger: Trigger, canFeedTrigger: Trigger, outtakeTr
             .onFalse(Funnel.stop())
 
     private val stopFunnelDoubleFeeding =
-        setFunnel.negate().and(canDoubleFeed.negate().or(canOuttake.negate())).onTrue(Funnel.stop())
+        setFunnel.negate().and(canDoubleFeed.negate()).and(canOuttake.negate()).onTrue(Funnel.stop())
 
     private val setFunnelDoubleFeeding = canDoubleFeed.or(canOuttake).onTrue(Funnel.reverse())
 }
