@@ -1,17 +1,16 @@
 package frc.robot
 
 import com.pathplanner.lib.auto.AutoBuilder
+import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
-import frc.robot.autonomous.isrChallengeOutpost
-import frc.robot.autonomous.depotDoubleCycle
-import frc.robot.autonomous.depotMainShootOnMove
-import frc.robot.autonomous.isrChallengeDepot
-import frc.robot.autonomous.outpostMainShootOnMove
+import frc.robot.autonomous.depotBumpDoubleCycle
+import frc.robot.autonomous.depotOutpostDoubleCycle
+import frc.robot.autonomous.parseAutoCommandName
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
 import frc.robot.states.intaking.IntakingStates
@@ -21,9 +20,10 @@ import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.leds.LEDSubsystem
 import frc.robot.subsystems.shooter.hood.Hood
 import frc.robot.subsystems.shooter.turret.Turret
-import kotlin.math.roundToInt
 import org.ironmaple.simulation.SimulatedArena
+import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
+import kotlin.math.roundToInt
 
 object RobotContainer {
     private val driverController = CommandPS5Controller(0)
@@ -50,6 +50,11 @@ object RobotContainer {
 
         enableAutoLogOutputFor(this)
         LEDSubsystem
+        autoChooser.onChange {
+            val poses = parseAutoCommandName(it.name)
+            Logger.recordOutput("poses", poses.size)
+            drive.fieldPose.getObject("path").setPoses(poses)
+        }
     }
 
     private fun configureDefaultCommands() {
@@ -92,9 +97,6 @@ object RobotContainer {
     private fun registerAutoCommands() {
         autoChooser.addDefaultOption("Empty", Commands.none())
 
-        autoChooser.addOption("isrChallengeOutpost", isrChallengeOutpost())
-        autoChooser.addOption("isrChallengeDepot", isrChallengeDepot())
-
         // SysIds
         autoChooser.addOption(
             "Drive Wheel Radius Characterization",
@@ -125,13 +127,13 @@ object RobotContainer {
             "swerveFFCharacterization",
             DriveCommands.feedforwardCharacterization()
         )
-
-        autoChooser.addOption("ShootOnMoveTestPath", depotDoubleCycle())
-        autoChooser.addOption("depotMainShootOnMove", depotMainShootOnMove())
         autoChooser.addOption(
-            "outpostMainShootOnMove",
-            outpostMainShootOnMove()
+            "depotBumpDoubleCycle",
+            depotBumpDoubleCycle()
         )
-        autoChooser.addOption("depotDoubleCycle", depotDoubleCycle())
+        autoChooser.addOption(
+            "depotOutpostDoubleCycle",
+            depotOutpostDoubleCycle()
+        )
     }
 }

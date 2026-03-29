@@ -14,12 +14,12 @@ import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.Filesystem
 import edu.wpi.first.wpilibj.PowerDistribution
 import edu.wpi.first.wpilibj.Timer
+import edu.wpi.first.wpilibj.smartdashboard.Field2d
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import frc.robot.lib.BetterPoseEstimator
 import frc.robot.lib.extensions.enableAutoLogOutputFor
-import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.toPose3d
 import frc.robot.lib.logged_output.LoggedOutputManager
 import frc.robot.sim.MapleSimHopper
@@ -32,12 +32,12 @@ import frc.robot.states.spindexer.SpindexerTriggers
 import frc.robot.subsystems.drive.DriveCommands
 import frc.robot.subsystems.intake.roller.Roller
 import frc.robot.subsystems.sensors.Sensors
-import java.io.File
 import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.*
 import org.littletonrobotics.junction.networktables.NT4Publisher
 import org.littletonrobotics.junction.wpilog.WPILOGReader
 import org.littletonrobotics.junction.wpilog.WPILOGWriter
+import java.io.File
 
 /**
  * The VM is configured to automatically run this class, and to call the

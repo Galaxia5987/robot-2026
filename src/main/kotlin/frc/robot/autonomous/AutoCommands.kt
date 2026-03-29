@@ -60,10 +60,10 @@ fun depotBumpDoubleCycle(): Command = Commands.sequence(
     runPath("DepotSideFirstBumpCycle"),
     Commands.waitSeconds(3.0),
     runPath("DepotSideSecondBumpCycle")
-)
+).withName(";DepotSideFirstBumpCycle;DepotSideSecondBumpCycle")
 
 fun depotOutpostDoubleCycle(): Command = Commands.sequence(
     runPath("DepotSideFirstBumpCycle", mirror = true),
     Commands.waitSeconds(3.0),
     runPath("DepotSideSecondBumpCycle", mirror = true)
-)
+).withName(";DepotSideFirstBumpCycle|m;DepotSideSecondBumpCycle|m")

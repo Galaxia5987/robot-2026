@@ -197,7 +197,6 @@ public class Drive extends SubsystemBase implements SysIdable {
         //        Pathfinding.setPathfinder(new LocalADStarAK());
         PathPlannerLogging.setLogActivePathCallback(
                 (activePath) -> {
-                    fieldPose.getObject("path").setPoses(activePath);
                     Logger.recordOutput(
                             "Odometry/Trajectory",
                             activePath.toArray(new Pose2d[activePath.size()]));
@@ -573,6 +572,10 @@ public class Drive extends SubsystemBase implements SysIdable {
             new Translation2d(
                     TunerConstants.BackRight.LocationX, TunerConstants.BackRight.LocationY)
         };
+    }
+
+    public Field2d getFieldPose(){
+        return fieldPose;
     }
 
     @Override
