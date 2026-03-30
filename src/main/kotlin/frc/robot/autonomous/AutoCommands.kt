@@ -66,10 +66,10 @@ val setRollerNormalCurrentLimit =
         .onTrue(Roller.setNormalCurrentLimits())
 
 private val DOUBLE_CYCLE_SHOOT_ON_MOVE_CONSTRAINTS = PathConstraints(
-    0.8.mps,
+    0.5.mps,
     3.0.mps_ps,
-    540.deg_ps,
-    900.deg_ps_ps
+    90.deg_ps,
+    135.deg_ps_ps
 )
 
 fun depotBumpDoubleCycle(): Command =

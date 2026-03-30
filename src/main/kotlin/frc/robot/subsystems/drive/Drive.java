@@ -20,6 +20,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
@@ -46,6 +47,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.ConstantsKt;
 import frc.robot.lib.BetterPoseEstimator;
+import frc.robot.lib.LocalADStarAK;
 import frc.robot.lib.Mode;
 import frc.robot.lib.sysid.SysIdable;
 import frc.robot.subsystems.drive.ModuleIOs.Module;
@@ -194,7 +196,7 @@ public class Drive extends SubsystemBase implements SysIdable {
         // Configure AutoBuilder for PathPlanner
         configureAutoBuilder();
 
-        //        Pathfinding.setPathfinder(new LocalADStarAK());
+        Pathfinding.setPathfinder(new LocalADStarAK());
         PathPlannerLogging.setLogActivePathCallback(
                 (activePath) -> {
                     fieldPose.getObject("path").setPoses(activePath);
@@ -318,9 +320,9 @@ public class Drive extends SubsystemBase implements SysIdable {
                     !gyroInputs.connected && ConstantsKt.getCURRENT_MODE() != Mode.SIM);
 
             Logger.recordOutput("Odometry/IsSkidding", isSkidding);
-            if (isSkidding) {
-                return;
-            }
+//            if (isSkidding) {
+//                return;
+//            }
 
             if (gyroInputs.connected) {
                 // Update odometry
