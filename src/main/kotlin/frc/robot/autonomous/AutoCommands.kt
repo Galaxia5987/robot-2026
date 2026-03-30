@@ -75,7 +75,7 @@ private val DOUBLE_CYCLE_SHOOT_ON_MOVE_CONSTRAINTS = PathConstraints(
 fun depotBumpDoubleCycle(): Command =
     Commands.sequence(
         runPath("DepotSideFirstBumpCycle"),
-        Commands.waitSeconds(3.0),
+        Commands.waitSeconds(3.0).alongWith(IntakingStates.PUMPING.set()),
         runPath("DepotSideSecondBumpCycle", pathfindBefore = true, pathfindingConstraints = DOUBLE_CYCLE_SHOOT_ON_MOVE_CONSTRAINTS)
     )
 

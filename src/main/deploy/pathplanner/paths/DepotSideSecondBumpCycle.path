@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.78875,
+        "x": 2.51,
         "y": 5.627172619047619
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.0109243697478996,
+        "x": 2.7321743697478995,
         "y": 7.3962352941176475
       },
       "isLocked": false,
@@ -96,11 +96,11 @@
     },
     {
       "anchor": {
-        "x": 2.78875,
+        "x": 2.51,
         "y": 5.627172619047619
       },
       "prevControl": {
-        "x": 3.848186974789916,
+        "x": 3.569436974789916,
         "y": 5.581441526610644
       },
       "nextControl": null,
@@ -139,6 +139,19 @@
         "nominalVoltage": 12.0,
         "unlimited": false
       }
+    },
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 5.200588235294118,
+      "maxWaypointRelativePos": 6.0,
+      "constraints": {
+        "maxVelocity": 3.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 1800.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
     }
   ],
   "pointTowardsZones": [],
@@ -151,7 +164,7 @@
     },
     {
       "name": "setIntaking",
-      "waypointRelativePos": 1.8335294117647138,
+      "waypointRelativePos": 1.7841176470588347,
       "endWaypointRelativePos": null,
       "command": null
     },
@@ -162,13 +175,13 @@
       "command": null
     },
     {
-      "name": "setRollerNormalCurrentLimit",
-      "waypointRelativePos": 6.0,
+      "name": "setStopShooting",
+      "waypointRelativePos": 5.5747058823529505,
       "endWaypointRelativePos": null,
       "command": null
     },
     {
-      "name": "setStopShooting",
+      "name": "setRollerNormalCurrentLimit",
       "waypointRelativePos": 6.0,
       "endWaypointRelativePos": null,
       "command": null

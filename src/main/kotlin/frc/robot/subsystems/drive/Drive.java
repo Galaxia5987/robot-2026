@@ -20,6 +20,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.pathfinding.LocalADStar;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
@@ -196,7 +197,7 @@ public class Drive extends SubsystemBase implements SysIdable {
         // Configure AutoBuilder for PathPlanner
         configureAutoBuilder();
 
-        Pathfinding.setPathfinder(new LocalADStarAK());
+        Pathfinding.setPathfinder(new LocalADStar());
         PathPlannerLogging.setLogActivePathCallback(
                 (activePath) -> {
                     fieldPose.getObject("path").setPoses(activePath);
