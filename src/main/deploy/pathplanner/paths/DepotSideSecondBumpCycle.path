@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.560364583333333,
-        "y": 7.7087425595238095
+        "x": 3.0109243697478996,
+        "y": 7.3962352941176475
       },
       "isLocked": false,
       "linkedName": "depotBumpCycleEnd"
@@ -32,15 +32,15 @@
     },
     {
       "anchor": {
-        "x": 5.385818452380952,
+        "x": 5.312722689075631,
         "y": 7.441205357142858
       },
       "prevControl": {
-        "x": 4.728464640109679,
+        "x": 4.655368876804358,
         "y": 7.441205357142858
       },
       "nextControl": {
-        "x": 6.071471687667082,
+        "x": 5.998375924361762,
         "y": 7.441205357142858
       },
       "isLocked": false,
@@ -80,16 +80,16 @@
     },
     {
       "anchor": {
-        "x": 6.084025297619047,
-        "y": 5.111674107142858
+        "x": 6.082529411764706,
+        "y": 5.155411764705882
       },
       "prevControl": {
-        "x": 6.593387004268308,
-        "y": 4.2653500407102385
+        "x": 6.591891118413967,
+        "y": 4.309087698273262
       },
       "nextControl": {
-        "x": 5.58860512955182,
-        "y": 5.934833771008405
+        "x": 5.587109243697479,
+        "y": 5.978571428571429
       },
       "isLocked": false,
       "linkedName": null
@@ -130,12 +130,12 @@
     {
       "name": "Constraints Zone",
       "minWaypointRelativePos": 0,
-      "maxWaypointRelativePos": 0.8136986301369844,
+      "maxWaypointRelativePos": 1.1205882352940901,
       "constraints": {
-        "maxVelocity": 0.5,
+        "maxVelocity": 0.8,
         "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 1800.0,
+        "maxAngularAcceleration": 900.0,
         "nominalVoltage": 12.0,
         "unlimited": false
       }
@@ -150,14 +150,8 @@
       "command": null
     },
     {
-      "name": "setShooting",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
       "name": "setIntaking",
-      "waypointRelativePos": 2.358904109589038,
+      "waypointRelativePos": 1.8335294117647138,
       "endWaypointRelativePos": null,
       "command": null
     },
