@@ -58,6 +58,16 @@ val setStopShooting = EventTrigger("setStopShooting").onTrue(stopShootInAuto())
 
 val setPriming = EventTrigger("setPriming").onTrue(ShootingState.PRIMING.set())
 
+var useOdometryOnlyInAuto = false
+
+private fun setUseOnlyOdometryCommand(): Command = Commands.runOnce({
+    useOdometryOnlyInAuto = true
+})
+
+val setUseNormalVision = EventTrigger("setUseNormalVision").onTrue(Commands.runOnce({
+    useOdometryOnlyInAuto = false
+}))
+
 val setRollerHighCurrentLimit =
     EventTrigger("setRollerHighCurrentLimit")
         .onTrue(Roller.setHighCurrentLimits())
@@ -76,12 +86,14 @@ fun depotBumpDoubleCycle(): Command =
     Commands.sequence(
         runPath("DepotSideFirstBumpCycle"),
         Commands.waitSeconds(3.0).alongWith(IntakingStates.PUMPING.set()),
-        runPath("DepotSideSecondBumpCycle", pathfindBefore = true, pathfindingConstraints = DOUBLE_CYCLE_SHOOT_ON_MOVE_CONSTRAINTS)
+        setUseOnlyOdometryCommand(),
+        runPath("DepotSideSecondBumpCycle")
     )
 
 fun outpostBumpDoubleCycle(): Command =
     Commands.sequence(
         runPath("DepotSideFirstBumpCycle", mirror = true),
         Commands.waitSeconds(3.0),
-        runPath("DepotSideSecondBumpCycle", mirror = true, pathfindBefore = true, pathfindingConstraints = DOUBLE_CYCLE_SHOOT_ON_MOVE_CONSTRAINTS)
+        setUseOnlyOdometryCommand(),
+        runPath("DepotSideSecondBumpCycle", mirror = true)
     )

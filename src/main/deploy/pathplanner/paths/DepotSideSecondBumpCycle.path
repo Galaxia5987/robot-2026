@@ -169,6 +169,12 @@
       "command": null
     },
     {
+      "name": "setUseNormalVision",
+      "waypointRelativePos": 1.9731543624161079,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
       "name": "setStopIntaking",
       "waypointRelativePos": 5.31780821917808,
       "endWaypointRelativePos": null,

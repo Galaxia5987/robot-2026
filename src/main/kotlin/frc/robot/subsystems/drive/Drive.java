@@ -47,6 +47,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.ConstantsKt;
+import frc.robot.autonomous.AutoCommandsKt;
 import frc.robot.lib.BetterPoseEstimator;
 import frc.robot.lib.LocalADStarAK;
 import frc.robot.lib.Mode;
@@ -226,7 +227,13 @@ public class Drive extends SubsystemBase implements SysIdable {
 
     private void configureAutoBuilder() {
         AutoBuilder.configure(
-                this::getPose,
+                () -> {
+                    if (AutoCommandsKt.getUseOdometryOnlyInAuto()) {
+                        return getOdometryPose();
+                    }
+
+                    return getPose();
+                },
                 this::resetOdometry,
                 () -> chassisSpeeds,
                 this::runVelocity,

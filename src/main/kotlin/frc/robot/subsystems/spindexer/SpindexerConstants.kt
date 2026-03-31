@@ -23,8 +23,8 @@ val SETPOINT_TOLERANCE = 1.0.rps
 
 val REGULAR_CURRENT_LIMITS =
     createCurrentLimits(
-        supplyCurrentLimit = 20.amps,
-        supplyCurrentPeakDifference = 5.amps
+        supplyCurrentLimit = 40.amps,
+        supplyCurrentPeakDifference = 20.amps
     )
 
 val LOW_CURRENT_LIMITS =
