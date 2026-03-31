@@ -29,7 +29,7 @@ val shouldPump: Trigger =
             })
         )
         .whileTrue(IntakingStates.PUMPING.set())
-        .logTrigger("$LOGGING_PATH/shouldPump")
+        .logTrigger("StateMachines/Shooting/shouldPump")
 
 // State Commands
 fun idle(): Command =

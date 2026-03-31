@@ -78,7 +78,7 @@ class Shooting(
         canFeedTrigger
             .and(inAllianceZone.negate())
             .and(Turret.atSetpoint)
-            .and(isEnabled)
+            .and(isEnabled).logTrigger("$LOGGING_PATH/canFeed")
 
     private val idleAndCanShootToHub =
         ShootingState.IDLE.trigger
@@ -164,9 +164,14 @@ class Shooting(
             .negate()
             .and(ShootingState.SHOOTING.trigger.negate())
             .onTrue(IntakingStates.CLOSED.set())
+
     val cantOuttakeAndIsShooting =
         canOuttake
             .negate()
+            .and(IntakingStates.INTAKING.trigger.negate())
+            .and(
+                canFeedTrigger.negate()
+            )
             .and(ShootingState.SHOOTING.trigger)
             .onTrue(IntakingStates.PUMPING.set())
 
