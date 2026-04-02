@@ -55,7 +55,6 @@ fun stopShootInAuto(): Command = runOnce({ commandShootOnAuto = false })
 
 class Shooting(
     val dontShootTrigger: Trigger,
-    canFeedTrigger: Trigger,
     outtakeTrigger: Trigger
 ) {
 
@@ -75,7 +74,7 @@ class Shooting(
     val cantShootToHub = canShootToHub.negate().onTrue(ShootingState.IDLE.set())
 
     private val canFeed =
-        canFeedTrigger
+        dontShootTrigger.negate()
             .and(inAllianceZone.negate())
             .and(Turret.atSetpoint)
             .and(isEnabled).logTrigger("$LOGGING_PATH/canFeed")
@@ -136,7 +135,7 @@ class Shooting(
             .and(inAllianceZone)
 
     private val shouldStopFeeding =
-        (canFeedTrigger.negate().or(Turret.atSetpoint.negate())).and(
+        (dontShootTrigger.or(Turret.atSetpoint.negate())).and(
             !inAllianceZone
         )
 
@@ -173,9 +172,6 @@ class Shooting(
         canOuttake
             .negate()
             .and(IntakingStates.INTAKING.trigger.negate())
-            .and(
-                canFeedTrigger.negate()
-            )
             .and(ShootingState.SHOOTING.trigger)
             .onTrue(IntakingStates.PUMPING.set())
             .logTrigger("$LOGGING_PATH/cantOuttakeAndIsShooting")

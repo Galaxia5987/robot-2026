@@ -84,7 +84,6 @@ object RobotContainer {
         shooting =
             Shooting(
                 driverController.L2(),
-                driverController.L1().negate(),
                 driverController.cross()
             )
     }
