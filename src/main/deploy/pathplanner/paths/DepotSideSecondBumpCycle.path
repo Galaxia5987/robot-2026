@@ -181,12 +181,6 @@
       "command": null
     },
     {
-      "name": "setStopShooting",
-      "waypointRelativePos": 5.5747058823529505,
-      "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
       "name": "setRollerNormalCurrentLimit",
       "waypointRelativePos": 6.0,
       "endWaypointRelativePos": null,

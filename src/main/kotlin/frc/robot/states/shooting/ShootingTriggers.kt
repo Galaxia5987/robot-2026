@@ -125,13 +125,13 @@ class Shooting(
 
     private val shouldShootingToHubStop =
         (Sensors.hasFuel
-                .negate()
-                .or(
-                    IntakingStates.INTAKING.trigger.and(
-                        isShootingOnMove.negate()
-                    )
+            .negate()
+            .or(
+                IntakingStates.INTAKING.trigger.and(
+                    isShootingOnMove.negate()
                 )
-                .or(Turret.atSetpoint.negate()))
+            )
+            .or(Turret.atSetpoint.negate()))
             .and(inAllianceZone)
 
     private val shouldStopFeeding =
@@ -146,7 +146,7 @@ class Shooting(
             .logTrigger("$LOGGING_PATH/setIdleIfShouldStopShooting")
 
     val canDoubleFeed: Trigger =
-        canFeed
+        dontShootTrigger.negate()
             .and(isInDoubleFeedingZone)
             .and(IntakingStates.INTAKING.trigger.negate())
             .and(isInDoubleFeedingRotation)
@@ -172,14 +172,15 @@ class Shooting(
         canOuttake
             .negate()
             .and(IntakingStates.INTAKING.trigger.negate())
+            .and(canDoubleFeed.negate())
             .and(ShootingState.SHOOTING.trigger)
             .onTrue(IntakingStates.PUMPING.set())
             .logTrigger("$LOGGING_PATH/cantOuttakeAndIsShooting")
 
     private val setFunnel =
         (ShootingState.IDLE.trigger
-                .negate()
-                .or(IntakingStates.INTAKING.trigger))
+            .negate()
+            .or(IntakingStates.INTAKING.trigger))
             .and(isEnabled)
             .and(canDoubleFeed.negate())
             .and(canOuttake.negate())
