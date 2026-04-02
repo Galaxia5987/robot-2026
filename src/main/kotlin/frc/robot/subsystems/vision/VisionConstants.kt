@@ -93,10 +93,10 @@ val RIGHT_CONFIG =
     CameraConfig(
         robotToCamera = {
             Transform3d(
-                (-149.796).mm,
-                (-368.204).mm,
-                370.87278.mm,
-                Rotation3d(0.0.deg, (-16.8255).deg, (-45).deg)
+                (-237.60471).mm,
+                (-373.33729).mm,
+                473.25917.mm,
+                Rotation3d(0.0.deg, 0.deg, (-45).deg)
             )
         },
         tagIdsToFilter = { listOf() },
