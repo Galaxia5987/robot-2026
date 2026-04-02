@@ -153,17 +153,21 @@ class Shooting(
             .and(isInDoubleFeedingRotation)
             .onTrue(IntakingStates.OUTTAKING.set())
             .onFalse(IntakingStates.CLOSED.set())
+            .logTrigger("$LOGGING_PATH/canDoubleFeed")
 
     val canOuttake: Trigger =
         outtakeTrigger
             .and(IntakingStates.INTAKING.trigger.negate())
             .onTrue(IntakingStates.OUTTAKING.set())
+            .logTrigger("$LOGGING_PATH/canOuttake")
 
     val cantOuttakeAndIsNotShooting =
         canOuttake
             .negate()
             .and(ShootingState.SHOOTING.trigger.negate())
+            .and(IntakingStates.INTAKING.trigger.negate())
             .onTrue(IntakingStates.CLOSED.set())
+            .logTrigger("$LOGGING_PATH/cantOuttakeAndIsNotShooting")
 
     val cantOuttakeAndIsShooting =
         canOuttake
@@ -174,6 +178,7 @@ class Shooting(
             )
             .and(ShootingState.SHOOTING.trigger)
             .onTrue(IntakingStates.PUMPING.set())
+            .logTrigger("$LOGGING_PATH/cantOuttakeAndIsShooting")
 
     private val setFunnel =
         (ShootingState.IDLE.trigger
