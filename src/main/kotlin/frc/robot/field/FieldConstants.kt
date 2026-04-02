@@ -81,7 +81,7 @@ val CLIMB_RECTANGLE: Rectangle2d
     get() = CLIMB_RECTANGLE_BLUE.flipIfNeeded()
 
 private val DEPOT_SIDE_DOUBLE_FEEDING_RECTANGLE_BLUE: Rectangle2d =
-    Rectangle2d(Translation2d(7.852, 1.1), Translation2d(4.706, 0.2))
+    Rectangle2d(Translation2d(7.852, 1.1), Translation2d(4.05, 0.2))
 
 private val OUTPOST_SIDE_DOUBLE_FEEDING_RECTANGLE_BLUE: Rectangle2d =
     DEPOT_SIDE_DOUBLE_FEEDING_RECTANGLE_BLUE.mirror()
