@@ -59,5 +59,8 @@ class MotorIOReal(
             inputs.position = motor.position.value
             inputs.distance = inputs.position.toDistance(diameter, gearRatio)
         }
+        if (logConfig.controlRequest) {
+            inputs.controlModeValue = motor.controlMode.value.value
+        }
     }
 }

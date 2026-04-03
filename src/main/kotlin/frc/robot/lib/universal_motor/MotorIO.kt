@@ -2,6 +2,7 @@ package frc.robot.lib.universal_motor
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration
 import com.ctre.phoenix6.controls.ControlRequest
+import com.ctre.phoenix6.signals.ControlModeValue
 import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.AngularVelocity
 import edu.wpi.first.units.measure.Current
@@ -65,5 +66,7 @@ interface MotorIO {
         var statorCurrent = 0.amps
 
         var absoluteEncoderPositionNoOffset: Angle = 0.deg
+
+        var controlModeValue: Int = 0
     }
 }

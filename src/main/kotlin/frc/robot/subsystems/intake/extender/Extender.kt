@@ -4,6 +4,7 @@ import com.ctre.phoenix6.controls.CoastOut
 import com.ctre.phoenix6.controls.NeutralOut
 import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.controls.VoltageOut
+import com.ctre.phoenix6.signals.ControlModeValue
 import edu.wpi.first.math.filter.Debouncer
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
@@ -32,6 +33,7 @@ object Extender : SubsystemBase() {
                     current = false,
                     velocity = false,
                     absoluteEncoder = false,
+                    controlRequest = true
                 )
         )
 
@@ -121,7 +123,7 @@ object Extender : SubsystemBase() {
             lastStallingDistance = motor.inputs.distance
         }
 
-        if (!atSetpointForReposition.asBoolean) {
+        if (!atSetpointForReposition.asBoolean && motor.inputs.controlModeValue != ControlModeValue.VoltageOut.value) {
             motor.setControl(
                 positionRequest.withPosition(
                     setpoint.toAngle(DIAMETER, GEAR_RATIO)
@@ -129,7 +131,7 @@ object Extender : SubsystemBase() {
             )
         }
 
-        if (atSetpoint.asBoolean) {
+        if (atSetpoint.asBoolean && motor.inputs.controlModeValue != ControlModeValue.VoltageOut.value) {
             motor.setControl(coastOut)
         }
 
