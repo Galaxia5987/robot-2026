@@ -44,6 +44,8 @@ object Extender : SubsystemBase() {
 
     private var setpoint = 0.meters
 
+    private var currentControlRequest = ControlModeValue.NeutralOut
+
     val atSetpoint = Trigger {
         setpoint.isNear(motor.inputs.distance, EXTENDER_SETPOINT_TOLERANCE)
     }
@@ -73,6 +75,7 @@ object Extender : SubsystemBase() {
     fun setPosition(value: Distance): Command =
         this.runOnce {
             setpoint = value
+            currentControlRequest = ControlModeValue.PositionVoltage
             motor.setControl(
                 positionRequest.withPosition(
                     value.toAngle(DIAMETER, GEAR_RATIO)
@@ -81,7 +84,10 @@ object Extender : SubsystemBase() {
         }
 
     fun setVoltage(value: Voltage): Command =
-        this.runOnce { motor.setControl(voltageRequest.withOutput(value)) }
+        this.runOnce {
+            currentControlRequest = ControlModeValue.VoltageOut
+            motor.setControl(voltageRequest.withOutput(value))
+        }
 
     private fun stop(): Command = setVoltage(0.volts)
 
@@ -123,8 +129,7 @@ object Extender : SubsystemBase() {
             lastStallingDistance = motor.inputs.distance
         }
 
-        // TODO: Make this prettier after mock comp
-        if (!atSetpointForReposition.asBoolean && motor.inputs.controlModeValue == ControlModeValue.PositionVoltageFOC.value) {
+        if (!atSetpointForReposition.asBoolean && currentControlRequest == ControlModeValue.PositionVoltage) {
             motor.setControl(
                 positionRequest.withPosition(
                     setpoint.toAngle(DIAMETER, GEAR_RATIO)
@@ -132,7 +137,7 @@ object Extender : SubsystemBase() {
             )
         }
 
-        if (atSetpoint.asBoolean && motor.inputs.controlModeValue == ControlModeValue.PositionVoltageFOC.value) {
+        if (atSetpoint.asBoolean && currentControlRequest == ControlModeValue.PositionVoltage) {
             motor.setControl(coastOut)
         }
 
