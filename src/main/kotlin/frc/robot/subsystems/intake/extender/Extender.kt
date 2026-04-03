@@ -123,7 +123,8 @@ object Extender : SubsystemBase() {
             lastStallingDistance = motor.inputs.distance
         }
 
-        if (!atSetpointForReposition.asBoolean && motor.inputs.controlModeValue != ControlModeValue.VoltageOut.value) {
+        // TODO: Make this prettier after mock comp
+        if (!atSetpointForReposition.asBoolean && motor.inputs.controlModeValue == ControlModeValue.PositionVoltageFOC.value) {
             motor.setControl(
                 positionRequest.withPosition(
                     setpoint.toAngle(DIAMETER, GEAR_RATIO)
@@ -131,7 +132,7 @@ object Extender : SubsystemBase() {
             )
         }
 
-        if (atSetpoint.asBoolean && motor.inputs.controlModeValue != ControlModeValue.VoltageOut.value) {
+        if (atSetpoint.asBoolean && motor.inputs.controlModeValue == ControlModeValue.PositionVoltageFOC.value) {
             motor.setControl(coastOut)
         }
 
