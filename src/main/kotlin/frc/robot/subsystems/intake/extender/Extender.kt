@@ -1,8 +1,10 @@
 package frc.robot.subsystems.intake.extender
 
+import com.ctre.phoenix6.controls.CoastOut
 import com.ctre.phoenix6.controls.NeutralOut
 import com.ctre.phoenix6.controls.PositionVoltage
 import com.ctre.phoenix6.controls.VoltageOut
+import edu.wpi.first.math.filter.Debouncer
 import edu.wpi.first.units.measure.Distance
 import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj2.command.Command
@@ -36,12 +38,15 @@ object Extender : SubsystemBase() {
     private val positionRequest = PositionVoltage(0.0)
     private val voltageRequest = VoltageOut(0.0)
     private val neutralOut = NeutralOut()
+    private val coastOut = CoastOut()
 
     private var setpoint = 0.meters
 
     val atSetpoint = Trigger {
         setpoint.isNear(motor.inputs.distance, EXTENDER_SETPOINT_TOLERANCE)
     }
+
+    private val atSetpointForReposition = atSetpoint.debounce(0.5, Debouncer.DebounceType.kFalling)
 
     var lastStallingDistance = 0.m
 
@@ -114,6 +119,18 @@ object Extender : SubsystemBase() {
 
         if (isStalling.asBoolean) {
             lastStallingDistance = motor.inputs.distance
+        }
+
+        if (!atSetpointForReposition.asBoolean) {
+            motor.setControl(
+                positionRequest.withPosition(
+                    setpoint.toAngle(DIAMETER, GEAR_RATIO)
+                )
+            )
+        }
+
+        if (atSetpoint.asBoolean) {
+            motor.setControl(coastOut)
         }
 
         Logger.recordOutput(
