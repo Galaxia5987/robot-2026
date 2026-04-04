@@ -74,7 +74,7 @@ class Shooting(
     val cantShootToHub = canShootToHub.negate().onTrue(ShootingState.IDLE.set())
 
     private val canFeed =
-        dontShootTrigger.negate()
+        dontShootTrigger.negate().and(isHubActive.negate())
             .and(inAllianceZone.negate())
             .and(Turret.atSetpoint)
             .and(isEnabled).logTrigger("$LOGGING_PATH/canFeed")
@@ -147,6 +147,7 @@ class Shooting(
 
     val canDoubleFeed: Trigger =
         dontShootTrigger.negate()
+            .and(isHubActive.negate())
             .and(isInDoubleFeedingZone)
             .and(IntakingStates.INTAKING.trigger.negate())
             .and(isInDoubleFeedingRotation)
