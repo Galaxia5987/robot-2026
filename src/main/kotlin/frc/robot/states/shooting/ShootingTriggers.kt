@@ -4,6 +4,7 @@ import edu.wpi.first.math.filter.Debouncer
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import frc.robot.currentShiftIndex
 import frc.robot.drive
 import frc.robot.field.inAllianceZone
 import frc.robot.field.isHubActive
@@ -11,11 +12,12 @@ import frc.robot.field.isInDoubleFeedingRotation
 import frc.robot.field.isInDoubleFeedingZone
 import frc.robot.isAuto
 import frc.robot.isEnabled
+import frc.robot.isOurHubActive
 import frc.robot.lib.extensions.get
 import frc.robot.lib.extensions.logTrigger
 import frc.robot.lib.extensions.not
-import frc.robot.lib.extensions.onTrue
 import frc.robot.lib.extensions.sec
+import frc.robot.matchTime
 import frc.robot.states.intaking.IntakingStates
 import frc.robot.states.setpoints_manager.SetpointsManager.isShootingOnMove
 import frc.robot.subsystems.intake.funnel.Funnel
@@ -58,6 +60,8 @@ class Shooting(
     outtakeTrigger: Trigger
 ) {
 
+    private val hubInactiveOrInTransitionPeriod = Trigger { !isOurHubActive }.or({ matchTime in 130.0..140.0 }).logTrigger("$LOGGING_PATH/hubInactiveAndNotInTransitionPeriod")
+
     val isAutoCurrentlyShooting: Trigger =
         Trigger { commandShootOnAuto }.or(isAuto.negate())
 
@@ -74,7 +78,8 @@ class Shooting(
     val cantShootToHub = canShootToHub.negate().onTrue(ShootingState.IDLE.set())
 
     private val canFeed =
-        dontShootTrigger.negate().and(isHubActive.negate())
+        dontShootTrigger.negate()
+            .and(hubInactiveOrInTransitionPeriod)
             .and(inAllianceZone.negate())
             .and(Turret.atSetpoint)
             .and(isEnabled).logTrigger("$LOGGING_PATH/canFeed")
@@ -147,7 +152,7 @@ class Shooting(
 
     val canDoubleFeed: Trigger =
         dontShootTrigger.negate()
-            .and(isHubActive.negate())
+            .and(hubInactiveOrInTransitionPeriod)
             .and(isInDoubleFeedingZone)
             .and(IntakingStates.INTAKING.trigger.negate())
             .and(isInDoubleFeedingRotation)
