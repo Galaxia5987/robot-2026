@@ -32,16 +32,16 @@
     },
     {
       "anchor": {
-        "x": 8.247134453781515,
-        "y": 4.6599915966386565
+        "x": 8.042460356161628,
+        "y": 4.97152811829473
       },
       "prevControl": {
-        "x": 8.909838189452866,
-        "y": 5.620912013362118
+        "x": 8.70516409183298,
+        "y": 5.9324485350181915
       },
       "nextControl": {
-        "x": 7.725110644257706,
-        "y": 3.9030570728291325
+        "x": 7.52043654663782,
+        "y": 4.214593594485206
       },
       "isLocked": false,
       "linkedName": null
@@ -52,34 +52,34 @@
         "y": 5.29438244047619
       },
       "prevControl": {
-        "x": 6.427527377014126,
-        "y": 5.202674994906062
+        "x": 6.44249038437705,
+        "y": 5.259362299240505
       },
       "nextControl": {
-        "x": 5.007070508985088,
-        "y": 5.762787389258538
+        "x": 5.097295460230868,
+        "y": 5.449674420961191
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.78875,
-        "y": 5.627172619047619
+        "x": 3.2183534434143932,
+        "y": 5.29438244047619
       },
       "prevControl": {
-        "x": 4.001746673669468,
-        "y": 5.473007352941176
+        "x": 4.526444951446964,
+        "y": 5.16811739659965
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "depotBumpCycleEnd"
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 0.3243243243243242,
-      "rotationDegrees": -90.0
+      "rotationDegrees": -108.50077503070024
     },
     {
       "waypointRelativePos": 1.454954954954958,
@@ -109,7 +109,7 @@
       "minWaypointRelativePos": 3.1470588235294117,
       "maxWaypointRelativePos": 4.0,
       "constraints": {
-        "maxVelocity": 3.0,
+        "maxVelocity": 2.0,
         "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 1800.0,
@@ -122,12 +122,6 @@
   "eventMarkers": [
     {
       "name": "setRollerHighCurrentLimit",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
-      "name": "setShooting",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": null
