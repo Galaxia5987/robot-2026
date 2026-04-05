@@ -46,7 +46,7 @@ data class CameraConfig(
 // Camera names, must match names configured on coprocessor
 const val TURRET_CAMERA_NAME = "turret"
 
-const val MAX_DISTANCE_METERS = 5.75
+const val MAX_DISTANCE_METERS = 5.6
 
 private val TURRET_TRANSLATION =
     Translation3d((-117.5).mm, 207.5.mm, 360.888.mm)
