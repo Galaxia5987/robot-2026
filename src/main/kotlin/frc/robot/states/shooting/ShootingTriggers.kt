@@ -84,6 +84,9 @@ class Shooting(
             .and(Turret.atSetpoint)
             .and(isEnabled).logTrigger("$LOGGING_PATH/canFeed")
 
+//    private val shouldStopFeeding =
+//        inAllianceZone.and(isHubActive.negate()).onTrue(ShootingState.IDLE.set())
+
     private val idleAndCanShootToHub =
         ShootingState.IDLE.trigger
             .and(canShootToHub)
@@ -142,7 +145,10 @@ class Shooting(
     private val shouldStopFeeding =
         (dontShootTrigger.or(Turret.atSetpoint.negate())).and(
             !inAllianceZone
-        )
+        ) // Stops feeding when the robot is not in alliance zone
+            .or(
+            inAllianceZone.and(isHubActive.negate())
+        ) // Stops feeding when the robot is in the alliance zone and hub is not active
 
     private val setIdleIfShouldStopShooting =
         ShootingState.SHOOTING.trigger

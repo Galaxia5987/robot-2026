@@ -75,16 +75,10 @@ val setRollerNormalCurrentLimit =
     EventTrigger("setRollerNormalCurrentLimit")
         .onTrue(Roller.setNormalCurrentLimits())
 
-private val DOUBLE_CYCLE_SHOOT_ON_MOVE_CONSTRAINTS = PathConstraints(
-    0.5.mps,
-    3.0.mps_ps,
-    90.deg_ps,
-    135.deg_ps_ps
-)
-
 fun depotBumpDoubleCycle(): Command =
     Commands.sequence(
         runPath("DepotSideFirstBumpCycle"),
+        setShootInAuto(),
         Commands.waitSeconds(3.0).alongWith(IntakingStates.PUMPING.set()),
         setUseOnlyOdometryCommand(),
         runPath("DepotSideSecondBumpCycle")
@@ -93,6 +87,7 @@ fun depotBumpDoubleCycle(): Command =
 fun outpostBumpDoubleCycle(): Command =
     Commands.sequence(
         runPath("DepotSideFirstBumpCycle", mirror = true),
+        setShootInAuto(),
         Commands.waitSeconds(3.0),
         setUseOnlyOdometryCommand(),
         runPath("DepotSideSecondBumpCycle", mirror = true)

@@ -52,9 +52,11 @@ private fun getHoodSetpoint(): Angle {
     return (90.deg - calculateFeedingPitch().deg)
 }
 
+
+private val MAX_FEED_VELOCITY_RPS = 42.rps
 private fun getFlywheelSetpoint(): AngularVelocity {
     val turretOrientedChassisSpeeds = turretOrientedChassisSpeeds
-    return (1 *
+    val result = (1 *
             calculateAngularVelocity(
                 calculateFeedingVelocity(
                     turretDistanceFromGoal[m],
@@ -63,6 +65,10 @@ private fun getFlywheelSetpoint(): AngularVelocity {
                 )
             ))
         .rps
+    if (result > MAX_FEED_VELOCITY_RPS) {
+        return MAX_FEED_VELOCITY_RPS
+    }
+    return result
 }
 
 private fun getPreShooterSetpoint(): AngularVelocity =

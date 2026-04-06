@@ -37,7 +37,7 @@ object SetpointsManager : SubsystemBase() {
                 DriverOverrides.ShootingCalibrationOverride.trigger.asBoolean ->
                     ShootingType.CALIBRATION
                 isFeeding -> ShootingType.FEEDING
-                DriverOverrides.ShootOnMoveOverride.trigger.asBoolean ->
+                !DriverOverrides.ShootOnMoveOverride.trigger.asBoolean ->
                     ShootingType.SHOOT_ON_MOVE
                 else -> ShootingType.INTERPOLATION
             }
