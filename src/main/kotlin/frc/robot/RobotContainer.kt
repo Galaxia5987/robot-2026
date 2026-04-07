@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import frc.robot.autonomous.depotBumpDoubleCycle
+import frc.robot.autonomous.middleNoDepot
+import frc.robot.autonomous.middleWithDepot
 import frc.robot.autonomous.outpostBumpDoubleCycle
 import frc.robot.lib.Mode
 import frc.robot.lib.extensions.enableAutoLogOutputFor
@@ -129,5 +131,8 @@ object RobotContainer {
             "outpostBumpDoubleCycle",
             outpostBumpDoubleCycle()
         )
+
+        autoChooser.addOption("middleNoDepot", middleNoDepot())
+        autoChooser.addOption("middleWithDepot", middleWithDepot())
     }
 }

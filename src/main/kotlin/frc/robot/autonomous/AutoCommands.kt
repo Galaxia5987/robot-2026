@@ -68,6 +68,8 @@ val setUseNormalVision = EventTrigger("setUseNormalVision").onTrue(Commands.runO
     useOdometryOnlyInAuto = false
 }))
 
+val setUseOnlyOdometry = EventTrigger("setUseOnlyOdometry").onTrue(setUseOnlyOdometryCommand())
+
 val setRollerHighCurrentLimit =
     EventTrigger("setRollerHighCurrentLimit")
         .onTrue(Roller.setHighCurrentLimits())
@@ -91,4 +93,16 @@ fun outpostBumpDoubleCycle(): Command =
         Commands.waitSeconds(3.0),
         setUseOnlyOdometryCommand(),
         runPath("DepotSideSecondBumpCycle", mirror = true)
+    )
+
+fun middleNoDepot(): Command =
+    Commands.sequence(
+        runPath("MiddleNoDepot"),
+        setShootInAuto()
+    )
+
+fun middleWithDepot(): Command =
+    Commands.sequence(
+        runPath("PickupDepotAndReturn"),
+        setShootInAuto()
     )
