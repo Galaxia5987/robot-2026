@@ -120,20 +120,20 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
+      "name": "setUseOnlyOdometry",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
       "name": "setIntaking",
       "waypointRelativePos": 0.45,
       "endWaypointRelativePos": null,
       "command": null
     },
     {
-      "name": "setUseOnlyOdometry",
-      "waypointRelativePos": 1.761513157894744,
-      "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
       "name": "setUseNormalVision",
-      "waypointRelativePos": 4.103618421052586,
+      "waypointRelativePos": 4.162828947368419,
       "endWaypointRelativePos": null,
       "command": null
     },
