@@ -10,9 +10,9 @@
           {
             "title": "Auto Choices",
             "x": 1152.0,
-            "y": 0.0,
+            "y": 128.0,
             "width": 256.0,
-            "height": 256.0,
+            "height": 128.0,
             "type": "ComboBox Chooser",
             "properties": {
               "topic": "/SmartDashboard/Auto Choices",
@@ -348,6 +348,19 @@
               "topic": "/AdvantageKit/RealOutputs/GameData/secondaryDashboardShiftMessage",
               "period": 0.06,
               "data_type": "string"
+            }
+          },
+          {
+            "title": "WinningAuto",
+            "x": 1152.0,
+            "y": 0.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/DriverDashboard/WinningAuto",
+              "period": 0.06,
+              "sort_options": false
             }
           }
         ]
