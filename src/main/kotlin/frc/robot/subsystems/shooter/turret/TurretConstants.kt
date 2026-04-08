@@ -32,7 +32,7 @@ val SETPOINT_TOLERANCE
         }
 
 const val ENCODER_ID = 5
-val ABSOLUTE_ENCODER_OFFSET = (0.37).rot
+val ABSOLUTE_ENCODER_OFFSET = (-0.099854).rot
 
 val FORWARD_LIMIT = 0.99.rot
 val REVERSE_LIMIT = 0.rot
